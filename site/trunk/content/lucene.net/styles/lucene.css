@@ -1,0 +1,22 @@
+#page { width:950px; margin: 0 auto; font: 12px Calibri; position:relative; } 
+
+#topnav { margin:0; padding:0; position: absolute; top: 0px; right: 0px}
+#topnav li { display:inline; padding: 0; margin: 0}
+#topnav a:link, #topnav a:visited { padding: 3px 10px 3px 10px; float: left; width: auto;}
+
+.mainnav { margin:0 0 5px 0; padding:0; float:left;width: 100%; background-color: #1764AA;}
+.mainnav li { display:inline; padding:0; margin:0 }
+.mainnav a:link , .mainnav a:visited { color: white; text-decoration: none; padding: 8px 30px 8px 10px; border-right: 2px solid white; float: left; width: auto;}
+.mainnav a:hover { background-color: white; color:black}
+
+.left { width: 700px; float:left;}
+.right { width: 230px; float:right; }
+
+#footer { clear: both; border-top: 1px solid #1764AA; margin-top: 20px; padding: 5px 3px 5px 3px;}
+
+h1 { color: #1764AA; font: bold 16px; }
+h2 { }
+h3 { font: 14px;}
+
+img { border: none; }
+.clear { clear: both;}

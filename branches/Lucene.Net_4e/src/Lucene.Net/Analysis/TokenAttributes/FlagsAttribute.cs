@@ -1,0 +1,154 @@
+﻿// -----------------------------------------------------------------------
+// <copyright file="FlagsAttribute.cs" company="Apache">
+//
+//      Licensed to the Apache Software Foundation (ASF) under one or more
+//      contributor license agreements.  See the NOTICE file distributed with
+//      this work for additional information regarding copyright ownership.
+//      The ASF licenses this file to You under the Apache License, Version 2.0
+//      (the "License"); you may not use this file except in compliance with
+//      the License.  You may obtain a copy of the License at
+// 
+//      http://www.apache.org/licenses/LICENSE-2.0
+// 
+//      Unless required by applicable law or agreed to in writing, software
+//      distributed under the License is distributed on an "AS IS" BASIS,
+//      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//      See the License for the specific language governing permissions and
+//      limitations under the License.
+//
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace Lucene.Net.Analysis.TokenAttributes
+{
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using Support;
+    using Util;
+
+    // DOCS: enhance FlagsAttribute summary
+
+    /// <summary>
+    /// This attribute is used to pass different flags down the tokenizer chain. i.e. from one TokenFilter to another
+    /// TokenFilter.
+    /// </summary>
+    /// <remarks>
+    ///     <note>
+    ///         <para>
+    ///             <b>Java File: </b> <a href="https://github.com/apache/lucene-solr/blob/trunk/lucene/src/java/org/apache/lucene/analysis/tokenattributes/FlagsAttributeImpl.java">
+    ///             lucene/src/java/org/apache/lucene/analysis/tokenattributes/FlagsAttributeImpl.java
+    ///             </a>
+    ///         </para>
+    ///         <para>
+    ///             <b>C# File: </b> <a href="https://github.com/wickedsoftware/lucene.net/tree/lucene-net-4/src/Lucene.Net/Analysis/TokenAttributes/FlagsAttribute.cs">
+    ///              src/Lucene.Net/Analysis/TokenAttributes/FlagsAttribute.cs
+    ///             </a>
+    ///         </para>
+    ///         <para>
+    ///             <b>C# Tests: </b>  <a href="https://github.com/wickedsoftware/lucene.net/tree/lucene-net-4/test/Lucene.Net.Test/Analysis/TokenAttributes/FlagsAttributeTest.cs">
+    ///             test/Lucene.Net.Test/Analysis/TokenAttributes/FlagsAttributeTest.cs
+    ///             </a>
+    ///         </para>
+    ///     </note>
+    /// </remarks>
+    [SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix",
+        Justification = "The class was called Attribute in Java. It would be fun to call it Annotation. However, " +
+        "its probably best to try to honor the correlating names when possible.")]
+    [SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms",
+    Justification = "Again, using the class name from java and its appropriate.")]
+    public class FlagsAttribute : AttributeBase, IFlagsAttribute
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FlagsAttribute"/> class.
+        /// </summary>
+        public FlagsAttribute()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FlagsAttribute"/> class.
+        /// </summary>
+        /// <param name="flags">The flags.</param>
+            [SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms",
+            Justification = "The variable name is appropriate.")]
+        public FlagsAttribute(int flags)
+        {
+            this.Flags = flags;
+        }
+
+        /// <summary>
+        /// Gets or sets the flags.
+        /// </summary>
+        /// <value>The flags.</value>
+        [SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms",
+        Justification = "The name is appropriate.")]
+        public int Flags { get; set; }
+
+        /// <summary>
+        /// Clears the instance of its flags.
+        /// </summary>
+        public override void Clear()
+        {
+            this.Flags = 0;
+        }
+
+        /// <summary>
+        /// Creates a clone of the object, generally shallow.
+        /// </summary>
+        /// <returns>an the clone of the current instance.</returns>
+        public override AttributeBase Clone()
+        {
+            return new FlagsAttribute { Flags = this.Flags };
+        }
+
+
+        /// <summary>
+        ///     Copies to the specified attribute.
+        /// </summary>
+        /// <param name="attributeBase">The <see cref="AttributeBase"/> object that is being copied to.</param>
+        /// <exception cref="ArgumentException">
+        ///     Thrown when the <paramref name="attributeBase"/> is not an <see cref="FlagsAttribute"/>.
+        /// </exception>
+        public override void CopyTo(AttributeBase attributeBase)
+        {
+            IFlagsAttribute attribute = attributeBase as IFlagsAttribute;
+            if (attribute == null)
+                throw new ArgumentException(
+                    "The parameter 'attributeBase' must be of type {0} in order to be copied"
+                    .Inject(this.GetType().FullName), 
+                    "attributeBase");
+
+            attribute.Flags = this.Flags;
+        }
+
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
+        public override int GetHashCode()
+        {
+            return this.Flags;
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
+        /// <returns>
+        ///     <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool Equals(object obj)
+        {
+            if (this == obj)
+                return true;
+
+            FlagsAttribute attribute = obj as FlagsAttribute;
+            if (attribute != null)
+                return attribute.Flags == this.Flags;
+
+            return false;
+        }
+    }
+}
