@@ -16,10 +16,9 @@
  */
 
 using System;
-
+using Lucene.Net.Util;
 using IndexReader = Lucene.Net.Index.IndexReader;
 using Term = Lucene.Net.Index.Term;
-using PriorityQueue = Lucene.Net.Util.PriorityQueue;
 using ToStringUtils = Lucene.Net.Util.ToStringUtils;
 
 namespace Lucene.Net.Search
@@ -34,7 +33,7 @@ namespace Lucene.Net.Search
 	/// 
 	/// </summary>
 	[Serializable]
-	public class FuzzyQuery:MultiTermQuery
+	public class FuzzyQuery : MultiTermQuery
 	{
 		
 		public const float defaultMinSimilarity = 0.5f;
@@ -65,8 +64,8 @@ namespace Lucene.Net.Search
 		/// <throws>  IllegalArgumentException if minimumSimilarity is &gt;= 1 or &lt; 0 </throws>
 		/// <summary> or if prefixLength &lt; 0
 		/// </summary>
-		public FuzzyQuery(Term term, float minimumSimilarity, int prefixLength):base(term)
-		{ // will be removed in 3.0
+		public FuzzyQuery(Term term, float minimumSimilarity, int prefixLength)
+		{
 			this.term = term;
 			
 			if (minimumSimilarity >= 1.0f)
@@ -113,14 +112,14 @@ namespace Lucene.Net.Search
 			return prefixLength;
 		}
 		
+        // TODO: Why is this public?  Java has this protected (C# protected internal is closer to it than public)
 		public /*protected internal*/ override FilteredTermEnum GetEnum(IndexReader reader)
 		{
 			return new FuzzyTermEnum(reader, GetTerm(), minimumSimilarity, prefixLength);
 		}
 		
 		/// <summary> Returns the pattern term.</summary>
-        [Obsolete("Lucene.Net-2.9.1. This method overrides obsolete member Lucene.Net.Search.MultiTermQuery.GetTerm()")]
-		public override Term GetTerm()
+		public Term GetTerm()
 		{
 			return term;
 		}
@@ -137,7 +136,7 @@ namespace Lucene.Net.Search
 				// can only match if it's exact
 				return new TermQuery(term);
 			}
-			
+
 			FilteredTermEnum enumerator = GetEnum(reader);
 			int maxClauseCount = BooleanQuery.GetMaxClauseCount();
 			ScoreTermQueue stQueue = new ScoreTermQueue(maxClauseCount);
@@ -219,7 +218,7 @@ namespace Lucene.Net.Search
 			}
 		}
 		
-		protected internal class ScoreTermQueue:PriorityQueue
+		protected internal class ScoreTermQueue:PriorityQueue<ScoreTerm>
 		{
 			
 			public ScoreTermQueue(int size)
@@ -230,10 +229,8 @@ namespace Lucene.Net.Search
 			/* (non-Javadoc)
 			* <see cref="Lucene.Net.Util.PriorityQueue.lessThan(java.lang.Object, java.lang.Object)"/>
 			*/
-			public override bool LessThan(System.Object a, System.Object b)
+            public override bool LessThan(ScoreTerm termA, ScoreTerm termB)
 			{
-				ScoreTerm termA = (ScoreTerm) a;
-				ScoreTerm termB = (ScoreTerm) b;
 				if (termA.score == termB.score)
 					return termA.term.CompareTo(termB.term) > 0;
 				else

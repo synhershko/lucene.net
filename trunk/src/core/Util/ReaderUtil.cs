@@ -21,21 +21,15 @@ using IndexReader = Lucene.Net.Index.IndexReader;
 
 namespace Lucene.Net.Util
 {
-	
-	/// <summary> Common util methods for dealing with <see cref="IndexReader" />s.
-	/// 
+	/// <summary>
+	/// Common util methods for dealing with <see cref="IndexReader" />s.
 	/// </summary>
 	public class ReaderUtil
 	{
-		
-		/// <summary> Gathers sub-readers from reader into a List.
-		/// 
-		/// </summary>
-		/// <param name="allSubReaders">
-		/// </param>
-		/// <param name="reader">
-		/// </param>
-		public static void  GatherSubReaders(System.Collections.IList allSubReaders, IndexReader reader)
+		/// <summary>Gathers sub-readers from reader into a List.</summary>
+		/// <param name="allSubReaders"></param>
+		/// <param name="reader"></param>
+		public static void GatherSubReaders(System.Collections.Generic.List<IndexReader> allSubReaders, IndexReader reader)
 		{
 			IndexReader[] subReaders = reader.GetSequentialSubReaders();
 			if (subReaders == null)
@@ -63,9 +57,9 @@ namespace Lucene.Net.Util
 		/// </returns>
 		public static IndexReader SubReader(int doc, IndexReader reader)
 		{
-			System.Collections.ArrayList subReadersList = new System.Collections.ArrayList();
+            var subReadersList = new System.Collections.Generic.List<IndexReader>();
 			ReaderUtil.GatherSubReaders(subReadersList, reader);
-			IndexReader[] subReaders = (IndexReader[]) subReadersList.ToArray(typeof(IndexReader));
+			IndexReader[] subReaders = subReadersList.ToArray();
 			int[] docStarts = new int[subReaders.Length];
 			int maxDoc = 0;
 			for (int i = 0; i < subReaders.Length; i++)
@@ -87,9 +81,9 @@ namespace Lucene.Net.Util
 		/// </returns>
 		public static IndexReader SubReader(IndexReader reader, int subIndex)
 		{
-			System.Collections.ArrayList subReadersList = new System.Collections.ArrayList();
+            var subReadersList = new System.Collections.Generic.List<IndexReader>();
 			ReaderUtil.GatherSubReaders(subReadersList, reader);
-			IndexReader[] subReaders = (IndexReader[]) subReadersList.ToArray(typeof(IndexReader));
+			IndexReader[] subReaders = subReadersList.ToArray();
 			return subReaders[subIndex];
 		}
 		

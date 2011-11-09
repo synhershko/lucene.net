@@ -16,8 +16,7 @@
  */
 
 using System;
-
-using PriorityQueue = Lucene.Net.Util.PriorityQueue;
+using Lucene.Net.Util;
 
 namespace Lucene.Net.Index
 {
@@ -28,30 +27,25 @@ namespace Lucene.Net.Index
 	/// </summary>
 	public class MultipleTermPositions : TermPositions
 	{
-		
-		private sealed class TermPositionsQueue:PriorityQueue
+		private sealed class TermPositionsQueue : PriorityQueue<TermPositions>
 		{
-			internal TermPositionsQueue(System.Collections.IList termPositions)
+			internal TermPositionsQueue(System.Collections.Generic.IList<TermPositions> termPositions)
 			{
 				Initialize(termPositions.Count);
 				
-				System.Collections.IEnumerator i = termPositions.GetEnumerator();
-				while (i.MoveNext())
-				{
-					TermPositions tp = (TermPositions) i.Current;
+				foreach(TermPositions tp in termPositions)
 					if (tp.Next())
-						Put(tp);
-				}
+						Add(tp);
 			}
 			
 			internal TermPositions Peek()
 			{
-				return (TermPositions) Top();
+				return Top();
 			}
 			
-			public override bool LessThan(System.Object a, System.Object b)
+			public override bool LessThan(TermPositions a, TermPositions b)
 			{
-				return ((TermPositions) a).Doc() < ((TermPositions) b).Doc();
+				return a.Doc() < b.Doc();
 			}
 		}
 		
@@ -120,7 +114,10 @@ namespace Lucene.Net.Index
 		/// </exception>
 		public MultipleTermPositions(IndexReader indexReader, Term[] terms)
 		{
-			System.Collections.IList termPositions = new System.Collections.ArrayList();
+            // TODO: Java implementation uses a LinkedList, which has different performance costs
+            //       for methods, particularly inserts.  If inserts are done, it may be beneficial
+            //       from a performance point of view to implement Java's version of LinkedList<T>
+			var termPositions = new System.Collections.Generic.List<TermPositions>();
 			
 			for (int i = 0; i < terms.Length; i++)
 				termPositions.Add(indexReader.TermPositions(terms[i]));
@@ -146,7 +143,7 @@ namespace Lucene.Net.Index
 					_posList.add(tp.NextPosition());
 				
 				if (tp.Next())
-					_termPositionsQueue.AdjustTop();
+					_termPositionsQueue.UpdateTop();
 				else
 				{
 					_termPositionsQueue.Pop();
@@ -170,9 +167,9 @@ namespace Lucene.Net.Index
 		{
 			while (_termPositionsQueue.Peek() != null && target > _termPositionsQueue.Peek().Doc())
 			{
-				TermPositions tp = (TermPositions) _termPositionsQueue.Pop();
+				TermPositions tp = _termPositionsQueue.Pop();
 				if (tp.SkipTo(target))
-					_termPositionsQueue.Put(tp);
+					_termPositionsQueue.Add(tp);
 				else
 					tp.Close();
 			}
@@ -192,19 +189,19 @@ namespace Lucene.Net.Index
 		public void  Close()
 		{
 			while (_termPositionsQueue.Size() > 0)
-				((TermPositions) _termPositionsQueue.Pop()).Close();
+				_termPositionsQueue.Pop().Close();
 		}
 		
 		/// <summary> Not implemented.</summary>
 		/// <throws>  UnsupportedOperationException </throws>
-		public virtual void  Seek(Term arg0)
+		public virtual void Seek(Term arg0)
 		{
 			throw new System.NotSupportedException();
 		}
 		
 		/// <summary> Not implemented.</summary>
 		/// <throws>  UnsupportedOperationException </throws>
-		public virtual void  Seek(TermEnum termEnum)
+		public virtual void Seek(TermEnum termEnum)
 		{
 			throw new System.NotSupportedException();
 		}

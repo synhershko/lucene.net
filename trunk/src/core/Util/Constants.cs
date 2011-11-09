@@ -22,14 +22,7 @@ using LucenePackage = Lucene.Net.LucenePackage;
 namespace Lucene.Net.Util
 {
 	
-	/// <summary> Some useful constants.
-	/// 
-	/// 
-	/// </summary>
-	/// <version>  $Id: Constants.java 828327 2009-10-22 06:47:40Z uschindler $
-	/// 
-	/// </version>
-	
+	/// <summary> Some useful constants.</summary>
 	public sealed class Constants
 	{
 		private Constants()

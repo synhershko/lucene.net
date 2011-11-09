@@ -16,18 +16,17 @@
  */
 
 using System;
-
+using Lucene.Net.Util;
 using IndexReader = Lucene.Net.Index.IndexReader;
 using Term = Lucene.Net.Index.Term;
-using PriorityQueue = Lucene.Net.Util.PriorityQueue;
 
 namespace Lucene.Net.Search
 {
 	
 	/// <summary>Implements parallel search over a set of <c>Searchables</c>.
 	/// 
-	/// <p/>Applications usually need only call the inherited <see cref="Searcher.Search(Query)" />
-	/// or <see cref="Searcher.Search(Query,Filter)" /> methods.
+	/// <p/>Applications usually need only call the inherited <see cref="Searcher.Search(Query, int)" />
+	/// or <see cref="Searcher.Search(Query,Filter,int)" /> methods.
 	/// </summary>
 	public class ParallelMultiSearcher:MultiSearcher
 	{
@@ -147,7 +146,7 @@ namespace Lucene.Net.Search
 		public override TopFieldDocs Search(Weight weight, Filter filter, int nDocs, Sort sort)
 		{
 			// don't specify the fields - we'll wait to do this until we get results
-			FieldDocSortedHitQueue hq = new FieldDocSortedHitQueue(null, nDocs);
+			FieldDocSortedHitQueue hq = new FieldDocSortedHitQueue(nDocs);
 			int totalHits = 0;
 			MultiSearcherThread[] msta = new MultiSearcherThread[searchables.Length];
 			for (int i = 0; i < searchables.Length; i++)
@@ -189,7 +188,7 @@ namespace Lucene.Net.Search
 			ScoreDoc[] scoreDocs = new ScoreDoc[hq.Size()];
 			for (int i = hq.Size() - 1; i >= 0; i--)
 			// put docs in array
-				scoreDocs[i] = (ScoreDoc) hq.Pop();
+				scoreDocs[i] = hq.Pop();
 			
 			return new TopFieldDocs(totalHits, scoreDocs, hq.GetFields(), maxScore);
 		}
@@ -245,7 +244,7 @@ namespace Lucene.Net.Search
 		private int nDocs;
 		private TopDocs docs;
 		private int i;
-		private PriorityQueue hq;
+        private HitQueue hq;
 		private int[] starts;
 		private System.Exception ioe;
 		private Sort sort;

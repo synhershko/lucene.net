@@ -1,4 +1,4 @@
-/* 
+﻿/* 
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -16,31 +16,23 @@
  */
 
 using System;
-using Lucene.Net.Util;
+using NUnit.Framework;
 
-namespace Lucene.Net.Index
+namespace Lucene.Net.Util
 {
-	
-	sealed class SegmentMergeQueue:PriorityQueue<SegmentMergeInfo>
-	{
-		internal SegmentMergeQueue(int size)
-		{
-			Initialize(size);
-		}
-
-        public override bool LessThan(SegmentMergeInfo stiA, SegmentMergeInfo stiB)
-		{
-			int comparison = stiA.term.CompareTo(stiB.term);
-			if (comparison == 0)
-				return stiA.base_Renamed < stiB.base_Renamed;
-			else
-				return comparison < 0;
-		}
-		
-		internal void  Close()
-		{
-			while (Top() != null)
-				Pop().Close();
-		}
-	}
+    [TestFixture]
+    public class TestVersion : LuceneTestCase
+    {
+        [Test]
+        public virtual void TestOnOrAfter()
+        {
+            foreach (Version v in Enum.GetValues(typeof(Version)))
+            {
+                Assert.IsTrue(Version.LUCENE_CURRENT.OnOrAfter(v), string.Format("LUCENE_CURRENT must be always OnOrAfter({0})", v));
+            }
+            Assert.IsTrue(Version.LUCENE_30.OnOrAfter(Version.LUCENE_29));
+            Assert.IsTrue(Version.LUCENE_30.OnOrAfter(Version.LUCENE_30));
+            Assert.IsTrue(Version.LUCENE_29.OnOrAfter(Version.LUCENE_30));
+        }
+    }
 }

@@ -29,20 +29,6 @@ namespace Lucene.Net.Store
 	/// </summary>
 	public class SimpleFSDirectory:FSDirectory
 	{
-		
-		/// <summary>Create a new SimpleFSDirectory for the named location.
-		/// 
-		/// </summary>
-		/// <param name="path">the path of the directory
-		/// </param>
-		/// <param name="lockFactory">the lock factory to use, or null for the default.
-		/// </param>
-		/// <throws>  IOException </throws>
-		[System.Obsolete("Use the constructor that takes a DirectoryInfo, this will be removed in the 3.0 release")]
-		public SimpleFSDirectory(System.IO.FileInfo path, LockFactory lockFactory):base(new System.IO.DirectoryInfo(path.FullName), lockFactory)
-		{
-		}
-		
         /// <summary>Create a new SimpleFSDirectory for the named location.
         /// 
         /// </summary>
@@ -63,14 +49,6 @@ namespace Lucene.Net.Store
 		/// <throws>  IOException </throws>
         [System.Obsolete("Use the constructor that takes a DirectoryInfo, this will be removed in the 3.0 release")]
 		public SimpleFSDirectory(System.IO.FileInfo path):base(new System.IO.DirectoryInfo(path.FullName), null)
-		{
-		}
-		
-		// back compatibility so FSDirectory can instantiate via reflection
-		/// <deprecated> 
-		/// </deprecated>
-        [Obsolete]
-		internal SimpleFSDirectory()
 		{
 		}
 		
@@ -141,20 +119,6 @@ namespace Lucene.Net.Store
 			internal bool isClone;
 			//  LUCENE-1566 - maximum read length on a 32bit JVM to prevent incorrect OOM 
 			protected internal int chunkSize;
-			
-			/// <deprecated> Please use ctor taking chunkSize 
-			/// </deprecated>
-            [Obsolete("Please use ctor taking chunkSize ")]
-			public SimpleFSIndexInput(System.IO.FileInfo path):this(path, BufferedIndexInput.BUFFER_SIZE, SimpleFSDirectory.DEFAULT_READ_CHUNK_SIZE)
-			{
-			}
-			
-			/// <deprecated> Please use ctor taking chunkSize 
-			/// </deprecated>
-            [Obsolete("Please use ctor taking chunkSize ")]
-			public SimpleFSIndexInput(System.IO.FileInfo path, int bufferSize):this(path, bufferSize, SimpleFSDirectory.DEFAULT_READ_CHUNK_SIZE)
-			{
-			}
 			
 			public SimpleFSIndexInput(System.IO.FileInfo path, int bufferSize, int chunkSize):base(bufferSize)
 			{

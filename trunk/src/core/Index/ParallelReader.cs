@@ -24,8 +24,6 @@ using Fieldable = Lucene.Net.Documents.Fieldable;
 
 namespace Lucene.Net.Index
 {
-	
-	
 	/// <summary>An IndexReader which reads multiple, parallel indexes.  Each index added
 	/// must have the same number of documents, but typically each contains
 	/// different fields.  Each document contains the union of the fields of all
@@ -502,14 +500,6 @@ namespace Lucene.Net.Index
 		public /*internal*/ virtual IndexReader[] GetSubReaders()
 		{
 			return (IndexReader[]) readers.ToArray(typeof(IndexReader));
-		}
-		
-		/// <deprecated> 
-		/// </deprecated>
-        [Obsolete]
-		protected internal override void  DoCommit()
-		{
-			DoCommit(null);
 		}
 
         protected internal override void DoCommit(System.Collections.Generic.IDictionary<string, string> commitUserData)

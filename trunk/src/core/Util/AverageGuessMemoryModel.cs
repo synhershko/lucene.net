@@ -29,7 +29,7 @@ namespace Lucene.Net.Util
 		{
 			InitBlock();
 		}
-		internal class AnonymousClassIdentityHashMap : System.Collections.Hashtable /*IdentityHashMap*/  // {{Aroush-2.9.0}} Port issue? Will this do the trick to mimic java's IdentityHashMap?
+		internal class AnonymousClassIdentityHashMap : System.Collections.Generic.Dictionary<Type, int> /*IdentityHashMap*/  // TODO: {{Aroush-2.9.0}} Port issue? Will this do the trick to mimic java's IdentityHashMap?
 		{
 			public AnonymousClassIdentityHashMap(AverageGuessMemoryModel enclosingInstance)
 			{
@@ -57,7 +57,7 @@ namespace Lucene.Net.Util
 				}
 				
 			}
-            // {{Aroush-2.9.0}} Port issue? Will this do the trick to mimic java's IdentityHashMap?
+            // TODO: {{Aroush-2.9.0}} Port issue? Will this do the trick to mimic java's IdentityHashMap?
             /*
              * From Java docs:
              * This class implements the Map interface with a hash table, using 
@@ -77,12 +77,13 @@ namespace Lucene.Net.Util
             }
             // {{Aroush-2.9.0}} Port issue, need to mimic java's IdentityHashMap
 		}
+
 		private void  InitBlock()
 		{
 			sizes = new AnonymousClassIdentityHashMap(this);
 		}
 		// best guess primitive sizes
-		private System.Collections.IDictionary sizes;
+        private System.Collections.Generic.Dictionary<Type, int> sizes;
 		
 		/*
 		* (non-Javadoc)
@@ -109,7 +110,7 @@ namespace Lucene.Net.Util
 		*/
 		public override int GetPrimitiveSize(System.Type clazz)
 		{
-			return ((System.Int32) sizes[clazz]);
+			return sizes[clazz];
 		}
 		
 		/* (non-Javadoc)

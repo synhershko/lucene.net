@@ -36,8 +36,8 @@ namespace Lucene.Net.Util
 		public abstract class AttributeFactory
 		{
 			/// <summary> returns an <see cref="AttributeImpl" /> for the supplied <see cref="Attribute" /> interface class.
-			/// <p/>Signature for Java 1.5: <c>public AttributeImpl createAttributeInstance(Class%lt;? extends Attribute&gt; attClass)</c>
 			/// </summary>
+			//TODO: .NET has no Type<T>, so this can't be a compiler time check like in java
 			public abstract AttributeImpl CreateAttributeInstance(System.Type attClass);
 			
 			/// <summary> This is the default factory that creates <see cref="AttributeImpl" />s using the

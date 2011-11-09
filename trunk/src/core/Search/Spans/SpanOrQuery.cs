@@ -16,9 +16,9 @@
  */
 
 using System;
-
+using Lucene.Net.Index;
+using Lucene.Net.Util;
 using IndexReader = Lucene.Net.Index.IndexReader;
-using PriorityQueue = Lucene.Net.Util.PriorityQueue;
 using ToStringUtils = Lucene.Net.Util.ToStringUtils;
 using Query = Lucene.Net.Search.Query;
 
@@ -27,7 +27,7 @@ namespace Lucene.Net.Search.Spans
 	
 	/// <summary>Matches the union of its clauses.</summary>
 	[Serializable]
-	public class SpanOrQuery:SpanQuery, System.ICloneable
+	public class SpanOrQuery : SpanQuery, System.ICloneable
 	{
 		private class AnonymousClassSpans : Spans
 		{
@@ -55,13 +55,13 @@ namespace Lucene.Net.Search.Spans
 			private bool InitSpanQueue(int target)
 			{
 				queue = new SpanQueue(enclosingInstance, Enclosing_Instance.clauses.Count);
-				System.Collections.IEnumerator i = Enclosing_Instance.clauses.GetEnumerator();
+				System.Collections.Generic.IEnumerator<SpanQuery> i = Enclosing_Instance.clauses.GetEnumerator();
 				while (i.MoveNext())
 				{
-					Spans spans = ((SpanQuery) i.Current).GetSpans(reader);
+					Spans spans = i.Current.GetSpans(reader);
 					if (((target == - 1) && spans.Next()) || ((target != - 1) && spans.SkipTo(target)))
 					{
-						queue.Put(spans);
+						queue.Add(spans);
 					}
 				}
 				return queue.Size() != 0;
@@ -83,7 +83,7 @@ namespace Lucene.Net.Search.Spans
 				if (Top().Next())
 				{
 					// move to next
-					queue.AdjustTop();
+					queue.UpdateTop();
 					return true;
 				}
 				
@@ -93,7 +93,7 @@ namespace Lucene.Net.Search.Spans
 			
 			private Spans Top()
 			{
-				return (Spans) queue.Top();
+				return queue.Top();
 			}
 			
 			public override bool SkipTo(int target)
@@ -108,7 +108,7 @@ namespace Lucene.Net.Search.Spans
 				{
 					if (Top().SkipTo(target))
 					{
-						queue.AdjustTop();
+						queue.UpdateTop();
 					}
 					else
 					{
@@ -137,7 +137,6 @@ namespace Lucene.Net.Search.Spans
 				return Top().End();
 			}
 			
-			// TODO: Remove warning after API has been finalized
 			public override System.Collections.Generic.ICollection<byte[]> GetPayload()
 			{
 				System.Collections.Generic.ICollection<byte[]> result = null;
@@ -149,7 +148,6 @@ namespace Lucene.Net.Search.Spans
 				return result;
 			}
 			
-			// TODO: Remove warning after API has been finalized
 			public override bool IsPayloadAvailable()
 			{
 				Spans top = Top();
@@ -161,11 +159,12 @@ namespace Lucene.Net.Search.Spans
 				return "spans(" + Enclosing_Instance + ")@" + ((queue == null)?"START":(queue.Size() > 0?(Doc() + ":" + Start() + "-" + End()):"END"));
 			}
 		}
+
 		private SupportClass.EquatableList<SpanQuery> clauses;
 		private System.String field;
 		
 		/// <summary>Construct a SpanOrQuery merging the provided clauses. </summary>
-		public SpanOrQuery(SpanQuery[] clauses)
+		public SpanOrQuery(params SpanQuery[] clauses)
 		{
 			
 			// copy clauses array into an ArrayList
@@ -189,7 +188,7 @@ namespace Lucene.Net.Search.Spans
 		/// <summary>Return the clauses whose spans are matched. </summary>
 		public virtual SpanQuery[] GetClauses()
 		{
-			return (SpanQuery[]) clauses.ToArray();
+			return clauses.ToArray();
 		}
 		
 		public override System.String GetField()
@@ -197,30 +196,10 @@ namespace Lucene.Net.Search.Spans
 			return field;
 		}
 		
-		/// <summary>Returns a collection of all terms matched by this query.</summary>
-		/// <deprecated> use extractTerms instead
-		/// </deprecated>
-        /// <seealso cref="ExtractTerms(System.Collections.Hashtable)">
-		/// </seealso>
-        [Obsolete("use ExtractTerms instead")]
-		public override System.Collections.ICollection GetTerms()
+		public override void  ExtractTerms(System.Collections.Generic.ISet<Term> terms)
 		{
-			System.Collections.ArrayList terms = new System.Collections.ArrayList();
-			System.Collections.IEnumerator i = clauses.GetEnumerator();
-			while (i.MoveNext())
-			{
-				SpanQuery clause = (SpanQuery) i.Current;
-				terms.AddRange(clause.GetTerms());
-			}
-			return terms;
-		}
-		
-		public override void  ExtractTerms(System.Collections.Hashtable terms)
-		{
-			System.Collections.IEnumerator i = clauses.GetEnumerator();
-			while (i.MoveNext())
-			{
-				SpanQuery clause = (SpanQuery) i.Current;
+			foreach(SpanQuery clause in clauses)
+            {
 				clause.ExtractTerms(terms);
 			}
 		}
@@ -232,8 +211,7 @@ namespace Lucene.Net.Search.Spans
 			
 			for (int i = 0; i < sz; i++)
 			{
-				SpanQuery clause = (SpanQuery) clauses[i];
-				newClauses[i] = (SpanQuery) clause.Clone();
+                newClauses[i] = (SpanQuery) clauses[i].Clone();
 			}
 			SpanOrQuery soq = new SpanOrQuery(newClauses);
 			soq.SetBoost(GetBoost());
@@ -245,7 +223,7 @@ namespace Lucene.Net.Search.Spans
 			SpanOrQuery clone = null;
 			for (int i = 0; i < clauses.Count; i++)
 			{
-				SpanQuery c = (SpanQuery) clauses[i];
+				SpanQuery c = clauses[i];
 				SpanQuery query = (SpanQuery) c.Rewrite(reader);
 				if (query != c)
 				{
@@ -269,12 +247,12 @@ namespace Lucene.Net.Search.Spans
 		{
 			System.Text.StringBuilder buffer = new System.Text.StringBuilder();
 			buffer.Append("spanOr([");
-			System.Collections.IEnumerator i = clauses.GetEnumerator();
+			System.Collections.Generic.IEnumerator<SpanQuery> i = clauses.GetEnumerator();
             int j = 0;
 			while (i.MoveNext())
 			{
                 j++;
-				SpanQuery clause = (SpanQuery) i.Current;
+				SpanQuery clause = i.Current;
 				buffer.Append(clause.ToString(field));
                 if (j < clauses.Count)
                 {
@@ -312,7 +290,7 @@ namespace Lucene.Net.Search.Spans
 		}
 		
 		
-		private class SpanQueue:PriorityQueue
+		private class SpanQueue : PriorityQueue<Spans>
 		{
 			private void  InitBlock(SpanOrQuery enclosingInstance)
 			{
@@ -332,11 +310,9 @@ namespace Lucene.Net.Search.Spans
 				InitBlock(enclosingInstance);
 				Initialize(size);
 			}
-			
-			public override bool LessThan(System.Object o1, System.Object o2)
+
+            public override bool LessThan(Spans spans1, Spans spans2)
 			{
-				Spans spans1 = (Spans) o1;
-				Spans spans2 = (Spans) o2;
 				if (spans1.Doc() == spans2.Doc())
 				{
 					if (spans1.Start() == spans2.Start())
@@ -359,7 +335,7 @@ namespace Lucene.Net.Search.Spans
 		{
 			if (clauses.Count == 1)
 			// optimize 1-clause case
-				return ((SpanQuery) clauses[0]).GetSpans(reader);
+				return (clauses[0]).GetSpans(reader);
 			
 			return new AnonymousClassSpans(reader, this);
 		}

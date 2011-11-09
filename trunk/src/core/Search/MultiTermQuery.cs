@@ -401,16 +401,6 @@ namespace Lucene.Net.Search
 		{
 		}
 		
-		/// <summary> Returns the pattern term.</summary>
-		/// <deprecated> check sub class for possible term access - getTerm does not
-		/// make sense for all MultiTermQuerys and will be removed.
-		/// </deprecated>
-        [Obsolete("check sub class for possible term access - getTerm does not make sense for all MultiTermQuerys and will be removed.")]
-		public virtual Term GetTerm()
-		{
-			return term;
-		}
-		
 		/// <summary>Construct the enumeration to be used, expanding the pattern term. </summary>
 		public /*protected internal*/ abstract FilteredTermEnum GetEnum(IndexReader reader);
 		

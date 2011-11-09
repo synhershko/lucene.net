@@ -96,6 +96,125 @@ namespace Lucene.Net._SupportClass
     }
     
     [TestFixture]
+    public class TestHashMap
+    {
+        private static SupportClass.HashMap<TKey, TValue> GetNewHashMap<TKey, TValue>()
+            where TKey : class
+            where TValue : class
+        {
+            return new SupportClass.HashMap<TKey, TValue>();
+        }
+
+        private static SupportClass.HashMap<string,string> GetDefaultHashMap1()
+        {
+            var hm = GetNewHashMap<string, string>();
+            hm.Add("key1", "value1");
+            hm.Add("key2", "value2");
+            return hm;
+        }
+
+        // Checking contains keys with reference types 
+        // checking contains values with both reference
+        // check ICollection<> methods with ref types as needed
+        // Test the enumerations of keys and values, with and without null key
+
+        [Test]
+        public void TestKeyEnumeration()
+        {
+            var dict = GetDefaultHashMap1();
+        }
+
+        [Test]
+        public void TestKeyValuePairEnumeration()
+        {
+            var dict = GetDefaultHashMap1();
+            Action<KeyValuePair<string, string>> act = kvp =>
+                                                           {
+                                                               Assert.IsNotNull(kvp);
+                                                               if (kvp.Key == "key1")
+                                                               {
+                                                                   Assert.AreEqual("value1", kvp.Value);
+                                                               }
+                                                               else if (kvp.Key == "key2")
+                                                               {
+                                                                   Assert.AreEqual("value2", kvp.Value);
+                                                               }
+                                                               else if (kvp.Key == null)
+                                                               {
+                                                                   Assert.AreEqual("nullval", kvp.Value);
+                                                               }
+                                                           };
+
+            foreach (var kvp in dict)
+            {
+                act.Invoke(kvp);
+            }
+
+            dict.Add(null, "nullval");
+            foreach (var kvp in dict)
+            {
+                act.Invoke(kvp);
+            }
+        }
+
+        [Test]
+        public void TestContainsNullKey()
+        {
+            var dict = GetDefaultHashMap1();
+            Assert.IsFalse(dict.ContainsKey(null));
+            Assert.IsNull(dict[null]);
+
+            dict.Add(null, "value");
+            Assert.IsTrue(dict.ContainsKey(null));
+            Assert.AreEqual("value", dict[null]);
+        }
+
+        [Test]
+        public void TestContainsKey()
+        {
+            var dict = GetDefaultHashMap1();
+            Assert.IsTrue(dict.ContainsKey("key1"));
+            Assert.IsTrue(dict.ContainsKey("key2"));
+        }
+
+        [Test]
+        public void TestAdd_NoNullKeys_NullValues()
+        {
+            var dict = GetNewHashMap<string, string>();
+            dict.Add("key1", null);
+            dict.Add("key2", "value2");
+
+            Assert.AreEqual(2, dict.Count);
+        }
+
+        [Test]
+        public void TestAdd_WithNullKeys_NoNullValues()
+        {
+            var dict = GetNewHashMap<string, string>();
+            dict.Add("key1", "value1");
+            dict.Add(null, "nullValue");
+
+            Assert.AreEqual(2, dict.Count);
+        }
+
+        [Test]
+        public void TestGetWithNonExistantKey_EmptyCollection()
+        {
+            var dict = GetNewHashMap<string, string>();
+            Assert.IsNull(dict["nothing"]);
+            Assert.IsNull(dict[null]);
+        }
+
+        [Test]
+        public void TestGetWithNonExistantKey()
+        {
+            var dict = GetDefaultHashMap1();
+            Assert.IsNull(dict["nothing"]);
+            Assert.IsNull(dict[null]);
+        }
+    }
+
+    [TestFixture]
     public class TestWeakHashTable
     {
         [Test]

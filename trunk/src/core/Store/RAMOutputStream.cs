@@ -21,11 +21,8 @@ namespace Lucene.Net.Store
 {
 	
 	/// <summary> A memory-resident <see cref="IndexOutput" /> implementation.
-	/// 
+	/// <para>For lucene internal use.</para>
 	/// </summary>
-	/// <version>  $Id: RAMOutputStream.java 691694 2008-09-03 17:34:29Z mikemccand $
-	/// </version>
-	
 	public class RAMOutputStream:IndexOutput
 	{
 		internal const int BUFFER_SIZE = 1024;
@@ -70,7 +67,7 @@ namespace Lucene.Net.Store
 					// at the last buffer
 					length = (int) (end - pos);
 				}
-				out_Renamed.WriteBytes((byte[]) file.GetBuffer(buffer++), length);
+				out_Renamed.WriteBytes(file.GetBuffer(buffer++), length);
 				pos = nextPos;
 			}
 		}
@@ -149,7 +146,7 @@ namespace Lucene.Net.Store
 			}
 			else
 			{
-				currentBuffer = (byte[]) file.GetBuffer(currentBufferIndex);
+				currentBuffer = file.GetBuffer(currentBufferIndex);
 			}
 			bufferPosition = 0;
 			bufferStart = (long) BUFFER_SIZE * (long) currentBufferIndex;

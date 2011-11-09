@@ -34,7 +34,7 @@ namespace Lucene.Net.Index
 	/// (subject to change suddenly in the next release)<p/>
 	/// </summary>
 	[Serializable]
-	public sealed class SegmentInfos:System.Collections.ArrayList
+	public sealed class SegmentInfos : System.Collections.ArrayList
 	{
 		private class AnonymousClassFindSegmentsFile:FindSegmentsFile
 		{
@@ -314,6 +314,9 @@ namespace Lucene.Net.Index
 					}
 					else if (0 != input.ReadByte())
 					{
+                        // TODO: In java, this is a read-only dictionary, probably for a reason, though
+                        //       I can't see immediately why.  We'd have to roll our own, I can't find
+                        //       and equivelant in the BCL
                         userData = new System.Collections.Generic.Dictionary<string,string>();
 						userData.Add("userData", input.ReadString());
 					}
@@ -443,7 +446,7 @@ namespace Lucene.Net.Index
             sis.generation = this.generation;
             sis.lastGeneration = this.lastGeneration;
             // sis.pendingSegnOutput = this.pendingSegnOutput; // {{Aroush-2.9}} needed?
-            sis.userData = new System.Collections.Generic.Dictionary<string, string>(userData);
+            sis.userData = new SupportClass.HashMap<string, string>(userData);
             sis.version = this.version;
             return sis;
 		}
@@ -701,10 +704,11 @@ namespace Lucene.Net.Index
 							}
 							catch (System.Threading.ThreadInterruptedException ie)
 							{
-								// In 3.0 we will change this to throw
-								// InterruptedException instead
-								SupportClass.ThreadClass.Current().Interrupt();
-								throw new System.SystemException(ie.Message, ie);
+                                //// In 3.0 we will change this to throw
+                                //// InterruptedException instead
+                                //SupportClass.ThreadClass.Current().Interrupt();
+                                //throw new System.SystemException(ie.Message, ie);
+							    throw;
 							}
 						}
 						
@@ -718,17 +722,7 @@ namespace Lucene.Net.Index
 						
 						if (gen == - 1)
 						{
-							// Neither approach found a generation
-							System.String s;
-							if (files != null)
-							{
-								s = "";
-								for (int i = 0; i < files.Length; i++)
-									s += (" " + files[i]);
-							}
-							else
-								s = " null";
-							throw new System.IO.FileNotFoundException("no segments* file found in " + directory + ": files:" + s);
+							throw new System.IO.FileNotFoundException("no segments* file found in " + directory + ": files:" + string.Join(" ", files));
 						}
 					}
 					
@@ -913,11 +907,10 @@ namespace Lucene.Net.Index
 		/// </summary>
         public System.Collections.Generic.ICollection<string> Files(Directory dir, bool includeSegmentsFile)
 		{
-            System.Collections.Generic.Dictionary<string, string> files = new System.Collections.Generic.Dictionary<string, string>();
+            System.Collections.Generic.HashSet<string> files = new System.Collections.Generic.HashSet<string>();
 			if (includeSegmentsFile)
 			{
-                string tmp = GetCurrentSegmentFileName();
-                files.Add(tmp, tmp);
+                files.Add(GetCurrentSegmentFileName());
 			}
 			int size = Count;
 			for (int i = 0; i < size; i++)
@@ -925,10 +918,10 @@ namespace Lucene.Net.Index
 				SegmentInfo info = Info(i);
 				if (info.dir == dir)
 				{
-					SupportClass.CollectionsHelper.AddAllIfNotContains(files, Info(i).Files());
+                    files.UnionWith(Info(i).Files());
 				}
 			}
-			return files.Keys;
+			return files;
 		}
 		
 		internal void  FinishCommit(Directory dir)

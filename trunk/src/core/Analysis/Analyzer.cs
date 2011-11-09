@@ -16,10 +16,9 @@
  */
 
 using System;
-
+using Lucene.Net.Store;
+using Lucene.Net.Util;
 using Fieldable = Lucene.Net.Documents.Fieldable;
-using AlreadyClosedException = Lucene.Net.Store.AlreadyClosedException;
-using CloseableThreadLocal = Lucene.Net.Util.CloseableThreadLocal;
 
 namespace Lucene.Net.Analysis
 {
@@ -30,7 +29,7 @@ namespace Lucene.Net.Analysis
 	/// characters from the Reader into raw Tokens.  One or more TokenFilters may
 	/// then be applied to the output of the Tokenizer.
 	/// </summary>
-	public abstract class Analyzer
+	public abstract class Analyzer : IDisposable
 	{
 		/// <summary>Creates a TokenStream which tokenizes all the text in the provided
 		/// Reader.  Must be able to handle null field name for
@@ -50,7 +49,7 @@ namespace Lucene.Net.Analysis
 			return TokenStream(fieldName, reader);
 		}
 		
-		private CloseableThreadLocal tokenStreams = new CloseableThreadLocal();
+		private CloseableThreadLocal<Object> tokenStreams = new CloseableThreadLocal<Object>();
 		
 		/// <summary>Used by Analyzers that implement reusableTokenStream
 		/// to retrieve previously saved TokenStreams for re-use
@@ -98,36 +97,41 @@ namespace Lucene.Net.Analysis
 			}
 		}
 		
-		protected internal bool overridesTokenStreamMethod;
+        [Obsolete()]
+		protected internal bool overridesTokenStreamMethod = false;
 		
 		/// <deprecated> This is only present to preserve
 		/// back-compat of classes that subclass a core analyzer
 		/// and override tokenStream but not reusableTokenStream 
 		/// </deprecated>
+		/// <summary>
+        /// Java uses Class&lt;? extends Analyer&gt; to contrain <paramref="baseClass"/> to
+        /// only Types that inherit from Analyzer.  C# does not have a generic type class,
+        /// ie Type&lt;t&gt;.  The method signature stays the same, and an exception may
+        /// still be thrown, if the method doesn't exist.
+		/// </summary>
         [Obsolete("This is only present to preserve back-compat of classes that subclass a core analyzer and override tokenStream but not reusableTokenStream ")]
 		protected internal virtual void  SetOverridesTokenStreamMethod(System.Type baseClass)
 		{
-			
-			System.Type[] params_Renamed = new System.Type[2];
-			params_Renamed[0] = typeof(System.String);
-			params_Renamed[1] = typeof(System.IO.TextReader);
-			
-			try
-			{
-				System.Reflection.MethodInfo m = this.GetType().GetMethod("TokenStream", (params_Renamed == null)?new System.Type[0]:(System.Type[]) params_Renamed);
-				if (m != null)
-				{
-					overridesTokenStreamMethod = m.DeclaringType != baseClass;
-				}
-				else
-				{
-					overridesTokenStreamMethod = false;
-				}
-			}
-			catch (System.MethodAccessException nsme)
-			{
-				overridesTokenStreamMethod = false;
-			}
+            // Unfortunately, this is not a compile-time check, like it would be in Java
+            // TODO: There's probably a better way to emulate java's compile-time behavior
+            if (!typeof(Analyzer).IsAssignableFrom(baseClass))
+            {
+                overridesTokenStreamMethod = false;
+            }
+            else
+            {
+                try
+                {
+                    System.Reflection.MethodInfo m = this.GetType().GetMethod("TokenStream", new[] { typeof(string), typeof(System.IO.TextReader) });
+                    overridesTokenStreamMethod = m.DeclaringType != baseClass;
+                }
+                catch (System.MethodAccessException nsme)
+                {
+                    // can't happen, as baseClass is subclass of Analyzer
+                    overridesTokenStreamMethod = false;
+                }
+            }
 		}
 		
 		
@@ -173,8 +177,18 @@ namespace Lucene.Net.Analysis
 		/// <summary>Frees persistent resources used by this Analyzer </summary>
 		public virtual void  Close()
 		{
-			tokenStreams.Close();
-			tokenStreams = null;
+		    Dispose();
 		}
+
+        // TODO: The whole Close calling Dispose thing isn't a good idea
+        //       We should convert all Close methods to Dispose; .net friendly
+        public virtual void Dispose()
+        {
+            if (tokenStreams != null)
+            {
+                tokenStreams.Close();
+                tokenStreams = null;
+            }
+        }
 	}
 }

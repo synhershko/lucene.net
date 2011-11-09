@@ -55,7 +55,8 @@ namespace Lucene.Net.Util
 		{
 			return name;
 		}
-		
+
+		// TODO: Why is this commented out?  Java has this code uncommented.
 		/// <summary> Resolves the deserialized instance to the local reference for accurate
 		/// equals() and == comparisons.
 		/// 

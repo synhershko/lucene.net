@@ -25,7 +25,7 @@ namespace Lucene.Net.Index
 	/// into account). 
 	/// </summary>
 	
-	public class LogDocMergePolicy:LogMergePolicy
+	public class LogDocMergePolicy : LogMergePolicy
 	{
 		
 		/// <seealso cref="SetMinMergeDocs">

@@ -48,30 +48,10 @@ namespace Lucene.Net.Store
 		/// </summary>
 		[NonSerialized]
 		protected internal LockFactory lockFactory;
-		
-		/// <deprecated> For some Directory implementations (<see cref="FSDirectory" />
-		///, and its subclasses), this method
-		/// silently filters its results to include only index
-		/// files.  Please use <see cref="ListAll" /> instead, which
-		/// does no filtering. 
-		/// </deprecated>
-        [Obsolete("For some Directory implementations (FSDirectory}, and its subclasses), this method silently filters its results to include only index files.  Please use ListAll instead, which does no filtering. ")]
-		public abstract System.String[] List();
-		
-		/// <summary>Returns an array of strings, one for each file in the
-		/// directory.  Unlike <see cref="List" /> this method does no
-		/// filtering of the contents in a directory, and it will
-		/// never return null (throws IOException instead).
-		/// 
-		/// Currently this method simply fallsback to <see cref="List" />
-		/// for Directory impls outside of Lucene's core &amp;
-		/// contrib, but in 3.0 that method will be removed and
-		/// this method will become abstract. 
-		/// </summary>
-		public virtual System.String[] ListAll()
-		{
-			return List();
-		}
+
+	    /// <summary>Returns an array of strings, one for each file in the directory.</summary>
+	    /// <exception cref="System.IO.IOException"></exception>
+	    public abstract System.String[] ListAll();
 		
 		/// <summary>Returns true iff a file with the given name exists. </summary>
 		public abstract bool FileExists(System.String name);
@@ -84,15 +64,6 @@ namespace Lucene.Net.Store
 		
 		/// <summary>Removes an existing file in the directory. </summary>
 		public abstract void  DeleteFile(System.String name);
-		
-		/// <summary>Renames an existing file in the directory.
-		/// If a file already exists with the new name, then it is replaced.
-		/// This replacement is not guaranteed to be atomic.
-		/// </summary>
-		/// <deprecated> 
-		/// </deprecated>
-        [Obsolete]
-		public abstract void  RenameFile(System.String from, System.String to);
 		
 		/// <summary>Returns the length of a file in the directory. </summary>
 		public abstract long FileLength(System.String name);
@@ -164,6 +135,7 @@ namespace Lucene.Net.Store
 		/// </param>
 		public virtual void  SetLockFactory(LockFactory lockFactory)
 		{
+		    System.Diagnostics.Debug.Assert(this.lockFactory != null);
 			this.lockFactory = lockFactory;
 			lockFactory.SetLockPrefix(this.GetLockID());
 		}

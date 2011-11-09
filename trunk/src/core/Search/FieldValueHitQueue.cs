@@ -16,8 +16,7 @@
  */
 
 using System;
-
-using PriorityQueue = Lucene.Net.Util.PriorityQueue;
+using Lucene.Net.Util;
 
 namespace Lucene.Net.Search
 {
@@ -25,11 +24,6 @@ namespace Lucene.Net.Search
 	/// <summary> Expert: A hit queue for sorting by hits by terms in more than one field.
 	/// Uses <c>FieldCache.DEFAULT</c> for maintaining
 	/// internal term lookup tables.
-	/// 
-	/// This class will not resolve SortField.AUTO types, and expects the type
-	/// of all SortFields used for construction to already have been resolved. 
-	/// <see cref="SortField.DetectFieldType(Lucene.Net.Index.IndexReader, String)" /> is a utility method which
-	/// may be used for field type detection.
 	/// 
 	/// <b>NOTE:</b> This API is experimental and might change in
 	/// incompatible ways in the next release.
@@ -43,32 +37,30 @@ namespace Lucene.Net.Search
 	/// </seealso>
 	/// <seealso cref="FieldCache">
 	/// </seealso>
-	public abstract class FieldValueHitQueue:PriorityQueue
+	public abstract class FieldValueHitQueue : PriorityQueue<FieldValueHitQueue.Entry>
 	{
-		
-		internal sealed class Entry
+        // had to change from internal to public, due to public accessability of FieldValueHitQueue
+		public /*internal*/ sealed class Entry : ScoreDoc
 		{
 			internal int slot;
-			internal int docID;
-			internal float score;
-			
-			internal Entry(int slot, int docID, float score)
+
+            internal Entry(int slot, int doc, float score)
+                : base(doc, score)
 			{
+			    
 				this.slot = slot;
-				this.docID = docID;
-				this.score = score;
 			}
 			
 			public override System.String ToString()
 			{
-				return "slot:" + slot + " docID:" + docID + " score=" + score;
+				return "slot:" + slot + " " + base.ToString();
 			}
 		}
 		
 		/// <summary> An implementation of <see cref="FieldValueHitQueue" /> which is optimized in case
 		/// there is just one comparator.
 		/// </summary>
-		private sealed class OneComparatorFieldValueHitQueue:FieldValueHitQueue
+		private sealed class OneComparatorFieldValueHitQueue : FieldValueHitQueue
 		{
 			
 			private FieldComparator comparator;
@@ -82,8 +74,6 @@ namespace Lucene.Net.Search
 				}
 				
 				SortField field = fields[0];
-				// AUTO is resolved before we are called
-				System.Diagnostics.Debug.Assert(field.GetType() != SortField.AUTO);
 				comparator = field.GetComparator(size, 0);
 				oneReverseMul = field.reverse?- 1:1;
 				
@@ -100,11 +90,8 @@ namespace Lucene.Net.Search
 			/// </param>
 			/// <returns> <c>true</c> if document <c>a</c> should be sorted after document <c>b</c>.
 			/// </returns>
-			public override bool LessThan(System.Object a, System.Object b)
+            public override bool LessThan(Entry hitA, Entry hitB)
 			{
-				Entry hitA = (Entry) a;
-				Entry hitB = (Entry) b;
-				
 				System.Diagnostics.Debug.Assert(hitA != hitB);
 				System.Diagnostics.Debug.Assert(hitA.slot != hitB.slot);
 				
@@ -115,14 +102,14 @@ namespace Lucene.Net.Search
 				}
 				
 				// avoid random sort order that could lead to duplicates (bug #31241):
-				return hitA.docID > hitB.docID;
+                return hitA.doc > hitB.doc;
 			}
 		}
 		
 		/// <summary> An implementation of <see cref="FieldValueHitQueue" /> which is optimized in case
 		/// there is more than one comparator.
 		/// </summary>
-		private sealed class MultiComparatorsFieldValueHitQueue:FieldValueHitQueue
+		private sealed class MultiComparatorsFieldValueHitQueue : FieldValueHitQueue
 		{
 			
 			public MultiComparatorsFieldValueHitQueue(SortField[] fields, int size):base(fields)
@@ -142,12 +129,9 @@ namespace Lucene.Net.Search
 				
 				Initialize(size);
 			}
-			
-			public override bool LessThan(System.Object a, System.Object b)
+
+            public override bool LessThan(Entry hitA, Entry hitB)
 			{
-				Entry hitA = (Entry) a;
-				Entry hitB = (Entry) b;
-				
 				System.Diagnostics.Debug.Assert(hitA != hitB);
 				System.Diagnostics.Debug.Assert(hitA.slot != hitB.slot);
 				
@@ -163,7 +147,7 @@ namespace Lucene.Net.Search
 				}
 				
 				// avoid random sort order that could lead to duplicates (bug #31241):
-				return hitA.docID > hitB.docID;
+                return hitA.doc > hitB.doc;
 			}
 		}
 		
@@ -226,8 +210,8 @@ namespace Lucene.Net.Search
 		protected internal SortField[] fields;
 		protected internal FieldComparator[] comparators;
 		protected internal int[] reverseMul;
-		
-		public abstract override bool LessThan(System.Object a, System.Object b);
+
+        public abstract override bool LessThan(Entry a, Entry b);
 		
 		/// <summary> Given a queue Entry, creates a corresponding FieldDoc
 		/// that contains the values used to sort the given document.
@@ -251,7 +235,7 @@ namespace Lucene.Net.Search
 				fields[i] = comparators[i].Value(entry.slot);
 			}
 			//if (maxscore > 1.0f) doc.score /= maxscore;   // normalize scores
-			return new FieldDoc(entry.docID, entry.score, fields);
+			return new FieldDoc(entry.doc, entry.score, fields);
 		}
 		
 		/// <summary>Returns the SortFields being used by this hit queue. </summary>

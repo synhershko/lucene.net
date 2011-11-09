@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Util;
 using CharReader = Lucene.Net.Analysis.CharReader;
 using Token = Lucene.Net.Analysis.Token;
 using Tokenizer = Lucene.Net.Analysis.Tokenizer;

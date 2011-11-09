@@ -28,13 +28,8 @@ namespace Lucene.Net.Store
 	/// }
 	/// }.run();
     /// </code>
-	/// 
-	/// 
 	/// </summary>
-	/// <version>  $Id: Lock.java 769409 2009-04-28 14:05:43Z mikemccand $
-	/// </version>
-	/// <seealso cref="Directory.MakeLock(String)">
-	/// </seealso>
+	/// <seealso cref="Directory.MakeLock(String)" />
 	public abstract class Lock
 	{
 		
@@ -114,6 +109,7 @@ namespace Lucene.Net.Store
 				{
 					// In 3.0 we will change this to throw
 					// InterruptedException instead
+                    // TODO: Revisit rewriting in ThreadInterruptedException
 					SupportClass.ThreadClass.Current().Interrupt();
 					throw new System.IO.IOException(e.ToString());
 				}

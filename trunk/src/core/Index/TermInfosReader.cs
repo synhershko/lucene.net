@@ -16,10 +16,9 @@
  */
 
 using System;
-
+using Lucene.Net.Util;
+using Lucene.Net.Util.Cache;
 using Directory = Lucene.Net.Store.Directory;
-using CloseableThreadLocal = Lucene.Net.Util.CloseableThreadLocal;
-using SimpleLRUCache = Lucene.Net.Util.Cache.SimpleLRUCache;
 
 namespace Lucene.Net.Index
 {
@@ -35,7 +34,7 @@ namespace Lucene.Net.Index
 		private System.String segment;
 		private FieldInfos fieldInfos;
 		
-		private CloseableThreadLocal threadResources = new CloseableThreadLocal();
+		private CloseableThreadLocal<ThreadResources> threadResources = new CloseableThreadLocal<ThreadResources>();
 		private SegmentTermEnum origEnum;
 		private long size;
 		
@@ -53,7 +52,7 @@ namespace Lucene.Net.Index
 			internal SegmentTermEnum termEnum;
 			
 			// Used for caching the least recently looked-up Terms
-			internal Lucene.Net.Util.Cache.Cache termInfoCache;
+			internal Lucene.Net.Util.Cache.Cache<Term, TermInfo> termInfoCache;
 		}
 		
 		internal TermInfosReader(Directory dir, System.String seg, FieldInfos fis, int readBufferSize, int indexDivisor)
@@ -154,13 +153,13 @@ namespace Lucene.Net.Index
 		
 		private ThreadResources GetThreadResources()
 		{
-			ThreadResources resources = (ThreadResources) threadResources.Get();
+			ThreadResources resources = threadResources.Get();
 			if (resources == null)
 			{
 				resources = new ThreadResources();
 				resources.termEnum = Terms();
 				// Cache does not have to be thread-safe, it is only used by one thread at the same time
-				resources.termInfoCache = new SimpleLRUCache(DEFAULT_CACHE_SIZE);
+				resources.termInfoCache = new SimpleLRUCache<Term,TermInfo>(DEFAULT_CACHE_SIZE);
 				threadResources.Set(resources);
 			}
 			return resources;
@@ -208,13 +207,13 @@ namespace Lucene.Net.Index
 			
 			TermInfo ti;
 			ThreadResources resources = GetThreadResources();
-			Lucene.Net.Util.Cache.Cache cache = null;
+			Lucene.Net.Util.Cache.Cache<Term, TermInfo> cache = null;
 			
 			if (useCache)
 			{
 				cache = resources.termInfoCache;
 				// check the cache first if the term was recently looked up
-				ti = (TermInfo) cache.Get(term);
+				ti = cache.Get(term);
 				if (ti != null)
 				{
 					return ti;

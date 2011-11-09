@@ -69,25 +69,9 @@ namespace Lucene.Net.Util
 				}
 			}
 			
-			/// <deprecated> use <see cref="DocID()" /> instead. 
-			/// </deprecated>
-            [Obsolete("use DocID() instead.")]
-			public override int Doc()
-			{
-				return lastInt;
-			}
-			
 			public override int DocID()
 			{
 				return doc;
-			}
-			
-			/// <deprecated> use <see cref="NextDoc()" /> instead. 
-			/// </deprecated>
-            [Obsolete("use NextDoc() instead.")]
-			public override bool Next()
-			{
-				return NextDoc() != NO_MORE_DOCS;
 			}
 			
 			public override int NextDoc()
@@ -102,14 +86,6 @@ namespace Lucene.Net.Util
 					doc = lastInt;
 				}
 				return doc;
-			}
-			
-			/// <deprecated> use <see cref="Advance(int)" /> instead. 
-			/// </deprecated>
-            [Obsolete("use Advance(int) instead.")]
-			public override bool SkipTo(int docNr)
-			{
-				return Advance(docNr) != NO_MORE_DOCS;
 			}
 			
 			public override int Advance(int target)
@@ -140,7 +116,7 @@ namespace Lucene.Net.Util
 		/// </summary>
 		/// <param name="sortedInts"> A sorted array of non negative integers.
 		/// </param>
-		public SortedVIntList(int[] sortedInts):this(sortedInts, sortedInts.Length)
+		public SortedVIntList(params int[] sortedInts):this(sortedInts, sortedInts.Length)
 		{
 		}
 		

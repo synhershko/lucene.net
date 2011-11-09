@@ -25,7 +25,7 @@ namespace Lucene.Net.Store
 	/// </summary>
 	/// <seealso cref="Directory">
 	/// </seealso>
-	public abstract class IndexInput : System.ICloneable
+	public abstract class IndexInput : System.ICloneable/*, IDisposable*/
 	{
 		private bool preUTF8Strings; // true if we are reading old (modified UTF8) string format
 		
@@ -273,5 +273,7 @@ namespace Lucene.Net.Store
 			
 			return map;
 		}
+
+	    /*public abstract void Dispose();*/
 	}
 }

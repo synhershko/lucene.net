@@ -19,7 +19,6 @@
  under the License.
 
 -->
-
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -116,13 +115,6 @@
       <Name>System</Name>
     </Reference>
     <Reference Include="System.configuration" />
-    <Reference Include="System.Data">
-      <Name>System.Data</Name>
-    </Reference>
-    <Reference Include="System.Runtime.Remoting">
-      <Name>System.Runtime.Remoting</Name>
-    </Reference>
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
@@ -350,9 +342,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Index\IndexFileNames.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\IndexModifier.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Index\IndexReader.cs">
@@ -586,9 +575,6 @@
     <Compile Include="Search\FieldDocSortedHitQueue.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Search\FieldSortedHitQueue.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Search\FieldValueHitQueue.cs" />
     <Compile Include="Search\Filter.cs">
       <SubType>Code</SubType>
@@ -731,6 +717,7 @@
     <Compile Include="Search\SimilarityDelegator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Search\SingleTermEnum.cs" />
     <Compile Include="Search\SloppyPhraseScorer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -793,19 +780,12 @@
     <Compile Include="Search\TermScorer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Search\TimeLimitedCollector.cs" />
     <Compile Include="Search\TimeLimitingCollector.cs" />
-    <Compile Include="Search\TopDocCollector.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Search\TopDocs.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Search\TopDocsCollector.cs" />
     <Compile Include="Search\TopFieldCollector.cs" />
-    <Compile Include="Search\TopFieldDocCollector.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Search\TopFieldDocs.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -819,23 +799,33 @@
     <Compile Include="Search\WildcardTermEnum.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Store\AlreadyClosedException.cs" />
+    <Compile Include="Store\AlreadyClosedException.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Store\BufferedIndexInput.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Store\BufferedIndexOutput.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Store\CheckSumIndexInput.cs" />
-    <Compile Include="Store\CheckSumIndexOutput.cs" />
+    <Compile Include="Store\CheckSumIndexInput.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Store\CheckSumIndexOutput.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Store\Directory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Store\FileSwitchDirectory.cs" />
+    <Compile Include="Store\FileSwitchDirectory.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Store\FSDirectory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Store\FSLockFactory.cs" />
+    <Compile Include="Store\FSLockFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Store\IndexInput.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -848,21 +838,33 @@
     <Compile Include="Store\LockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Store\LockObtainFailedException.cs" />
-    <Compile Include="Store\LockReleaseFailedException.cs" />
-    <Compile Include="Store\LockStressTest.cs" />
-    <Compile Include="Store\LockVerifyServer.cs" />
+    <Compile Include="Store\LockObtainFailedException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Store\LockReleaseFailedException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Store\LockStressTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Store\LockVerifyServer.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Store\MMapDirectory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Store\NativeFSLockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Store\NIOFSDirectory.cs" />
+    <Compile Include="Store\NIOFSDirectory.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Store\NoLockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Store\NoSuchDirectoryException.cs" />
+    <Compile Include="Store\NoSuchDirectoryException.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Store\RAMDirectory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -875,14 +877,18 @@
     <Compile Include="Store\RAMOutputStream.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Store\SimpleFSDirectory.cs" />
+    <Compile Include="Store\SimpleFSDirectory.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Store\SimpleFSLockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Store\SingleInstanceLockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Store\VerifyingLockFactory.cs" />
+    <Compile Include="Store\VerifyingLockFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SupportClass.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -944,6 +950,7 @@
     <None Include="QueryParser\QueryParser.jj" />
     <Content Include="Analysis\Package.html" />
     <Content Include="Analysis\Standard\Package.html" />
+    <Content Include="ChangeNotes.txt" />
     <Content Include="Document\Package.html" />
     <Content Include="Index\Package.html" />
     <Content Include="Messages\Package.html" />

@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using System.Linq;
 using BufferedIndexInput = Lucene.Net.Store.BufferedIndexInput;
 using Directory = Lucene.Net.Store.Directory;
 using IndexInput = Lucene.Net.Store.IndexInput;
@@ -30,12 +30,8 @@ namespace Lucene.Net.Index
 	/// <summary> Class for accessing a compound stream.
 	/// This class implements a directory, but is limited to only read operations.
 	/// Directory methods that would normally modify data throw an exception.
-	/// 
-	/// 
 	/// </summary>
-	/// <version>  $Id: CompoundFileReader.java 673371 2008-07-02 11:57:27Z mikemccand $
-	/// </version>
-	public class CompoundFileReader:Directory
+	public class CompoundFileReader : Directory
 	{
 		
 		private int readBufferSize;
@@ -52,7 +48,7 @@ namespace Lucene.Net.Index
 		private System.String fileName;
 		
 		private IndexInput stream;
-		private System.Collections.Hashtable entries = new System.Collections.Hashtable();
+		private SupportClass.HashMap<string, FileEntry> entries = new SupportClass.HashMap<string, FileEntry>();
 		
 		
 		public CompoundFileReader(Directory dir, System.String name):this(dir, name, BufferedIndexInput.BUFFER_SIZE)
@@ -160,7 +156,7 @@ namespace Lucene.Net.Index
 				if (stream == null)
 					throw new System.IO.IOException("Stream closed");
 				
-				FileEntry entry = (FileEntry) entries[id];
+				FileEntry entry = entries[id];
 				if (entry == null)
 					throw new System.IO.IOException("No sub-file with id " + id + " found");
 				
@@ -169,12 +165,9 @@ namespace Lucene.Net.Index
 		}
 		
 		/// <summary>Returns an array of strings, one for each file in the directory. </summary>
-        [Obsolete("Lucene.Net-2.9.1. This method overrides obsolete member Lucene.Net.Store.Directory.List()")]
-		public override System.String[] List()
+		public override System.String[] ListAll()
 		{
-			System.String[] res = new System.String[entries.Count];
-			entries.Keys.CopyTo(res, 0);
-			return res;
+		    return entries.Keys.ToArray();
 		}
 		
 		/// <summary>Returns true iff a file with the given name exists. </summary>
@@ -204,8 +197,7 @@ namespace Lucene.Net.Index
 		
 		/// <summary>Not implemented</summary>
 		/// <throws>  UnsupportedOperationException  </throws>
-        [Obsolete("Lucene.Net-2.9.1. This method overrides obsolete member Lucene.Net.Store.Directory.RenameFile(string, string)")]
-		public override void  RenameFile(System.String from, System.String to)
+		public void RenameFile(System.String from, System.String to)
 		{
 			throw new System.NotSupportedException();
 		}
@@ -214,7 +206,7 @@ namespace Lucene.Net.Index
 		/// <throws>  IOException if the file does not exist  </throws>
 		public override long FileLength(System.String name)
 		{
-			FileEntry e = (FileEntry) entries[name];
+			FileEntry e = entries[name];
 			if (e == null)
 				throw new System.IO.IOException("File " + name + " does not exist");
 			return e.length;

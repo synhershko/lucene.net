@@ -27,20 +27,19 @@ namespace Lucene.Net.Search
 	
 	/// <summary> A range filter built on top of a cached single term field (in <see cref="FieldCache" />).
 	/// 
-	/// <p/>FieldCacheRangeFilter builds a single cache for the field the first time it is used.
-	/// Each subsequent FieldCacheRangeFilter on the same field then reuses this cache,
+    /// <p/><see cref="FieldCacheRangeFilter" /> builds a single cache for the field the first time it is used.
+    /// Each subsequent <see cref="FieldCacheRangeFilter" /> on the same field then reuses this cache,
 	/// even if the range itself changes. 
 	/// 
-	/// <p/>This means that FieldCacheRangeFilter is much faster (sometimes more than 100x as fast) 
-	/// as building a <see cref="TermRangeFilter" /> (or <see cref="ConstantScoreRangeQuery" /> on a <see cref="TermRangeFilter" />)
-	/// for each query, if using a <see cref="NewStringRange" />. However, if the range never changes it
-	/// is slower (around 2x as slow) than building a CachingWrapperFilter on top of a single TermRangeFilter.
+    /// <p/>This means that <see cref="FieldCacheRangeFilter" /> is much faster (sometimes more than 100x as fast) 
+	/// as building a <see cref="TermRangeFilter" /> if using a <see cref="NewStringRange" />. However, if the range never changes it
+    /// is slower (around 2x as slow) than building a CachingWrapperFilter on top of a single <see cref="TermRangeFilter" />.
 	/// 
 	/// For numeric data types, this filter may be significantly faster than <see cref="NumericRangeFilter" />.
 	/// Furthermore, it does not need the numeric values encoded by <see cref="NumericField" />. But
 	/// it has the problem that it only works with exact one value/document (see below).
 	/// 
-	/// <p/>As with all <see cref="FieldCache" /> based functionality, FieldCacheRangeFilter is only valid for 
+    /// <p/>As with all <see cref="FieldCache" /> based functionality, <see cref="FieldCacheRangeFilter" /> is only valid for 
 	/// fields which exact one term for each document (except for <see cref="NewStringRange" />
 	/// where 0 terms are also allowed). Due to a restriction of <see cref="FieldCache" />, for numeric ranges
 	/// all terms that do not have a numeric value, 0 is assumed.
@@ -54,14 +53,14 @@ namespace Lucene.Net.Search
 	/// </summary>
 	
 	[Serializable]
-	public abstract class FieldCacheRangeFilter:Filter
+	public abstract class FieldCacheRangeFilter<T> : Filter
 	{
 		[Serializable]
-		private class AnonymousClassFieldCacheRangeFilter:FieldCacheRangeFilter
+        private class AnonymousClassFieldCacheRangeFilter : FieldCacheRangeFilter<string>
 		{
 			private class AnonymousClassFieldCacheDocIdSet:FieldCacheDocIdSet
 			{
-				private void  InitBlock(Lucene.Net.Search.StringIndex fcsi, int inclusiveLowerPoint, int inclusiveUpperPoint, AnonymousClassFieldCacheRangeFilter enclosingInstance)
+                private void InitBlock(Lucene.Net.Search.StringIndex fcsi, int inclusiveLowerPoint, int inclusiveUpperPoint, FieldCacheRangeFilter<string> enclosingInstance)
 				{
 					this.fcsi = fcsi;
 					this.inclusiveLowerPoint = inclusiveLowerPoint;
@@ -71,8 +70,8 @@ namespace Lucene.Net.Search
 				private Lucene.Net.Search.StringIndex fcsi;
 				private int inclusiveLowerPoint;
 				private int inclusiveUpperPoint;
-				private AnonymousClassFieldCacheRangeFilter enclosingInstance;
-				public AnonymousClassFieldCacheRangeFilter Enclosing_Instance
+                private FieldCacheRangeFilter<string> enclosingInstance;
+                public FieldCacheRangeFilter<string> Enclosing_Instance
 				{
 					get
 					{
@@ -80,7 +79,8 @@ namespace Lucene.Net.Search
 					}
 					
 				}
-				internal AnonymousClassFieldCacheDocIdSet(Lucene.Net.Search.StringIndex fcsi, int inclusiveLowerPoint, int inclusiveUpperPoint, AnonymousClassFieldCacheRangeFilter enclosingInstance, Lucene.Net.Index.IndexReader Param1, bool Param2):base(Param1, Param2)
+                internal AnonymousClassFieldCacheDocIdSet(Lucene.Net.Search.StringIndex fcsi, int inclusiveLowerPoint, int inclusiveUpperPoint, FieldCacheRangeFilter<string> enclosingInstance, Lucene.Net.Index.IndexReader Param1, bool Param2)
+                    : base(Param1, Param2)
 				{
 					InitBlock(fcsi, inclusiveLowerPoint, inclusiveUpperPoint, enclosingInstance);
 				}
@@ -89,14 +89,15 @@ namespace Lucene.Net.Search
 					return fcsi.order[doc] >= inclusiveLowerPoint && fcsi.order[doc] <= inclusiveUpperPoint;
 				}
 			}
-			internal AnonymousClassFieldCacheRangeFilter(System.String Param1, Lucene.Net.Search.Parser Param2, System.Object Param3, System.Object Param4, bool Param5, bool Param6):base(Param1, Param2, Param3, Param4, Param5, Param6)
+			internal AnonymousClassFieldCacheRangeFilter(string field, Lucene.Net.Search.Parser parser, string lowerVal, string upperVal, bool includeLower, bool includeUpper)
+                : base(field, parser, lowerVal, upperVal, includeLower, includeUpper)
 			{
 			}
 			public override DocIdSet GetDocIdSet(IndexReader reader)
 			{
 				Lucene.Net.Search.StringIndex fcsi = Lucene.Net.Search.FieldCache_Fields.DEFAULT.GetStringIndex(reader, field);
-				int lowerPoint = fcsi.BinarySearchLookup((System.String) lowerVal);
-				int upperPoint = fcsi.BinarySearchLookup((System.String) upperVal);
+				int lowerPoint = fcsi.BinarySearchLookup(lowerVal);
+				int upperPoint = fcsi.BinarySearchLookup(upperVal);
 				
 				int inclusiveLowerPoint;
 				int inclusiveUpperPoint;
@@ -152,11 +153,11 @@ namespace Lucene.Net.Search
 			}
 		}
 		[Serializable]
-		private class AnonymousClassFieldCacheRangeFilter1:FieldCacheRangeFilter
+		private class AnonymousClassFieldCacheRangeFilter1 : FieldCacheRangeFilter<byte?>
 		{
 			private class AnonymousClassFieldCacheDocIdSet:FieldCacheDocIdSet
 			{
-				private void  InitBlock(sbyte[] values, byte inclusiveLowerPoint, byte inclusiveUpperPoint, AnonymousClassFieldCacheRangeFilter1 enclosingInstance)
+                private void InitBlock(sbyte[] values, byte inclusiveLowerPoint, byte inclusiveUpperPoint, FieldCacheRangeFilter<byte?> enclosingInstance)
 				{
 					this.values = values;
 					this.inclusiveLowerPoint = inclusiveLowerPoint;
@@ -166,8 +167,8 @@ namespace Lucene.Net.Search
 				private sbyte[] values;
 				private byte inclusiveLowerPoint;
 				private byte inclusiveUpperPoint;
-				private AnonymousClassFieldCacheRangeFilter1 enclosingInstance;
-				public AnonymousClassFieldCacheRangeFilter1 Enclosing_Instance
+                private FieldCacheRangeFilter<byte?> enclosingInstance;
+                public FieldCacheRangeFilter<byte?> Enclosing_Instance
 				{
 					get
 					{
@@ -175,7 +176,8 @@ namespace Lucene.Net.Search
 					}
 					
 				}
-				internal AnonymousClassFieldCacheDocIdSet(sbyte[] values, byte inclusiveLowerPoint, byte inclusiveUpperPoint, AnonymousClassFieldCacheRangeFilter1 enclosingInstance, Lucene.Net.Index.IndexReader Param1, bool Param2):base(Param1, Param2)
+                internal AnonymousClassFieldCacheDocIdSet(sbyte[] values, byte inclusiveLowerPoint, byte inclusiveUpperPoint, FieldCacheRangeFilter<byte?> enclosingInstance, Lucene.Net.Index.IndexReader Param1, bool Param2)
+                    : base(Param1, Param2)
 				{
 					InitBlock(values, inclusiveLowerPoint, inclusiveUpperPoint, enclosingInstance);
 				}
@@ -184,7 +186,8 @@ namespace Lucene.Net.Search
 					return values[doc] >= inclusiveLowerPoint && values[doc] <= inclusiveUpperPoint;
 				}
 			}
-			internal AnonymousClassFieldCacheRangeFilter1(System.String Param1, Lucene.Net.Search.Parser Param2, System.Object Param3, System.Object Param4, bool Param5, bool Param6):base(Param1, Param2, Param3, Param4, Param5, Param6)
+			internal AnonymousClassFieldCacheRangeFilter1(string field, Parser parser, byte? lowerVal, byte? upperVal, bool includeLower, bool includeUpper)
+                : base(field, parser, lowerVal, upperVal, includeLower, includeUpper)
 			{
 			}
 			public override DocIdSet GetDocIdSet(IndexReader reader)
@@ -193,25 +196,25 @@ namespace Lucene.Net.Search
 				byte inclusiveUpperPoint;
 				if (lowerVal != null)
 				{
-					byte i = (byte) System.Convert.ToSByte(((System.ValueType) lowerVal));
-					if (!includeLower && i == (byte) System.Byte.MaxValue)
+					byte i = (byte) lowerVal;
+					if (!includeLower && i == byte.MaxValue)
 						return DocIdSet.EMPTY_DOCIDSET;
 					inclusiveLowerPoint = (byte) (includeLower?i:(i + 1));
 				}
 				else
 				{
-					inclusiveLowerPoint = (byte) System.Byte.MinValue;
+					inclusiveLowerPoint = byte.MinValue;
 				}
 				if (upperVal != null)
 				{
-					byte i = (byte) System.Convert.ToSByte(((System.ValueType) upperVal));
-					if (!includeUpper && i == (byte) System.Byte.MinValue)
+					byte i = (byte)upperVal;
+					if (!includeUpper && i == byte.MinValue)
 						return DocIdSet.EMPTY_DOCIDSET;
 					inclusiveUpperPoint = (byte) (includeUpper?i:(i - 1));
 				}
 				else
 				{
-					inclusiveUpperPoint = (byte) System.Byte.MaxValue;
+					inclusiveUpperPoint = byte.MaxValue;
 				}
 				
 				if (inclusiveLowerPoint > inclusiveUpperPoint)
@@ -223,11 +226,11 @@ namespace Lucene.Net.Search
 			}
 		}
 		[Serializable]
-		private class AnonymousClassFieldCacheRangeFilter2:FieldCacheRangeFilter
+		private class AnonymousClassFieldCacheRangeFilter2 : FieldCacheRangeFilter<short?>
 		{
 			private class AnonymousClassFieldCacheDocIdSet:FieldCacheDocIdSet
 			{
-				private void  InitBlock(short[] values, short inclusiveLowerPoint, short inclusiveUpperPoint, AnonymousClassFieldCacheRangeFilter2 enclosingInstance)
+                private void InitBlock(short[] values, short inclusiveLowerPoint, short inclusiveUpperPoint, FieldCacheRangeFilter<short?> enclosingInstance)
 				{
 					this.values = values;
 					this.inclusiveLowerPoint = inclusiveLowerPoint;
@@ -237,8 +240,8 @@ namespace Lucene.Net.Search
 				private short[] values;
 				private short inclusiveLowerPoint;
 				private short inclusiveUpperPoint;
-				private AnonymousClassFieldCacheRangeFilter2 enclosingInstance;
-				public AnonymousClassFieldCacheRangeFilter2 Enclosing_Instance
+                private FieldCacheRangeFilter<short?> enclosingInstance;
+                public FieldCacheRangeFilter<short?> Enclosing_Instance
 				{
 					get
 					{
@@ -246,7 +249,8 @@ namespace Lucene.Net.Search
 					}
 					
 				}
-				internal AnonymousClassFieldCacheDocIdSet(short[] values, short inclusiveLowerPoint, short inclusiveUpperPoint, AnonymousClassFieldCacheRangeFilter2 enclosingInstance, Lucene.Net.Index.IndexReader Param1, bool Param2):base(Param1, Param2)
+                internal AnonymousClassFieldCacheDocIdSet(short[] values, short inclusiveLowerPoint, short inclusiveUpperPoint, FieldCacheRangeFilter<short?> enclosingInstance, Lucene.Net.Index.IndexReader Param1, bool Param2)
+                    : base(Param1, Param2)
 				{
 					InitBlock(values, inclusiveLowerPoint, inclusiveUpperPoint, enclosingInstance);
 				}
@@ -255,7 +259,8 @@ namespace Lucene.Net.Search
 					return values[doc] >= inclusiveLowerPoint && values[doc] <= inclusiveUpperPoint;
 				}
 			}
-			internal AnonymousClassFieldCacheRangeFilter2(System.String Param1, Lucene.Net.Search.Parser Param2, System.Object Param3, System.Object Param4, bool Param5, bool Param6):base(Param1, Param2, Param3, Param4, Param5, Param6)
+			internal AnonymousClassFieldCacheRangeFilter2(string field, Parser parser, short? lowerVal, short? upperVal, bool includeLower, bool includeUpper)
+                : base(field, parser, lowerVal, upperVal, includeLower, includeUpper)
 			{
 			}
 			public override DocIdSet GetDocIdSet(IndexReader reader)
@@ -264,25 +269,25 @@ namespace Lucene.Net.Search
 				short inclusiveUpperPoint;
 				if (lowerVal != null)
 				{
-					short i = System.Convert.ToInt16(((System.ValueType) lowerVal));
-					if (!includeLower && i == System.Int16.MaxValue)
+					short i = (short)lowerVal;
+					if (!includeLower && i == short.MaxValue)
 						return DocIdSet.EMPTY_DOCIDSET;
 					inclusiveLowerPoint = (short) (includeLower?i:(i + 1));
 				}
 				else
 				{
-					inclusiveLowerPoint = System.Int16.MinValue;
+					inclusiveLowerPoint = short.MinValue;
 				}
 				if (upperVal != null)
 				{
-					short i = System.Convert.ToInt16(((System.ValueType) upperVal));
-					if (!includeUpper && i == System.Int16.MinValue)
+					short i = (short)upperVal;
+					if (!includeUpper && i == short.MinValue)
 						return DocIdSet.EMPTY_DOCIDSET;
 					inclusiveUpperPoint = (short) (includeUpper?i:(i - 1));
 				}
 				else
 				{
-					inclusiveUpperPoint = System.Int16.MaxValue;
+					inclusiveUpperPoint = short.MaxValue;
 				}
 				
 				if (inclusiveLowerPoint > inclusiveUpperPoint)
@@ -294,11 +299,11 @@ namespace Lucene.Net.Search
 			}
 		}
 		[Serializable]
-		private class AnonymousClassFieldCacheRangeFilter3:FieldCacheRangeFilter
+		private class AnonymousClassFieldCacheRangeFilter3 : FieldCacheRangeFilter<int?>
 		{
-			private class AnonymousClassFieldCacheDocIdSet:FieldCacheDocIdSet
+			private class AnonymousClassFieldCacheDocIdSet : FieldCacheDocIdSet
 			{
-				private void  InitBlock(int[] values, int inclusiveLowerPoint, int inclusiveUpperPoint, AnonymousClassFieldCacheRangeFilter3 enclosingInstance)
+                private void InitBlock(int[] values, int inclusiveLowerPoint, int inclusiveUpperPoint, FieldCacheRangeFilter<int?> enclosingInstance)
 				{
 					this.values = values;
 					this.inclusiveLowerPoint = inclusiveLowerPoint;
@@ -308,8 +313,8 @@ namespace Lucene.Net.Search
 				private int[] values;
 				private int inclusiveLowerPoint;
 				private int inclusiveUpperPoint;
-				private AnonymousClassFieldCacheRangeFilter3 enclosingInstance;
-				public AnonymousClassFieldCacheRangeFilter3 Enclosing_Instance
+                private FieldCacheRangeFilter<int?> enclosingInstance;
+                public FieldCacheRangeFilter<int?> Enclosing_Instance
 				{
 					get
 					{
@@ -317,7 +322,8 @@ namespace Lucene.Net.Search
 					}
 					
 				}
-				internal AnonymousClassFieldCacheDocIdSet(int[] values, int inclusiveLowerPoint, int inclusiveUpperPoint, AnonymousClassFieldCacheRangeFilter3 enclosingInstance, Lucene.Net.Index.IndexReader Param1, bool Param2):base(Param1, Param2)
+                internal AnonymousClassFieldCacheDocIdSet(int[] values, int inclusiveLowerPoint, int inclusiveUpperPoint, FieldCacheRangeFilter<int?> enclosingInstance, Lucene.Net.Index.IndexReader Param1, bool Param2)
+                    : base(Param1, Param2)
 				{
 					InitBlock(values, inclusiveLowerPoint, inclusiveUpperPoint, enclosingInstance);
 				}
@@ -326,7 +332,8 @@ namespace Lucene.Net.Search
 					return values[doc] >= inclusiveLowerPoint && values[doc] <= inclusiveUpperPoint;
 				}
 			}
-			internal AnonymousClassFieldCacheRangeFilter3(System.String Param1, Lucene.Net.Search.Parser Param2, System.Object Param3, System.Object Param4, bool Param5, bool Param6):base(Param1, Param2, Param3, Param4, Param5, Param6)
+			internal AnonymousClassFieldCacheRangeFilter3(string field, Lucene.Net.Search.Parser parser, int? lowerVal, int? upperVal, bool includeLower, bool includeUpper)
+                : base(field, parser, lowerVal, upperVal, includeLower, includeUpper)
 			{
 			}
 			public override DocIdSet GetDocIdSet(IndexReader reader)
@@ -335,25 +342,25 @@ namespace Lucene.Net.Search
 				int inclusiveUpperPoint;
 				if (lowerVal != null)
 				{
-					int i = System.Convert.ToInt32(((System.ValueType) lowerVal));
-					if (!includeLower && i == System.Int32.MaxValue)
+				    int i = (int) lowerVal;
+					if (!includeLower && i == int.MaxValue)
 						return DocIdSet.EMPTY_DOCIDSET;
 					inclusiveLowerPoint = includeLower?i:(i + 1);
 				}
 				else
 				{
-					inclusiveLowerPoint = System.Int32.MinValue;
+					inclusiveLowerPoint = int.MinValue;
 				}
 				if (upperVal != null)
 				{
-					int i = System.Convert.ToInt32(((System.ValueType) upperVal));
-					if (!includeUpper && i == System.Int32.MinValue)
+				    int i = (int) upperVal;
+					if (!includeUpper && i == int.MinValue)
 						return DocIdSet.EMPTY_DOCIDSET;
 					inclusiveUpperPoint = includeUpper?i:(i - 1);
 				}
 				else
 				{
-					inclusiveUpperPoint = System.Int32.MaxValue;
+					inclusiveUpperPoint = int.MaxValue;
 				}
 				
 				if (inclusiveLowerPoint > inclusiveUpperPoint)
@@ -365,11 +372,11 @@ namespace Lucene.Net.Search
 			}
 		}
 		[Serializable]
-		private class AnonymousClassFieldCacheRangeFilter4:FieldCacheRangeFilter
+		private class AnonymousClassFieldCacheRangeFilter4 : FieldCacheRangeFilter<long?>
 		{
 			private class AnonymousClassFieldCacheDocIdSet:FieldCacheDocIdSet
 			{
-				private void  InitBlock(long[] values, long inclusiveLowerPoint, long inclusiveUpperPoint, AnonymousClassFieldCacheRangeFilter4 enclosingInstance)
+                private void InitBlock(long[] values, long inclusiveLowerPoint, long inclusiveUpperPoint, FieldCacheRangeFilter<long?> enclosingInstance)
 				{
 					this.values = values;
 					this.inclusiveLowerPoint = inclusiveLowerPoint;
@@ -379,8 +386,8 @@ namespace Lucene.Net.Search
 				private long[] values;
 				private long inclusiveLowerPoint;
 				private long inclusiveUpperPoint;
-				private AnonymousClassFieldCacheRangeFilter4 enclosingInstance;
-				public AnonymousClassFieldCacheRangeFilter4 Enclosing_Instance
+                private FieldCacheRangeFilter<long?> enclosingInstance;
+                public FieldCacheRangeFilter<long?> Enclosing_Instance
 				{
 					get
 					{
@@ -388,7 +395,8 @@ namespace Lucene.Net.Search
 					}
 					
 				}
-				internal AnonymousClassFieldCacheDocIdSet(long[] values, long inclusiveLowerPoint, long inclusiveUpperPoint, AnonymousClassFieldCacheRangeFilter4 enclosingInstance, Lucene.Net.Index.IndexReader Param1, bool Param2):base(Param1, Param2)
+                internal AnonymousClassFieldCacheDocIdSet(long[] values, long inclusiveLowerPoint, long inclusiveUpperPoint, FieldCacheRangeFilter<long?> enclosingInstance, Lucene.Net.Index.IndexReader Param1, bool Param2)
+                    : base(Param1, Param2)
 				{
 					InitBlock(values, inclusiveLowerPoint, inclusiveUpperPoint, enclosingInstance);
 				}
@@ -397,7 +405,8 @@ namespace Lucene.Net.Search
 					return values[doc] >= inclusiveLowerPoint && values[doc] <= inclusiveUpperPoint;
 				}
 			}
-			internal AnonymousClassFieldCacheRangeFilter4(System.String Param1, Lucene.Net.Search.Parser Param2, System.Object Param3, System.Object Param4, bool Param5, bool Param6):base(Param1, Param2, Param3, Param4, Param5, Param6)
+			internal AnonymousClassFieldCacheRangeFilter4(string field, Lucene.Net.Search.Parser parser, long? lowerVal, long? upperVal, bool includeLower, bool includeUpper)
+                : base(field, parser, lowerVal, upperVal, includeLower, includeUpper)
 			{
 			}
 			public override DocIdSet GetDocIdSet(IndexReader reader)
@@ -406,25 +415,25 @@ namespace Lucene.Net.Search
 				long inclusiveUpperPoint;
 				if (lowerVal != null)
 				{
-					long i = System.Convert.ToInt64(((System.ValueType) lowerVal));
-					if (!includeLower && i == System.Int64.MaxValue)
+					long i = (long)lowerVal;
+					if (!includeLower && i == long.MaxValue)
 						return DocIdSet.EMPTY_DOCIDSET;
 					inclusiveLowerPoint = includeLower?i:(i + 1L);
 				}
 				else
 				{
-					inclusiveLowerPoint = System.Int64.MinValue;
+					inclusiveLowerPoint = long.MinValue;
 				}
 				if (upperVal != null)
 				{
-					long i = System.Convert.ToInt64(((System.ValueType) upperVal));
-					if (!includeUpper && i == System.Int64.MinValue)
+					long i = (long)upperVal;
+					if (!includeUpper && i == long.MinValue)
 						return DocIdSet.EMPTY_DOCIDSET;
 					inclusiveUpperPoint = includeUpper?i:(i - 1L);
 				}
 				else
 				{
-					inclusiveUpperPoint = System.Int64.MaxValue;
+					inclusiveUpperPoint = long.MaxValue;
 				}
 				
 				if (inclusiveLowerPoint > inclusiveUpperPoint)
@@ -436,11 +445,11 @@ namespace Lucene.Net.Search
 			}
 		}
 		[Serializable]
-		private class AnonymousClassFieldCacheRangeFilter5:FieldCacheRangeFilter
+		private class AnonymousClassFieldCacheRangeFilter5 : FieldCacheRangeFilter<float?>
 		{
 			private class AnonymousClassFieldCacheDocIdSet:FieldCacheDocIdSet
 			{
-				private void  InitBlock(float[] values, float inclusiveLowerPoint, float inclusiveUpperPoint, AnonymousClassFieldCacheRangeFilter5 enclosingInstance)
+                private void InitBlock(float[] values, float inclusiveLowerPoint, float inclusiveUpperPoint, FieldCacheRangeFilter<float?> enclosingInstance)
 				{
 					this.values = values;
 					this.inclusiveLowerPoint = inclusiveLowerPoint;
@@ -450,8 +459,8 @@ namespace Lucene.Net.Search
 				private float[] values;
 				private float inclusiveLowerPoint;
 				private float inclusiveUpperPoint;
-				private AnonymousClassFieldCacheRangeFilter5 enclosingInstance;
-				public AnonymousClassFieldCacheRangeFilter5 Enclosing_Instance
+                private FieldCacheRangeFilter<float?> enclosingInstance;
+                public FieldCacheRangeFilter<float?> Enclosing_Instance
 				{
 					get
 					{
@@ -459,7 +468,8 @@ namespace Lucene.Net.Search
 					}
 					
 				}
-				internal AnonymousClassFieldCacheDocIdSet(float[] values, float inclusiveLowerPoint, float inclusiveUpperPoint, AnonymousClassFieldCacheRangeFilter5 enclosingInstance, Lucene.Net.Index.IndexReader Param1, bool Param2):base(Param1, Param2)
+                internal AnonymousClassFieldCacheDocIdSet(float[] values, float inclusiveLowerPoint, float inclusiveUpperPoint, FieldCacheRangeFilter<float?> enclosingInstance, Lucene.Net.Index.IndexReader Param1, bool Param2)
+                    : base(Param1, Param2)
 				{
 					InitBlock(values, inclusiveLowerPoint, inclusiveUpperPoint, enclosingInstance);
 				}
@@ -468,7 +478,8 @@ namespace Lucene.Net.Search
 					return values[doc] >= inclusiveLowerPoint && values[doc] <= inclusiveUpperPoint;
 				}
 			}
-			internal AnonymousClassFieldCacheRangeFilter5(System.String Param1, Lucene.Net.Search.Parser Param2, System.Object Param3, System.Object Param4, bool Param5, bool Param6):base(Param1, Param2, Param3, Param4, Param5, Param6)
+			internal AnonymousClassFieldCacheRangeFilter5(string field, Lucene.Net.Search.Parser parser, float? lowerVal, float? upperVal, bool includeLower, bool includeUpper)
+                : base(field, parser, lowerVal, upperVal, includeLower, includeUpper)
 			{
 			}
 			public override DocIdSet GetDocIdSet(IndexReader reader)
@@ -479,27 +490,27 @@ namespace Lucene.Net.Search
 				float inclusiveUpperPoint;
 				if (lowerVal != null)
 				{
-					float f = System.Convert.ToSingle(((System.ValueType) lowerVal));
-					if (!includeUpper && f > 0.0f && System.Single.IsInfinity(f))
+					float f = (float)lowerVal;
+					if (!includeUpper && f > 0.0f && float.IsInfinity(f))
 						return DocIdSet.EMPTY_DOCIDSET;
 					int i = NumericUtils.FloatToSortableInt(f);
 					inclusiveLowerPoint = NumericUtils.SortableIntToFloat(includeLower?i:(i + 1));
 				}
 				else
 				{
-					inclusiveLowerPoint = System.Single.NegativeInfinity;
+					inclusiveLowerPoint = float.NegativeInfinity;
 				}
 				if (upperVal != null)
 				{
-					float f = System.Convert.ToSingle(((System.ValueType) upperVal));
-					if (!includeUpper && f < 0.0f && System.Single.IsInfinity(f))
+				    float f = (float) upperVal;
+					if (!includeUpper && f < 0.0f && float.IsInfinity(f))
 						return DocIdSet.EMPTY_DOCIDSET;
 					int i = NumericUtils.FloatToSortableInt(f);
 					inclusiveUpperPoint = NumericUtils.SortableIntToFloat(includeUpper?i:(i - 1));
 				}
 				else
 				{
-					inclusiveUpperPoint = System.Single.PositiveInfinity;
+					inclusiveUpperPoint = float.PositiveInfinity;
 				}
 				
 				if (inclusiveLowerPoint > inclusiveUpperPoint)
@@ -511,11 +522,11 @@ namespace Lucene.Net.Search
 			}
 		}
 		[Serializable]
-		private class AnonymousClassFieldCacheRangeFilter6:FieldCacheRangeFilter
+		private class AnonymousClassFieldCacheRangeFilter6 : FieldCacheRangeFilter<double?>
 		{
 			private class AnonymousClassFieldCacheDocIdSet:FieldCacheDocIdSet
 			{
-				private void  InitBlock(double[] values, double inclusiveLowerPoint, double inclusiveUpperPoint, AnonymousClassFieldCacheRangeFilter6 enclosingInstance)
+                private void InitBlock(double[] values, double inclusiveLowerPoint, double inclusiveUpperPoint, FieldCacheRangeFilter<double?> enclosingInstance)
 				{
 					this.values = values;
 					this.inclusiveLowerPoint = inclusiveLowerPoint;
@@ -525,8 +536,8 @@ namespace Lucene.Net.Search
 				private double[] values;
 				private double inclusiveLowerPoint;
 				private double inclusiveUpperPoint;
-				private AnonymousClassFieldCacheRangeFilter6 enclosingInstance;
-				public AnonymousClassFieldCacheRangeFilter6 Enclosing_Instance
+                private FieldCacheRangeFilter<double?> enclosingInstance;
+                public FieldCacheRangeFilter<double?> Enclosing_Instance
 				{
 					get
 					{
@@ -534,7 +545,8 @@ namespace Lucene.Net.Search
 					}
 					
 				}
-				internal AnonymousClassFieldCacheDocIdSet(double[] values, double inclusiveLowerPoint, double inclusiveUpperPoint, AnonymousClassFieldCacheRangeFilter6 enclosingInstance, Lucene.Net.Index.IndexReader Param1, bool Param2):base(Param1, Param2)
+                internal AnonymousClassFieldCacheDocIdSet(double[] values, double inclusiveLowerPoint, double inclusiveUpperPoint, FieldCacheRangeFilter<double?> enclosingInstance, Lucene.Net.Index.IndexReader Param1, bool Param2)
+                    : base(Param1, Param2)
 				{
 					InitBlock(values, inclusiveLowerPoint, inclusiveUpperPoint, enclosingInstance);
 				}
@@ -543,7 +555,8 @@ namespace Lucene.Net.Search
 					return values[doc] >= inclusiveLowerPoint && values[doc] <= inclusiveUpperPoint;
 				}
 			}
-			internal AnonymousClassFieldCacheRangeFilter6(System.String Param1, Lucene.Net.Search.Parser Param2, System.Object Param3, System.Object Param4, bool Param5, bool Param6):base(Param1, Param2, Param3, Param4, Param5, Param6)
+			internal AnonymousClassFieldCacheRangeFilter6(string field, Lucene.Net.Search.Parser parser, double? lowerVal, double? upperVal, bool includeLower, bool includeUpper)
+                : base(field, parser, lowerVal, upperVal, includeLower, includeUpper)
 			{
 			}
 			public override DocIdSet GetDocIdSet(IndexReader reader)
@@ -554,27 +567,27 @@ namespace Lucene.Net.Search
 				double inclusiveUpperPoint;
 				if (lowerVal != null)
 				{
-					double f = System.Convert.ToDouble(((System.ValueType) lowerVal));
-					if (!includeUpper && f > 0.0 && System.Double.IsInfinity(f))
+				    double f = (double) lowerVal;
+					if (!includeUpper && f > 0.0 && double.IsInfinity(f))
 						return DocIdSet.EMPTY_DOCIDSET;
 					long i = NumericUtils.DoubleToSortableLong(f);
-					inclusiveLowerPoint = NumericUtils.SortableLongToDouble(includeLower?i:(i + 1L));
+					inclusiveLowerPoint = NumericUtils.SortableLongToDouble(includeLower ? i : (i + 1L));
 				}
 				else
 				{
-					inclusiveLowerPoint = System.Double.NegativeInfinity;
+					inclusiveLowerPoint = double.NegativeInfinity;
 				}
 				if (upperVal != null)
 				{
-					double f = System.Convert.ToDouble(((System.ValueType) upperVal));
-					if (!includeUpper && f < 0.0 && System.Double.IsInfinity(f))
+				    double f = (double) upperVal;
+					if (!includeUpper && f < 0.0 && double.IsInfinity(f))
 						return DocIdSet.EMPTY_DOCIDSET;
 					long i = NumericUtils.DoubleToSortableLong(f);
 					inclusiveUpperPoint = NumericUtils.SortableLongToDouble(includeUpper?i:(i - 1L));
 				}
 				else
 				{
-					inclusiveUpperPoint = System.Double.PositiveInfinity;
+					inclusiveUpperPoint = double.PositiveInfinity;
 				}
 				
 				if (inclusiveLowerPoint > inclusiveUpperPoint)
@@ -587,12 +600,12 @@ namespace Lucene.Net.Search
 		}
 		internal System.String field;
 		internal Lucene.Net.Search.Parser parser;
-		internal System.Object lowerVal;
-		internal System.Object upperVal;
+		internal T lowerVal;
+		internal T upperVal;
 		internal bool includeLower;
 		internal bool includeUpper;
 		
-		private FieldCacheRangeFilter(System.String field, Lucene.Net.Search.Parser parser, System.Object lowerVal, System.Object upperVal, bool includeLower, bool includeUpper)
+		private FieldCacheRangeFilter(System.String field, Lucene.Net.Search.Parser parser, T lowerVal, T upperVal, bool includeLower, bool includeUpper)
 		{
 			this.field = field;
 			this.parser = parser;
@@ -605,29 +618,29 @@ namespace Lucene.Net.Search
 		/// <summary>This method is implemented for each data type </summary>
 		public abstract override DocIdSet GetDocIdSet(IndexReader reader);
 		
-		/// <summary> Creates a string range query using <see cref="FieldCache.GetStringIndex(IndexReader,string)" />. This works with all
+		/// <summary> Creates a string range filter using <see cref="FieldCache.GetStringIndex(IndexReader,string)" />. This works with all
 		/// fields containing zero or one term in the field. The range can be half-open by setting one
 		/// of the values to <c>null</c>.
 		/// </summary>
-		public static FieldCacheRangeFilter NewStringRange(System.String field, System.String lowerVal, System.String upperVal, bool includeLower, bool includeUpper)
+		public static FieldCacheRangeFilter<string> NewStringRange(string field, string lowerVal, string upperVal, bool includeLower, bool includeUpper)
 		{
 			return new AnonymousClassFieldCacheRangeFilter(field, null, lowerVal, upperVal, includeLower, includeUpper);
 		}
 		
-		/// <summary> Creates a numeric range query using <see cref="FieldCache.GetBytes(IndexReader,String)" />. This works with all
+		/// <summary> Creates a numeric range filter using <see cref="FieldCache.GetBytes(IndexReader,String)" />. This works with all
 		/// byte fields containing exactly one numeric term in the field. The range can be half-open by setting one
 		/// of the values to <c>null</c>.
 		/// </summary>
-		public static FieldCacheRangeFilter NewByteRange(System.String field, System.Byte lowerVal, System.Byte upperVal, bool includeLower, bool includeUpper)
+		public static FieldCacheRangeFilter<byte?> NewByteRange(string field, byte? lowerVal, byte? upperVal, bool includeLower, bool includeUpper)
 		{
 			return NewByteRange(field, null, lowerVal, upperVal, includeLower, includeUpper);
 		}
 		
-		/// <summary> Creates a numeric range query using <see cref="FieldCache.GetBytes(IndexReader,String,ByteParser)" />. This works with all
+		/// <summary> Creates a numeric range filter using <see cref="FieldCache.GetBytes(IndexReader,String,ByteParser)" />. This works with all
 		/// byte fields containing exactly one numeric term in the field. The range can be half-open by setting one
 		/// of the values to <c>null</c>.
 		/// </summary>
-		public static FieldCacheRangeFilter NewByteRange(System.String field, Lucene.Net.Search.ByteParser parser, System.Byte lowerVal, System.Byte upperVal, bool includeLower, bool includeUpper)
+		public static FieldCacheRangeFilter<byte?> NewByteRange(string field, Lucene.Net.Search.ByteParser parser, byte? lowerVal, byte? upperVal, bool includeLower, bool includeUpper)
 		{
 			return new AnonymousClassFieldCacheRangeFilter1(field, parser, lowerVal, upperVal, includeLower, includeUpper);
 		}
@@ -636,7 +649,7 @@ namespace Lucene.Net.Search
 		/// short fields containing exactly one numeric term in the field. The range can be half-open by setting one
 		/// of the values to <c>null</c>.
 		/// </summary>
-		public static FieldCacheRangeFilter NewShortRange(System.String field, System.ValueType lowerVal, System.ValueType upperVal, bool includeLower, bool includeUpper)
+		public static FieldCacheRangeFilter<short?> NewShortRange(string field, short? lowerVal, short? upperVal, bool includeLower, bool includeUpper)
 		{
 			return NewShortRange(field, null, lowerVal, upperVal, includeLower, includeUpper);
 		}
@@ -645,7 +658,7 @@ namespace Lucene.Net.Search
 		/// short fields containing exactly one numeric term in the field. The range can be half-open by setting one
 		/// of the values to <c>null</c>.
 		/// </summary>
-		public static FieldCacheRangeFilter NewShortRange(System.String field, Lucene.Net.Search.ShortParser parser, System.ValueType lowerVal, System.ValueType upperVal, bool includeLower, bool includeUpper)
+        public static FieldCacheRangeFilter<short?> NewShortRange(string field, Lucene.Net.Search.ShortParser parser, short? lowerVal, short? upperVal, bool includeLower, bool includeUpper)
 		{
 			return new AnonymousClassFieldCacheRangeFilter2(field, parser, lowerVal, upperVal, includeLower, includeUpper);
 		}
@@ -654,7 +667,7 @@ namespace Lucene.Net.Search
 		/// int fields containing exactly one numeric term in the field. The range can be half-open by setting one
 		/// of the values to <c>null</c>.
 		/// </summary>
-        public static FieldCacheRangeFilter NewIntRange(System.String field, System.ValueType lowerVal, System.ValueType upperVal, bool includeLower, bool includeUpper)
+        public static FieldCacheRangeFilter<int?> NewIntRange(string field, int? lowerVal, int? upperVal, bool includeLower, bool includeUpper)
 		{
 			return NewIntRange(field, null, lowerVal, upperVal, includeLower, includeUpper);
 		}
@@ -663,7 +676,7 @@ namespace Lucene.Net.Search
 		/// int fields containing exactly one numeric term in the field. The range can be half-open by setting one
 		/// of the values to <c>null</c>.
 		/// </summary>
-		public static FieldCacheRangeFilter NewIntRange(System.String field, Lucene.Net.Search.IntParser parser, System.ValueType lowerVal, System.ValueType upperVal, bool includeLower, bool includeUpper)
+        public static FieldCacheRangeFilter<int?> NewIntRange(string field, Lucene.Net.Search.IntParser parser, int? lowerVal, int? upperVal, bool includeLower, bool includeUpper)
 		{
 			return new AnonymousClassFieldCacheRangeFilter3(field, parser, lowerVal, upperVal, includeLower, includeUpper);
 		}
@@ -672,7 +685,7 @@ namespace Lucene.Net.Search
 		/// long fields containing exactly one numeric term in the field. The range can be half-open by setting one
 		/// of the values to <c>null</c>.
 		/// </summary>
-		public static FieldCacheRangeFilter NewLongRange(System.String field, System.ValueType lowerVal, System.ValueType upperVal, bool includeLower, bool includeUpper)
+		public static FieldCacheRangeFilter<long?> NewLongRange(string field, long? lowerVal, long? upperVal, bool includeLower, bool includeUpper)
 		{
 			return NewLongRange(field, null, lowerVal, upperVal, includeLower, includeUpper);
 		}
@@ -681,7 +694,7 @@ namespace Lucene.Net.Search
 		/// long fields containing exactly one numeric term in the field. The range can be half-open by setting one
 		/// of the values to <c>null</c>.
 		/// </summary>
-		public static FieldCacheRangeFilter NewLongRange(System.String field, Lucene.Net.Search.LongParser parser, System.ValueType lowerVal, System.ValueType upperVal, bool includeLower, bool includeUpper)
+		public static FieldCacheRangeFilter<long?> NewLongRange(string field, Lucene.Net.Search.LongParser parser, long? lowerVal, long? upperVal, bool includeLower, bool includeUpper)
 		{
 			return new AnonymousClassFieldCacheRangeFilter4(field, parser, lowerVal, upperVal, includeLower, includeUpper);
 		}
@@ -690,7 +703,7 @@ namespace Lucene.Net.Search
 		/// float fields containing exactly one numeric term in the field. The range can be half-open by setting one
 		/// of the values to <c>null</c>.
 		/// </summary>
-		public static FieldCacheRangeFilter NewFloatRange(System.String field, System.ValueType lowerVal, System.ValueType upperVal, bool includeLower, bool includeUpper)
+        public static FieldCacheRangeFilter<float?> NewFloatRange(string field, float? lowerVal, float? upperVal, bool includeLower, bool includeUpper)
 		{
 			return NewFloatRange(field, null, lowerVal, upperVal, includeLower, includeUpper);
 		}
@@ -699,7 +712,7 @@ namespace Lucene.Net.Search
 		/// float fields containing exactly one numeric term in the field. The range can be half-open by setting one
 		/// of the values to <c>null</c>.
 		/// </summary>
-		public static FieldCacheRangeFilter NewFloatRange(System.String field, Lucene.Net.Search.FloatParser parser, System.ValueType lowerVal, System.ValueType upperVal, bool includeLower, bool includeUpper)
+        public static FieldCacheRangeFilter<float?> NewFloatRange(string field, Lucene.Net.Search.FloatParser parser, float? lowerVal, float? upperVal, bool includeLower, bool includeUpper)
 		{
 			return new AnonymousClassFieldCacheRangeFilter5(field, parser, lowerVal, upperVal, includeLower, includeUpper);
 		}
@@ -708,7 +721,7 @@ namespace Lucene.Net.Search
 		/// double fields containing exactly one numeric term in the field. The range can be half-open by setting one
 		/// of the values to <c>null</c>.
 		/// </summary>
-		public static FieldCacheRangeFilter NewDoubleRange(System.String field, System.ValueType lowerVal, System.ValueType upperVal, bool includeLower, bool includeUpper)
+        public static FieldCacheRangeFilter<double?> NewDoubleRange(string field, double? lowerVal, double? upperVal, bool includeLower, bool includeUpper)
 		{
 			return NewDoubleRange(field, null, lowerVal, upperVal, includeLower, includeUpper);
 		}
@@ -717,7 +730,7 @@ namespace Lucene.Net.Search
 		/// double fields containing exactly one numeric term in the field. The range can be half-open by setting one
 		/// of the values to <c>null</c>.
 		/// </summary>
-		public static FieldCacheRangeFilter NewDoubleRange(System.String field, Lucene.Net.Search.DoubleParser parser, System.ValueType lowerVal, System.ValueType upperVal, bool includeLower, bool includeUpper)
+        public static FieldCacheRangeFilter<double?> NewDoubleRange(string field, Lucene.Net.Search.DoubleParser parser, double? lowerVal, double? upperVal, bool includeLower, bool includeUpper)
 		{
 			return new AnonymousClassFieldCacheRangeFilter6(field, parser, lowerVal, upperVal, includeLower, includeUpper);
 		}
@@ -732,19 +745,19 @@ namespace Lucene.Net.Search
 		{
 			if (this == o)
 				return true;
-			if (!(o is FieldCacheRangeFilter))
+			if (!(o is FieldCacheRangeFilter<T>))
 				return false;
-			FieldCacheRangeFilter other = (FieldCacheRangeFilter) o;
+			FieldCacheRangeFilter<T> other = (FieldCacheRangeFilter<T>) o;
 			
 			if (!this.field.Equals(other.field) || this.includeLower != other.includeLower || this.includeUpper != other.includeUpper)
 			{
 				return false;
 			}
-			if (this.lowerVal != null?!this.lowerVal.Equals(other.lowerVal):other.lowerVal != null)
+			if (this.lowerVal != null ?! this.lowerVal.Equals(other.lowerVal):other.lowerVal != null)
 				return false;
-			if (this.upperVal != null?!this.upperVal.Equals(other.upperVal):other.upperVal != null)
+			if (this.upperVal != null ?! this.upperVal.Equals(other.upperVal):other.upperVal != null)
 				return false;
-			if (this.parser != null?!this.parser.Equals(other.parser):other.parser != null)
+			if (this.parser != null ?! this.parser.Equals(other.parser):other.parser != null)
 				return false;
 			return true;
 		}
@@ -760,9 +773,36 @@ namespace Lucene.Net.Search
 			return h;
 		}
 		
+        /// <summary>
+        /// Returns the field name for this filter
+        /// </summary>
+        public string GetField { get { return field; } }
+
+        /// <summary>
+        /// Returns <c>true</c> if the lower endpoint is inclusive
+        /// </summary>
+        public bool IncludesLower { get { return includeLower; } }
+
+        /// <summary>
+        /// Returns <c>true</c> if the upper endpoint is inclusive
+        /// </summary>
+        public bool IncludesUpper { get { return includeUpper; } }
+
+        /// <summary>
+        /// Returns the lower value of the range filter
+        /// </summary>
+	    public T LowerValue { get { return lowerVal; } }
+
+        /// <summary>
+        /// Returns the upper value of this range filter
+        /// </summary>
+        public T UpperValue { get { return upperVal; } }
+
+        public Parser Parser { get { return parser; } }
+
 		internal abstract class FieldCacheDocIdSet:DocIdSet
 		{
-			private class AnonymousClassDocIdSetIterator:DocIdSetIterator
+			private class AnonymousClassDocIdSetIterator : DocIdSetIterator
 			{
 				public AnonymousClassDocIdSetIterator(Lucene.Net.Index.TermDocs termDocs, FieldCacheDocIdSet enclosingInstance)
 				{
@@ -784,29 +824,6 @@ namespace Lucene.Net.Search
 					
 				}
 				private int doc = - 1;
-				
-				// @deprecated use <see cref="NextDoc()" /> instead.
-                [Obsolete("Lucene.Net-2.9.1. This method overrides obsolete member Lucene.Net.Search.DocIdSetIterator.Next()")]
-				public override bool Next()
-				{
-					return NextDoc() != NO_MORE_DOCS;
-				}
-				
-				/// <deprecated> use <see cref="Advance(int)" /> instead. 
-				/// </deprecated>
-                [Obsolete("use Advance(int) instead.")]
-				public override bool SkipTo(int target)
-				{
-					return Advance(target) != NO_MORE_DOCS;
-				}
-				
-				/// <deprecated> use <see cref="DocID()" /> instead. 
-				/// </deprecated>
-                [Obsolete("use DocID() instead.")]
-				public override int Doc()
-				{
-					return termDocs.Doc();
-				}
 				
 				public override int DocID()
 				{
@@ -856,30 +873,6 @@ namespace Lucene.Net.Search
 					
 				}
 				private int doc = - 1;
-				
-				/// <deprecated> use <see cref="NextDoc()" /> instead. 
-				/// </deprecated>
-                [Obsolete("use NextDoc() instead.")]
-				public override bool Next()
-				{
-					return NextDoc() != NO_MORE_DOCS;
-				}
-				
-				/// <deprecated> use <see cref="Advance(int)" /> instead. 
-				/// </deprecated>
-                [Obsolete("use Advance(int) instead.")]
-				public override bool SkipTo(int target)
-				{
-					return Advance(target) != NO_MORE_DOCS;
-				}
-				
-				/// <deprecated> use <see cref="DocID()" /> instead. 
-				/// </deprecated>
-                [Obsolete("use DocID() instead. ")]
-				public override int Doc()
-				{
-					return doc;
-				}
 				
 				public override int DocID()
 				{

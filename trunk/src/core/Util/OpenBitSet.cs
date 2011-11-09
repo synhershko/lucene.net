@@ -900,7 +900,7 @@ namespace Lucene.Net.Util
 		
 		
 		/// <summary>returns true if both sets have the same bits set </summary>
-		public  override bool Equals(System.Object o)
+		public override bool Equals(System.Object o)
 		{
 			if (this == o)
 				return true;

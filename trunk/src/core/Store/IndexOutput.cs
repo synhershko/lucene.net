@@ -29,7 +29,7 @@ namespace Lucene.Net.Store
 	/// </seealso>
 	/// <seealso cref="IndexInput">
 	/// </seealso>
-	public abstract class IndexOutput
+    public abstract class IndexOutput /*: IDisposable*/
 	{
 		/// <summary>Writes a single byte.</summary>
 		/// <seealso cref="IndexInput.ReadByte()">
@@ -262,10 +262,10 @@ namespace Lucene.Net.Store
 			else
 			{
 				WriteInt(map.Count);
-                foreach (string key in map.Keys)
+                foreach (var entry in map)
                 {
-                    WriteString(key);
-                    WriteString(map[key]);
+                    WriteString(entry.Key);
+                    WriteString(entry.Value);
                 }
 			}
 		}

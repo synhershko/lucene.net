@@ -1,0 +1,151 @@
+﻿##############################################################
+This branch does not build, and likely won't for a while. The
+tests don't pass, and there is no guarantee that everything
+would work properly even if it did.  There is a bit of work
+being done to try and emulate java's classes as much as possible
+and because of that, there may be unexpected behavior until
+tests have been written and prove that they work as intended.
+##############################################################
+
+
+TODO: Tests need to be written for SupportClass.HashMap
+TODO: Tests need to be written for SupportClass.WeakHashMap -> the entire implementation is probably all wrong
+
+Util.Version changed to Enum with extension methods
+ThreadInterruptedException.java was not ported, because it only exists in the java because the build-in is a checked exception
+RamUsageEstimator unsure how to port.  Moves seen Dict to a Dict<object,object> (seemingly pointless), but java sets the Map<object,object> as a new IdentityHashMap()
+PriorityQueue in InsertWithOverflow, java returns null, I set it to return default(T).  I don't think it's an issue, it looks like java is doing unchecked generics.  We should look back and determine if we should contrain the generic to class
+Parameter.cs - Commented code in Lucene.Net is uncommented in java
+TODO: Finish HashMap<K,V> and confirm it properly emulates java's behavior
+TODO: NamedThreadFactory.java
+TODO: DummyConcurrentLock.java
+TODO: Constants.java - LUCENE_MAIN_VERSION, and static constructor
+TODO: AverageGuessMemoryModel.java - IdentityHashMap okay to change to Dictionary<k,v>?
+TODO: AttributeSource.java needs WeakHashMap<k,v> ported from java
+TODO: Implement Cache.cs' IDisposable properly
+TODO: Check on FSDirectory(System.IO.DirectoryInfo path, LockFactory lockFactory)
+TODO: Revisit rewriting in ThreadInterruptedException
+TODO: LockStressTest.java
+TODO: MMapDirectory.java -> ThreadInterruptedException
+TODO: NIOFSDirectory.java
+TODO: RAMDirectory.java
+Util, Store (All files touched - Any that are present in 3.0.3 still need to be added)
+TODO: BooleanClause.java - Can't override tostring on Enum.  Leave type-safe or override with extension method?
+TODO: FieldValueHitQueue.Entry had to be made public for accessibility.  Look further into that.
+TODO: ParallelMultiSearcher - uses a lot of the java concurrency libs, which don't have perfect .NET equivalents
+TODO: FuzzyQuery - uses java.util.PriorityQueue<T>, which .net does not have.  Revisit later.
+TODO: ParallelReader - extra data types, TreeMap<Tk,Tv>
+
+TODO: SegmentInfos inherites from Vector<E>, which is threadsafe.  Closest equivelant is SynchronizedCollection<T> in .NET, but it's in a System.ServiceModel, and I can't be sure it's worth a dependency on that entire assembly for the one class.  Thread safety can probably be achieved in a different way.
+
+TODO: ThreadInterruptedException.java - This shouldn't be necessary.  Lucene is using it because it is unchecked.  C# has no checked expcetions
+TODO: FSDirectory.java - ThreadInterruptedException
+TODO: ConcurrentMergeScheduler - ThreadInterruptedException
+
+CHANGED: FieldCacheRangeFilter - Expects nullable primitives for the anonymous range filters<T> -> replaced with Nulable<T>
+CONFIRM: IndexWriter.java - ReaderPool.Close/Commit/Get lock/sync changes - may be wrong - ThreadInterruptedException(ie)
+
+CachingWrapperFilter.java -> changes ported
+TermInfosReader.java -> changes ported
+Analyzer.java -> changes ported
+FieldsReader.java -> changes ported
+SegmentReader.java -> changes ported
+TopDocsCollector.java -> changes ported
+FieldDocSortedHitQueue.java -> changes ported
+PhraseQueue.java -> changes ported
+HitQueue.java -> changes ported
+FieldValueHitQueue.java -> changes ported
+MultipleTermsPositions.java -> changes ported
+TopFieldCollector.java -> changes ported
+SpanOrQuery.java -> changes ported
+NearSpansUnordered.java -> changes ported
+TopScoreDocCollector.java -> changes ported
+CompoundFileReader.java -> changes ported
+AbstractField.java -> changes ported
+Fieldable.java -> changes ported
+Field.java -> changes ported
+NumericField.java -> changes ported
+IndexReader.java -> changes ported
+DirectoryReader.java -> changes ported
+FilterIndexReader.java -> changes ported
+MultiReader.java -> changes ported
+CachingSpanFilter.java -> changes ported
+ConjunctionScorer.java -> changes ported
+Query.Java -> changes ported
+ConstantScoreQuery.java -> changes ported
+DisjunctionMaxScorer.java -> changes ported
+DisjunctionSumScorer.java -> changes ported
+FieldCacheTermsFilter.java -> changes ported
+FilteredDocIdSetIterator.java -> changes ported
+FilteredQuery.java -> changes ported
+CustomScoreQuery.java -> changes ported
+ValueSourceQuery.java -> changes ported
+MatchAllDocsQuery.java -> changes ported
+MultiPhraseQuery.java -> changes ported
+TermScorer.java -> changes ported
+SpanScorer.java -> changes ported
+ScoreCachingWrappingScorer.java -> changes ported
+PhraseQuery.java -> changes ported
+PhraseScorer.java -> changes ported
+ReqExclScorer.java -> changes ported
+ReqOptSumScorer.java -> changes ported
+BooleanQuery.java -> changes ported
+DisjunctionMaxQuery.java -> changes ported
+SpanFirstQuery.java -> changes ported
+SpanQuery.java -> changes ported
+SpanNearQuery.java -> changes ported
+SpanNotQuery.java -> changes ported
+SpanTermQuery.java -> changes ported
+FieldMaskingSpanQuery.java -> changes ported
+TermQuery.java -> changes ported
+WildCardQuery.java -> changes ported
+FieldCacheRangeFilter.java -> changes ported
+Document.java -> changes ported
+FieldsWriter.java -> changes ported
+FieldInfos.java -> changes ported
+DocFieldProcessorPerThread.java -> changes ported
+PayloadSpanUtil.java -> changes ported
+IndexSearcher.java -> changes ported
+SegmentInfo.java -> changes ported
+IndexWriter.java -> changes ported
+QueryParser.java -> changes ported
+MultiFieldQueryParser.java -> changes ported
+MergePolicy.java -> changes ported
+LogByteSizeMergePolicy.java -> changes ported
+LogMergePolicy.java -> changes ported
+LogDocMergePolicy.java -> changes ported
+BooleanScorer2.java -> changes ported
+CheckIndex.java -> changes ported
+ConcurrentMergeScheduler.java -> changes ported
+ReadOnlyDirectoryReader.java -> changes ported
+IndexFileDeleter.java -> changes ported
+DocumentsWriter.java -> changes ported
+BufferedDeletes.java -> changes ported
+ByteBlockPool.java -> changes ported
+DocInverterPerField.java -> changes ported
+DocInverterPerThread.java -> changes ported
+SegmentWriteState.java -> changes ported
+DocFieldProcessor.java -> changes ported
+DocFieldConsumer.java -> changes ported
+DocFieldConsumers.java -> changes ported
+DocInverter.java -> changes ported
+SingleTermEnum.java -> changes ported
+FilteredTermEnum.java -> changes ported
+NormsWriter.java -> changes ported
+InvertedDocEndConsumer.java -> changes ported
+DocumentsWriterThreadState.java -> changes ported
+NativeFSLockFactory.java -> changes ported
+ExactPhraseScorer.java -> changes ported
+SloppyPhraseScorer.java -> changes ported
+Explanation.java -> changes ported
+Similarity.java -> changes ported
+SimilarityDelegator.java -> changes ported
+SegmentInfos.java -> changes ported (doesn't inherit from a generic equiv as in Java)
+FlagsAttributeImpl.java -> changes ported
+OffsetAttributeImpl.java -> changes ported
+PayloadAttributeImpl.java -> changes ported
+PositionIncrementAttributeImpl.java -> changes ported
+TermAttributeImpl.java -> changes ported
+TypeAttributeImpl.java -> changes ported
+ASCIIFoldingFilter.java -> changes ported
+TokenStream.java -> changes ported

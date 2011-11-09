@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Index;
 using IndexReader = Lucene.Net.Index.IndexReader;
 
 namespace Lucene.Net.Search
@@ -24,11 +24,7 @@ namespace Lucene.Net.Search
 	
 	/// <summary> A query that wraps a filter and simply returns a constant score equal to the
 	/// query boost for every document in the filter.
-	/// 
-	/// 
 	/// </summary>
-	/// <version>  $Id: ConstantScoreQuery.java 807180 2009-08-24 12:26:43Z markrmiller $
-	/// </version>
 	[Serializable]
 	public class ConstantScoreQuery:Query
 	{
@@ -50,7 +46,7 @@ namespace Lucene.Net.Search
 			return this;
 		}
 		
-		public override void  ExtractTerms(System.Collections.Hashtable terms)
+		public override void ExtractTerms(System.Collections.Generic.ISet<Term> terms)
 		{
 			// OK to not add any terms when used for MultiSearcher,
 			// but may not be OK for highlighting
@@ -137,7 +133,7 @@ namespace Lucene.Net.Search
 			}
 		}
 		
-		protected internal class ConstantScorer:Scorer
+		protected internal class ConstantScorer : Scorer
 		{
 			private void  InitBlock(ConstantScoreQuery enclosingInstance)
 			{
@@ -179,25 +175,9 @@ namespace Lucene.Net.Search
 				}
 			}
 			
-			/// <deprecated> use <see cref="NextDoc()" /> instead. 
-			/// </deprecated>
-            [Obsolete("use NextDoc() instead.")]
-			public override bool Next()
-			{
-				return docIdSetIterator.NextDoc() != NO_MORE_DOCS;
-			}
-			
 			public override int NextDoc()
 			{
 				return docIdSetIterator.NextDoc();
-			}
-			
-			/// <deprecated> use <see cref="DocID()" /> instead. 
-			/// </deprecated>
-            [Obsolete("use DocID() instead. ")]
-			public override int Doc()
-			{
-				return docIdSetIterator.Doc();
 			}
 			
 			public override int DocID()
@@ -210,22 +190,9 @@ namespace Lucene.Net.Search
 				return theScore;
 			}
 			
-			/// <deprecated> use <see cref="Advance(int)" /> instead. 
-			/// </deprecated>
-            [Obsolete("use Advance(int) instead. ")]
-			public override bool SkipTo(int target)
-			{
-				return docIdSetIterator.Advance(target) != NO_MORE_DOCS;
-			}
-			
 			public override int Advance(int target)
 			{
 				return docIdSetIterator.Advance(target);
-			}
-			
-			public override Explanation Explain(int doc)
-			{
-				throw new System.NotSupportedException();
 			}
 		}
 		

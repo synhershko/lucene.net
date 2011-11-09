@@ -281,14 +281,6 @@ namespace Lucene.Net.Index
 		{
 			in_Renamed.DeleteDocument(n);
 		}
-		
-		/// <deprecated> 
-		/// </deprecated>
-        [Obsolete]
-		protected internal override void  DoCommit()
-		{
-			DoCommit(null);
-		}
 
         protected internal override void DoCommit(System.Collections.Generic.IDictionary<string, string> commitUserData)
 		{

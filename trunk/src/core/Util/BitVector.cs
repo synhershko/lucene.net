@@ -33,9 +33,7 @@ namespace Lucene.Net.Util
 	/// <item>store and load, as bit set or d-gaps, depending on sparseness;</item> 
 	/// </list>
 	/// </summary>
-	/// <version>  $Id: BitVector.java 765649 2009-04-16 14:29:26Z mikemccand $
-	/// </version>
-	public sealed class BitVector : System.ICloneable
+	public sealed class BitVector : ICloneable
 	{
 		
 		private byte[] bits;

@@ -130,9 +130,32 @@ namespace Lucene.Net.Search
 				System.String field = Enclosing_Instance.term.Field();
 				ComplexExplanation fieldExpl = new ComplexExplanation();
 				fieldExpl.SetDescription("fieldWeight(" + Enclosing_Instance.term + " in " + doc + "), product of:");
-				
-				Explanation tfExpl = Scorer(reader, true, false).Explain(doc);
-				fieldExpl.AddDetail(tfExpl);
+
+                Explanation tfExplanation = new Explanation();
+                int tf = 0;
+                TermDocs termDocs = reader.TermDocs(enclosingInstance.term);
+                if (termDocs != null)
+                {
+                    try
+                    {
+                        if (termDocs.SkipTo(doc) && termDocs.Doc() == doc)
+                        {
+                            tf = termDocs.Freq();
+                        }
+                    }
+                    finally
+                    {
+                        termDocs.Close();
+                    }
+                    tfExplanation.SetValue(similarity.Tf(tf));
+                    tfExplanation.SetDescription("tf(termFreq(" + enclosingInstance.term + ")=" + tf + ")");
+                }
+                else
+                {
+                    tfExplanation.SetValue(0.0f);
+                    tfExplanation.SetDescription("no matching term");
+                }
+                fieldExpl.AddDetail(tfExplanation);
 				fieldExpl.AddDetail(expl);
 				
 				Explanation fieldNormExpl = new Explanation();
@@ -141,9 +164,9 @@ namespace Lucene.Net.Search
 				fieldNormExpl.SetValue(fieldNorm);
 				fieldNormExpl.SetDescription("fieldNorm(field=" + field + ", doc=" + doc + ")");
 				fieldExpl.AddDetail(fieldNormExpl);
-				
-				fieldExpl.SetMatch(tfExpl.IsMatch());
-				fieldExpl.SetValue(tfExpl.GetValue() * expl.GetValue() * fieldNormExpl.GetValue());
+
+                fieldExpl.SetMatch(tfExplanation.IsMatch());
+                fieldExpl.SetValue(tfExplanation.GetValue() * expl.GetValue() * fieldNormExpl.GetValue());
 				
 				result.AddDetail(fieldExpl);
 				System.Boolean? tempAux = fieldExpl.GetMatch();
@@ -176,9 +199,9 @@ namespace Lucene.Net.Search
 			return new TermWeight(this, searcher);
 		}
 		
-		public override void  ExtractTerms(System.Collections.Hashtable terms)
+		public override void  ExtractTerms(System.Collections.Generic.ISet<Term> terms)
 		{
-			SupportClass.CollectionsHelper.AddIfNotContains(terms, GetTerm());
+		    terms.Add(GetTerm());
 		}
 		
 		/// <summary>Prints a user-readable version of this query. </summary>

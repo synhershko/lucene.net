@@ -72,12 +72,5 @@ namespace Lucene.Net.Store
 		{
 			return main.Length();
 		}
-
-        /*
-		override public System.Object Clone()
-		{
-			return null;
-		}
-        */
 	}
 }

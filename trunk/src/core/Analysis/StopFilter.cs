@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Util;
 using PositionIncrementAttribute = Lucene.Net.Analysis.Tokenattributes.PositionIncrementAttribute;
 using TermAttribute = Lucene.Net.Analysis.Tokenattributes.TermAttribute;
 using QueryParser = Lucene.Net.QueryParsers.QueryParser;

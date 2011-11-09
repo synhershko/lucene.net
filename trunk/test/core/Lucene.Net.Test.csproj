@@ -19,7 +19,6 @@
  under the License.
 
 -->
-
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -112,7 +111,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup>
-  	<DefineConstants>$(DefineConstants);$(ExternalConstants)</DefineConstants>
+    <DefineConstants>$(DefineConstants);$(ExternalConstants)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, processorArchitecture=MSIL">
@@ -498,6 +497,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Util\TestStringIntern.cs" />
+    <Compile Include="Util\TestVersion.cs" />
     <Compile Include="Util\_TestUtil.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Index;
 using IndexReader = Lucene.Net.Index.IndexReader;
 using ToStringUtils = Lucene.Net.Util.ToStringUtils;
 using Query = Lucene.Net.Search.Query;
@@ -174,18 +174,7 @@ namespace Lucene.Net.Search.Spans
 			return include.GetField();
 		}
 		
-		/// <summary>Returns a collection of all terms matched by this query.</summary>
-		/// <deprecated> use extractTerms instead
-		/// </deprecated>
-        /// <seealso cref="ExtractTerms(System.Collections.Hashtable)">
-		/// </seealso>
-        [Obsolete("use ExtractTerms instead")]
-		public override System.Collections.ICollection GetTerms()
-		{
-			return include.GetTerms();
-		}
-		
-		public override void  ExtractTerms(System.Collections.Hashtable terms)
+		public override void  ExtractTerms(System.Collections.Generic.ISet<Term> terms)
 		{
 			include.ExtractTerms(terms);
 		}

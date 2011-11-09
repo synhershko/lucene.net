@@ -70,8 +70,7 @@ namespace Lucene.Net.Documents
 	/// <c>NumericField</c>, use <see cref="NumericRangeQuery" /> or <see cref="NumericRangeFilter" />
 	///.  To sort according to a
 	/// <c>NumericField</c>, use the normal numeric sort types, eg
-	/// <see cref="SortField.INT" /> (note that <see cref="SortField.AUTO" />
-	/// will not work with these fields).  <c>NumericField</c> values
+	/// <see cref="SortField.INT" />  <c>NumericField</c> values
 	/// can also be loaded directly from <see cref="FieldCache" />.<p/>
 	/// 
 	/// <p/>By default, a <c>NumericField</c>'s value is not stored but
@@ -218,12 +217,6 @@ namespace Lucene.Net.Documents
 		}
 		
 		/// <summary>Returns always <c>null</c> for numeric fields </summary>
-		public override byte[] BinaryValue()
-		{
-			return null;
-		}
-		
-		/// <summary>Returns always <c>null</c> for numeric fields </summary>
 		public override byte[] GetBinaryValue(byte[] result)
 		{
 			return null;
@@ -256,7 +249,7 @@ namespace Lucene.Net.Documents
 		public NumericField SetLongValue(long value_Renamed)
 		{
 			tokenStream.SetLongValue(value_Renamed);
-			fieldsData = (long) value_Renamed;
+			fieldsData = value_Renamed;
 			return this;
 		}
 		
@@ -269,7 +262,7 @@ namespace Lucene.Net.Documents
 		public NumericField SetIntValue(int value_Renamed)
 		{
 			tokenStream.SetIntValue(value_Renamed);
-			fieldsData = (System.Int32) value_Renamed;
+			fieldsData = value_Renamed;
 			return this;
 		}
 		
@@ -282,7 +275,7 @@ namespace Lucene.Net.Documents
 		public NumericField SetDoubleValue(double value_Renamed)
 		{
 			tokenStream.SetDoubleValue(value_Renamed);
-			fieldsData = (double) value_Renamed;
+			fieldsData = value_Renamed;
 			return this;
 		}
 		
@@ -295,7 +288,7 @@ namespace Lucene.Net.Documents
 		public NumericField SetFloatValue(float value_Renamed)
 		{
 			tokenStream.SetFloatValue(value_Renamed);
-			fieldsData = (float) value_Renamed;
+			fieldsData = value_Renamed;
 			return this;
 		}
 	}

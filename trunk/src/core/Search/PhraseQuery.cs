@@ -74,7 +74,7 @@ namespace Lucene.Net.Search
 		{
 			int position = 0;
 			if (positions.Count > 0)
-				position = ((System.Int32) positions[positions.Count - 1]) + 1;
+				position = positions[positions.Count - 1] + 1;
 			
 			Add(term, position);
 		}
@@ -99,7 +99,7 @@ namespace Lucene.Net.Search
 			}
 			
 			terms.Add(term);
-			positions.Add((System.Int32) position);
+			positions.Add(position);
 			if (position > maxPosition)
 				maxPosition = position;
 		}
@@ -107,7 +107,7 @@ namespace Lucene.Net.Search
 		/// <summary>Returns the set of terms in this phrase. </summary>
 		public virtual Term[] GetTerms()
 		{
-			return (Term[])terms.ToArray();
+			return terms.ToArray();
 		}
 		
 		/// <summary> Returns the relative positions of terms in this phrase.</summary>
@@ -115,7 +115,7 @@ namespace Lucene.Net.Search
 		{
 			int[] result = new int[positions.Count];
 			for (int i = 0; i < positions.Count; i++)
-				result[i] = ((System.Int32) positions[i]);
+				result[i] = positions[i];
 			return result;
 		}
 		
@@ -187,7 +187,7 @@ namespace Lucene.Net.Search
 				TermPositions[] tps = new TermPositions[Enclosing_Instance.terms.Count];
 				for (int i = 0; i < Enclosing_Instance.terms.Count; i++)
 				{
-					TermPositions p = reader.TermPositions((Term) Enclosing_Instance.terms[i]);
+					TermPositions p = reader.TermPositions(Enclosing_Instance.terms[i]);
 					if (p == null)
 						return null;
 					tps[i] = p;
@@ -217,7 +217,7 @@ namespace Lucene.Net.Search
 						query.Append(" ");
 					}
 					
-					Term term = (Term) Enclosing_Instance.terms[i];
+					Term term = Enclosing_Instance.terms[i];
 					
 					query.Append(term.Text());
 				}
@@ -245,13 +245,18 @@ namespace Lucene.Net.Search
 				Explanation fieldExpl = new Explanation();
 				fieldExpl.SetDescription("fieldWeight(" + Enclosing_Instance.field + ":" + query + " in " + doc + "), product of:");
 				
-				Scorer scorer = Scorer(reader, true, false);
+				PhraseScorer scorer = (PhraseScorer)Scorer(reader, true, false);
 				if (scorer == null)
 				{
 					return new Explanation(0.0f, "no matching docs");
 				}
-				Explanation tfExpl = scorer.Explain(doc);
-				fieldExpl.AddDetail(tfExpl);
+                Explanation tfExplanation = new Explanation();
+                int d = scorer.Advance(doc);
+                float phraseFreq = (d == doc) ? scorer.CurrentFreq() : 0.0f;
+                tfExplanation.SetValue(similarity.Tf(phraseFreq));
+                tfExplanation.SetDescription("tf(phraseFreq=" + phraseFreq + ")");
+
+                fieldExpl.AddDetail(tfExplanation);
 				fieldExpl.AddDetail(idfExpl);
 				
 				Explanation fieldNormExpl = new Explanation();
@@ -260,8 +265,8 @@ namespace Lucene.Net.Search
 				fieldNormExpl.SetValue(fieldNorm);
 				fieldNormExpl.SetDescription("fieldNorm(field=" + Enclosing_Instance.field + ", doc=" + doc + ")");
 				fieldExpl.AddDetail(fieldNormExpl);
-				
-				fieldExpl.SetValue(tfExpl.GetValue() * idfExpl.GetValue() * fieldNormExpl.GetValue());
+
+                fieldExpl.SetValue(tfExplanation.GetValue() * idfExpl.GetValue() * fieldNormExpl.GetValue());
 				
 				result.AddDetail(fieldExpl);
 				
@@ -280,7 +285,7 @@ namespace Lucene.Net.Search
 			if (terms.Count == 1)
 			{
 				// optimize one-term case
-				Term term = (Term) terms[0];
+				Term term = terms[0];
 				Query termQuery = new TermQuery(term);
 				termQuery.SetBoost(GetBoost());
 				return termQuery.CreateWeight(searcher);
@@ -288,11 +293,11 @@ namespace Lucene.Net.Search
 			return new PhraseWeight(this, searcher);
 		}
 		
-		/// <seealso cref="Lucene.Net.Search.Query.ExtractTerms(System.Collections.Hashtable)">
+		/// <seealso cref="Lucene.Net.Search.Query.ExtractTerms(System.Collections.Generic.ISet{T})">
 		/// </seealso>
-		public override void  ExtractTerms(System.Collections.Hashtable queryTerms)
+		public override void ExtractTerms(System.Collections.Generic.ISet<Term> queryTerms)
 		{
-			SupportClass.CollectionsHelper.AddAllIfNotContains(queryTerms, terms);
+		    queryTerms.UnionWith(terms);
 		}
 		
 		/// <summary>Prints a user-readable version of this query. </summary>
@@ -309,15 +314,15 @@ namespace Lucene.Net.Search
 			System.String[] pieces = new System.String[maxPosition + 1];
 			for (int i = 0; i < terms.Count; i++)
 			{
-				int pos = ((System.Int32) positions[i]);
+				int pos = positions[i];
 				System.String s = pieces[pos];
 				if (s == null)
 				{
-					s = ((Term) terms[i]).Text();
+					s = terms[i].Text();
 				}
 				else
 				{
-					s = s + "|" + ((Term) terms[i]).Text();
+					s = s + "|" + terms[i].Text();
 				}
 				pieces[pos] = s;
 			}

@@ -154,15 +154,6 @@ namespace Lucene.Net.Store
             InitBlock();
         }
 		
-		// back compatibility so FSDirectory can instantiate via reflection
-		/// <deprecated> 
-		/// </deprecated>
-        [Obsolete]
-		internal MMapDirectory()
-		{
-			InitBlock();
-		}
-		
 		internal static readonly System.Type[] NO_PARAM_TYPES = new System.Type[0];
 		internal static readonly System.Object[] NO_PARAMS = new System.Object[0];
 		

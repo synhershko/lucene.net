@@ -21,7 +21,6 @@ namespace Lucene.Net.Store
 {
 	
 	/// <summary> Use this <see cref="LockFactory" /> to disable locking entirely.
-	/// This LockFactory is used when you call <see cref="FSDirectory.SetDisableLocks" />.
 	/// Only one instance of this lock is created.  You should call <see cref="GetNoLockFactory()" />
 	/// to get the instance.
 	/// 
