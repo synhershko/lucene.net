@@ -88,11 +88,11 @@ namespace Lucene.Net.Util
 
 		private class AnonymousClassIntRangeBuilder:NumericUtils.IntRangeBuilder
 		{
-			public AnonymousClassIntRangeBuilder(int lower, int upper, bool useBitSet, Lucene.Net.Util.OpenBitSet bits, System.Collections.IEnumerator neededBounds, System.Collections.IEnumerator neededShifts,TestNumericUtils enclosingInstance)
+            public AnonymousClassIntRangeBuilder(int lower, int upper, bool useBitSet, Lucene.Net.Util.OpenBitSet bits, IEnumerator<int> neededBounds, IEnumerator<int> neededShifts, TestNumericUtils enclosingInstance)
 			{
                 InitBlock(lower, upper, useBitSet, bits, neededBounds, neededShifts,enclosingInstance);
 			}
-			private void  InitBlock(int lower, int upper, bool useBitSet, Lucene.Net.Util.OpenBitSet bits, System.Collections.IEnumerator neededBounds, System.Collections.IEnumerator neededShifts,TestNumericUtils enclosingInstance)
+            private void InitBlock(int lower, int upper, bool useBitSet, Lucene.Net.Util.OpenBitSet bits, IEnumerator<int> neededBounds, IEnumerator<int> neededShifts, TestNumericUtils enclosingInstance)
 			{
 				this.lower = lower;
 				this.upper = upper;
@@ -106,8 +106,8 @@ namespace Lucene.Net.Util
 			private int upper;
 			private bool useBitSet;
 			private Lucene.Net.Util.OpenBitSet bits;
-			private System.Collections.IEnumerator neededBounds;
-            private System.Collections.IEnumerator neededShifts;
+            private IEnumerator<int> neededBounds;
+            private IEnumerator<int> neededShifts;
 			private TestNumericUtils enclosingInstance;
 			public TestNumericUtils Enclosing_Instance
 			{
@@ -509,7 +509,7 @@ namespace Lucene.Net.Util
 		
 
 		/// <summary>Note: The neededBounds iterator must be unsigned (easier understanding what's happening) </summary>
-		protected internal virtual void  AssertIntRangeSplit(int lower, int upper, int precisionStep, bool useBitSet, System.Collections.IEnumerator neededBounds,System.Collections.IEnumerator neededShifts)
+		protected internal virtual void  AssertIntRangeSplit(int lower, int upper, int precisionStep, bool useBitSet, IEnumerator<int> neededBounds, IEnumerator<int> neededShifts)
 		{
 		    OpenBitSet bits = useBitSet ? new OpenBitSet(upper - lower + 1) : null;
 
@@ -527,32 +527,57 @@ namespace Lucene.Net.Util
 		public virtual void  TestSplitIntRange()
 		{
 			// a hard-coded "standard" range
-			AssertIntRangeSplit(- 5000, 9500, 4, true, new System.Collections.ArrayList(new System.Int32[]{0x7fffec78, 0x7fffec7f, unchecked((System.Int32) 0x80002510), unchecked((System.Int32) 0x8000251c), 0x7fffec8, 0x7fffecf, 0x8000250, 0x8000250, 0x7fffed, 0x7fffef, 0x800020, 0x800024, 0x7ffff, 0x80001}).GetEnumerator(),new int[]{0,0,4,4,8,8,12}.GetEnumerator());
+            AssertIntRangeSplit(- 5000, 9500, 4, true,
+                                new System.Int32[]
+                                    {
+                                        0x7fffec78, 0x7fffec7f, unchecked((System.Int32) 0x80002510),
+                                        unchecked((System.Int32) 0x8000251c), 0x7fffec8, 0x7fffecf, 0x8000250, 0x8000250,
+                                        0x7fffed, 0x7fffef, 0x800020, 0x800024, 0x7ffff, 0x80001
+                                    }.Cast<int>().GetEnumerator
+                                    (), new int[] { 0, 0, 4, 4, 8, 8, 12 }.Cast<int>().GetEnumerator());
 			
 			// the same with no range splitting
-            AssertIntRangeSplit(-5000, 9500, 32, true, new System.Collections.ArrayList(new System.Int32[] { 0x7fffec78, unchecked((System.Int32)0x8000251c) }).GetEnumerator(), new int[] { 0}.GetEnumerator());
+            AssertIntRangeSplit(-5000, 9500, 32, true,
+                                new System.Int32[] {0x7fffec78, unchecked((System.Int32) 0x8000251c)}.Cast<int>().
+                                    GetEnumerator(), new int[] { 0 }.Cast<int>().GetEnumerator());
 			
 			// this tests optimized range splitting, if one of the inner bounds
 			// is also the bound of the next lower precision, it should be used completely
-            AssertIntRangeSplit(0, 1024 + 63, 4, true, new System.Collections.ArrayList(new System.Int32[] { 0x8000040, 0x8000043, 0x800000, 0x800003 }).GetEnumerator(), new int[] {4,8 }.GetEnumerator());
+            AssertIntRangeSplit(0, 1024 + 63, 4, true,
+                                new System.Int32[] {0x8000040, 0x8000043, 0x800000, 0x800003}.Cast<int>().GetEnumerator(),
+                                new int[] { 4, 8 }.Cast<int>().GetEnumerator());
 			
 			// the full int range should only consist of a lowest precision range; no bitset testing here, as too much memory needed :-)
-            AssertIntRangeSplit(System.Int32.MinValue, System.Int32.MaxValue, 8, false, new System.Collections.ArrayList(new System.Int32[] { 0x00, 0xff }).GetEnumerator(), new int[] { 24}.GetEnumerator());
+            AssertIntRangeSplit(System.Int32.MinValue, System.Int32.MaxValue, 8, false,
+                                new System.Int32[] {0x00, 0xff}.Cast<int>().GetEnumerator(),
+                                new int[] { 24 }.Cast<int>().GetEnumerator());
 			
 			// the same with precisionStep=4
-            AssertIntRangeSplit(System.Int32.MinValue, System.Int32.MaxValue, 4, false, new System.Collections.ArrayList(new System.Int32[] { 0x0, 0xf }).GetEnumerator(), new int[] { 28}.GetEnumerator());
+            AssertIntRangeSplit(System.Int32.MinValue, System.Int32.MaxValue, 4, false,
+                                new System.Int32[] {0x0, 0xf}.Cast<int>().GetEnumerator(),
+                                new int[] {28}.Cast<int>().GetEnumerator());
 			
 			// the same with precisionStep=2
-            AssertIntRangeSplit(System.Int32.MinValue, System.Int32.MaxValue, 2, false, new System.Collections.ArrayList(new System.Int32[] { 0x0, 0x3 }).GetEnumerator(), new int[] {30 }.GetEnumerator());
+            AssertIntRangeSplit(System.Int32.MinValue, System.Int32.MaxValue, 2, false,
+                                new System.Int32[] {0x0, 0x3}.Cast<int>().GetEnumerator(),
+                                new int[] {30}.Cast<int>().GetEnumerator());
 			
 			// the same with precisionStep=1
-            AssertIntRangeSplit(System.Int32.MinValue, System.Int32.MaxValue, 1, false, new System.Collections.ArrayList(new System.Int32[] { 0x0, 0x1 }).GetEnumerator(), new int[] {31 }.GetEnumerator());
+            AssertIntRangeSplit(System.Int32.MinValue, System.Int32.MaxValue, 1, false,
+                                new System.Int32[] {0x0, 0x1}.Cast<int>().GetEnumerator(),
+                                new int[] {31}.Cast<int>().GetEnumerator());
 			
 			// a inverse range should produce no sub-ranges
-            AssertIntRangeSplit(9500, -5000, 4, false, ((System.Collections.IList)System.Collections.ArrayList.ReadOnly(new System.Collections.ArrayList())).GetEnumerator(), new int[] { }.GetEnumerator());
+            AssertIntRangeSplit(9500, -5000, 4, false, Enumerable.Empty<int>().GetEnumerator(),
+                                new int[] {}.Cast<int>().GetEnumerator());
 			
 			// a 0-length range should reproduce the range itsself
-            AssertIntRangeSplit(9500, 9500, 4, false, new System.Collections.ArrayList(new System.Int32[] { unchecked((System.Int32)0x8000251c), unchecked((System.Int32)0x8000251c) }).GetEnumerator(), new int[] {0 }.GetEnumerator());
+            AssertIntRangeSplit(9500, 9500, 4, false, new System.Int32[]
+                                                          {
+                                                              unchecked((System.Int32) 0x8000251c),
+                                                              unchecked((System.Int32) 0x8000251c)
+                                                          }.Cast<int>().GetEnumerator(),
+                                new int[] {0}.Cast<int>().GetEnumerator());
 		}
 	}
 }
