@@ -3,12 +3,12 @@ util\_TestUtil.java - DONE
 util\ArrayUtilTest.java - IDENTICAL
 util\English.java - Text files are different
 util\util\util\LocalizedTestCase.java - DONE
-util\LuceneTestCase.java - Text files are different
-util\TestAttributeSource.java - Text files are different
-util\util\TestBitVector.java - Text files are different
-util\TestCloseableThreadLocal.java - Text files are different
-util\TestFieldCacheSanityChecker.java - Text files are different
-util\TestIndexableBinaryStringTools.java - Text files are different
+util\LuceneTestCase.java - DONE
+util\TestAttributeSource.java - DONE
+util\util\TestBitVector.java - DONE
+util\TestCloseableThreadLocal.java - DONE? * Had to add type parameters to CloseableThreadLocal that java didn't require?
+util\TestFieldCacheSanityChecker.java - DONE
+util\TestIndexableBinaryStringTools.java - DONE
 util\TestNumericUtils.java - Text files are different
 util\TestOpenBitSet.java - IDENTICAL
 util\TestPriorityQueue.java - Text files are different

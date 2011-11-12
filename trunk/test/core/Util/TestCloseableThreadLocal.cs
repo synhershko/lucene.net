@@ -50,12 +50,12 @@ namespace Lucene.Net.Util
 		{
 			// LUCENE-1805: make sure default get returns null,
 			// twice in a row
-			CloseableThreadLocal ctl = new CloseableThreadLocal();
+            CloseableThreadLocal<object> ctl = new CloseableThreadLocal<object>();
 			Assert.IsNull(ctl.Get());
 			Assert.IsNull(ctl.Get());
 		}
-		
-		public class InitValueThreadLocal:CloseableThreadLocal
+
+        public class InitValueThreadLocal : CloseableThreadLocal<object>
 		{
 			public InitValueThreadLocal(TestCloseableThreadLocal enclosingInstance)
 			{

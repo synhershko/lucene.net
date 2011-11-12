@@ -115,12 +115,8 @@ namespace Lucene.Net.Util
 				PurgeFieldCache(Lucene.Net.Search.FieldCache_Fields.DEFAULT);
 			}
 			
-			TokenStream.SetOnlyUseNewAPI(savedAPISetting);
 			//base.TearDown();  // {{Aroush-2.9}}
-            this.seed_init = false;
-
-            //{{Lucene.Net-2.9.1}}
-            Lucene.Net.Search.BooleanQuery.SetAllowDocsOutOfOrder(allowDocsOutOfOrder); 
+            this.seed = null;
 		}
 		
 		/// <summary> Asserts that FieldCacheSanityChecker does not detect any 
@@ -216,7 +212,7 @@ namespace Lucene.Net.Util
 		/// </summary>
 		public virtual System.Random NewRandom()
 		{
-			if (seed_init != false)
+			if (this.seed != null)
 			{
 				throw new System.SystemException("please call LuceneTestCase.newRandom only once per test");
 			}
@@ -229,11 +225,10 @@ namespace Lucene.Net.Util
 		/// </summary>
 		public virtual System.Random NewRandom(int seed)
 		{
-			if (this.seed_init != false)
+			if (this.seed != null)
 			{
 				throw new System.SystemException("please call LuceneTestCase.newRandom only once per test");
 			}
-            this.seed_init = true;
 			this.seed = seed;
 			return new System.Random(seed);
 		}
@@ -243,13 +238,13 @@ namespace Lucene.Net.Util
 		{
 			try
 			{
-				seed_init = false;
+				this.seed = null;
 				//base.RunBare(); // {{Aroush-2.9}}
                 System.Diagnostics.Debug.Fail("Port issue:", "base.RunBare()"); // {{Aroush-2.9}}
 			}
 			catch (System.Exception e)
 			{
-				if (seed_init != false)
+				if (this.seed != null)
 				{
 					System.Console.Out.WriteLine("NOTE: random seed of testcase '" + GetType() + "' was: " + seed);
 				}
@@ -259,8 +254,8 @@ namespace Lucene.Net.Util
 		
 		// recorded seed
 		[NonSerialized]
-		protected internal int seed = 0;
-        protected internal bool seed_init = false;
+		protected internal int? seed = null;
+        //protected internal bool seed_init = false;
 		
 		// static members
 		[NonSerialized]
