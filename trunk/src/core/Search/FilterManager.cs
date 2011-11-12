@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using Lucene.Net.Support;
 
 namespace Lucene.Net.Search
 {
@@ -71,7 +72,7 @@ namespace Lucene.Net.Search
 			cleanSleepTime = DEFAULT_CACHE_SLEEP_TIME; // 10 minutes between cleanings
 			
 			filterCleaner = new FilterCleaner(this);
-			SupportClass.ThreadClass fcThread = new SupportClass.ThreadClass(new System.Threading.ThreadStart(filterCleaner.Run));
+			ThreadClass fcThread = new ThreadClass(new System.Threading.ThreadStart(filterCleaner.Run));
 			// setto be a Daemon so it doesn't have to be stopped
 			fcThread.IsBackground = true;
 			fcThread.Start();
@@ -222,7 +223,7 @@ namespace Lucene.Net.Search
 					}
 					catch (System.Threading.ThreadInterruptedException ie)
 					{
-						SupportClass.ThreadClass.Current().Interrupt();
+						ThreadClass.Current().Interrupt();
 						throw new System.SystemException(ie.Message, ie);
 					}
 				}

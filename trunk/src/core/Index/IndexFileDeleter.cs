@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using Lucene.Net.Support;
 using Directory = Lucene.Net.Store.Directory;
 
 namespace Lucene.Net.Index
@@ -70,7 +71,7 @@ namespace Lucene.Net.Index
 		//// Reference count for all files in the index.  
 		/// Counts how many existing commits reference a file.
 		/// Maps String to RefCount (class below) instances: ////
-		private IDictionary<string, RefCount> refCounts = new SupportClass.HashMap<string, RefCount>();
+		private IDictionary<string, RefCount> refCounts = new HashMap<string, RefCount>();
 		
 		//// Holds all commits (segments_N) currently in the index.
 		/// This will have just 1 commit if you are using the
@@ -112,7 +113,7 @@ namespace Lucene.Net.Index
 		
 		private void  Message(System.String message)
 		{
-            infoStream.WriteLine("IFD [" + new DateTime().ToString() + "; " + SupportClass.ThreadClass.Current().Name + "]: " + message);
+            infoStream.WriteLine("IFD [" + new DateTime().ToString() + "; " + ThreadClass.Current().Name + "]: " + message);
 		}
 		
 		/// <summary> Initialize the deleter: find all previous commits in

@@ -17,7 +17,7 @@
 
 using System;
 using System.IO;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using WhitespaceAnalyzer = Lucene.Net.Analysis.WhitespaceAnalyzer;
@@ -42,7 +42,7 @@ namespace Lucene.Net.Store
     [TestFixture]
 	public class TestRAMDirectory:LuceneTestCase
 	{
-		private class AnonymousClassThread:SupportClass.ThreadClass
+		private class AnonymousClassThread:ThreadClass
 		{
 			public AnonymousClassThread(int num, Lucene.Net.Index.IndexWriter writer, Lucene.Net.Store.MockRAMDirectory ramDir, TestRAMDirectory enclosingInstance)
 			{
@@ -214,7 +214,7 @@ namespace Lucene.Net.Store
 			
 			Assert.AreEqual(ramDir.SizeInBytes(), ramDir.GetRecomputedSizeInBytes());
 			
-			SupportClass.ThreadClass[] threads = new SupportClass.ThreadClass[numThreads];
+			ThreadClass[] threads = new ThreadClass[numThreads];
 			for (int i = 0; i < numThreads; i++)
 			{
 				int num = i;

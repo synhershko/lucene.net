@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using StandardAnalyzer = Lucene.Net.Analysis.Standard.StandardAnalyzer;
@@ -67,7 +67,7 @@ namespace Lucene.Net.Store
 			return fb.ToString();
 		}
 		
-		private static readonly System.String storePathname = new System.IO.FileInfo(System.IO.Path.Combine(SupportClass.AppSettings.Get("tempDir", ""), "testLuceneMmap")).FullName;
+		private static readonly System.String storePathname = new System.IO.FileInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "testLuceneMmap")).FullName;
 		
 		[Test]
 		public virtual void  TestMmapIndex()
@@ -97,7 +97,7 @@ namespace Lucene.Net.Store
 		
 		private void  RmDir(System.IO.FileInfo dir)
 		{
-			System.IO.FileInfo[] files = SupportClass.FileSupport.GetFiles(dir);
+			System.IO.FileInfo[] files = FileSupport.GetFiles(dir);
 			for (int i = 0; i < files.Length; i++)
 			{
 				bool tmpBool;

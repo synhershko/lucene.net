@@ -16,9 +16,10 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NumericField = Lucene.Net.Documents.NumericField;
 using IndexReader = Lucene.Net.Index.IndexReader;
+using Single = Lucene.Net.Support.Single;
 using Term = Lucene.Net.Index.Term;
 using TermEnum = Lucene.Net.Index.TermEnum;
 using StringHelper = Lucene.Net.Util.StringHelper;
@@ -671,7 +672,7 @@ namespace Lucene.Net.Search
                     int tmpI32; long tmpI64; float tmpF;
                     if      (System.Int32.TryParse(termtext, out tmpI32))       ret = SortField.INT;
                     else if (System.Int64.TryParse(termtext, out tmpI64))       ret = SortField.LONG;
-                    else if (SupportClass.Single.TryParse(termtext, out tmpF))  ret = SortField.FLOAT;
+                    else if (Single.TryParse(termtext, out tmpF))  ret = SortField.FLOAT;
                     else ret = SortField.STRING;
 				}
 				else

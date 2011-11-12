@@ -47,8 +47,8 @@ namespace Lucene.Net.Index
 
             internal SingleTokenAttributeSource()
 			{
-				termAttribute = AddAttribute(typeof(TermAttribute));
-				offsetAttribute = AddAttribute(typeof(OffsetAttribute));
+                termAttribute = AddAttribute<TermAttribute>();
+				offsetAttribute = AddAttribute<OffsetAttribute>();
 			}
 			
 			public void  Reinit(System.String stringValue, int startOffset, int endOffset)

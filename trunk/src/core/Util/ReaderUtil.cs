@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using IndexReader = Lucene.Net.Index.IndexReader;
 
 namespace Lucene.Net.Util
@@ -29,7 +29,7 @@ namespace Lucene.Net.Util
 		/// <summary>Gathers sub-readers from reader into a List.</summary>
 		/// <param name="allSubReaders"></param>
 		/// <param name="reader"></param>
-		public static void GatherSubReaders(System.Collections.Generic.List<IndexReader> allSubReaders, IndexReader reader)
+		public static void GatherSubReaders(System.Collections.Generic.IList<IndexReader> allSubReaders, IndexReader reader)
 		{
 			IndexReader[] subReaders = reader.GetSequentialSubReaders();
 			if (subReaders == null)
@@ -100,7 +100,7 @@ namespace Lucene.Net.Util
 			int hi = size - 1; // for first element less than n, return its index
 			while (hi >= lo)
 			{
-				int mid = SupportClass.Number.URShift((lo + hi), 1);
+				int mid = Number.URShift((lo + hi), 1);
 				int midValue = docStarts[mid];
 				if (n < midValue)
 					hi = mid - 1;

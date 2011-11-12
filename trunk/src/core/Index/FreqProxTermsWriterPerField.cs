@@ -89,9 +89,9 @@ namespace Lucene.Net.Index
 		
 		internal override void  Start(Fieldable f)
 		{
-			if (fieldState.attributeSource.HasAttribute(typeof(PayloadAttribute)))
+            if (fieldState.attributeSource.HasAttribute<PayloadAttribute>())
 			{
-				payloadAttribute = (PayloadAttribute) fieldState.attributeSource.GetAttribute(typeof(PayloadAttribute));
+                payloadAttribute = fieldState.attributeSource.GetAttribute<PayloadAttribute>();
 			}
 			else
 			{

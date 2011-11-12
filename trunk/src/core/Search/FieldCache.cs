@@ -16,12 +16,14 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
+using Double = Lucene.Net.Support.Double;
 using NumericTokenStream = Lucene.Net.Analysis.NumericTokenStream;
 using NumericField = Lucene.Net.Documents.NumericField;
 using IndexReader = Lucene.Net.Index.IndexReader;
 using NumericUtils = Lucene.Net.Util.NumericUtils;
 using RamUsageEstimator = Lucene.Net.Util.RamUsageEstimator;
+using Single = Lucene.Net.Support.Single;
 
 namespace Lucene.Net.Search
 {
@@ -56,7 +58,7 @@ namespace Lucene.Net.Search
 			
 			while (low <= high)
 			{
-				int mid = SupportClass.Number.URShift((low + high), 1);
+				int mid = Number.URShift((low + high), 1);
 				int cmp = String.CompareOrdinal(lookup[mid], key);
 				
 				if (cmp < 0)
@@ -250,7 +252,7 @@ namespace Lucene.Net.Search
 		{
             try
             {
-                return SupportClass.Single.Parse(value_Renamed);
+                return Single.Parse(value_Renamed);
             }
             catch (System.OverflowException)
             {
@@ -287,7 +289,7 @@ namespace Lucene.Net.Search
 	{
 		public virtual double ParseDouble(System.String value_Renamed)
 		{
-			return SupportClass.Double.Parse(value_Renamed);
+			return Double.Parse(value_Renamed);
 		}
 		protected internal virtual System.Object ReadResolve()
 		{

@@ -17,6 +17,7 @@
 
 using System;
 using Lucene.Net.Index;
+using Lucene.Net.Support;
 using IndexReader = Lucene.Net.Index.IndexReader;
 using ToStringUtils = Lucene.Net.Util.ToStringUtils;
 using Query = Lucene.Net.Search.Query;
@@ -246,9 +247,9 @@ namespace Lucene.Net.Search.Spans
 		public override int GetHashCode()
 		{
 			int h = include.GetHashCode();
-			h = (h << 1) | (SupportClass.Number.URShift(h, 31)); // rotate left
+			h = (h << 1) | (Number.URShift(h, 31)); // rotate left
 			h ^= exclude.GetHashCode();
-			h = (h << 1) | (SupportClass.Number.URShift(h, 31)); // rotate left
+			h = (h << 1) | (Number.URShift(h, 31)); // rotate left
 			h ^= System.Convert.ToInt32(GetBoost());
 			return h;
 		}

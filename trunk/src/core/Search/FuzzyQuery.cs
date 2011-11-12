@@ -16,8 +16,10 @@
  */
 
 using System;
+using Lucene.Net.Support;
 using Lucene.Net.Util;
 using IndexReader = Lucene.Net.Index.IndexReader;
+using Single = Lucene.Net.Support.Single;
 using Term = Lucene.Net.Index.Term;
 using ToStringUtils = Lucene.Net.Util.ToStringUtils;
 
@@ -201,7 +203,7 @@ namespace Lucene.Net.Search
 			}
 			buffer.Append(term.Text());
 			buffer.Append('~');
-			buffer.Append(SupportClass.Single.ToString(minimumSimilarity));
+			buffer.Append(Single.ToString(minimumSimilarity));
 			buffer.Append(ToStringUtils.Boost(GetBoost()));
 			return buffer.ToString();
 		}

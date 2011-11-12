@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Lucene.Net.Support;
 
 namespace Lucene.Net.Util
 {
@@ -80,11 +81,11 @@ namespace Lucene.Net.Util
         public virtual void Set(T @object)
         {
             //+-- For Debuging
-            if (SupportClass.CloseableThreadLocalProfiler.EnableCloseableThreadLocalProfiler == true)
+            if (CloseableThreadLocalProfiler.EnableCloseableThreadLocalProfiler == true)
             {
-                lock (SupportClass.CloseableThreadLocalProfiler.Instances)
+                lock (CloseableThreadLocalProfiler.Instances)
                 {
-                    SupportClass.CloseableThreadLocalProfiler.Instances.Add(new WeakReference(@object));
+                    CloseableThreadLocalProfiler.Instances.Add(new WeakReference(@object));
                 }
             }
             //+--

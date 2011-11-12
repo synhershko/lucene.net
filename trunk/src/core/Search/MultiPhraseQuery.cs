@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using IndexReader = Lucene.Net.Index.IndexReader;
 using MultipleTermPositions = Lucene.Net.Index.MultipleTermPositions;
 using Term = Lucene.Net.Index.Term;
@@ -390,7 +390,7 @@ namespace Lucene.Net.Search
 
             for (int i = 0; i < this.termArrays.Count; i++)
             {
-                if (!SupportClass.Compare.CompareTermArrays((Term[])this.termArrays[i], (Term[])other.termArrays[i]))
+                if (!Compare.CompareTermArrays((Term[])this.termArrays[i], (Term[])other.termArrays[i]))
                 {
                     return false;
                 }

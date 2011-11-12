@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using IndexInput = Lucene.Net.Store.IndexInput;
 
 namespace Lucene.Net.Index
@@ -87,7 +87,7 @@ namespace Lucene.Net.Index
 				{
 					payloadLength = proxStream.ReadVInt();
 				}
-				delta = SupportClass.Number.URShift(delta, 1);
+				delta = Number.URShift(delta, 1);
 				needToLoadPayload = true;
 			}
 			return delta;

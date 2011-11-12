@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using WhitespaceAnalyzer = Lucene.Net.Analysis.WhitespaceAnalyzer;
@@ -499,7 +499,7 @@ namespace Lucene.Net.Index
 					System.String[] actual = dir.ListAll();
 					System.Array.Sort(expected);
 					System.Array.Sort(actual);
-					if (!SupportClass.CollectionsHelper.Equals(expected, actual))
+					if (!CollectionsHelper.Equals(expected, actual))
 					{
 						Assert.Fail("incorrect filenames in index: expected:\n    " + AsString(expected) + "\n  actual:\n    " + AsString(actual));
 					}
@@ -570,7 +570,7 @@ namespace Lucene.Net.Index
 				tmpBool = System.IO.Directory.Exists(fileDir.FullName);
 			if (tmpBool)
 			{
-				System.IO.FileInfo[] files = SupportClass.FileSupport.GetFiles(fileDir);
+				System.IO.FileInfo[] files = FileSupport.GetFiles(fileDir);
 				if (files != null)
 				{
 					for (int i = 0; i < files.Length; i++)
@@ -610,7 +610,7 @@ namespace Lucene.Net.Index
 		
 		public static System.String FullDir(System.String dirName)
 		{
-			return new System.IO.FileInfo(System.IO.Path.Combine(SupportClass.AppSettings.Get("tempDir", ""), dirName)).FullName;
+			return new System.IO.FileInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), dirName)).FullName;
 		}
 		
 		internal const System.String TEXT_TO_COMPRESS = "this is a compressed field and should appear in 3.0 as an uncompressed field after merge";

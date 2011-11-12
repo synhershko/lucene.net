@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using WhitespaceAnalyzer = Lucene.Net.Analysis.WhitespaceAnalyzer;
@@ -284,7 +284,7 @@ namespace Lucene.Net.Store
 		[Test]
 		public virtual void  TestSetBufferSize()
 		{
-			System.IO.FileInfo indexDir = new System.IO.FileInfo(System.IO.Path.Combine(SupportClass.AppSettings.Get("tempDir", ""), "testSetBufferSize"));
+			System.IO.FileInfo indexDir = new System.IO.FileInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "testSetBufferSize"));
 			MockFSDirectory dir = new MockFSDirectory(indexDir, NewRandom());
 			try
 			{

@@ -29,7 +29,7 @@ namespace Lucene.Net.Analysis
 	/// <version>  $Id$
 	/// 
 	/// </version>
-	public abstract class CharFilter:CharStream
+	public abstract class CharFilter : CharStream
 	{
         private long currentPosition = -1;
 		

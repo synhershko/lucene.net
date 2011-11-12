@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Lucene.Net.Support;
 using Analyzer = Lucene.Net.Analysis.Analyzer;
 using Document = Lucene.Net.Documents.Document;
 using AlreadyClosedException = Lucene.Net.Store.AlreadyClosedException;
@@ -166,7 +167,7 @@ namespace Lucene.Net.Index
 		// than this they share ThreadStates
 		private const int MAX_THREAD_STATE = 5;
 		private DocumentsWriterThreadState[] threadStates = new DocumentsWriterThreadState[0];
-        private SupportClass.HashMap<SupportClass.ThreadClass, DocumentsWriterThreadState> threadBindings = new SupportClass.HashMap<SupportClass.ThreadClass, DocumentsWriterThreadState>();
+        private HashMap<ThreadClass, DocumentsWriterThreadState> threadBindings = new HashMap<ThreadClass, DocumentsWriterThreadState>();
 		
 		private int pauseThreads; // Non-zero when we need all threads to
 		// pause (eg to flush)
@@ -912,7 +913,7 @@ namespace Lucene.Net.Index
 				// First, find a thread state.  If this thread already
 				// has affinity to a specific ThreadState, use that one
 				// again.
-				DocumentsWriterThreadState state = threadBindings[SupportClass.ThreadClass.Current()];
+				DocumentsWriterThreadState state = threadBindings[ThreadClass.Current()];
 				if (state == null)
 				{
 					
@@ -939,7 +940,7 @@ namespace Lucene.Net.Index
 						state = newArray[threadStates.Length] = new DocumentsWriterThreadState(this);
 						threadStates = newArray;
 					}
-					threadBindings[SupportClass.ThreadClass.Current()] = state;
+					threadBindings[ThreadClass.Current()] = state;
 				}
 				
 				// Next, wait until my thread state is idle (in case
@@ -1365,7 +1366,7 @@ namespace Lucene.Net.Index
 				
 				// Delete by query
 				IndexSearcher searcher = new IndexSearcher(reader);
-				foreach(KeyValuePair<Query, int?> entry in deletesFlushed.queries)
+				foreach(KeyValuePair<Query, int> entry in deletesFlushed.queries)
 				{
 					Query query = (Query) entry.Key;
 					int limit = (int)entry.Value;

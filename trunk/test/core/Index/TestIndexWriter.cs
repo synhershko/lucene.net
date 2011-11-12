@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using Analyzer = Lucene.Net.Analysis.Analyzer;
@@ -204,7 +204,7 @@ namespace Lucene.Net.Index
                 return new CrashingFilter(this.enclosingInstance, fieldName, new WhitespaceTokenizer(reader));
             }
         }
-        private class AnonymousClassThread : SupportClass.ThreadClass
+        private class AnonymousClassThread : ThreadClass
         {
             public AnonymousClassThread(int NUM_ITER, IndexWriter writer, int finalI, TestIndexWriter enclosingInstance)
             {
@@ -263,14 +263,14 @@ namespace Lucene.Net.Index
                 {
                     lock (this)
                     {
-                        System.Console.Out.WriteLine(SupportClass.ThreadClass.Current().Name + ": ERROR: hit unexpected exception");
+                        System.Console.Out.WriteLine(ThreadClass.Current().Name + ": ERROR: hit unexpected exception");
                         System.Console.Out.WriteLine(t.StackTrace);
                     }
                     Assert.Fail();
                 }
             }
         }
-        private class AnonymousClassThread1 : SupportClass.ThreadClass
+        private class AnonymousClassThread1 : ThreadClass
         {
             public AnonymousClassThread1(IndexWriter finalWriter, Document doc, System.Collections.ArrayList failure, TestIndexWriter enclosingInstance)
             {
@@ -995,7 +995,7 @@ namespace Lucene.Net.Index
             System.Array.Sort(startFiles);
             System.Array.Sort(endFiles);
 
-            if (!SupportClass.CollectionsHelper.Equals(startFiles, endFiles))
+            if (!CollectionsHelper.Equals(startFiles, endFiles))
             {
                 Assert.Fail(message + ": before delete:\n    " + ArrayToString(startFiles) + "\n  after delete:\n    " + ArrayToString(endFiles));
             }
@@ -1009,7 +1009,7 @@ namespace Lucene.Net.Index
             IndexWriter writer = new IndexWriter(dir, new StandardAnalyzer(), true, IndexWriter.MaxFieldLength.LIMITED);
 
             char[] chars = new char[DocumentsWriter.CHAR_BLOCK_SIZE_ForNUnit - 1];
-            SupportClass.CollectionsHelper.Fill(chars, 'x');
+            CollectionsHelper.Fill(chars, 'x');
             Document doc = new Document();
             System.String bigTerm = new System.String(chars);
 
@@ -2233,7 +2233,7 @@ namespace Lucene.Net.Index
 
         private void RmDir(System.IO.FileInfo dir)
         {
-            System.IO.FileInfo[] files = SupportClass.FileSupport.GetFiles(dir);
+            System.IO.FileInfo[] files = FileSupport.GetFiles(dir);
             if (files != null)
             {
                 for (int i = 0; i < files.Length; i++)
@@ -2348,7 +2348,7 @@ namespace Lucene.Net.Index
         [Test]
         public virtual void TestMaxThreadPriority()
         {
-            int pri = (System.Int32)SupportClass.ThreadClass.Current().Priority;
+            int pri = (System.Int32)ThreadClass.Current().Priority;
             try
             {
                 MockRAMDirectory dir = new MockRAMDirectory();
@@ -2357,14 +2357,14 @@ namespace Lucene.Net.Index
                 document.Add(new Field("tvtest", "a b c", Field.Store.NO, Field.Index.ANALYZED, Field.TermVector.YES));
                 iw.SetMaxBufferedDocs(2);
                 iw.SetMergeFactor(2);
-                SupportClass.ThreadClass.Current().Priority = (System.Threading.ThreadPriority)System.Threading.ThreadPriority.Highest;
+                ThreadClass.Current().Priority = (System.Threading.ThreadPriority)System.Threading.ThreadPriority.Highest;
                 for (int i = 0; i < 4; i++)
                     iw.AddDocument(document);
                 iw.Close();
             }
             finally
             {
-                SupportClass.ThreadClass.Current().Priority = (System.Threading.ThreadPriority)pri;
+                ThreadClass.Current().Priority = (System.Threading.ThreadPriority)pri;
             }
         }
 
@@ -2693,7 +2693,7 @@ namespace Lucene.Net.Index
 
                     int finalI = i;
 
-                    SupportClass.ThreadClass[] threads = new SupportClass.ThreadClass[NUM_THREAD];
+                    ThreadClass[] threads = new ThreadClass[NUM_THREAD];
                     for (int t = 0; t < NUM_THREAD; t++)
                     {
                         threads[t] = new AnonymousClassThread(NUM_ITER, writer, finalI, this);
@@ -2855,7 +2855,7 @@ namespace Lucene.Net.Index
 
                     IndexWriter finalWriter = writer;
                     System.Collections.ArrayList failure = new System.Collections.ArrayList();
-                    SupportClass.ThreadClass t1 = new AnonymousClassThread1(finalWriter, doc, failure, this);
+                    ThreadClass t1 = new AnonymousClassThread1(finalWriter, doc, failure, this);
 
                     if (failure.Count > 0)
                     {
@@ -2881,7 +2881,7 @@ namespace Lucene.Net.Index
         }
 
         // Used by test cases below
-        private class IndexerThread : SupportClass.ThreadClass
+        private class IndexerThread : ThreadClass
         {
             private void InitBlock(TestIndexWriter enclosingInstance)
             {
@@ -2941,7 +2941,7 @@ namespace Lucene.Net.Index
                             }
                             catch (System.Threading.ThreadInterruptedException ie)
                             {
-                                SupportClass.ThreadClass.Current().Interrupt();
+                                ThreadClass.Current().Interrupt();
                                 throw new System.SystemException("", ie);
                             }
                             if (fullCount++ >= 5)
@@ -2951,7 +2951,7 @@ namespace Lucene.Net.Index
                         {
                             if (noErrors)
                             {
-                                System.Console.Out.WriteLine(SupportClass.ThreadClass.Current().Name + ": ERROR: unexpected IOException:");
+                                System.Console.Out.WriteLine(ThreadClass.Current().Name + ": ERROR: unexpected IOException:");
                                 System.Console.Out.WriteLine(ioe.StackTrace);
                                 error = ioe;
                             }
@@ -2963,7 +2963,7 @@ namespace Lucene.Net.Index
                         //t.printStackTrace(System.out);
                         if (noErrors)
                         {
-                            System.Console.Out.WriteLine(SupportClass.ThreadClass.Current().Name + ": ERROR: unexpected Throwable:");
+                            System.Console.Out.WriteLine(ThreadClass.Current().Name + ": ERROR: unexpected Throwable:");
                             System.Console.Out.WriteLine(t.StackTrace);
                             error = t;
                         }
@@ -3900,7 +3900,7 @@ namespace Lucene.Net.Index
             {
                 w.AddDocument(doc);
 
-                if (SupportClass.BuildType.Debug)
+                if (BuildType.Debug)
                     Assert.Fail("did not hit exception");
                 else
                     Assert.Ignore("This test is not executed in release mode");
@@ -4002,7 +4002,7 @@ namespace Lucene.Net.Index
                 }
 
             ((ConcurrentMergeScheduler)w.GetMergeScheduler()).Sync();
-            if (SupportClass.BuildType.Debug)
+            if (BuildType.Debug)
                 Assert.IsTrue(w.failed);
             else
                 Assert.Ignore("This test is not executed in release mode");
@@ -4532,7 +4532,7 @@ namespace Lucene.Net.Index
 
         private abstract class RunAddIndexesThreads
         {
-            private class AnonymousClassThread2 : SupportClass.ThreadClass
+            private class AnonymousClassThread2 : ThreadClass
             {
                 public AnonymousClassThread2(int numIter, RunAddIndexesThreads enclosingInstance)
                 {
@@ -4580,7 +4580,7 @@ namespace Lucene.Net.Index
             }
             private void InitBlock()
             {
-                threads = new SupportClass.ThreadClass[NUM_THREADS];
+                threads = new ThreadClass[NUM_THREADS];
             }
 
             internal Directory dir, dir2;
@@ -4591,7 +4591,7 @@ namespace Lucene.Net.Index
             internal IndexReader[] readers;
             internal int NUM_COPY;
             internal const int NUM_THREADS = 5;
-            internal SupportClass.ThreadClass[] threads;
+            internal ThreadClass[] threads;
             internal ConcurrentMergeScheduler cms;
 
             public RunAddIndexesThreads(int numCopy)
@@ -4615,7 +4615,7 @@ namespace Lucene.Net.Index
 
             internal virtual void LaunchThreads(int numIter)
             {
-                threads = new SupportClass.ThreadClass[NUM_THREADS]; //{{DIGY}} Should this be created somewhere else?
+                threads = new ThreadClass[NUM_THREADS]; //{{DIGY}} Should this be created somewhere else?
                 for (int i = 0; i < NUM_THREADS; i++)
                 {
                     threads[i] = new AnonymousClassThread2(numIter, this);
@@ -4956,7 +4956,7 @@ namespace Lucene.Net.Index
             try
             {
                 w.Rollback();
-                if (SupportClass.BuildType.Debug)
+                if (BuildType.Debug)
                     Assert.Fail("did not hit intentional RuntimeException");
                 else
                     Assert.Ignore("This test is not executed in release mode");
@@ -5008,7 +5008,7 @@ namespace Lucene.Net.Index
         [Test]
         public virtual void TestMergeCompressedFields()
         {
-            System.IO.FileInfo indexDir = new System.IO.FileInfo(System.IO.Path.Combine(SupportClass.AppSettings.Get("tempDir", ""), "mergecompressedfields"));
+            System.IO.FileInfo indexDir = new System.IO.FileInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "mergecompressedfields"));
             Directory dir = FSDirectory.Open(indexDir);
             try
             {
@@ -5416,7 +5416,7 @@ namespace Lucene.Net.Index
         [Test]
         public virtual void TestOtherFiles()
         {
-            System.IO.FileInfo indexDir = new System.IO.FileInfo(System.IO.Path.Combine(SupportClass.AppSettings.Get("tempDir", ""), "otherfiles"));
+            System.IO.FileInfo indexDir = new System.IO.FileInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "otherfiles"));
             Directory dir = FSDirectory.Open(indexDir);
             try
             {
@@ -5476,7 +5476,7 @@ namespace Lucene.Net.Index
             dir.Close();
         }
 
-        private class IndexerThreadInterrupt : SupportClass.ThreadClass
+        private class IndexerThreadInterrupt : ThreadClass
         {
             public IndexerThreadInterrupt(TestIndexWriter enclosingInstance)
             {
@@ -5766,7 +5766,7 @@ namespace Lucene.Net.Index
             dir.Close();
         }
 
-        class LUCENE_2095_Thread : SupportClass.ThreadClass
+        class LUCENE_2095_Thread : ThreadClass
         {
             IndexWriter w = null;
             Directory dir = null;

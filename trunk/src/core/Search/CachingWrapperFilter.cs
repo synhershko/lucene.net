@@ -18,6 +18,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Lucene.Net.Support;
 using IndexReader = Lucene.Net.Index.IndexReader;
 using OpenBitSetDISI = Lucene.Net.Util.OpenBitSetDISI;
 using Lucene.Net.Util;
@@ -83,7 +84,7 @@ namespace Lucene.Net.Search
 
                     if (cache == null)
                     {
-                        cache = new SupportClass.WeakHashMap<object, T>();
+                        cache = new WeakDictionary<object, T>();
                     }
 
                     if (deletesMode == DeletesMode.IGNORE)

@@ -24,6 +24,7 @@ using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Analysis;
 using Lucene.Net.Documents;
+using Lucene.Net.Support;
 using Lucene.Net.Util;
 using Lucene.Net.Store;
 
@@ -87,7 +88,7 @@ namespace Lucene.Net._SupportClass
             for (int i = 0; i < b.Length; i++)
                 b[i] = (byte)i;
 
-            SupportClass.Checksum digest = new SupportClass.CRC32();
+            IChecksum digest = new CRC32();
             digest.Update(b, 0, b.Length);
 
             Int64 expected = 688229491;
@@ -98,14 +99,14 @@ namespace Lucene.Net._SupportClass
     [TestFixture]
     public class TestHashMap
     {
-        private static SupportClass.HashMap<TKey, TValue> GetNewHashMap<TKey, TValue>()
+        private static HashMap<TKey, TValue> GetNewHashMap<TKey, TValue>()
             where TKey : class
             where TValue : class
         {
-            return new SupportClass.HashMap<TKey, TValue>();
+            return new HashMap<TKey, TValue>();
         }
 
-        private static SupportClass.HashMap<string,string> GetDefaultHashMap1()
+        private static HashMap<string,string> GetDefaultHashMap1()
         {
             var hm = GetNewHashMap<string, string>();
             hm.Add("key1", "value1");
@@ -340,7 +341,7 @@ namespace Lucene.Net._SupportClass
         [Test]
         public void TestMemLeakage()
         {
-            SupportClass.CloseableThreadLocalProfiler.EnableCloseableThreadLocalProfiler = true;
+            CloseableThreadLocalProfiler.EnableCloseableThreadLocalProfiler = true;
 
             int LoopCount = 100;
             Analyzer[] analyzers = new Analyzer[LoopCount];
@@ -380,13 +381,13 @@ namespace Lucene.Net._SupportClass
             GC.WaitForPendingFinalizers();
 
             int aliveObjects = 0;
-            foreach (WeakReference w in SupportClass.CloseableThreadLocalProfiler.Instances)
+            foreach (WeakReference w in CloseableThreadLocalProfiler.Instances)
             {
                 object o = w.Target;
                 if (o != null) aliveObjects++;
             }
 
-            SupportClass.CloseableThreadLocalProfiler.EnableCloseableThreadLocalProfiler = false;
+            CloseableThreadLocalProfiler.EnableCloseableThreadLocalProfiler = false;
 
             Assert.AreEqual(0, aliveObjects);
         }
@@ -399,7 +400,7 @@ namespace Lucene.Net._SupportClass
 
         public static IDictionary CreateDictionary()
         {
-            return new SupportClass.WeakHashTable();
+            return new WeakHashTable();
         }
 
 
@@ -685,7 +686,7 @@ namespace Lucene.Net._SupportClass
     [TestFixture]
     public class TestWeakHashTableMultiThreadAccess
     {
-        SupportClass.WeakHashTable wht = new SupportClass.WeakHashTable();
+        WeakHashTable wht = new WeakHashTable();
         Exception AnyException = null;
         bool EndOfTest = false;
 
@@ -989,10 +990,10 @@ namespace Lucene.Net._SupportClass
         [Test]
         public void Test()
         {
-            SupportClass.ThreadClass thread = new SupportClass.ThreadClass();
+            ThreadClass thread = new ThreadClass();
 
             //Compare Current Thread Ids
-            Assert.IsTrue(SupportClass.ThreadClass.Current().Instance.ManagedThreadId == System.Threading.Thread.CurrentThread.ManagedThreadId);
+            Assert.IsTrue(ThreadClass.Current().Instance.ManagedThreadId == System.Threading.Thread.CurrentThread.ManagedThreadId);
 
 
             //Compare instances of ThreadClass
@@ -1002,17 +1003,17 @@ namespace Lucene.Net._SupportClass
             Assert.IsTrue((bool)mythread.Result);
 
 
-            SupportClass.ThreadClass nullThread = null;
+            ThreadClass nullThread = null;
             Assert.IsTrue(nullThread == null); //test overloaded operator == with null values
             Assert.IsFalse(nullThread != null); //test overloaded operator != with null values
         }
 
-        class MyThread : SupportClass.ThreadClass
+        class MyThread : ThreadClass
         {
             public object Result = null;
             public override void Run()
             {
-                Result = SupportClass.ThreadClass.Current() == this;
+                Result = ThreadClass.Current() == this;
             }
         }
     }
@@ -1024,7 +1025,7 @@ namespace Lucene.Net._SupportClass
         [Test]
         public void TestFSDirectorySync()
         {
-            System.IO.FileInfo path = new System.IO.FileInfo(System.IO.Path.Combine(SupportClass.AppSettings.Get("tempDir", ""), "testsync"));
+            System.IO.FileInfo path = new System.IO.FileInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "testsync"));
             Lucene.Net.Store.Directory directory = new Lucene.Net.Store.SimpleFSDirectory(path, null);
             try
             {
@@ -1505,8 +1506,8 @@ namespace Lucene.Net._SupportClass
             var foo = new Object();
             var bar = new Object();
 
-            var list1 = new SupportClass.EquatableList<Object> {foo, bar};
-            var list2 = new SupportClass.EquatableList<Object> {foo, bar};
+            var list1 = new EquatableList<Object> {foo, bar};
+            var list2 = new EquatableList<Object> {foo, bar};
 
             Assert.AreEqual(list1, list2);
 
@@ -1522,8 +1523,8 @@ namespace Lucene.Net._SupportClass
             var foo = new Object();
             var bar = new Object();
 
-            var list1 = new SupportClass.EquatableList<Object> { foo, bar };
-            var list2 = new SupportClass.EquatableList<Object> { foo, bar };
+            var list1 = new EquatableList<Object> { foo, bar };
+            var list2 = new EquatableList<Object> { foo, bar };
 
             var hashTable = new Hashtable();
 

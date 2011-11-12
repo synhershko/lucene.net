@@ -17,6 +17,7 @@
 
 using System;
 using System.Linq;
+using Lucene.Net.Support;
 using BufferedIndexInput = Lucene.Net.Store.BufferedIndexInput;
 using Directory = Lucene.Net.Store.Directory;
 using IndexInput = Lucene.Net.Store.IndexInput;
@@ -48,7 +49,7 @@ namespace Lucene.Net.Index
 		private System.String fileName;
 		
 		private IndexInput stream;
-		private SupportClass.HashMap<string, FileEntry> entries = new SupportClass.HashMap<string, FileEntry>();
+		private HashMap<string, FileEntry> entries = new HashMap<string, FileEntry>();
 		
 		
 		public CompoundFileReader(Directory dir, System.String name):this(dir, name, BufferedIndexInput.BUFFER_SIZE)

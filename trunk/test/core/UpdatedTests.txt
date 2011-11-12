@@ -1,0 +1,20 @@
+﻿util\
+util\_TestUtil.java - DONE
+util\ArrayUtilTest.java - IDENTICAL
+util\English.java - Text files are different
+util\util\util\LocalizedTestCase.java - DONE
+util\LuceneTestCase.java - Text files are different
+util\TestAttributeSource.java - Text files are different
+util\util\TestBitVector.java - Text files are different
+util\TestCloseableThreadLocal.java - Text files are different
+util\TestFieldCacheSanityChecker.java - Text files are different
+util\TestIndexableBinaryStringTools.java - Text files are different
+util\TestNumericUtils.java - Text files are different
+util\TestOpenBitSet.java - IDENTICAL
+util\TestPriorityQueue.java - Text files are different
+util\TestRamUsageEstimator.java - IDENTICAL
+util\TestSmallFloat.java - IDENTICAL
+util\TestSortedVIntList.java - IDENTICAL
+util\TestStringHelper.java - IDENTICAL
+util\TestStringIntern.java - Text files are different
+util\TestVersion.java - Right only: C:\SVN\apache\Lucene\lucene-3.0.3\src\test\org\apache\lucene\util

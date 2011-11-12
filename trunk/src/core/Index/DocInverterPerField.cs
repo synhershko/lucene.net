@@ -151,9 +151,9 @@ namespace Lucene.Net.Index
 							bool hasMoreTokens = stream.IncrementToken();
 							
 							fieldState.attributeSource = stream;
-							
-							OffsetAttribute offsetAttribute = fieldState.attributeSource.AddAttribute(typeof(OffsetAttribute));
-							PositionIncrementAttribute posIncrAttribute = fieldState.attributeSource.AddAttribute(typeof(PositionIncrementAttribute));
+
+                            OffsetAttribute offsetAttribute = fieldState.attributeSource.AddAttribute<OffsetAttribute>();
+							PositionIncrementAttribute posIncrAttribute = fieldState.attributeSource.AddAttribute<PositionIncrementAttribute>();
 							
 							consumer.Start(field);
 							

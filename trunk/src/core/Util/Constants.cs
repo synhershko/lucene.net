@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using LucenePackage = Lucene.Net.LucenePackage;
 
 namespace Lucene.Net.Util
@@ -30,7 +30,7 @@ namespace Lucene.Net.Util
 		} // can't construct
 		
 		/// <summary>The value of <tt>System.getProperty("java.version")</tt>. *</summary>
-		public static readonly System.String JAVA_VERSION = SupportClass.AppSettings.Get("java.version", "");
+		public static readonly System.String JAVA_VERSION = AppSettings.Get("java.version", "");
 		/// <summary>True iff this is Java version 1.1. </summary>
 		public static readonly bool JAVA_1_1 = JAVA_VERSION.StartsWith("1.1.");
 		/// <summary>True iff this is Java version 1.2. </summary>
@@ -49,7 +49,7 @@ namespace Lucene.Net.Util
 		
 		public static readonly System.String OS_ARCH = GetEnvironmentVariable("PROCESSOR_ARCHITECTURE","x86");
         public static readonly System.String OS_VERSION = GetEnvironmentVariable("OS_VERSION", "?");
-		public static readonly System.String JAVA_VENDOR = SupportClass.AppSettings.Get("java.vendor", "");
+		public static readonly System.String JAVA_VENDOR = AppSettings.Get("java.vendor", "");
 		
 		// NOTE: this logic may not be correct; if you know of a
 		// more reliable approach please raise it on java-dev!
@@ -63,7 +63,7 @@ namespace Lucene.Net.Util
             return s.ToString();
         }
 
-		public static readonly System.String LUCENE_MAIN_VERSION = Ident("2.9.4");
+		public static readonly System.String LUCENE_MAIN_VERSION = Ident("3.0.3");
 		
 		public static System.String LUCENE_VERSION="8.8.8.8";
 		static Constants()

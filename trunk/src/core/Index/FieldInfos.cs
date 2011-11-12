@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using Document = Lucene.Net.Documents.Document;
 using Fieldable = Lucene.Net.Documents.Fieldable;
 using Directory = Lucene.Net.Store.Directory;
@@ -53,7 +53,7 @@ namespace Lucene.Net.Index
 		internal const byte OMIT_TERM_FREQ_AND_POSITIONS = (0x40);
 
         private System.Collections.Generic.List<FieldInfo> byNumber = new System.Collections.Generic.List<FieldInfo>();
-        private SupportClass.HashMap<string, FieldInfo> byName = new SupportClass.HashMap<string, FieldInfo>();
+        private HashMap<string, FieldInfo> byName = new HashMap<string, FieldInfo>();
 		private int format;
 		
 		public /*internal*/ FieldInfos()

@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using Lucene.Net.Analysis;
@@ -38,7 +38,7 @@ namespace Lucene.Net.Index
 		private static readonly Analyzer ANALYZER = new SimpleAnalyzer();
 		private System.Random RANDOM;
 		
-		abstract public class TimedThread:SupportClass.ThreadClass
+		abstract public class TimedThread:ThreadClass
 		{
 			internal bool failed;
 			internal int count;
@@ -68,7 +68,7 @@ namespace Lucene.Net.Index
 				}
 				catch (System.Exception e)
 				{
-					System.Console.Out.WriteLine(SupportClass.ThreadClass.Current() + ": exc");
+					System.Console.Out.WriteLine(ThreadClass.Current() + ": exc");
 					System.Console.Out.WriteLine(e.StackTrace);
 					failed = true;
 				}

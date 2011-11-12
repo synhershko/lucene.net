@@ -230,7 +230,7 @@ namespace Lucene.Net.Store
 							// thread trying to obtain this lock, so we own
 							// the only instance of a channel against this
 							// file:
-                            LOCK_HELD.Add(canonicalPath, canonicalPath);
+                            LOCK_HELD.Add(canonicalPath);
 							markedHeld = true;
 						}
 					}

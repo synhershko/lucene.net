@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 
 // Used only for WRITE_LOCK_NAME in deprecated create=true case:
+using Lucene.Net.Support;
 using IndexFileNameFilter = Lucene.Net.Index.IndexFileNameFilter;
 using IndexWriter = Lucene.Net.Index.IndexWriter;
 using Constants = Lucene.Net.Util.Constants;
@@ -107,7 +108,7 @@ namespace Lucene.Net.Store
         {
             try
             {
-                DIGESTER = SupportClass.Cryptography.GetHashAlgorithm();
+                DIGESTER = Cryptography.GetHashAlgorithm();
             }
             catch (System.Exception e)
             {
@@ -374,7 +375,7 @@ namespace Lucene.Net.Store
 					try
 					{
                         file = new System.IO.FileStream(fullFile.FullName, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write, System.IO.FileShare.ReadWrite);
-                        SupportClass.FileSupport.Sync(file);
+                        FileSupport.Sync(file);
                         success = true;
 					}
 					finally
@@ -397,7 +398,7 @@ namespace Lucene.Net.Store
 						// In 3.0 we will change this to throw
 						// InterruptedException instead
                         // TODO: Change this to throwing a new ThreadInterruptedException when class is build
-						SupportClass.ThreadClass.Current().Interrupt();
+						ThreadClass.Current().Interrupt();
                         throw new System.SystemException(ie.ToString(), ie);
 					}
 				}

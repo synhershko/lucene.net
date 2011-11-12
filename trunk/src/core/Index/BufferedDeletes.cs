@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using Lucene.Net.Search;
+using Lucene.Net.Support;
 
 namespace Lucene.Net.Index
 {
@@ -34,7 +35,7 @@ namespace Lucene.Net.Index
 	{
 		internal int numTerms;
         internal IDictionary<Term,Num> terms = null;
-		internal IDictionary<Query, int> queries = new SupportClass.HashMap<Query, int>();
+		internal IDictionary<Query, int> queries = new HashMap<Query, int>();
 		internal List<int> docIDs = new List<int>();
 		internal long bytesUsed;
         internal  bool doTermSort;
@@ -49,7 +50,7 @@ namespace Lucene.Net.Index
             }
             else
             {
-                terms = new SupportClass.HashMap<Term, Num>();
+                terms = new HashMap<Term, Num>();
             }
         }
                 
@@ -145,7 +146,7 @@ namespace Lucene.Net.Index
                     }
                     else
                     {
-                        newDeleteTerms = new SupportClass.HashMap<Term, Num>();
+                        newDeleteTerms = new HashMap<Term, Num>();
                     }
 					foreach(var entry in terms)
 					{
@@ -171,11 +172,11 @@ namespace Lucene.Net.Index
 					newDeleteDocIDs = null;
 				
 				// Remap delete-by-query
-				SupportClass.HashMap<Query, int> newDeleteQueries;
+				HashMap<Query, int> newDeleteQueries;
 				
 				if (queries.Count > 0)
 				{
-                    newDeleteQueries = new SupportClass.HashMap<Query, int>(queries.Count);
+                    newDeleteQueries = new HashMap<Query, int>(queries.Count);
 					foreach(var entry in queries)
 					{
 						int num = (int)entry.Value;

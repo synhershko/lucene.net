@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using System.Collections.Generic;
 using AttributeImpl = Lucene.Net.Util.AttributeImpl;
 using AttributeSource = Lucene.Net.Util.AttributeSource;
 
@@ -74,7 +74,7 @@ namespace Lucene.Net.Analysis
 				return true;
 			}
 		}
-		private System.Collections.IList sinks = new System.Collections.ArrayList();
+		private LinkedList<WeakReference> sinks = new LinkedList<WeakReference>();
 		
 		/// <summary> Instantiates a new TeeSinkTokenFilter.</summary>
 		public TeeSinkTokenFilter(TokenStream input):base(input)
@@ -95,7 +95,7 @@ namespace Lucene.Net.Analysis
 		public SinkTokenStream NewSinkTokenStream(SinkFilter filter)
 		{
 			SinkTokenStream sink = new SinkTokenStream(this.CloneAttributes(), filter);
-			this.sinks.Add(new System.WeakReference(sink));
+			this.sinks.AddLast(new System.WeakReference(sink));
 			return sink;
 		}
 		
@@ -115,7 +115,7 @@ namespace Lucene.Net.Analysis
             {
                 sink.AddAttributeImpl(impl);
             }
-			this.sinks.Add(new System.WeakReference(sink));
+			this.sinks.AddLast(new WeakReference(sink));
 		}
 		
 		/// <summary> <c>TeeSinkTokenFilter</c> passes all tokens to the added sinks
@@ -125,8 +125,9 @@ namespace Lucene.Net.Analysis
 		/// </summary>
 		public void  ConsumeAllTokens()
 		{
-			while (IncrementToken())
-				;
+            while (IncrementToken())
+            {
+            }
 		}
 		
 		public override bool IncrementToken()
@@ -135,9 +136,9 @@ namespace Lucene.Net.Analysis
 			{
 				// capture state lazily - maybe no SinkFilter accepts this state
 				AttributeSource.State state = null;
-				for (System.Collections.IEnumerator it = sinks.GetEnumerator(); it.MoveNext(); )
+				foreach(WeakReference wr in sinks)
 				{
-					SinkTokenStream sink = (SinkTokenStream) ((System.WeakReference) it.Current).Target;
+				    SinkTokenStream sink = (SinkTokenStream)wr.Target;
 					if (sink != null)
 					{
 						if (sink.Accept(this))
@@ -160,9 +161,9 @@ namespace Lucene.Net.Analysis
 		{
 			base.End();
 			AttributeSource.State finalState = CaptureState();
-			for (System.Collections.IEnumerator it = sinks.GetEnumerator(); it.MoveNext(); )
+			foreach(WeakReference wr in sinks)
 			{
-				SinkTokenStream sink = (SinkTokenStream) ((System.WeakReference) it.Current).Target;
+                SinkTokenStream sink = (SinkTokenStream)wr.Target;
 				if (sink != null)
 				{
 					sink.SetFinalState(finalState);
@@ -189,12 +190,13 @@ namespace Lucene.Net.Analysis
 		
 		public sealed class SinkTokenStream:TokenStream
 		{
-			private System.Collections.IList cachedStates = new System.Collections.ArrayList();
+            private LinkedList<AttributeSource.State> cachedStates = new LinkedList<AttributeSource.State>();
 			private AttributeSource.State finalState;
-			private System.Collections.IEnumerator it = null;
+			private IEnumerator<AttributeSource.State> it = null;
 			private SinkFilter filter;
 			
-			internal SinkTokenStream(AttributeSource source, SinkFilter filter):base(source)
+			internal SinkTokenStream(AttributeSource source, SinkFilter filter)
+                : base(source)
 			{
 				this.filter = filter;
 			}
@@ -210,7 +212,7 @@ namespace Lucene.Net.Analysis
 				{
 					throw new System.SystemException("The tee must be consumed before sinks are consumed.");
 				}
-				cachedStates.Add(state);
+				cachedStates.AddLast(state);
 			}
 			
 			internal /*private*/ void  SetFinalState(AttributeSource.State finalState)
@@ -231,7 +233,7 @@ namespace Lucene.Net.Analysis
 					return false;
 				}
 				
-				AttributeSource.State state = (State) it.Current;
+				AttributeSource.State state = it.Current;
 				RestoreState(state);
 				return true;
 			}

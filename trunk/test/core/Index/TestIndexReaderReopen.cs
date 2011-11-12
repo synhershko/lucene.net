@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using KeywordAnalyzer = Lucene.Net.Analysis.KeywordAnalyzer;
@@ -395,8 +395,8 @@ namespace Lucene.Net.Index
 					{
 						// refresh reader synchronized
 						ReaderCouple c = (Enclosing_Instance.RefreshReader(r, test, index, true));
-						SupportClass.CollectionsHelper.AddIfNotContains(readersToClose, c.newReader);
-						SupportClass.CollectionsHelper.AddIfNotContains(readersToClose, c.refreshedReader);
+						CollectionsHelper.AddIfNotContains(readersToClose, c.newReader);
+						CollectionsHelper.AddIfNotContains(readersToClose, c.refreshedReader);
 						readers.Add(c);
 						// prevent too many readers
 						break;
@@ -424,7 +424,7 @@ namespace Lucene.Net.Index
 						{
 							refreshed.Close();
 						}
-						SupportClass.CollectionsHelper.AddIfNotContains(readersToClose, refreshed);
+						CollectionsHelper.AddIfNotContains(readersToClose, refreshed);
 					}
 					lock (this)
 					{
@@ -1107,7 +1107,7 @@ namespace Lucene.Net.Index
 					IndexReader refreshed = reader.Reopen();
 					if (refreshed != reader)
 					{
-						SupportClass.CollectionsHelper.AddIfNotContains(readersToClose, reader);
+						CollectionsHelper.AddIfNotContains(readersToClose, reader);
 					}
 					reader = refreshed;
 				}
@@ -1200,7 +1200,7 @@ namespace Lucene.Net.Index
 			public abstract void  Run();
 		}
 		
-		private class ReaderThread:SupportClass.ThreadClass
+		private class ReaderThread:ThreadClass
 		{
 			private ReaderThreadTask task;
 			internal /*private*/ System.Exception error;

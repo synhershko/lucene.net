@@ -16,6 +16,7 @@
  */
 
 using System;
+using Lucene.Net.Support;
 
 namespace Lucene.Net.Store
 {
@@ -26,12 +27,12 @@ namespace Lucene.Net.Store
 	public class ChecksumIndexInput:IndexInput
 	{
 		internal IndexInput main;
-		internal SupportClass.Checksum digest;
+		internal IChecksum digest;
 		
 		public ChecksumIndexInput(IndexInput main)
 		{
 			this.main = main;
-            digest = new SupportClass.CRC32();
+            digest = new CRC32();
 		}
 		
 		public override byte ReadByte()

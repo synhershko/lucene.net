@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using CheckIndex = Lucene.Net.Index.CheckIndex;
@@ -51,7 +51,7 @@ namespace Lucene.Net.Util
 				tmpBool = System.IO.Directory.Exists(dir.FullName);
 			if (tmpBool)
 			{
-				System.IO.FileInfo[] files = SupportClass.FileSupport.GetFiles(dir);
+				System.IO.FileInfo[] files = FileSupport.GetFiles(dir);
 				for (int i = 0; i < files.Length; i++)
 				{
 					bool tmpBool2;

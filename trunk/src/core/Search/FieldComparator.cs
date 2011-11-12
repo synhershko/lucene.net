@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using IndexReader = Lucene.Net.Index.IndexReader;
 using ByteParser = Lucene.Net.Search.ByteParser;
 using DoubleParser = Lucene.Net.Search.DoubleParser;
@@ -953,7 +953,7 @@ namespace Lucene.Net.Search
 			
 			while (low <= high)
 			{
-				int mid = SupportClass.Number.URShift((low + high), 1);
+				int mid = Number.URShift((low + high), 1);
 				System.String midVal = a[mid];
 				int cmp;
 				if (midVal != null)

@@ -16,6 +16,7 @@
  */
 
 using System;
+using Lucene.Net.Support;
 using Lucene.Net.Util;
 using Document = Lucene.Net.Documents.Document;
 using FieldSelector = Lucene.Net.Documents.FieldSelector;
@@ -767,7 +768,7 @@ namespace Lucene.Net.Index
 			}
 		}
 		
-		internal System.Collections.Generic.IDictionary<string, Norm> norms = new SupportClass.HashMap<string, Norm>();
+		internal System.Collections.Generic.IDictionary<string, Norm> norms = new HashMap<string, Norm>();
 		
 		/// <throws>  CorruptIndexException if the index is corrupt </throws>
 		/// <throws>  IOException if there is a low-level IO error </throws>
@@ -969,7 +970,7 @@ namespace Lucene.Net.Index
 						}
 					}
 					
-					clone.norms = new SupportClass.HashMap<string, Norm>();
+					clone.norms = new HashMap<string, Norm>();
 					
 					// Clone norms
 					for (int i = 0; i < fieldNormsChanged.Length; i++)

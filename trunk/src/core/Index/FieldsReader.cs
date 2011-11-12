@@ -16,6 +16,7 @@
  */
 
 using System;
+using Lucene.Net.Support;
 using Lucene.Net.Util;
 using TokenStream = Lucene.Net.Analysis.TokenStream;
 using Lucene.Net.Documents;
@@ -433,9 +434,9 @@ namespace Lucene.Net.Index
 		{
 			int size = fieldsStream.ReadVInt(), bytesize = binary || compressed?size:2 * size;
 			byte[] sizebytes = new byte[4];
-			sizebytes[0] = (byte) (SupportClass.Number.URShift(bytesize, 24));
-			sizebytes[1] = (byte) (SupportClass.Number.URShift(bytesize, 16));
-			sizebytes[2] = (byte) (SupportClass.Number.URShift(bytesize, 8));
+			sizebytes[0] = (byte) (Number.URShift(bytesize, 24));
+			sizebytes[1] = (byte) (Number.URShift(bytesize, 16));
+			sizebytes[2] = (byte) (Number.URShift(bytesize, 8));
 			sizebytes[3] = (byte) bytesize;
 			doc.Add(new Field(fi.name, sizebytes, Field.Store.YES));
 			return size;

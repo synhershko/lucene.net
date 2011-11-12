@@ -93,9 +93,9 @@ namespace Lucene.Net.Analysis
 	{
 		private void  InitBlock()
 		{
-			termAtt = (TermAttribute) AddAttribute(typeof(TermAttribute));
-			typeAtt = (TypeAttribute) AddAttribute(typeof(TypeAttribute));
-			posIncrAtt = (PositionIncrementAttribute) AddAttribute(typeof(PositionIncrementAttribute));
+            termAtt = AddAttribute<TermAttribute>();
+            typeAtt = AddAttribute<TypeAttribute>();
+            posIncrAtt = AddAttribute<PositionIncrementAttribute>();
 		}
 		
 		/// <summary>The full precision token gets this token type assigned. </summary>

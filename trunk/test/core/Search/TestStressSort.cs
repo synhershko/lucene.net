@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using StandardAnalyzer = Lucene.Net.Analysis.Standard.StandardAnalyzer;
@@ -456,7 +456,7 @@ namespace Lucene.Net.Search
 					Assert.AreEqual(oldHit.doc, newHit.doc, "hit " + i + " of " + oldDocs.Length + " differs: oldDoc=" + oldHit.doc + " vs newDoc=" + newHit.doc + " oldFields=" + _TestUtil.ArrayToString(oldHit.fields) + " newFields=" + _TestUtil.ArrayToString(newHit.fields));
 					
 					Assert.AreEqual(oldHit.score, newHit.score, 0.00001);
-					Assert.IsTrue(SupportClass.CollectionsHelper.Equals(oldHit.fields, newHit.fields));
+					Assert.IsTrue(CollectionsHelper.Equals(oldHit.fields, newHit.fields));
 				}
 				else
 				{

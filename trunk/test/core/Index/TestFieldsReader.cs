@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using WhitespaceAnalyzer = Lucene.Net.Analysis.WhitespaceAnalyzer;
@@ -151,15 +151,15 @@ namespace Lucene.Net.Index
 			Assert.IsTrue(reader != null);
 			Assert.IsTrue(reader.Size() == 1);
 			System.Collections.Hashtable loadFieldNames = new System.Collections.Hashtable();
-			SupportClass.CollectionsHelper.AddIfNotContains(loadFieldNames, DocHelper.TEXT_FIELD_1_KEY);
-			SupportClass.CollectionsHelper.AddIfNotContains(loadFieldNames, DocHelper.TEXT_FIELD_UTF1_KEY);
+			CollectionsHelper.AddIfNotContains(loadFieldNames, DocHelper.TEXT_FIELD_1_KEY);
+			CollectionsHelper.AddIfNotContains(loadFieldNames, DocHelper.TEXT_FIELD_UTF1_KEY);
 			System.Collections.Hashtable lazyFieldNames = new System.Collections.Hashtable();
 			//new String[]{DocHelper.LARGE_LAZY_FIELD_KEY, DocHelper.LAZY_FIELD_KEY, DocHelper.LAZY_FIELD_BINARY_KEY};
-			SupportClass.CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LARGE_LAZY_FIELD_KEY);
-			SupportClass.CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_KEY);
-			SupportClass.CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_BINARY_KEY);
-			SupportClass.CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.TEXT_FIELD_UTF2_KEY);
-			SupportClass.CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.COMPRESSED_TEXT_FIELD_2_KEY);
+			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LARGE_LAZY_FIELD_KEY);
+			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_KEY);
+			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_BINARY_KEY);
+			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.TEXT_FIELD_UTF2_KEY);
+			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.COMPRESSED_TEXT_FIELD_2_KEY);
 			SetBasedFieldSelector fieldSelector = new SetBasedFieldSelector(loadFieldNames, lazyFieldNames);
 			Document doc = reader.Doc(0, fieldSelector);
 			Assert.IsTrue(doc != null, "doc is null and it shouldn't be");
@@ -211,14 +211,14 @@ namespace Lucene.Net.Index
 			Assert.IsTrue(reader != null);
 			Assert.IsTrue(reader.Size() == 1);
 			System.Collections.Hashtable loadFieldNames = new System.Collections.Hashtable();
-			SupportClass.CollectionsHelper.AddIfNotContains(loadFieldNames, DocHelper.TEXT_FIELD_1_KEY);
-			SupportClass.CollectionsHelper.AddIfNotContains(loadFieldNames, DocHelper.TEXT_FIELD_UTF1_KEY);
+			CollectionsHelper.AddIfNotContains(loadFieldNames, DocHelper.TEXT_FIELD_1_KEY);
+			CollectionsHelper.AddIfNotContains(loadFieldNames, DocHelper.TEXT_FIELD_UTF1_KEY);
 			System.Collections.Hashtable lazyFieldNames = new System.Collections.Hashtable();
-			SupportClass.CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LARGE_LAZY_FIELD_KEY);
-			SupportClass.CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_KEY);
-			SupportClass.CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_BINARY_KEY);
-			SupportClass.CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.TEXT_FIELD_UTF2_KEY);
-			SupportClass.CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.COMPRESSED_TEXT_FIELD_2_KEY);
+			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LARGE_LAZY_FIELD_KEY);
+			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_KEY);
+			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_BINARY_KEY);
+			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.TEXT_FIELD_UTF2_KEY);
+			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.COMPRESSED_TEXT_FIELD_2_KEY);
 			SetBasedFieldSelector fieldSelector = new SetBasedFieldSelector(loadFieldNames, lazyFieldNames);
 			Document doc = reader.Doc(0, fieldSelector);
 			Assert.IsTrue(doc != null, "doc is null and it shouldn't be");
@@ -270,7 +270,7 @@ namespace Lucene.Net.Index
 		[Test]
 		public virtual void  TestLazyPerformance()
 		{
-			System.String tmpIODir = SupportClass.AppSettings.Get("tempDir", "");
+			System.String tmpIODir = AppSettings.Get("tempDir", "");
 			System.String userName = System.Environment.UserName;
 			System.String path = tmpIODir + System.IO.Path.DirectorySeparatorChar.ToString() + "lazyDir" + userName;
 			System.IO.FileInfo file = new System.IO.FileInfo(path);
@@ -289,7 +289,7 @@ namespace Lucene.Net.Index
 			long regularTime = 0;
 			int length = 50;
 			System.Collections.Hashtable lazyFieldNames = new System.Collections.Hashtable();
-			SupportClass.CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LARGE_LAZY_FIELD_KEY);
+			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LARGE_LAZY_FIELD_KEY);
 			SetBasedFieldSelector fieldSelector = new SetBasedFieldSelector(new System.Collections.Hashtable(), lazyFieldNames);
 			
 			for (int i = 0; i < length; i++)
@@ -356,9 +356,9 @@ namespace Lucene.Net.Index
 		
 		private void  AssertSizeEquals(int size, byte[] sizebytes)
 		{
-			Assert.AreEqual((byte) (SupportClass.Number.URShift(size, 24)), sizebytes[0]);
-			Assert.AreEqual((byte) (SupportClass.Number.URShift(size, 16)), sizebytes[1]);
-			Assert.AreEqual((byte) (SupportClass.Number.URShift(size, 8)), sizebytes[2]);
+			Assert.AreEqual((byte) (Number.URShift(size, 24)), sizebytes[0]);
+			Assert.AreEqual((byte) (Number.URShift(size, 16)), sizebytes[1]);
+			Assert.AreEqual((byte) (Number.URShift(size, 8)), sizebytes[2]);
 			Assert.AreEqual((byte) size, sizebytes[3]);
 		}
 		

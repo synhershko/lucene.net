@@ -16,9 +16,8 @@
  */
 
 using System;
-
-using Checksum = SupportClass.Checksum;
-using CRC32 = SupportClass.CRC32;
+using Lucene.Net.Support;
+using CRC32 = Lucene.Net.Support.CRC32;
 
 namespace Lucene.Net.Store
 {
@@ -29,7 +28,7 @@ namespace Lucene.Net.Store
 	public class ChecksumIndexOutput:IndexOutput
 	{
 		internal IndexOutput main;
-		internal Checksum digest;
+		internal IChecksum digest;
 		
 		public ChecksumIndexOutput(IndexOutput main)
 		{

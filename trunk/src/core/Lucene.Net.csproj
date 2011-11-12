@@ -126,7 +126,6 @@
     <Compile Include="Analysis\ASCIIFoldingFilter.cs" />
     <Compile Include="Analysis\BaseCharFilter.cs" />
     <Compile Include="Analysis\CachingTokenFilter.cs" />
-    <Compile Include="Analysis\CharacterCache.cs" />
     <Compile Include="Analysis\CharArraySet.cs" />
     <Compile Include="Analysis\CharFilter.cs" />
     <Compile Include="Analysis\CharReader.cs" />
@@ -170,7 +169,6 @@
     <Compile Include="Analysis\SimpleAnalyzer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Analysis\SinkTokenizer.cs" />
     <Compile Include="Analysis\Standard\StandardAnalyzer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -188,7 +186,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Analysis\TeeSinkTokenFilter.cs" />
-    <Compile Include="Analysis\TeeTokenFilter.cs" />
     <Compile Include="Analysis\Token.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -213,7 +210,6 @@
     <Compile Include="Analysis\TokenStream.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Analysis\TokenWrapper.cs" />
     <Compile Include="Analysis\WhitespaceAnalyzer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -889,9 +885,36 @@
     <Compile Include="Store\VerifyingLockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SupportClass.cs">
+    <Compile Include="Support\AppSettings.cs" />
+    <Compile Include="Support\AttributeImplItem.cs" />
+    <Compile Include="Support\BitSetSupport.cs" />
+    <Compile Include="Support\BuildType.cs" />
+    <Compile Include="Support\Character.cs" />
+    <Compile Include="Support\CloseableThreadLocalProfiler.cs" />
+    <Compile Include="Support\CollectionsHelper.cs" />
+    <Compile Include="Support\Compare.cs" />
+    <Compile Include="Support\CRC32.cs" />
+    <Compile Include="Support\Cryptography.cs" />
+    <Compile Include="Support\Deflater.cs" />
+    <Compile Include="Support\Double.cs" />
+    <Compile Include="Support\EquatableList.cs" />
+    <Compile Include="Support\FileSupport.cs" />
+    <Compile Include="Support\GeneralKeyedCollection.cs" />
+    <Compile Include="Support\HashMap.cs" />
+    <Compile Include="Support\Inflater.cs" />
+    <Compile Include="Support\IThreadRunnable.cs" />
+    <Compile Include="Support\Number.cs" />
+    <Compile Include="Support\OS.cs" />
+    <Compile Include="Support\SharpZipLib.cs" />
+    <Compile Include="Support\Single.cs" />
+    <Compile Include="Support\IChecksum.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Support\TextSupport.cs" />
+    <Compile Include="Support\ThreadClass.cs" />
+    <Compile Include="Support\WeakDictionary.cs" />
+    <Compile Include="Support\WeakHashTable.cs" />
+    <Compile Include="Support\WeakReference.cs" />
     <Compile Include="Util\ArrayUtil.cs" />
     <Compile Include="Util\Attribute.cs" />
     <Compile Include="Util\AttributeImpl.cs" />
@@ -907,6 +930,7 @@
     </Compile>
     <Compile Include="Util\DocIdBitSet.cs" />
     <Compile Include="Util\FieldCacheSanityChecker.cs" />
+    <Compile Include="Util\IdentityDictionary.cs" />
     <Compile Include="Util\IndexableBinaryStringTools.cs" />
     <Compile Include="Util\MapOfSets.cs" />
     <Compile Include="Util\MemoryModel.cs" />
@@ -950,8 +974,10 @@
     <None Include="QueryParser\QueryParser.jj" />
     <Content Include="Analysis\Package.html" />
     <Content Include="Analysis\Standard\Package.html" />
+    <Content Include="Analysis\Standard\READ_BEFORE_REGENERATING.txt" />
     <Content Include="ChangeNotes.txt" />
     <Content Include="Document\Package.html" />
+    <Content Include="FileDiffs.txt" />
     <Content Include="Index\Package.html" />
     <Content Include="Messages\Package.html" />
     <Content Include="Overview.html" />

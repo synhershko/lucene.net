@@ -18,6 +18,7 @@
 using System;
 using System.Linq;
 using Lucene.Net.Index;
+using Lucene.Net.Support;
 using IndexReader = Lucene.Net.Index.IndexReader;
 using ToStringUtils = Lucene.Net.Util.ToStringUtils;
 using Query = Lucene.Net.Search.Query;
@@ -219,7 +220,7 @@ namespace Lucene.Net.Search.Spans
 			// Mix bits before folding in things like boost, since it could cancel the
 			// last element of clauses.  This particular mix also serves to
 			// differentiate SpanNearQuery hashcodes from others.
-			result ^= ((result << 14) | (SupportClass.Number.URShift(result, 19))); // reversible
+			result ^= ((result << 14) | (Number.URShift(result, 19))); // reversible
 			result += System.Convert.ToInt32(GetBoost());
 			result += slop;
 			result ^= (inOrder ? (long) 0x99AFD3BD : 0);

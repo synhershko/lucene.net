@@ -28,7 +28,7 @@ namespace Lucene.Net.Store
 	/// <seealso cref="LockFactory">
 	/// </seealso>
 	
-	public class NoLockFactory:LockFactory
+	public class NoLockFactory : LockFactory
 	{
 		
 		// Single instance returned whenever makeLock is called.

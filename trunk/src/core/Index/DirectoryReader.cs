@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using Document = Lucene.Net.Documents.Document;
 using FieldSelector = Lucene.Net.Documents.FieldSelector;
 using AlreadyClosedException = Lucene.Net.Store.AlreadyClosedException;
@@ -101,7 +101,7 @@ namespace Lucene.Net.Index
                 
         private SegmentReader[] subReaders;
         private int[] starts; // 1st docno for each segment
-        private System.Collections.Generic.IDictionary<string, byte[]> normsCache = new SupportClass.HashMap<string, byte[]>();
+        private System.Collections.Generic.IDictionary<string, byte[]> normsCache = new HashMap<string, byte[]>();
         private int maxDoc = 0;
         private int numDocs = - 1;
         private bool hasDeletions = false;
@@ -255,7 +255,7 @@ namespace Lucene.Net.Index
             // we put the old SegmentReaders in a map, that allows us
             // to lookup a reader using its segment name
             // TODO: Leave as Object or java's Integer class?
-            System.Collections.Generic.IDictionary<string, object> segmentReaders = new SupportClass.HashMap<string, object>();
+            System.Collections.Generic.IDictionary<string, object> segmentReaders = new HashMap<string, object>();
             
             if (oldReaders != null)
             {
@@ -729,7 +729,7 @@ namespace Lucene.Net.Index
             
             while (hi >= lo)
             {
-                int mid = SupportClass.Number.URShift((lo + hi), 1);
+                int mid = Number.URShift((lo + hi), 1);
                 int midValue = starts[mid];
                 if (n < midValue)
                     hi = mid - 1;

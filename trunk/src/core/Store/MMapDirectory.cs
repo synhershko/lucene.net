@@ -104,20 +104,6 @@ namespace Lucene.Net.Store
 			maxBBuf = Constants.JRE_IS_64BIT?System.Int32.MaxValue:(256 * 1024 * 1024);
 		}
 		
-		/// <summary>Create a new MMapDirectory for the named location.
-		/// 
-		/// </summary>
-		/// <param name="path">the path of the directory
-		/// </param>
-		/// <param name="lockFactory">the lock factory to use, or null for the default.
-		/// </param>
-		/// <throws>  IOException </throws>
-		[System.Obsolete("Use the constructor that takes a DirectoryInfo, this will be removed in the 3.0 release")]
-		public MMapDirectory(System.IO.FileInfo path, LockFactory lockFactory):base(new System.IO.DirectoryInfo(path.FullName), lockFactory)
-		{
-			InitBlock();
-		}
-		
         /// <summary>Create a new MMapDirectory for the named location.
         /// 
         /// </summary>
@@ -126,36 +112,23 @@ namespace Lucene.Net.Store
         /// <param name="lockFactory">the lock factory to use, or null for the default.
         /// </param>
         /// <throws>  IOException </throws>
-        public MMapDirectory(System.IO.DirectoryInfo path, LockFactory lockFactory) : base(path, lockFactory)
+        public MMapDirectory(System.IO.DirectoryInfo path, LockFactory lockFactory)
+            : base(path, lockFactory)
         {
             InitBlock();
         }
-		
-		/// <summary>Create a new MMapDirectory for the named location and the default lock factory.
-		/// 
-		/// </summary>
-		/// <param name="path">the path of the directory
-		/// </param>
-		/// <throws>  IOException </throws>
-		[System.Obsolete("Use the constructor that takes a DirectoryInfo, this will be removed in the 3.0 release")]
-		public MMapDirectory(System.IO.FileInfo path):base(new System.IO.DirectoryInfo(path.FullName), null)
-		{
-			InitBlock();
-		}
-		
-        /// <summary>Create a new MMapDirectory for the named location and the default lock factory.
+
+	    /// <summary>Create a new MMapDirectory for the named location and the default lock factory.
         /// 
         /// </summary>
         /// <param name="path">the path of the directory
         /// </param>
         /// <throws>  IOException </throws>
-        public MMapDirectory(System.IO.DirectoryInfo path) : base(path, null)
-        {
-            InitBlock();
-        }
-		
-		internal static readonly System.Type[] NO_PARAM_TYPES = new System.Type[0];
-		internal static readonly System.Object[] NO_PARAMS = new System.Object[0];
+        public MMapDirectory(System.IO.DirectoryInfo path)
+            : base(path, null)
+	    {
+	        InitBlock();
+	    }
 		
 		private bool useUnmapHack = false;
 		private int maxBBuf;

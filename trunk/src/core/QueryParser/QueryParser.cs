@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lucene.Net.Support;
 using Lucene.Net.Util;
 using Analyzer = Lucene.Net.Analysis.Analyzer;
 using CachingTokenFilter = Lucene.Net.Analysis.CachingTokenFilter;
@@ -38,6 +39,7 @@ using MultiTermQuery = Lucene.Net.Search.MultiTermQuery;
 using PhraseQuery = Lucene.Net.Search.PhraseQuery;
 using PrefixQuery = Lucene.Net.Search.PrefixQuery;
 using Query = Lucene.Net.Search.Query;
+using Single = Lucene.Net.Support.Single;
 using TermQuery = Lucene.Net.Search.TermQuery;
 using TermRangeQuery = Lucene.Net.Search.TermRangeQuery;
 using WildcardQuery = Lucene.Net.Search.WildcardQuery;
@@ -582,13 +584,13 @@ namespace Lucene.Net.QueryParsers
 			}
 			if (success)
 			{
-				if (buffer.HasAttribute(typeof(TermAttribute)))
+                if (buffer.HasAttribute<TermAttribute>())
 				{
-					termAtt = buffer.GetAttribute(typeof(TermAttribute));
+                    termAtt = buffer.GetAttribute<TermAttribute>();
 				}
-				if (buffer.HasAttribute(typeof(PositionIncrementAttribute)))
+                if (buffer.HasAttribute<PositionIncrementAttribute>())
 				{
-					posIncrAtt = buffer.GetAttribute(typeof(PositionIncrementAttribute));
+					posIncrAtt = buffer.GetAttribute<PositionIncrementAttribute>();
 				}
 			}
 			
@@ -991,7 +993,7 @@ namespace Lucene.Net.QueryParsers
 		/// </returns>
 		/// <exception cref="ParseException">throw in overridden method to disallow
 		/// </exception>
-		protected internal virtual Query GetBooleanQuery(System.Collections.IList clauses)
+		protected internal virtual Query GetBooleanQuery(IList<BooleanClause> clauses)
 		{
 			return GetBooleanQuery(clauses, false);
 		}
@@ -1022,7 +1024,7 @@ namespace Lucene.Net.QueryParsers
 			BooleanQuery query = NewBooleanQuery(disableCoord);
 			foreach(BooleanClause clause in clauses)
 			{
-				query.Add(clauses);
+                query.Add(clause);
 			}
 			return query;
 		}
@@ -1164,7 +1166,7 @@ namespace Lucene.Net.QueryParsers
 				if (codePointMultiplier > 0)
 				{
 					codePoint += HexToInt(curChar) * codePointMultiplier;
-					codePointMultiplier = SupportClass.Number.URShift(codePointMultiplier, 4);
+					codePointMultiplier = Number.URShift(codePointMultiplier, 4);
 					if (codePointMultiplier == 0)
 					{
 						output[length++] = (char) codePoint;
@@ -1514,7 +1516,7 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 				float f = (float) 1.0;
 				try
 				{
-					f = (float) SupportClass.Single.Parse(boost.image);
+					f = (float) Single.Parse(boost.image);
 					q.SetBoost(f);
 				}
 				catch (System.Exception ignored)
@@ -1631,7 +1633,7 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 						float fms = fuzzyMinSim;
 						try
 						{
-							fms = (float) SupportClass.Single.Parse(fuzzySlop.image.Substring(1));
+							fms = (float) Single.Parse(fuzzySlop.image.Substring(1));
 						}
 						catch (System.Exception ignored)
 						{
@@ -1837,7 +1839,7 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 					{
 						try
 						{
-							s = (int) SupportClass.Single.Parse(fuzzySlop.image.Substring(1));
+							s = (int) Single.Parse(fuzzySlop.image.Substring(1));
 						}
 						catch (System.Exception ignored)
 						{
@@ -1857,7 +1859,7 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 				float f = (float) 1.0;
 				try
 				{
-					f = (float) SupportClass.Single.Parse(boost.image);
+					f = (float) Single.Parse(boost.image);
 				}
 				catch (System.Exception ignored)
 				{

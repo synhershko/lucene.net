@@ -17,6 +17,7 @@
 
 using System;
 using System.Linq;
+using Lucene.Net.Support;
 using TermPositions = Lucene.Net.Index.TermPositions;
 
 namespace Lucene.Net.Search
@@ -157,7 +158,7 @@ namespace Lucene.Net.Search
 			{
 				checkedRepeats = true;
 				// check for repeats
-				SupportClass.HashMap<PhrasePositions, object> m = null;
+				HashMap<PhrasePositions, object> m = null;
 				for (PhrasePositions pp = first; pp != null; pp = pp.next)
 				{
 					int tpPos = pp.position + pp.offset;
@@ -168,7 +169,7 @@ namespace Lucene.Net.Search
 						{
 							if (m == null)
 							{
-								m = new SupportClass.HashMap<PhrasePositions, object>();
+								m = new HashMap<PhrasePositions, object>();
 							}
 							pp.repeats = true;
 							pp2.repeats = true;

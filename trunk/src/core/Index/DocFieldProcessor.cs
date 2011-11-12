@@ -18,6 +18,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Lucene.Net.Support;
 
 namespace Lucene.Net.Index
 {
@@ -29,7 +30,7 @@ namespace Lucene.Net.Index
 	/// DocFieldConsumer.
 	/// </summary>
 	
-	sealed class DocFieldProcessor:DocConsumer
+	sealed class DocFieldProcessor : DocConsumer
 	{
 		
 		internal DocumentsWriter docWriter;
@@ -51,10 +52,9 @@ namespace Lucene.Net.Index
 			fieldsWriter.CloseDocStore(state);
 		}
 		
-		public override void  Flush(System.Collections.ICollection threads, SegmentWriteState state)
+		public override void Flush(ICollection<DocConsumerPerThread> threads, SegmentWriteState state)
 		{
-			
-			var childThreadsAndFields = new SupportClass.HashMap<DocFieldConsumerPerThread, ICollection<DocFieldConsumerPerField>>();
+			var childThreadsAndFields = new HashMap<DocFieldConsumerPerThread, ICollection<DocFieldConsumerPerField>>();
 			foreach(DocConsumerPerThread thread in threads)
 			{
                 DocFieldProcessorPerThread perThread = (DocFieldProcessorPerThread)thread;

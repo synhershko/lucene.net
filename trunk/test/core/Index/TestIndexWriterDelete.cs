@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using WhitespaceAnalyzer = Lucene.Net.Analysis.WhitespaceAnalyzer;
@@ -922,7 +922,7 @@ namespace Lucene.Net.Index
 				new IndexFileDeleter(dir, new KeepOnlyLastCommitDeletionPolicy(), infos, null, null,null);
 				System.String[] endFiles = dir.ListAll();
 				
-				if (!SupportClass.CollectionsHelper.CompareStringArrays(startFiles, endFiles))
+				if (!CollectionsHelper.CompareStringArrays(startFiles, endFiles))
 				{
 					Assert.Fail("docswriter abort() failed to delete unreferenced files:\n  before delete:\n    " + ArrayToString(startFiles) + "\n  after delete:\n    " + ArrayToString(endFiles));
 				}

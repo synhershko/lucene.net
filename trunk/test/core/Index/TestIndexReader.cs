@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using WhitespaceAnalyzer = Lucene.Net.Analysis.WhitespaceAnalyzer;
@@ -156,10 +156,10 @@ namespace Lucene.Net.Index
 			// set up reader
 			IndexReader reader = IndexReader.Open(d);
 			System.Collections.Generic.ICollection<string> fieldNames = reader.GetFieldNames(IndexReader.FieldOption.ALL);
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "keyword"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "text"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "unindexed"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "unstored"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "keyword"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "text"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "unindexed"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "unstored"));
 			reader.Close();
 			// add more documents
 			writer = new IndexWriter(d, new StandardAnalyzer(), false, IndexWriter.MaxFieldLength.LIMITED);
@@ -184,57 +184,57 @@ namespace Lucene.Net.Index
 			reader = IndexReader.Open(d);
 			fieldNames = reader.GetFieldNames(IndexReader.FieldOption.ALL);
 			Assert.AreEqual(13, fieldNames.Count); // the following fields
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "keyword"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "text"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "unindexed"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "unstored"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "keyword2"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "text2"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "unindexed2"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "unstored2"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "tvnot"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "termvector"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "tvposition"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "tvoffset"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "tvpositionoffset"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "keyword"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "text"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "unindexed"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "unstored"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "keyword2"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "text2"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "unindexed2"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "unstored2"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "tvnot"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "termvector"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "tvposition"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "tvoffset"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "tvpositionoffset"));
 			
 			// verify that only indexed fields were returned
 			fieldNames = reader.GetFieldNames(IndexReader.FieldOption.INDEXED);
 			Assert.AreEqual(11, fieldNames.Count); // 6 original + the 5 termvector fields 
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "keyword"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "text"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "unstored"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "keyword2"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "text2"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "unstored2"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "tvnot"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "termvector"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "tvposition"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "tvoffset"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "tvpositionoffset"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "keyword"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "text"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "unstored"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "keyword2"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "text2"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "unstored2"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "tvnot"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "termvector"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "tvposition"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "tvoffset"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "tvpositionoffset"));
 			
 			// verify that only unindexed fields were returned
 			fieldNames = reader.GetFieldNames(IndexReader.FieldOption.UNINDEXED);
 			Assert.AreEqual(2, fieldNames.Count); // the following fields
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "unindexed"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "unindexed2"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "unindexed"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "unindexed2"));
 			
 			// verify index term vector fields  
 			fieldNames = reader.GetFieldNames(IndexReader.FieldOption.TERMVECTOR);
 			Assert.AreEqual(1, fieldNames.Count); // 1 field has term vector only
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "termvector"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "termvector"));
 			
 			fieldNames = reader.GetFieldNames(IndexReader.FieldOption.TERMVECTOR_WITH_POSITION);
 			Assert.AreEqual(1, fieldNames.Count); // 4 fields are indexed with term vectors
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "tvposition"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "tvposition"));
 			
 			fieldNames = reader.GetFieldNames(IndexReader.FieldOption.TERMVECTOR_WITH_OFFSET);
 			Assert.AreEqual(1, fieldNames.Count); // 4 fields are indexed with term vectors
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "tvoffset"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "tvoffset"));
 			
 			fieldNames = reader.GetFieldNames(IndexReader.FieldOption.TERMVECTOR_WITH_POSITION_OFFSET);
 			Assert.AreEqual(1, fieldNames.Count); // 4 fields are indexed with term vectors
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "tvpositionoffset"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "tvpositionoffset"));
 			reader.Close();
 			d.Close();
 		}
@@ -393,7 +393,7 @@ namespace Lucene.Net.Index
 				Assert.AreEqual(bin[i], data1[i + b1.GetBinaryOffset()]);
 			}
 			System.Collections.Hashtable lazyFields = new System.Collections.Hashtable();
-			SupportClass.CollectionsHelper.AddIfNotContains(lazyFields, "bin1");
+			CollectionsHelper.AddIfNotContains(lazyFields, "bin1");
 			FieldSelector sel = new SetBasedFieldSelector(new System.Collections.Hashtable(), lazyFields);
 			doc = reader.Document(reader.MaxDoc() - 1, sel);
 			Fieldable[] fieldables = doc.GetFieldables("bin1");
@@ -557,7 +557,7 @@ namespace Lucene.Net.Index
 		[Test]
 		public virtual void  TestWritingNorms()
 		{
-			System.String tempDir = SupportClass.AppSettings.Get("tempDir", "");
+			System.String tempDir = AppSettings.Get("tempDir", "");
 			if (tempDir == null)
 				throw new System.IO.IOException("tempDir undefined, cannot run test");
 			
@@ -761,14 +761,14 @@ namespace Lucene.Net.Index
 		
 		private Directory GetDirectory()
 		{
-			return FSDirectory.Open(new System.IO.FileInfo(System.IO.Path.Combine(SupportClass.AppSettings.Get("tempDir", ""), "testIndex")));
+			return FSDirectory.Open(new System.IO.FileInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "testIndex")));
 		}
 		
 		[Test]
 		public virtual void  TestFilesOpenClose()
 		{
 			// Create initial data set
-			System.IO.FileInfo dirFile = new System.IO.FileInfo(System.IO.Path.Combine(SupportClass.AppSettings.Get("tempDir", ""), "testIndex"));
+			System.IO.FileInfo dirFile = new System.IO.FileInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "testIndex"));
 			Directory dir = GetDirectory();
 			IndexWriter writer = new IndexWriter(dir, new WhitespaceAnalyzer(), true, IndexWriter.MaxFieldLength.LIMITED);
 			AddDoc(writer, "test");
@@ -800,7 +800,7 @@ namespace Lucene.Net.Index
 		public virtual void  TestLastModified()
 		{
 			Assert.IsFalse(IndexReader.IndexExists("there_is_no_such_index"));
-			System.IO.FileInfo fileDir = new System.IO.FileInfo(System.IO.Path.Combine(SupportClass.AppSettings.Get("tempDir", ""), "testIndex"));
+			System.IO.FileInfo fileDir = new System.IO.FileInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "testIndex"));
 			for (int i = 0; i < 2; i++)
 			{
 				try
@@ -1111,7 +1111,7 @@ namespace Lucene.Net.Index
 					//  System.out.println("  startFiles: " + i + ": " + startFiles[i]);
 					//}
 					
-					if (!SupportClass.CollectionsHelper.Equals(startFiles, endFiles))
+					if (!CollectionsHelper.Equals(startFiles, endFiles))
 					{
 						System.String successStr;
 						if (success)
@@ -1311,7 +1311,7 @@ namespace Lucene.Net.Index
 		[Test]
 		public virtual void  TestOpenReaderAfterDelete()
 		{
-			System.IO.FileInfo dirFile = new System.IO.FileInfo(System.IO.Path.Combine(SupportClass.AppSettings.Get("tempDir", ""), "deletetest"));
+			System.IO.FileInfo dirFile = new System.IO.FileInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "deletetest"));
 			Directory dir = FSDirectory.Open(dirFile);
 			try
 			{
@@ -1499,7 +1499,7 @@ namespace Lucene.Net.Index
 		}
 		private void  RmDir(System.IO.FileInfo dir)
 		{
-			System.IO.FileInfo[] files = SupportClass.FileSupport.GetFiles(dir);
+			System.IO.FileInfo[] files = FileSupport.GetFiles(dir);
 			for (int i = 0; i < files.Length; i++)
 			{
 				bool tmpBool;

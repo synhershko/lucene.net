@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using Lucene.Net.Analysis;
@@ -204,7 +204,7 @@ namespace Lucene.Net.Index
 				IndexingThread th = threads[i];
 				lock (th)
 				{
-					SupportClass.CollectionsHelper.AddAllIfNotContains(docs, th.docs);
+					CollectionsHelper.AddAllIfNotContains(docs, th.docs);
 				}
 			}
 			
@@ -482,13 +482,13 @@ namespace Lucene.Net.Index
 			System.Collections.IList ff1 = d1.GetFields();
 			System.Collections.IList ff2 = d2.GetFields();
 			
-			SupportClass.CollectionsHelper.Sort(ff1, fieldNameComparator);
-			SupportClass.CollectionsHelper.Sort(ff2, fieldNameComparator);
+			CollectionsHelper.Sort(ff1, fieldNameComparator);
+			CollectionsHelper.Sort(ff2, fieldNameComparator);
 			
 			if (ff1.Count != ff2.Count)
 			{
-				System.Console.Out.WriteLine(SupportClass.CollectionsHelper.CollectionToString(ff1));
-				System.Console.Out.WriteLine(SupportClass.CollectionsHelper.CollectionToString(ff2));
+				System.Console.Out.WriteLine(CollectionsHelper.CollectionToString(ff1));
+				System.Console.Out.WriteLine(CollectionsHelper.CollectionToString(ff2));
 				Assert.AreEqual(ff1.Count, ff2.Count);
 			}
 			
@@ -509,8 +509,8 @@ namespace Lucene.Net.Index
 					if (!s1.Equals(s2))
 					{
 						// print out whole doc on error
-						System.Console.Out.WriteLine(SupportClass.CollectionsHelper.CollectionToString(ff1));
-						System.Console.Out.WriteLine(SupportClass.CollectionsHelper.CollectionToString(ff2));
+						System.Console.Out.WriteLine(CollectionsHelper.CollectionToString(ff1));
+						System.Console.Out.WriteLine(CollectionsHelper.CollectionToString(ff2));
 						Assert.AreEqual(s1, s2);
 					}
 				}
@@ -577,7 +577,7 @@ namespace Lucene.Net.Index
 			}
 		}
 		
-		internal class IndexingThread:SupportClass.ThreadClass
+		internal class IndexingThread:ThreadClass
 		{
 			internal IndexWriter w;
 			internal int base_Renamed;
@@ -662,7 +662,7 @@ namespace Lucene.Net.Index
 			public virtual System.String GetUTF8String(int nTokens)
 			{
 				int upto = 0;
-				SupportClass.CollectionsHelper.Fill(buffer, (char) 0);
+				CollectionsHelper.Fill(buffer, (char) 0);
 				for (int i = 0; i < nTokens; i++)
 					upto = AddUTF8Token(upto);
 				return new System.String(buffer, 0, upto);
@@ -730,7 +730,7 @@ namespace Lucene.Net.Index
 				
 				if (Lucene.Net.Index.TestStressIndexing2.sameFieldOrder)
 				{
-					SupportClass.CollectionsHelper.Sort(fields, Lucene.Net.Index.TestStressIndexing2.fieldNameComparator);
+					CollectionsHelper.Sort(fields, Lucene.Net.Index.TestStressIndexing2.fieldNameComparator);
 				}
 				else
 				{

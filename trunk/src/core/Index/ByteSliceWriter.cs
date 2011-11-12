@@ -16,6 +16,7 @@
  */
 
 using System;
+using Lucene.Net.Support;
 
 namespace Lucene.Net.Index
 {
@@ -92,7 +93,7 @@ namespace Lucene.Net.Index
 			while ((i & ~ 0x7F) != 0)
 			{
 				WriteByte((byte) ((i & 0x7f) | 0x80));
-				i = SupportClass.Number.URShift(i, 7);
+				i = Number.URShift(i, 7);
 			}
 			WriteByte((byte) i);
 		}

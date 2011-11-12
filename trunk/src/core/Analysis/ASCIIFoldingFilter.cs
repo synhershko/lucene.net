@@ -60,7 +60,7 @@ namespace Lucene.Net.Analysis
 	{
 		public ASCIIFoldingFilter(TokenStream input):base(input)
 		{
-			termAtt = AddAttribute(typeof(TermAttribute));
+            termAtt = AddAttribute<TermAttribute>();
 		}
 		
 		private char[] output = new char[512];

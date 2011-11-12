@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using Analyzer = Lucene.Net.Analysis.Analyzer;
@@ -28,6 +28,7 @@ using IndexWriter = Lucene.Net.Index.IndexWriter;
 using Directory = Lucene.Net.Store.Directory;
 using RAMDirectory = Lucene.Net.Store.RAMDirectory;
 using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
+using Single = Lucene.Net.Support.Single;
 
 namespace Lucene.Net.Search.Function
 {
@@ -158,7 +159,7 @@ namespace Lucene.Net.Search.Function
 		// extract expected doc score from its ID Field: "ID7" --> 7.0
 		protected internal virtual float ExpectedFieldScore(System.String docIDFieldVal)
 		{
-            return SupportClass.Single.Parse(docIDFieldVal.Substring(2));
+            return Single.Parse(docIDFieldVal.Substring(2));
 		}
 		
 		// debug messages (change DBG to true for anything to print) 

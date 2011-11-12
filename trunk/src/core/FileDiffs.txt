@@ -1,0 +1,460 @@
+﻿analysis\standard\
+analysis\standard\package.html - IDENTICAL
+analysis\standard\READ_BEFORE_REGENERATING.txt - New File
+analysis\standard\StandardAnalyzer.java - PORTED
+analysis\standard\StandardFilter.java - PORTED
+analysis\standard\StandardTokenizer.java - PORTED
+analysis\standard\StandardTokenizerImpl.java - PORTED
+analysis\standard\StandardTokenizerImpl.jflex - PORTED
+
+analysis\tokenattributes\
+analysis\tokenattributes\FlagsAttribute.java - IDENTICAL
+analysis\tokenattributes\FlagsAttributeImpl.java - PORTED
+nalysis\tokenattributes\OffsetAttribute.java - IDENTICAL
+analysis\tokenattributes\OffsetAttributeImpl.java - PORTED
+analysis\tokenattributes\PayloadAttribute.java - IDENTICAL
+analysis\tokenattributes\PayloadAttributeImpl.java - PORTED
+analysis\tokenattributes\PositionIncrementAttribute.java - IDENTICAL
+analysis\tokenattributes\PositionIncrementAttributeImpl.java - PORTED
+analysis\tokenattributes\TermAttribute.java - IDENTICAL
+analysis\tokenattributes\TermAttributeImpl.java - PORTED
+analysis\tokenattributes\TypeAttribute.java - IDENTICAL
+analysis\tokenattributes\TypeAttributeImpl.java - PORTED
+
+analysis\
+analysis\Analyzer.java - PORTED
+analysis\ASCIIFoldingFilter.java - PORTED
+analysis\BaseCharFilter.java - PORTED
+analysis\CachingTokenFilter.java - PORTED
+analysis\CharacterCache.java - Removed in 3.x
+analysis\CharArraySet.java - PORTED
+analysis\CharFilter.java - PORTED
+analysis\CharReader.java - PORTED
+analysis\CharStream.java - IDENTICAL
+analysis\CharTokenizer.java - PORTED
+analysis\ISOLatin1AccentFilter.java - PORTED
+analysis\KeywordAnalyzer.java - PORTED
+analysis\KeywordTokenizer.java - PORTED
+analysis\LengthFilter.java - PORTED
+analysis\LetterTokenizer.java - PORTED
+analysis\LowerCaseFilter.java - PORTED
+analysis\LowerCaseTokenizer.java - PORTED
+analysis\MappingCharFilter.java - PORTED
+analysis\NormalizeCharMap.java - PORTED
+analysis\NumericTokenStream.java - PORTED
+analysis\package.html - Text files are different
+analysis\PerFieldAnalyzerWrapper.java - PORTED
+analysis\PorterStemFilter.java - PORTED
+analysis\PorterStemmer.java - PORTED
+analysis\SimpleAnalyzer.java - PORTED
+analysis\SinkTokenizer.java - Removed in 3.x
+analysis\StopAnalyzer.java - PORTED
+analysis\StopFilter.java - PORTED
+analysis\TeeSinkTokenFilter.java - PORTED
+analysis\TeeTokenFilter.java - Removed in 3.x
+analysis\Token.java - PORTED
+analysis\TokenFilter.java - PORTED
+analysis\Tokenizer.java - PORTED
+analysis\TokenStream.java - PORTED
+analysis\TokenWrapper.java - Removed in 3.x
+analysis\WhitespaceAnalyzer.java - PORTED
+analysis\WhitespaceTokenizer.java - PORTED
+analysis\WordlistLoader.java - PORTED
+
+document\
+document\AbstractField.java - PORTED
+document\CompressionTools.java - Text files are different
+document\DateField.java - Text files are different
+document\DateTools.java - Text files are different
+document\Document.java - PORTED
+document\Field.java - PORTED
+document\Fieldable.java - PORTED
+document\FieldSelector.java - IDENTICAL
+document\FieldSelectorResult.java - Text files are different
+document\LoadFirstFieldSelector.java - IDENTICAL
+document\MapFieldSelector.java - Text files are different
+document\NumberTools.java - Text files are different
+document\NumericField.java - PORTED
+document\package.html - IDENTICAL
+document\SetBasedFieldSelector.java - Text files are different
+
+index\
+	index\AbstractAllTermDocs.java - IDENTICAL
+	index\AllTermDocs.java - IDENTICAL
+	index\BufferedDeletes.java - PORTED
+	index\ByteBlockPool.java - PORTED
+	index\ByteSliceReader.java - Text files are different
+	index\ByteSliceWriter.java - IDENTICAL
+	index\CharBlockPool.java - IDENTICAL
+	index\CheckIndex.java - PORTED
+	index\CompoundFileReader.java - PORTED
+	index\CompoundFileWriter.java - Text files are different
+	index\ConcurrentMergeScheduler.java - PORTED
+	index\CorruptIndexException.java - IDENTICAL
+	index\DefaultSkipListReader.java - Text files are different
+	index\DefaultSkipListWriter.java - Text files are different
+	index\DirectoryOwningReader.java - Removed in 3.x
+	index\DirectoryReader.java - Text files are different
+	index\DocConsumer.java - PORTED
+	index\DocConsumerPerThread.java - IDENTICAL
+	index\DocFieldConsumer.java - PORTED
+	index\DocFieldConsumerPerField.java - IDENTICAL
+	index\DocFieldConsumerPerThread.java - IDENTICAL
+	index\DocFieldConsumers.java - PORTED
+	index\DocFieldConsumersPerField.java - Text files are different
+	index\DocFieldConsumersPerThread.java - Text files are different
+	index\DocFieldProcessor.java - PORTED
+	index\DocFieldProcessorPerField.java - IDENTICAL
+	index\DocFieldProcessorPerThread.java - PORTED
+	index\DocInverter.java - PORTED
+	index\DocInverterPerField.java - PORTED
+	index\DocInverterPerThread.java - PORTED
+	index\DocumentsWriter.java - PORTED
+	index\DocumentsWriterThreadState.java - PORTED
+	index\FieldInfo.java - Text files are different
+	index\FieldInfos.java - PORTED
+	index\FieldInvertState.java - IDENTICAL
+	index\FieldReaderException.java - IDENTICAL
+	index\FieldSortedTermVectorMapper.java - Text files are different
+	index\FieldsReader.java - PORTED
+	index\FieldsWriter.java - PORTED
+	index\FilterIndexReader.java - PORTED
+	index\FormatPostingsDocsConsumer.java - IDENTICAL
+	index\FormatPostingsDocsWriter.java - Text files are different
+	index\FormatPostingsFieldsConsumer.java - IDENTICAL
+	index\FormatPostingsFieldsWriter.java - Text files are different
+	index\FormatPostingsPositionsConsumer.java - Text files are different
+	index\FormatPostingsPositionsWriter.java - Text files are different
+	index\FormatPostingsTermsConsumer.java - IDENTICAL
+	index\FormatPostingsTermsWriter.java - Text files are different
+	index\FreqProxFieldMergeState.java - IDENTICAL
+	index\FreqProxTermsWriter.java - Text files are different
+	index\FreqProxTermsWriterPerField.java - Text files are different
+	index\FreqProxTermsWriterPerThread.java - Text files are different
+	index\IndexCommit.java - Text files are different
+	index\IndexCommitPoint.java - Removed in 3.x
+	index\IndexDeletionPolicy.java - Text files are different
+	index\IndexFileDeleter.java - PORTED
+	index\IndexFileNameFilter.java - Text files are different
+	index\IndexFileNames.java - Text files are different
+	index\IndexModifier.java - Removed in 3.x
+	index\IndexReader.java - PORTED
+	index\IndexWriter.java - PORTED
+	index\IntBlockPool.java - IDENTICAL
+	index\InvertedDocConsumer.java - PORTED
+	index\InvertedDocConsumerPerField.java - IDENTICAL
+	index\InvertedDocConsumerPerThread.java - IDENTICAL
+	index\InvertedDocEndConsumer.java - PORTED
+	index\InvertedDocEndConsumerPerField.java - IDENTICAL
+	index\InvertedDocEndConsumerPerThread.java - IDENTICAL
+	index\KeepOnlyLastCommitDeletionPolicy.java - Text files are different
+	index\LogByteSizeMergePolicy.java - PORTED
+	index\LogDocMergePolicy.java - PORTED
+	index\LogMergePolicy.java - PORTED
+	index\MergeDocIDRemapper.java - IDENTICAL
+	index\MergePolicy.java - PORTED
+	index\MergeScheduler.java - IDENTICAL
+	index\MultiLevelSkipListReader.java - Text files are different
+	index\MultiLevelSkipListWriter.java - IDENTICAL
+	index\MultipleTermPositions.java - PORTED
+	index\MultiReader.java - PORTED
+	index\NormsWriter.java - PORTED
+	index\NormsWriterPerField.java - Text files are different
+	index\NormsWriterPerThread.java - Text files are different
+	index\package.html - IDENTICAL
+	index\ParallelReader.java - Text files are different
+	index\Payload.java - Text files are different
+	index\PositionBasedTermVectorMapper.java - Text files are different
+	index\RawPostingList.java - IDENTICAL
+	index\ReadOnlyDirectoryReader.java - PORTED
+	index\ReadOnlySegmentReader.java - Text files are different
+	index\ReusableStringReader.java - Text files are different
+	index\SegmentInfo.java - PORTED
+	index\SegmentInfos.java - PORTED * doesn't inherit from a generic equiv as in java
+	index\SegmentMergeInfo.java - IDENTICAL
+	index\SegmentMergeQueue.java - Text files are different
+	index\SegmentMerger.java - Text files are different
+	index\SegmentReader.java - PORTED
+	index\SegmentTermDocs.java - IDENTICAL
+	index\SegmentTermEnum.java - Text files are different
+	index\SegmentTermPositions.java - Text files are different
+	index\SegmentTermPositionVector.java - IDENTICAL
+	index\SegmentTermVector.java - Text files are different
+	index\SegmentWriteState.java - PORTED
+	index\SerialMergeScheduler.java - Text files are different
+	index\SnapshotDeletionPolicy.java - Text files are different
+	index\SortedTermVectorMapper.java - Text files are different
+	index\StaleReaderException.java - IDENTICAL
+	index\StoredFieldsWriter.java - Text files are different
+	index\StoredFieldsWriterPerThread.java - IDENTICAL
+	index\Term.java - Text files are different
+	index\TermBuffer.java - Text files are different
+	index\TermDocs.java - Text files are different
+	index\TermEnum.java - Text files are different
+	index\TermFreqVector.java - IDENTICAL
+	index\TermInfo.java - IDENTICAL
+	index\TermInfosReader.java - PORTED
+	index\TermInfosWriter.java - IDENTICAL
+	index\TermPositions.java - IDENTICAL
+	index\TermPositionVector.java - IDENTICAL
+	index\TermsHash.java - PORTED
+	index\TermsHashConsumer.java - Text files are different
+	index\TermsHashConsumerPerField.java - IDENTICAL
+	index\TermsHashConsumerPerThread.java - IDENTICAL
+	index\TermsHashPerField.java - Text files are different
+	index\TermsHashPerThread.java - Text files are different
+	index\TermVectorEntry.java - Text files are different
+	index\TermVectorEntryFreqSortedComparator.java - Text files are different
+	index\TermVectorMapper.java - IDENTICAL
+	index\TermVectorOffsetInfo.java - Text files are different
+	index\TermVectorsReader.java - Text files are different
+	index\TermVectorsTermsWriter.java - Text files are different
+	index\TermVectorsTermsWriterPerField.java - Text files are different
+	index\TermVectorsTermsWriterPerThread.java - Text files are different
+	index\TermVectorsWriter.java - IDENTICAL
+
+messages\
+	messages\Message.java - IDENTICAL
+	messages\MessageImpl.java - Text files are different
+	messages\NLS.java - Text files are different
+	messages\NLSException.java - IDENTICAL
+	messages\package.html - IDENTICAL
+
+queryParser\
+	queryParser\CharStream.java - Text files are different
+	queryParser\FastCharStream.java - IDENTICAL
+	queryParser\MultiFieldQueryParser.java - PORTED
+	queryParser\package.html - IDENTICAL
+	queryParser\ParseException.java - Text files are different
+	queryParser\QueryParser.java - PORTED
+	queryParser\QueryParser.jj - Text files are different
+	queryParser\QueryParserConstants.java - IDENTICAL
+	queryParser\QueryParserTokenManager.java - Text files are different
+	queryParser\Token.java - Text files are different
+	queryParser\TokenMgrError.java - Text files are different
+
+search\function\
+	search\function\ByteFieldSource.java - Text files are different
+	search\function\CustomScoreProvider.java - IDENTICAL
+	search\function\CustomScoreQuery.java - PORTED
+	search\function\DocValues.java - IDENTICAL
+	search\function\FieldCacheSource.java - Text files are different
+	search\function\FieldScoreQuery.java - Text files are different
+	search\function\FloatFieldSource.java - Text files are different
+	search\function\IntFieldSource.java - Text files are different
+	search\function\MultiValueSource.java - Removed in 3.x
+	search\function\OrdFieldSource.java - Text files are different
+	search\function\package.html - IDENTICAL
+	search\function\ReverseOrdFieldSource.java - Text files are different
+	search\function\ShortFieldSource.java - Text files are different
+	search\function\ValueSource.java - Text files are different
+	search\function\ValueSourceQuery.java - PORTED
+
+search\payloads\
+	search\payloads\AveragePayloadFunction.java - Text files are different
+	search\payloads\BoostingTermQuery.java - Removed in 3.x
+	search\payloads\MaxPayloadFunction.java - Text files are different
+	search\payloads\MinPayloadFunction.java - Text files are different
+	search\payloads\package.html - IDENTICAL
+	search\payloads\PayloadFunction.java - Text files are different
+	search\payloads\PayloadNearQuery.java - Text files are different
+	search\payloads\PayloadSpanUtil.java - PORTED
+	search\payloads\PayloadTermQuery.java - Text files are different
+
+search\spans\
+	search\spans\FieldMaskingSpanQuery.java - PORTED
+	search\spans\NearSpansOrdered.java - PORTED
+	search\spans\NearSpansUnordered.java - Text files are different
+	search\spans\package.html - IDENTICAL
+	search\spans\SpanFirstQuery.java - PORTED
+	search\spans\SpanNearQuery.java - PORTED
+	search\spans\SpanNotQuery.java - PORTED
+	search\spans\SpanOrQuery.java - PORTED
+	search\spans\SpanQuery.java - PORTED
+	search\spans\Spans.java - Text files are different
+	search\spans\SpanScorer.java - PORTED
+	search\spans\SpanTermQuery.java - PORTED
+	search\spans\SpanWeight.java - Text files are different
+	search\spans\TermSpans.java - Text files are different
+
+search
+	BooleanClause.java - Text files are different
+	BooleanQuery.java - PORTED
+	BooleanScorer.java - Text files are different
+	BooleanScorer2.java - PORTED
+	CachingSpanFilter.java - PORTED
+	CachingWrapperFilter.java - PORTED
+	Collector.java - Text files are different
+	ComplexExplanation.java - Text files are different
+	ConjunctionScorer.java - PORTED
+	ConstantScoreQuery.java - PORTED
+	ConstantScoreRangeQuery.java - Removed in 3.x
+	DefaultSimilarity.java - Text files are different
+	DisjunctionMaxQuery.java - PORTED
+	DisjunctionMaxScorer.java - PORTED
+	DisjunctionSumScorer.java - PORTED
+	DocIdSet.java - Text files are different
+	DocIdSetIterator.java - Text files are different
+	ExactPhraseScorer.java - PORTED
+	Explanation.java - PORTED
+	ExtendedFieldCache.java - Removed in 3.x
+	FieldCache.java - Text files are different
+	FieldCacheImpl.java - Text files are different
+	FieldCacheRangeFilter.java - PORTED
+	FieldCacheTermsFilter.java - PORTED
+	FieldComparator.java - Text files are different
+	FieldComparatorSource.java - IDENTICAL
+	FieldDoc.java - Text files are different
+	FieldDocSortedHitQueue.java - PORTED
+	FieldSortedHitQueue.java - Removed in 3.x
+	FieldValueHitQueue.java - PORTED
+	Filter.java - Text files are different
+	FilteredDocIdSet.java - Text files are different
+	FilteredDocIdSetIterator.java - PORTED
+	FilteredQuery.java - PORTED
+	FilteredTermEnum.java - PORTED
+	FilterManager.java - Text files are different
+	FuzzyQuery.java - Text files are different
+	FuzzyTermEnum.java - Text files are different
+	Hit.java - Removed in 3.x
+	HitCollector.java - Removed in 3.x
+	HitCollectorWrapper.java - Removed in 3.x
+	HitIterator.java - Removed in 3.x
+	HitQueue.java - PORTED
+	Hits.java - Removed in 3.x
+	IndexSearcher.java - PORTED
+	MatchAllDocsQuery.java - PORTED
+	MultiPhraseQuery.java - PORTED
+	MultiSearcher.java - PORTED * Double check on MultiSearcherCallableNoSort/Sort, use use of new Object() rather than dummy lock.  Shouldn't make a difference, seems to be used because ParallelMultiSearcher uses a ReEntrantLock instead of synchronized
+	MultiTermQuery.java - Text files are different
+	MultiTermQueryWrapperFilter.java - Text files are different
+	NumericRangeFilter.java - Text files are different
+	NumericRangeQuery.java - Text files are different
+	package.html - Text files are different
+	ParallelMultiSearcher.java - PORTED
+	PhrasePositions.java - IDENTICAL
+	PhraseQuery.java - PORTED
+	PhraseQueue.java - PORTED
+	PhraseScorer.java - PORTED
+	PositiveScoresOnlyCollector.java - Text files are different
+	PrefixFilter.java - Text files are different
+	PrefixQuery.java - Text files are different
+	PrefixTermEnum.java - Text files are different
+	Query.java - PORTED
+	QueryFilter.java - Removed in 3.x
+	QueryTermVector.java - Text files are different
+	QueryWrapperFilter.java - Text files are different
+	RangeFilter.java - Removed in 3.x
+	RangeQuery.java - Removed in 3.x
+	ReqExclScorer.java - PORTED
+	ReqOptSumScorer.java - PORTED
+	ScoreCachingWrappingScorer.java - PORTED
+	ScoreDoc.java - Text files are different
+	ScoreDocComparator.java - Removed in 3.x
+	Scorer.java - Text files are different
+	Searchable.java - Text files are different
+	Searcher.java - Text files are different
+	Similarity.java - PORTED
+	SimilarityDelegator.java - PORTED
+	SingleTermEnum.java - PORTED
+	SloppyPhraseScorer.java - PORTED
+	Sort.java - Text files are different
+	SortComparator.java - Removed in 3.x
+	SortComparatorSource.java - Removed in 3.x
+	SortField.java - Text files are different
+	SpanFilter.java - IDENTICAL
+	SpanFilterResult.java - Text files are different
+	SpanQueryFilter.java - Text files are different
+	TermQuery.java - PORTED
+	TermRangeFilter.java - Text files are different
+	TermRangeQuery.java - Text files are different
+	TermRangeTermEnum.java - Text files are different
+	TermScorer.java - PORTED
+	TimeLimitedCollector.java - Removed in 3.x
+	TimeLimitingCollector.java - Text files are different
+	TopDocCollector.java - Removed in 3.x
+	TopDocs.java - Text files are different
+	TopDocsCollector.java - Text files are different
+	TopFieldCollector.java - PORTED
+	TopFieldDocCollector.java - Removed in 3.x
+	TopFieldDocs.java - IDENTICAL
+	TopScoreDocCollector.java - PORTED
+	Weight.java - IDENTICAL
+	WildcardQuery.java - PORTED
+	WildcardTermEnum.java - Text files are different
+
+store
+	AlreadyClosedException.java - IDENTICAL
+	BufferedIndexInput.java - PORTED
+	BufferedIndexOutput.java - PORTED
+	ChecksumIndexInput.java - PORTED
+	ChecksumIndexOutput.java - PORTED
+	Directory.java - PORTED
+	FileSwitchDirectory.java - PORTED
+	FSDirectory.java - Text files are different
+	FSLockFactory.java - IDENTICAL
+	IndexInput.java - PORTED * See IDisposable
+	IndexOutput.java - PORTED * See IDisposable
+	Lock.java - PORTED
+	LockFactory.java - IDENTICAL
+	LockObtainFailedException.java - IDENTICAL
+	LockReleaseFailedException.java - IDENTICAL
+	LockStressTest.java - Text files are different
+	LockVerifyServer.java - IDENTICAL
+	MMapDirectory.java - Text files are different - PORT ISSUES
+	NativeFSLockFactory.java - PORTED
+	NIOFSDirectory.java - Text files are different - PORT ISSUES
+	NoLockFactory.java - PORTED
+	NoSuchDirectoryException.java - IDENTICAL
+	package.html - IDENTICAL
+	RAMDirectory.java - PORTED
+	RAMFile.java - PORTED
+	RAMInputStream.java - PORTED
+	RAMOutputStream.java - PORTED
+	SimpleFSDirectory.java - PORTED
+	SimpleFSLockFactory.java - PORTED
+	SingleInstanceLockFactory.java - PORTED
+	VerifyingLockFactory.java - PORTED
+
+util\cache
+	Cache.java - PORTED
+	SimpleLRUCache.java - PORTED
+	SimpleMapCache.java - PORTED
+
+lucene\util
+	ArrayUtil.java - IDENTICAL
+	Attribute.java - IDENTICAL
+	AttributeImpl.java - PORTED
+	AttributeSource.java - PORTED
+	AverageGuessMemoryModel.java - PORTED
+	BitUtil.java - IDENTICAL
+	BitVector.java - PORTED
+	CloseableThreadLocal.java - PORTED
+	Constants.java - PORTED * Static Constructor for LUCENE_MAIN_VERSION differents greatly from java.
+	DocIdBitSet.java - PORTED
+	DummyConcurrentLock.java - New in 3.x
+	FieldCacheSanityChecker.java - PORTED
+	IndexableBinaryStringTools.java - IDENTICAL
+	MapOfSets.java - PORTED
+	MemoryModel.java - IDENTICAL
+	NamedThreadFactory.java - New in 3.x
+	NumericUtils.java - IDENTICAL
+	OpenBitSet.java - PORTED
+	OpenBitSetDISI.java - IDENTICAL
+	OpenBitSetIterator.java - PORTED
+	package.html - IDENTICAL
+	Parameter.java - PORTED
+	PriorityQueue.java - PORTED
+	RamUsageEstimator.java - PORTED
+	ReaderUtil.java - PORTED
+	ScorerDocQueue.java - IDENTICAL
+	SimpleStringInterner.java - PORTED
+	SmallFloat.java - IDENTICAL
+	SortedVIntList.java - PORTED
+	SorterTemplate.java - IDENTICAL
+	StringHelper.java - PORTED
+	StringInterner.java - IDENTICAL
+	ThreadInterruptedException.java - new in 3.x (NOT NEEDED IN .NET)
+	ToStringUtils.java - IDENTICAL
+	UnicodeUtil.java - IDENTICAL
+	Version.java - PORTED

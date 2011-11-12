@@ -16,6 +16,7 @@
  */
 
 using System;
+using Lucene.Net.Support;
 
 namespace Lucene.Net.Store
 {
@@ -107,11 +108,7 @@ namespace Lucene.Net.Store
 				}
 				catch (System.Threading.ThreadInterruptedException e)
 				{
-					// In 3.0 we will change this to throw
-					// InterruptedException instead
-                    // TODO: Revisit rewriting in ThreadInterruptedException
-					SupportClass.ThreadClass.Current().Interrupt();
-					throw new System.IO.IOException(e.ToString());
+				    throw;
 				}
 				locked = Obtain();
 			}

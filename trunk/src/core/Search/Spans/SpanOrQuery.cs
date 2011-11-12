@@ -17,6 +17,7 @@
 
 using System;
 using Lucene.Net.Index;
+using Lucene.Net.Support;
 using Lucene.Net.Util;
 using IndexReader = Lucene.Net.Index.IndexReader;
 using ToStringUtils = Lucene.Net.Util.ToStringUtils;
@@ -160,7 +161,7 @@ namespace Lucene.Net.Search.Spans
 			}
 		}
 
-		private SupportClass.EquatableList<SpanQuery> clauses;
+		private EquatableList<SpanQuery> clauses;
 		private System.String field;
 		
 		/// <summary>Construct a SpanOrQuery merging the provided clauses. </summary>
@@ -168,7 +169,7 @@ namespace Lucene.Net.Search.Spans
 		{
 			
 			// copy clauses array into an ArrayList
-			this.clauses = new SupportClass.EquatableList<SpanQuery>(clauses.Length);
+			this.clauses = new EquatableList<SpanQuery>(clauses.Length);
 			for (int i = 0; i < clauses.Length; i++)
 			{
 				SpanQuery clause = clauses[i];
@@ -284,7 +285,7 @@ namespace Lucene.Net.Search.Spans
 		public override int GetHashCode()
 		{
 			int h = clauses.GetHashCode();
-			h ^= ((h << 10) | (SupportClass.Number.URShift(h, 23)));
+			h ^= ((h << 10) | (Number.URShift(h, 23)));
 			h ^= System.Convert.ToInt32(GetBoost());
 			return h;
 		}

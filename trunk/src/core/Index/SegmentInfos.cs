@@ -16,7 +16,8 @@
  */
 
 using System;
-
+using System.Collections.Generic;
+using Lucene.Net.Support;
 using ChecksumIndexInput = Lucene.Net.Store.ChecksumIndexInput;
 using ChecksumIndexOutput = Lucene.Net.Store.ChecksumIndexOutput;
 using Directory = Lucene.Net.Store.Directory;
@@ -34,7 +35,7 @@ namespace Lucene.Net.Index
 	/// (subject to change suddenly in the next release)<p/>
 	/// </summary>
 	[Serializable]
-	public sealed class SegmentInfos : System.Collections.ArrayList
+	public sealed class SegmentInfos : List<SegmentInfo>, ICloneable/*ConcurrentBag<SegmentInfo> is thread-safety a requirement of SegmentInfos?*/
 	{
 		private class AnonymousClassFindSegmentsFile:FindSegmentsFile
 		{
@@ -224,7 +225,7 @@ namespace Lucene.Net.Index
 			}
 			else if (fileName.StartsWith(IndexFileNames.SEGMENTS))
 			{
-				return SupportClass.Number.ToInt64(fileName.Substring(1 + IndexFileNames.SEGMENTS.Length));
+				return Number.ToInt64(fileName.Substring(1 + IndexFileNames.SEGMENTS.Length));
 			}
 			else
 			{
@@ -435,18 +436,18 @@ namespace Lucene.Net.Index
 		/// SegmentInfo.
 		/// </summary>
 		
-		public override System.Object Clone()
+		public System.Object Clone()
 		{
             SegmentInfos sis = new SegmentInfos();
             for (int i = 0; i < this.Count; i++)
             {
-                sis.Add(((SegmentInfo) this[i]).Clone());
+                sis.Add((SegmentInfo)this[i].Clone());
             }
             sis.counter = this.counter;
             sis.generation = this.generation;
             sis.lastGeneration = this.lastGeneration;
             // sis.pendingSegnOutput = this.pendingSegnOutput; // {{Aroush-2.9}} needed?
-            sis.userData = new SupportClass.HashMap<string, string>(userData);
+            sis.userData = new HashMap<string, string>(userData);
             sis.version = this.version;
             return sis;
 		}
@@ -566,7 +567,7 @@ namespace Lucene.Net.Index
 		{
 			if (infoStream != null)
 			{
-				infoStream.WriteLine("SIS [" + SupportClass.ThreadClass.Current().Name + "]: " + message);
+				infoStream.WriteLine("SIS [" + ThreadClass.Current().Name + "]: " + message);
 			}
 		}
 		
@@ -844,7 +845,7 @@ namespace Lucene.Net.Index
 		public SegmentInfos Range(int first, int last)
 		{
 			SegmentInfos infos = new SegmentInfos();
-			infos.AddRange((System.Collections.IList) ((System.Collections.ArrayList) this).GetRange(first, last - first));
+			infos.AddRange(this.GetRange(first, last - first));
 			return infos;
 		}
 		

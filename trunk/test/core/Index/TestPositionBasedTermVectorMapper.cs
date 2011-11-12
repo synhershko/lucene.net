@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
@@ -109,7 +109,7 @@ namespace Lucene.Net.Index
 					Assert.IsTrue(info.Offsets.Count == 1, "info.getOffsets() Size: " + info.Offsets.Count + " is not: " + 1);
 				}
 			}
-			Assert.IsTrue(SupportClass.BitSetSupport.Cardinality(bits) == numPositions, "Bits are not all on");
+			Assert.IsTrue(BitSetSupport.Cardinality(bits) == numPositions, "Bits are not all on");
 		}
     }
 }

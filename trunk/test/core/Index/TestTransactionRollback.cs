@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using WhitespaceAnalyzer = Lucene.Net.Analysis.WhitespaceAnalyzer;
@@ -106,7 +106,7 @@ namespace Lucene.Net.Index
 				}
 			}
 			r.Close();
-			Assert.AreEqual(0, SupportClass.BitSetSupport.Cardinality(expecteds), "Should have 0 docs remaining ");
+			Assert.AreEqual(0, BitSetSupport.Cardinality(expecteds), "Should have 0 docs remaining ");
 		}
 		
 		/*

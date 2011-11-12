@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using Lucene.Net.Support;
 using IndexOutput = Lucene.Net.Store.IndexOutput;
 using Similarity = Lucene.Net.Search.Similarity;
 
@@ -60,7 +61,7 @@ namespace Lucene.Net.Index
         public override void Flush(IDictionary<InvertedDocEndConsumerPerThread,ICollection<InvertedDocEndConsumerPerField>> threadsAndFields, SegmentWriteState state)
 		{
 
-            IDictionary<FieldInfo, IList<NormsWriterPerField>> byField = new SupportClass.HashMap<FieldInfo, IList<NormsWriterPerField>>();
+            IDictionary<FieldInfo, IList<NormsWriterPerField>> byField = new HashMap<FieldInfo, IList<NormsWriterPerField>>();
 			
 			// Typically, each thread will have encountered the same
 			// field.  So first we collate by field, ie, all

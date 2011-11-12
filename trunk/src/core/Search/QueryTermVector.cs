@@ -61,7 +61,7 @@ namespace Lucene.Net.Search
 						bool hasMoreTokens = false;
 						
 						stream.Reset();
-						TermAttribute termAtt = (TermAttribute) stream.AddAttribute(typeof(TermAttribute));
+                        TermAttribute termAtt = stream.AddAttribute<TermAttribute>();
 						
 						hasMoreTokens = stream.IncrementToken();
 						while (hasMoreTokens)

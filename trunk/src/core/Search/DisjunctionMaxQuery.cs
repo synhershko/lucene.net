@@ -17,6 +17,7 @@
 
 using System;
 using Lucene.Net.Index;
+using Lucene.Net.Support;
 using IndexReader = Lucene.Net.Index.IndexReader;
 
 namespace Lucene.Net.Search
@@ -40,7 +41,7 @@ namespace Lucene.Net.Search
 	{
 		
 		/* The subqueries */
-		private SupportClass.EquatableList<Query> disjuncts = new SupportClass.EquatableList<Query>();
+		private EquatableList<Query> disjuncts = new EquatableList<Query>();
 		
 		/* Multiple of the non-max disjunct scores added into our final score.  Non-zero values support tie-breaking. */
 		private float tieBreakerMultiplier = 0.0f;
@@ -263,7 +264,7 @@ namespace Lucene.Net.Search
 		public override System.Object Clone()
 		{
 			DisjunctionMaxQuery clone = (DisjunctionMaxQuery) base.Clone();
-            clone.disjuncts = (SupportClass.EquatableList<Query>) this.disjuncts.Clone();
+            clone.disjuncts = (EquatableList<Query>) this.disjuncts.Clone();
 			return clone;
 		}
 		

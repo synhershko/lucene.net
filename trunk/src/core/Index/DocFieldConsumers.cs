@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using Lucene.Net.Support;
 using ArrayUtil = Lucene.Net.Util.ArrayUtil;
 
 namespace Lucene.Net.Index
@@ -52,8 +53,8 @@ namespace Lucene.Net.Index
         public override void Flush(IDictionary<DocFieldConsumerPerThread, ICollection<DocFieldConsumerPerField>> threadsAndFields, SegmentWriteState state)
 		{
 
-            var oneThreadsAndFields = new SupportClass.HashMap<DocFieldConsumerPerThread, ICollection<DocFieldConsumerPerField>>();
-			var twoThreadsAndFields = new SupportClass.HashMap<DocFieldConsumerPerThread, ICollection<DocFieldConsumerPerField>>();
+            var oneThreadsAndFields = new HashMap<DocFieldConsumerPerThread, ICollection<DocFieldConsumerPerField>>();
+			var twoThreadsAndFields = new HashMap<DocFieldConsumerPerThread, ICollection<DocFieldConsumerPerField>>();
 			
 			foreach(var entry in threadsAndFields)
 			{

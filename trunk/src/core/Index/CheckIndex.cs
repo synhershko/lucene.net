@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using Lucene.Net.Support;
 using AbstractField = Lucene.Net.Documents.AbstractField;
 using Document = Lucene.Net.Documents.Document;
 using Directory = Lucene.Net.Store.Directory;
@@ -413,7 +414,7 @@ namespace Lucene.Net.Index
 			System.String userDataString;
 			if (sis.GetUserData().Count > 0)
 			{
-				userDataString = " userData=" + SupportClass.CollectionsHelper.CollectionToString(sis.GetUserData());
+				userDataString = " userData=" + CollectionsHelper.CollectionToString(sis.GetUserData());
 			}
 			else
 			{
@@ -478,7 +479,7 @@ namespace Lucene.Net.Index
 					segInfoStat.diagnostics = diagnostics;
 					if (diagnostics.Count > 0)
 					{
-						Msg("    diagnostics = " + SupportClass.CollectionsHelper.CollectionToString(diagnostics));
+						Msg("    diagnostics = " + CollectionsHelper.CollectionToString(diagnostics));
 					}
 					
 					int docStoreOffset = info.GetDocStoreOffset();
@@ -601,7 +602,7 @@ namespace Lucene.Net.Index
 				}
 				
 				// Keeper
-				result.newSegments.Add(info.Clone());
+				result.newSegments.Add((SegmentInfo)info.Clone());
 			}
 			
 			if (0 == result.numBadSegments)

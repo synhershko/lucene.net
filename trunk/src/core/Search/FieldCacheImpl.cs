@@ -16,20 +16,21 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NumericField = Lucene.Net.Documents.NumericField;
 using IndexReader = Lucene.Net.Index.IndexReader;
 using Term = Lucene.Net.Index.Term;
 using TermDocs = Lucene.Net.Index.TermDocs;
 using TermEnum = Lucene.Net.Index.TermEnum;
 using FieldCacheSanityChecker = Lucene.Net.Util.FieldCacheSanityChecker;
+using Single = Lucene.Net.Support.Single;
 using StringHelper = Lucene.Net.Util.StringHelper;
 
 namespace Lucene.Net.Search
 {
 	
 	/// <summary> Expert: The default cache implementation, storing all values in memory.
-	/// A WeakHashMap is used for storage.
+	/// A WeakDictionary is used for storage.
 	/// 
 	/// <p/>Created: May 19, 2004 4:40:36 PM
 	/// 
@@ -92,7 +93,7 @@ namespace Lucene.Net.Search
 				{
 					// we've now materialized a hard ref
 					System.Object readerKey = innerKeys.Current;
-					// innerKeys was backed by WeakHashMap, sanity check
+					// innerKeys was backed by WeakDictionary, sanity check
 					// that it wasn't GCed before we made hard ref
 					if (null != readerKey && cache.readerCache.Contains(readerKey))
 					{
@@ -210,7 +211,7 @@ namespace Lucene.Net.Search
 			
 			internal FieldCache wrapper;
 
-            internal System.Collections.IDictionary readerCache = new SupportClass.WeakHashTable();
+            internal System.Collections.IDictionary readerCache = new WeakHashTable();
 			
 			protected internal abstract System.Object CreateValue(IndexReader reader, Entry key);
 
@@ -982,7 +983,7 @@ namespace Lucene.Net.Search
 							{
 								try
 								{
-                                    SupportClass.Single.Parse(termtext);
+                                    Single.Parse(termtext);
 									ret = wrapper.GetFloats(reader, field);
 								}
 								catch (System.FormatException nfe3)

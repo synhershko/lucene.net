@@ -16,6 +16,7 @@
  */
 
 using System;
+using Lucene.Net.Support;
 
 namespace Lucene.Net.Index
 {
@@ -139,7 +140,7 @@ namespace Lucene.Net.Index
 			else
 			{
 #if !PRE_LUCENE_NET_2_0_0_COMPATIBLE
-				return base_Renamed + "_" + SupportClass.Number.ToString(gen) + extension;
+				return base_Renamed + "_" + Number.ToString(gen) + extension;
 #else
 				return base_Renamed + "_" + System.Convert.ToString(gen, 16) + extension;
 #endif

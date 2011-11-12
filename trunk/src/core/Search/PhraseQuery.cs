@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using IndexReader = Lucene.Net.Index.IndexReader;
 using Term = Lucene.Net.Index.Term;
 using TermPositions = Lucene.Net.Index.TermPositions;
@@ -35,8 +35,8 @@ namespace Lucene.Net.Search
 	public class PhraseQuery:Query
 	{
 		private System.String field;
-        private SupportClass.EquatableList<Term> terms = new SupportClass.EquatableList<Term>(4);
-        private SupportClass.EquatableList<int> positions = new SupportClass.EquatableList<int>(4);
+        private EquatableList<Term> terms = new EquatableList<Term>(4);
+        private EquatableList<int> positions = new EquatableList<int>(4);
 		private int maxPosition = 0;
 		private int slop = 0;
 		

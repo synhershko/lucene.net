@@ -19,7 +19,6 @@ using System;
 
 using NUnit.Framework;
 
-using TokenStream = Lucene.Net.Analysis.TokenStream;
 using ConcurrentMergeScheduler = Lucene.Net.Index.ConcurrentMergeScheduler;
 using Insanity = Lucene.Net.Util.FieldCacheSanityChecker.Insanity;
 using FieldCache = Lucene.Net.Search.FieldCache;
@@ -56,29 +55,20 @@ namespace Lucene.Net.Util
             TEMP_DIR = new System.IO.FileInfo(directory);
         }
 
-		[NonSerialized]
-		private bool savedAPISetting = false;
         bool allowDocsOutOfOrder = true;
 
-		public LuceneTestCase():base()
+		public LuceneTestCase() : base()
 		{
 		}
 		
 		public LuceneTestCase(System.String name)
 		{
 		}
-
         
 		[SetUp]
 		public virtual void  SetUp()
 		{
-            //{{Lucene.Net-2.9.1}}
-            allowDocsOutOfOrder = Lucene.Net.Search.BooleanQuery.GetAllowDocsOutOfOrder();
-
 			ConcurrentMergeScheduler.SetTestMode();
-			
-			savedAPISetting = TokenStream.GetOnlyUseNewAPI();
-			TokenStream.SetOnlyUseNewAPI(false);
 		}
 		
 		/// <summary> Forcible purges all cache entries from the FieldCache.

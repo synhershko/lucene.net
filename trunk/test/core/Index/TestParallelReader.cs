@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using StandardAnalyzer = Lucene.Net.Analysis.Standard.StandardAnalyzer;
@@ -81,10 +81,10 @@ namespace Lucene.Net.Index
 			pr.Add(IndexReader.Open(dir2));
             System.Collections.Generic.ICollection<string> fieldNames = pr.GetFieldNames(IndexReader.FieldOption.ALL);
 			Assert.AreEqual(4, fieldNames.Count);
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "f1"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "f2"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "f3"));
-			Assert.IsTrue(SupportClass.CollectionsHelper.Contains(fieldNames, "f4"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "f1"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "f2"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "f3"));
+			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "f4"));
 		}
 		
 		[Test]

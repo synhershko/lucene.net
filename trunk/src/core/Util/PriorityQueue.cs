@@ -16,6 +16,7 @@
  */
 
 using System;
+using Lucene.Net.Support;
 
 namespace Lucene.Net.Util
 {
@@ -240,12 +241,12 @@ namespace Lucene.Net.Util
 		{
 			int i = size;
 			T node = heap[i]; // save bottom node
-			int j = SupportClass.Number.URShift(i, 1);
+			int j = Number.URShift(i, 1);
 			while (j > 0 && LessThan(node, heap[j]))
 			{
 				heap[i] = heap[j]; // shift parents down
 				i = j;
-				j = SupportClass.Number.URShift(j, 1);
+				j = Number.URShift(j, 1);
 			}
 			heap[i] = node; // install saved node
 		}

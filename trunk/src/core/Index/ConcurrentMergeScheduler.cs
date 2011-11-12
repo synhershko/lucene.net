@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using Lucene.Net.Support;
 using Directory = Lucene.Net.Store.Directory;
 
 namespace Lucene.Net.Index
@@ -129,7 +130,7 @@ namespace Lucene.Net.Index
 				{
 					// Default to slightly higher priority than our
 					// calling thread
-					mergeThreadPriority = 1 + (System.Int32) SupportClass.ThreadClass.Current().Priority;
+					mergeThreadPriority = 1 + (System.Int32) ThreadClass.Current().Priority;
 					if (mergeThreadPriority > (int) System.Threading.ThreadPriority.Highest)
 						mergeThreadPriority = (int) System.Threading.ThreadPriority.Highest;
 				}
@@ -303,7 +304,7 @@ namespace Lucene.Net.Index
 			}
 		}
 		
-		public /*protected internal*/ class MergeThread:SupportClass.ThreadClass
+		public /*protected internal*/ class MergeThread:ThreadClass
 		{
 			private void  InitBlock(ConcurrentMergeScheduler enclosingInstance)
 			{

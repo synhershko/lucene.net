@@ -16,7 +16,8 @@
  */
 
 using System;
-
+using System.Collections.Generic;
+using Lucene.Net.Support;
 using TokenStream = Lucene.Net.Analysis.TokenStream;
 
 namespace Lucene.Net.Util
@@ -35,10 +36,9 @@ namespace Lucene.Net.Util
 		/// <summary> An AttributeFactory creates instances of <see cref="AttributeImpl" />s.</summary>
 		public abstract class AttributeFactory
 		{
-			/// <summary> returns an <see cref="AttributeImpl" /> for the supplied <see cref="Attribute" /> interface class.
-			/// </summary>
+			/// <summary> returns an <see cref="AttributeImpl" /> for the supplied <see cref="Attribute" /> interface class.</summary>
 			//TODO: .NET has no Type<T>, so this can't be a compiler time check like in java
-			public abstract AttributeImpl CreateAttributeInstance(System.Type attClass);
+			public abstract AttributeImpl CreateAttributeInstance<T>() where T : Attribute;
 			
 			/// <summary> This is the default factory that creates <see cref="AttributeImpl" />s using the
 			/// class name of the supplied <see cref="Attribute" /> interface class by appending <c>Impl</c> to it.
@@ -47,33 +47,36 @@ namespace Lucene.Net.Util
 			
 			private sealed class DefaultAttributeFactory:AttributeFactory
 			{
-                private static readonly SupportClass.WeakHashTable attClassImplMap = new SupportClass.WeakHashTable();
+                // This should be WeakDictionary<T, WeakReference<TImpl>> where typeof(T) is Attribute and TImpl is typeof(AttributeImpl)
+			    private static readonly WeakDictionary<Type, WeakReference> attClassImplMap =
+			        new WeakDictionary<Type, WeakReference>();
                 
 				internal DefaultAttributeFactory()
 				{
 				}
 				
-				public override AttributeImpl CreateAttributeInstance(System.Type attClass)
+				public override AttributeImpl CreateAttributeInstance<TAttImpl>()
 				{
 					try
 					{
-						return (AttributeImpl) System.Activator.CreateInstance(GetClassForInterface(attClass));
+                        return (AttributeImpl)System.Activator.CreateInstance(GetClassForInterface<TAttImpl>());
 					}
 					catch (System.UnauthorizedAccessException e)
                     {
-                        throw new System.ArgumentException("Could not instantiate implementing class for " + attClass.FullName);
+                        throw new System.ArgumentException("Could not instantiate implementing class for " + typeof(TAttImpl).FullName);
 					}
 					catch (System.Exception e)
 					{
-                        throw new System.ArgumentException("Could not instantiate implementing class for " + attClass.FullName);
+                        throw new System.ArgumentException("Could not instantiate implementing class for " + typeof(TAttImpl).FullName);
 					}
 				}
-				
-				private static System.Type GetClassForInterface(System.Type attClass)
+
+                private static System.Type GetClassForInterface<TAttImpl>() where TAttImpl : Attribute
 				{
 					lock (attClassImplMap)
 					{
-                        WeakReference refz = (WeakReference) attClassImplMap[attClass];
+					    var attClass = typeof (TAttImpl);
+                        WeakReference refz = attClassImplMap[attClass];
                         System.Type clazz = (refz == null) ? null : ((System.Type) refz.Target);
 						if (clazz == null)
 						{
@@ -82,7 +85,7 @@ namespace Lucene.Net.Util
                                 string name = attClass.FullName + "Impl," + attClass.Assembly.FullName;
 								attClassImplMap.Add(attClass, new WeakReference( clazz = System.Type.GetType(name, true))); //OK
 							}
-							catch (System.Exception e)
+                            catch (System.TypeLoadException e) // was System.Exception
 							{
 								throw new System.ArgumentException("Could not find implementing class for " + attClass.FullName);
 							}
@@ -95,8 +98,8 @@ namespace Lucene.Net.Util
 		
 		// These two maps must always be in sync!!!
 		// So they are private, final and read-only from the outside (read-only iterators)
-		private SupportClass.GeneralKeyedCollection<Type, SupportClass.AttributeImplItem> attributes;
-		private SupportClass.GeneralKeyedCollection<Type, SupportClass.AttributeImplItem> attributeImpls;
+		private GeneralKeyedCollection<Type, AttributeImplItem> attributes;
+		private GeneralKeyedCollection<Type, AttributeImplItem> attributeImpls;
 		
 		private AttributeFactory factory;
 		
@@ -120,8 +123,8 @@ namespace Lucene.Net.Util
 		/// <summary> An AttributeSource using the supplied <see cref="AttributeFactory" /> for creating new <see cref="Attribute" /> instances.</summary>
 		public AttributeSource(AttributeFactory factory)
 		{
-            this.attributes = new SupportClass.GeneralKeyedCollection<Type, SupportClass.AttributeImplItem>(delegate(SupportClass.AttributeImplItem att) { return att.Key; });
-            this.attributeImpls = new SupportClass.GeneralKeyedCollection<Type, SupportClass.AttributeImplItem>(delegate(SupportClass.AttributeImplItem att) { return att.Key; });
+            this.attributes = new GeneralKeyedCollection<Type, AttributeImplItem>(delegate(AttributeImplItem att) { return att.Key; });
+            this.attributeImpls = new GeneralKeyedCollection<Type, AttributeImplItem>(delegate(AttributeImplItem att) { return att.Key; });
 			this.factory = factory;
 		}
 		
@@ -140,7 +143,7 @@ namespace Lucene.Net.Util
 		/// </summary>
 		public virtual System.Collections.Generic.IEnumerable<Type> GetAttributeClassesIterator()
 		{
-            foreach (SupportClass.AttributeImplItem item in this.attributes)
+            foreach (AttributeImplItem item in this.attributes)
             {
                 yield return item.Key;
             }
@@ -167,37 +170,34 @@ namespace Lucene.Net.Util
                 }
 			}
 		}
-		
-		/// <summary>a cache that stores all interfaces for known implementation classes for performance (slow reflection) </summary>
-		private static readonly SupportClass.WeakHashTable knownImplClasses = new SupportClass.WeakHashTable();
 
-        // {{Aroush-2.9 Port issue, need to mimic java's IdentityHashMap
-        /*
-         * From Java docs:
-         * This class implements the Map interface with a hash table, using 
-         * reference-equality in place of object-equality when comparing keys 
-         * (and values). In other words, in an IdentityHashMap, two keys k1 and k2 
-         * are considered equal if and only if (k1==k2). (In normal Map 
-         * implementations (like HashMap) two keys k1 and k2 are considered 
-         * equal if and only if (k1==null ? k2==null : k1.equals(k2)).) 
-         */
-        // Aroush-2.9}}
-		
-		/// <summary>Adds a custom AttributeImpl instance with one or more Attribute interfaces. </summary>
+	    /// <summary>a cache that stores all interfaces for known implementation classes for performance (slow reflection) </summary>
+	    private static readonly WeakDictionary<Type, System.Collections.Generic.LinkedList<WeakReference>>
+	        knownImplClasses = new WeakDictionary<Type, System.Collections.Generic.LinkedList<WeakReference>>();
+
+        /// <summary>
+        /// <b>Expert:</b> Adds a custom AttributeImpl instance with one or more Attribute interfaces.
+        /// <p><font color="red"><b>Please note:</b> It is not guaranteed, that <code>att</code> is added to
+        /// the <code>AttributeSource</code>, because the provided attributes may already exist.
+        /// You should always retrieve the wanted attributes using <see cref="GetAttribute{T}"/> after adding
+        /// with this method and cast to your class.
+        /// The recommended way to use custom implementations is using an <see cref="AttributeFactory"/>
+        /// </font></p>
+        /// </summary>
 		public virtual void  AddAttributeImpl(AttributeImpl att)
 		{
 			System.Type clazz = att.GetType();
 			if (attributeImpls.Contains(clazz))
 				return ;
-			System.Collections.ArrayList foundInterfaces;
+			System.Collections.Generic.LinkedList<WeakReference> foundInterfaces;
 			lock (knownImplClasses)
 			{
-				foundInterfaces = (System.Collections.ArrayList) knownImplClasses[clazz];
+				foundInterfaces = knownImplClasses[clazz];
 				if (foundInterfaces == null)
 				{
                     // we have a strong reference to the class instance holding all interfaces in the list (parameter "att"),
                     // so all WeakReferences are never evicted by GC
-					knownImplClasses.Add(clazz, foundInterfaces = new System.Collections.ArrayList());
+					knownImplClasses.Add(clazz, foundInterfaces = new LinkedList<WeakReference>());
 					// find all interfaces that this attribute instance implements
 					// and that extend the Attribute interface
 					System.Type actClazz = clazz;
@@ -209,7 +209,7 @@ namespace Lucene.Net.Util
 							System.Type curInterface = interfaces[i];
 							if (curInterface != typeof(Attribute) && typeof(Attribute).IsAssignableFrom(curInterface))
 							{
-								foundInterfaces.Add(new WeakReference(curInterface));
+								foundInterfaces.AddLast(new WeakReference(curInterface));
 							}
 						}
 						actClazz = actClazz.BaseType;
@@ -219,20 +219,20 @@ namespace Lucene.Net.Util
 			}
 			
 			// add all interfaces of this AttributeImpl to the maps
-			for (System.Collections.IEnumerator it = foundInterfaces.GetEnumerator(); it.MoveNext(); )
+			foreach(var curInterfaceRef in foundInterfaces)
 			{
-                WeakReference curInterfaceRef = (WeakReference)it.Current;
 				System.Type curInterface = (System.Type) curInterfaceRef.Target;
-                System.Diagnostics.Debug.Assert(curInterface != null,"We have a strong reference on the class holding the interfaces, so they should never get evicted");
+			    System.Diagnostics.Debug.Assert(curInterface != null,
+			                                    "We have a strong reference on the class holding the interfaces, so they should never get evicted");
 				// Attribute is a superclass of this interface
 				if (!attributes.ContainsKey(curInterface))
 				{
 					// invalidate state to force recomputation in captureState()
 					this.currentState = null;
-                    attributes.Add(new SupportClass.AttributeImplItem(curInterface, att));
+                    attributes.Add(new AttributeImplItem(curInterface, att));
                     if (!attributeImpls.ContainsKey(clazz))
                     {
-                        attributeImpls.Add(new SupportClass.AttributeImplItem(clazz, att));
+                        attributeImpls.Add(new AttributeImplItem(clazz, att));
                     }
 				}
 			}
@@ -242,10 +242,11 @@ namespace Lucene.Net.Util
 		/// This method first checks if an instance of that class is 
 		/// already in this AttributeSource and returns it. Otherwise a
 		/// new instance is created, added to this AttributeSource and returned. 
-		/// Signature for Java 1.5: <c>public &lt;T extends Attribute&gt; T addAttribute(Class&lt;T&gt;)</c>
 		/// </summary>
-		public virtual Attribute AddAttribute(System.Type attClass)
+		// NOTE: Java has Class<T>, .NET has no Type<T>, this is not a perfect port
+        public virtual T AddAttribute<T>() where T : Attribute
 		{
+		    var attClass = typeof (T);
 			if (!attributes.ContainsKey(attClass))
 			{
                 if (!(attClass.IsInterface &&  typeof(Attribute).IsAssignableFrom(attClass))) 
@@ -256,52 +257,49 @@ namespace Lucene.Net.Util
                     );
                 }
 
-				AttributeImpl attImpl = this.factory.CreateAttributeInstance(attClass);
-				AddAttributeImpl(attImpl);
-				return attImpl;
+				AddAttributeImpl(this.factory.CreateAttributeInstance<T>());
 			}
-			else
-			{
-				return attributes[attClass].Value;
-			}
+
+            return (T)(Attribute)attributes[attClass].Value;
 		}
 		
 		/// <summary>Returns true, iff this AttributeSource has any attributes </summary>
 		public virtual bool HasAttributes()
 		{
-			return !(this.attributes.Count == 0);
+			return this.attributes.Count != 0;
 		}
 		
 		/// <summary> The caller must pass in a Class&lt;? extends Attribute&gt; value. 
 		/// Returns true, iff this AttributeSource contains the passed-in Attribute.
-		/// Signature for Java 1.5: <c>public boolean hasAttribute(Class&lt;? extends Attribute&gt;)</c>
-		/// </summary>
-		public virtual bool HasAttribute(System.Type attClass)
+        /// </summary>\
+		public virtual bool HasAttribute<T>() where T : Attribute
 		{
-			return this.attributes.Contains(attClass);
+			return this.attributes.Contains(typeof(T));
 		}
 		
-		/// <summary> The caller must pass in a Class&lt;? extends Attribute&gt; value. 
+		/// <summary>
+		/// The caller must pass in a Class&lt;? extends Attribute&gt; value. 
 		/// Returns the instance of the passed in Attribute contained in this AttributeSource
-		/// Signature for Java 1.5: <c>public &lt;T extends Attribute&gt; T getAttribute(Class&lt;T&gt;)</c>
-		/// 
 		/// </summary>
-		/// <throws>  IllegalArgumentException if this AttributeSource does not contain the </throws>
-		/// <summary>         Attribute. It is recommended to always use <see cref="AddAttribute" /> even in consumers
+		/// <throws>
+		/// IllegalArgumentException if this AttributeSource does not contain the Attribute. 
+		/// It is recommended to always use <see cref="AddAttribute{T}" /> even in consumers
 		/// of TokenStreams, because you cannot know if a specific TokenStream really uses
-		/// a specific Attribute. <see cref="AddAttribute" /> will automatically make the attribute
+        /// a specific Attribute. <see cref="AddAttribute{T}" /> will automatically make the attribute
 		/// available. If you want to only use the attribute, if it is available (to optimize
-		/// consuming), use <see cref="HasAttribute" />.
-		/// </summary>
-		public virtual Attribute GetAttribute(System.Type attClass)
+        /// consuming), use <see cref="HasAttribute" />.
+        /// </throws>
+        // NOTE: Java has Class<T>, .NET has no Type<T>, this is not a perfect port
+		public virtual T GetAttribute<T>() where T : Attribute
 		{
+		    var attClass = typeof (T);
             if (!this.attributes.ContainsKey(attClass))
             {
                 throw new System.ArgumentException("This AttributeSource does not have the attribute '" + attClass.FullName + "'.");
             }
             else
             {
-                return this.attributes[attClass].Value;
+                return (T)(Attribute)this.attributes[attClass].Value;
             }
 		}
 		
@@ -335,7 +333,7 @@ namespace Lucene.Net.Util
 		{
 			currentState = new State();
 			State c = currentState;
-            System.Collections.Generic.IEnumerator<SupportClass.AttributeImplItem> it = attributeImpls.GetEnumerator();
+            System.Collections.Generic.IEnumerator<AttributeImplItem> it = attributeImpls.GetEnumerator();
 			if (it.MoveNext())
 				c.attribute = it.Current.Value;
 			while (it.MoveNext())
@@ -486,8 +484,7 @@ namespace Lucene.Net.Util
 		
 		public override System.String ToString()
 		{
-			System.Text.StringBuilder sb = new System.Text.StringBuilder();
-			sb.Append('(');
+            System.Text.StringBuilder sb = new System.Text.StringBuilder().Append('(');
 			
 			if (HasAttributes())
 			{
@@ -502,8 +499,7 @@ namespace Lucene.Net.Util
 					sb.Append(state.attribute.ToString());
 				}
 			}
-			sb.Append(')');
-			return sb.ToString();
+			return sb.Append(')').ToString();
 		}
 		
 		/// <summary> Performs a clone of all <see cref="AttributeImpl" /> instances returned in a new
@@ -524,14 +520,14 @@ namespace Lucene.Net.Util
 				for (State state = currentState; state != null; state = state.next)
 				{
 					AttributeImpl impl = (AttributeImpl) state.attribute.Clone();
-                    clone.attributeImpls.Add(new SupportClass.AttributeImplItem(impl.GetType(), impl));
+                    clone.attributeImpls.Add(new AttributeImplItem(impl.GetType(), impl));
 				}
 			}
 			
 			// now the interfaces
-            foreach (SupportClass.AttributeImplItem att in this.attributes)
+            foreach (AttributeImplItem att in this.attributes)
 			{
-                clone.attributes.Add(new SupportClass.AttributeImplItem(att.Key, clone.attributeImpls[att.Value.GetType()].Value));
+                clone.attributes.Add(new AttributeImplItem(att.Key, clone.attributeImpls[att.Value.GetType()].Value));
 			}
 			
 			return clone;

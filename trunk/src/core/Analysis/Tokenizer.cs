@@ -26,10 +26,8 @@ namespace Lucene.Net.Analysis
 	/// <p/>
 	/// This is an abstract class; subclasses must override <see cref="TokenStream.IncrementToken()" />
 	/// <p/>
-    /// NOTE: Subclasses overriding <see cref="TokenStream.Next(Token)" /> must call
+    /// NOTE: Subclasses overriding <see cref="TokenStream.IncrementToken()" /> must call
 	/// <see cref="AttributeSource.ClearAttributes()" /> before setting attributes.
-    /// Subclasses overriding <see cref="TokenStream.IncrementToken()" /> must call
-	/// <see cref="Token.Clear()" /> before setting Token attributes.
 	/// </summary>
 	
 	public abstract class Tokenizer:TokenStream

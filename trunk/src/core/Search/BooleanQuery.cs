@@ -18,6 +18,7 @@
 using System;
 using System.Collections;
 using Lucene.Net.Index;
+using Lucene.Net.Support;
 using IndexReader = Lucene.Net.Index.IndexReader;
 using ToStringUtils = Lucene.Net.Util.ToStringUtils;
 using Occur = Lucene.Net.Search.BooleanClause.Occur;
@@ -99,7 +100,7 @@ namespace Lucene.Net.Search
 			BooleanQuery.maxClauseCount = maxClauseCount;
 		}
 		
-		private SupportClass.EquatableList<BooleanClause> clauses = new SupportClass.EquatableList<BooleanClause>();
+		private EquatableList<BooleanClause> clauses = new EquatableList<BooleanClause>();
 		private bool disableCoord;
 		
 		/// <summary>Constructs an empty boolean query. </summary>
@@ -519,7 +520,7 @@ namespace Lucene.Net.Search
 		public override System.Object Clone()
 		{
 			BooleanQuery clone = (BooleanQuery) base.Clone();
-			clone.clauses = (SupportClass.EquatableList<BooleanClause>) this.clauses.Clone();
+			clone.clauses = (EquatableList<BooleanClause>) this.clauses.Clone();
 			return clone;
 		}
 		

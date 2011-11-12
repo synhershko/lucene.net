@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using Lucene.Net.Support;
 using Directory = Lucene.Net.Store.Directory;
 using IndexInput = Lucene.Net.Store.IndexInput;
 using IndexOutput = Lucene.Net.Store.IndexOutput;
@@ -366,7 +367,7 @@ namespace Lucene.Net.Index
 			si.hasProx = hasProx;
 			si.preLockless = preLockless;
 			si.hasSingleNormFile = hasSingleNormFile;
-		    si.diagnostics = new SupportClass.HashMap<string, string>(this.diagnostics);
+		    si.diagnostics = new HashMap<string, string>(this.diagnostics);
             if (this.diagnostics != null)
             {
                 si.diagnostics = new System.Collections.Generic.Dictionary<string, string>();

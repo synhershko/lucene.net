@@ -151,6 +151,12 @@ namespace Lucene.Net.Analysis
 		/// <summary>Releases resources associated with this stream. </summary>
 		public virtual void  Close()
 		{
+            Dispose();
 		}
+
+        public virtual void Dispose()
+        {
+            
+        }
 	}
 }

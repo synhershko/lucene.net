@@ -16,6 +16,7 @@
  */
 
 using System;
+using Lucene.Net.Support;
 
 namespace Lucene.Net.Store
 {
@@ -23,7 +24,6 @@ namespace Lucene.Net.Store
     /// <summary> A memory-resident <see cref="Directory"/> implementation.  Locking
     /// implementation is by default the <see cref="SingleInstanceLockFactory"/>
     /// but can be changed with <see cref="Directory.SetLockFactory"/>.
-	/// 
 	/// </summary>
 	[Serializable]
 	public class RAMDirectory:Directory
@@ -31,7 +31,7 @@ namespace Lucene.Net.Store
 		
 		private const long serialVersionUID = 1L;
 
-        internal protected SupportClass.HashMap<string, RAMFile> fileMap = new SupportClass.HashMap<string, RAMFile>();
+        internal protected HashMap<string, RAMFile> fileMap = new HashMap<string, RAMFile>();
 		internal protected long sizeInBytes = 0;
 		
 		// *****
@@ -148,7 +148,7 @@ namespace Lucene.Net.Store
 				{
 					// In 3.0 we will change this to throw
 					// InterruptedException instead
-					SupportClass.ThreadClass.Current().Interrupt();
+					ThreadClass.Current().Interrupt();
 					throw new System.SystemException(ie.Message, ie);
 				}
 				ts2 = System.DateTime.Now.Ticks;
@@ -252,7 +252,7 @@ namespace Lucene.Net.Store
             Close();
         }
 
-        public SupportClass.HashMap<string, RAMFile> fileMap_ForNUnit
+        public HashMap<string, RAMFile> fileMap_ForNUnit
         {
             get { return fileMap; }
         }

@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using Lucene.Net.Support;
 using NUnit.Framework;
 
 using WhitespaceAnalyzer = Lucene.Net.Analysis.WhitespaceAnalyzer;
@@ -212,7 +212,7 @@ namespace Lucene.Net.Search
 				docs[c++] = ((System.Int32) intIter.Current);
 			}
 			int[] answer = new int[]{4, 6, 8};
-			bool same = SupportClass.CollectionsHelper.Equals(answer, docs);
+			bool same = CollectionsHelper.Equals(answer, docs);
 			if (!same)
 			{
 				System.Console.Out.WriteLine("answer: " + _TestUtil.ArrayToString(answer));

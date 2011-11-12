@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using Lucene.Net.Support;
 using Analyzer = Lucene.Net.Analysis.Analyzer;
 using Document = Lucene.Net.Documents.Document;
 using IndexingChain = Lucene.Net.Index.DocumentsWriter.IndexingChain;
@@ -228,7 +229,7 @@ namespace Lucene.Net.Index
 		private long lastCommitChangeCount; // last changeCount that was committed
 		
 		private SegmentInfos rollbackSegmentInfos; // segmentInfos we will fallback to if the commit fails
-		private SupportClass.HashMap<SegmentInfo, int?> rollbackSegments;
+		private HashMap<SegmentInfo, int?> rollbackSegments;
 		
 		internal volatile SegmentInfos pendingCommit; // set when a commit is pending (after prepareCommit() & before commit())
 		internal volatile uint pendingCommitChangeCount;
@@ -269,7 +270,7 @@ namespace Lucene.Net.Index
 		// Used to only allow one addIndexes to proceed at once
 		// TODO: use ReadWriteLock once we are on 5.0
 		private int readCount; // count of how many threads are holding read lock
-		private SupportClass.ThreadClass writeThread; // non-null if any thread holds write lock
+		private ThreadClass writeThread; // non-null if any thread holds write lock
 		internal ReaderPool readerPool;
 		private int upgradeCount;
 
@@ -753,14 +754,14 @@ namespace Lucene.Net.Index
 		{
 			lock (this)
 			{
-				System.Diagnostics.Debug.Assert(writeThread != SupportClass.ThreadClass.Current());
+				System.Diagnostics.Debug.Assert(writeThread != ThreadClass.Current());
 				while (writeThread != null || readCount > 0)
 					DoWait();
 				
 				// We could have been closed while we were waiting:
 				EnsureOpen();
 				
-				writeThread = SupportClass.ThreadClass.Current();
+				writeThread = ThreadClass.Current();
 			}
 		}
 		
@@ -768,7 +769,7 @@ namespace Lucene.Net.Index
 		{
 			lock (this)
 			{
-				System.Diagnostics.Debug.Assert(SupportClass.ThreadClass.Current() == writeThread);
+				System.Diagnostics.Debug.Assert(ThreadClass.Current() == writeThread);
 				writeThread = null;
 				System.Threading.Monitor.PulseAll(this);
 			}
@@ -778,7 +779,7 @@ namespace Lucene.Net.Index
 		{
 			lock (this)
 			{
-				SupportClass.ThreadClass current = SupportClass.ThreadClass.Current();
+				ThreadClass current = ThreadClass.Current();
 				while (writeThread != null && writeThread != current)
 					DoWait();
 				
@@ -800,7 +801,7 @@ namespace Lucene.Net.Index
 					DoWait();
 				}
 				
-				writeThread = SupportClass.ThreadClass.Current();
+				writeThread = ThreadClass.Current();
 				readCount--;
 				upgradeCount--;
 			}
@@ -855,7 +856,7 @@ namespace Lucene.Net.Index
 		public virtual void  Message(System.String message)
 		{
 			if (infoStream != null)
-                infoStream.WriteLine("IW " + messageID + " [" + DateTime.Now.ToString() + "; " + SupportClass.ThreadClass.Current().Name + "]: " + message);
+                infoStream.WriteLine("IW " + messageID + " [" + DateTime.Now.ToString() + "; " + ThreadClass.Current().Name + "]: " + message);
 		}
 		
 		private void  SetMessageID(System.IO.StreamWriter infoStream)
@@ -1344,7 +1345,7 @@ namespace Lucene.Net.Index
 			{
 				rollbackSegmentInfos = (SegmentInfos) infos.Clone();
 				System.Diagnostics.Debug.Assert(!rollbackSegmentInfos.HasExternalSegments(directory));
-				rollbackSegments = new SupportClass.HashMap<SegmentInfo, int?>();
+				rollbackSegments = new HashMap<SegmentInfo, int?>();
 				int size = rollbackSegmentInfos.Count;
 				for (int i = 0; i < size; i++)
 					rollbackSegments[rollbackSegmentInfos.Info(i)] = i;
@@ -2546,7 +2547,7 @@ namespace Lucene.Net.Index
 				// name that was previously returned which can cause
 				// problems at least with ConcurrentMergeScheduler.
 				changeCount++;
-				return "_" + SupportClass.Number.ToString(segmentInfos.counter++);
+				return "_" + Number.ToString(segmentInfos.counter++);
 			}
 		}
 		
@@ -4530,7 +4531,7 @@ namespace Lucene.Net.Index
 				
 				merge.info.SetHasProx(merger.HasProx());
 				
-				((System.Collections.IList) ((System.Collections.ArrayList) segmentInfos).GetRange(start, start + merge.segments.Count - start)).Clear();
+				segmentInfos.RemoveRange(start, start + merge.segments.Count - start);
 				System.Diagnostics.Debug.Assert(!segmentInfos.Contains(merge.info));
 				segmentInfos.Insert(start, merge.info);
 
