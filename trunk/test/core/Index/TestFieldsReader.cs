@@ -59,7 +59,7 @@ namespace Lucene.Net.Index
 			}
 			public virtual FieldSelectorResult Accept(System.String fieldName)
 			{
-				if (fieldName.Equals(DocHelper.TEXT_FIELD_1_KEY) || fieldName.Equals(DocHelper.COMPRESSED_TEXT_FIELD_2_KEY) || fieldName.Equals(DocHelper.LAZY_FIELD_BINARY_KEY))
+				if (fieldName.Equals(DocHelper.TEXT_FIELD_1_KEY) ||  fieldName.Equals(DocHelper.LAZY_FIELD_BINARY_KEY))
 					return FieldSelectorResult.SIZE;
 				else if (fieldName.Equals(DocHelper.TEXT_FIELD_3_KEY))
 					return FieldSelectorResult.LOAD;
@@ -121,7 +121,7 @@ namespace Lucene.Net.Index
 			Assert.IsTrue(field.IsStoreOffsetWithTermVector() == true);
 			Assert.IsTrue(field.IsStorePositionWithTermVector() == true);
 			Assert.IsTrue(field.GetOmitNorms() == false);
-			Assert.IsTrue(field.GetOmitTf() == false);
+			Assert.IsTrue(field.GetOmitTermFreqAndPositions() == false);
 			
 			field = doc.GetField(DocHelper.TEXT_FIELD_3_KEY);
 			Assert.IsTrue(field != null);
@@ -129,7 +129,7 @@ namespace Lucene.Net.Index
 			Assert.IsTrue(field.IsStoreOffsetWithTermVector() == false);
 			Assert.IsTrue(field.IsStorePositionWithTermVector() == false);
 			Assert.IsTrue(field.GetOmitNorms() == true);
-			Assert.IsTrue(field.GetOmitTf() == false);
+			Assert.IsTrue(field.GetOmitTermFreqAndPositions() == false);
 			
 			field = doc.GetField(DocHelper.NO_TF_KEY);
 			Assert.IsTrue(field != null);
@@ -137,7 +137,7 @@ namespace Lucene.Net.Index
 			Assert.IsTrue(field.IsStoreOffsetWithTermVector() == false);
 			Assert.IsTrue(field.IsStorePositionWithTermVector() == false);
 			Assert.IsTrue(field.GetOmitNorms() == false);
-			Assert.IsTrue(field.GetOmitTf() == true);
+			Assert.IsTrue(field.GetOmitTermFreqAndPositions() == true);
 			reader.Close();
 		}
 		
@@ -159,7 +159,6 @@ namespace Lucene.Net.Index
 			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_KEY);
 			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_BINARY_KEY);
 			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.TEXT_FIELD_UTF2_KEY);
-			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.COMPRESSED_TEXT_FIELD_2_KEY);
 			SetBasedFieldSelector fieldSelector = new SetBasedFieldSelector(loadFieldNames, lazyFieldNames);
 			Document doc = reader.Doc(0, fieldSelector);
 			Assert.IsTrue(doc != null, "doc is null and it shouldn't be");
@@ -169,13 +168,6 @@ namespace Lucene.Net.Index
 			System.String value_Renamed = field.StringValue();
 			Assert.IsTrue(value_Renamed != null, "value is null and it shouldn't be");
 			Assert.IsTrue(value_Renamed.Equals(DocHelper.LAZY_FIELD_TEXT) == true, value_Renamed + " is not equal to " + DocHelper.LAZY_FIELD_TEXT);
-			field = doc.GetFieldable(DocHelper.COMPRESSED_TEXT_FIELD_2_KEY);
-			Assert.IsTrue(field != null, "field is null and it shouldn't be");
-			Assert.IsTrue(field.IsLazy(), "field is not lazy and it should be");
-			Assert.IsTrue(field.BinaryValue() == null, "binaryValue isn't null for lazy string field");
-			value_Renamed = field.StringValue();
-			Assert.IsTrue(value_Renamed != null, "value is null and it shouldn't be");
-			Assert.IsTrue(value_Renamed.Equals(DocHelper.FIELD_2_COMPRESSED_TEXT) == true, value_Renamed + " is not equal to " + DocHelper.FIELD_2_COMPRESSED_TEXT);
 			field = doc.GetFieldable(DocHelper.TEXT_FIELD_1_KEY);
 			Assert.IsTrue(field != null, "field is null and it shouldn't be");
 			Assert.IsTrue(field.IsLazy() == false, "Field is lazy and it should not be");
@@ -193,7 +185,7 @@ namespace Lucene.Net.Index
 			Assert.IsTrue(field != null, "field is null and it shouldn't be");
 			Assert.IsTrue(field.StringValue() == null, "stringValue isn't null for lazy binary field");
 			
-			byte[] bytes = field.BinaryValue();
+			byte[] bytes = field.GetBinaryValue();
 			Assert.IsTrue(bytes != null, "bytes is null and it shouldn't be");
 			Assert.IsTrue(DocHelper.LAZY_FIELD_BINARY_BYTES.Length == bytes.Length, "");
 			for (int i = 0; i < bytes.Length; i++)
@@ -218,7 +210,6 @@ namespace Lucene.Net.Index
 			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_KEY);
 			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_BINARY_KEY);
 			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.TEXT_FIELD_UTF2_KEY);
-			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.COMPRESSED_TEXT_FIELD_2_KEY);
 			SetBasedFieldSelector fieldSelector = new SetBasedFieldSelector(loadFieldNames, lazyFieldNames);
 			Document doc = reader.Doc(0, fieldSelector);
 			Assert.IsTrue(doc != null, "doc is null and it shouldn't be");
@@ -249,7 +240,7 @@ namespace Lucene.Net.Index
 			Document doc = reader.Doc(0, fieldSelector);
 			Assert.IsTrue(doc != null, "doc is null and it shouldn't be");
 			int count = 0;
-			System.Collections.IList l = doc.GetFields();
+			var l = doc.GetFields();
 			for (System.Collections.IEnumerator iter = l.GetEnumerator(); iter.MoveNext(); )
 			{
 				Field field = (Field) iter.Current;
@@ -273,7 +264,7 @@ namespace Lucene.Net.Index
 			System.String tmpIODir = AppSettings.Get("tempDir", "");
 			System.String userName = System.Environment.UserName;
 			System.String path = tmpIODir + System.IO.Path.DirectorySeparatorChar.ToString() + "lazyDir" + userName;
-			System.IO.FileInfo file = new System.IO.FileInfo(path);
+            System.IO.DirectoryInfo file = new System.IO.DirectoryInfo(path);
 			_TestUtil.RmDir(file);
 			FSDirectory tmpDir = FSDirectory.Open(file);
 			Assert.IsTrue(tmpDir != null);
@@ -347,9 +338,9 @@ namespace Lucene.Net.Index
 			Assert.IsTrue(f1.IsBinary());
 			Assert.IsTrue(!f3.IsBinary());
 			Assert.IsTrue(fb.IsBinary());
-			AssertSizeEquals(2 * DocHelper.FIELD_1_TEXT.Length, f1.BinaryValue());
+			AssertSizeEquals(2 * DocHelper.FIELD_1_TEXT.Length, f1.GetBinaryValue());
 			Assert.AreEqual(DocHelper.FIELD_3_TEXT, f3.StringValue());
-			AssertSizeEquals(DocHelper.LAZY_FIELD_BINARY_BYTES.Length, fb.BinaryValue());
+            AssertSizeEquals(DocHelper.LAZY_FIELD_BINARY_BYTES.Length, fb.GetBinaryValue());
 			
 			reader.Close();
 		}
@@ -366,7 +357,7 @@ namespace Lucene.Net.Index
 		{
 			
 			internal FSDirectory fsDir;
-			public FaultyFSDirectory(System.IO.FileInfo dir)
+			public FaultyFSDirectory(System.IO.DirectoryInfo dir)
 			{
 				fsDir = FSDirectory.Open(dir);
 				lockFactory = fsDir.GetLockFactory();
@@ -374,10 +365,6 @@ namespace Lucene.Net.Index
 			public override IndexInput OpenInput(System.String name)
 			{
 				return new FaultyIndexInput(fsDir.OpenInput(name));
-			}
-			public override System.String[] List()
-			{
-				return fsDir.List();
 			}
 			public override System.String[] ListAll()
 			{
@@ -398,10 +385,6 @@ namespace Lucene.Net.Index
 			public override void  DeleteFile(System.String name)
 			{
 				fsDir.DeleteFile(name);
-			}
-			public override void  RenameFile(System.String name, System.String newName)
-			{
-				fsDir.RenameFile(name, newName);
 			}
 			public override long FileLength(System.String name)
 			{
@@ -469,7 +452,7 @@ namespace Lucene.Net.Index
 			System.String tempDir = System.IO.Path.GetTempPath();
 			if (tempDir == null)
 				throw new System.IO.IOException("java.io.tmpdir undefined, cannot run test");
-			System.IO.FileInfo indexDir = new System.IO.FileInfo(System.IO.Path.Combine(tempDir, "testfieldswriterexceptions"));
+            System.IO.DirectoryInfo indexDir = new System.IO.DirectoryInfo(System.IO.Path.Combine(tempDir, "testfieldswriterexceptions"));
 			
 			try
 			{
@@ -480,7 +463,7 @@ namespace Lucene.Net.Index
 				writer.Optimize();
 				writer.Close();
 				
-				IndexReader reader = IndexReader.Open(dir);
+				IndexReader reader = IndexReader.Open(dir, true);
 				
 				FaultyIndexInput.doFail = true;
 				

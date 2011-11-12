@@ -148,7 +148,6 @@
     </Compile>
     <Compile Include="Analysis\TestASCIIFoldingFilter.cs" />
     <Compile Include="Analysis\TestCachingTokenFilter.cs" />
-    <Compile Include="Analysis\TestCharacterCache.cs" />
     <Compile Include="Analysis\TestCharArraySet.cs" />
     <Compile Include="Analysis\TestCharFilter.cs" />
     <Compile Include="Analysis\TestISOLatin1AccentFilter.cs">
@@ -175,9 +174,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Analysis\TestTeeSinkTokenFilter.cs" />
-    <Compile Include="Analysis\TestTeeTokenFilter.cs" />
     <Compile Include="Analysis\TestToken.cs" />
-    <Compile Include="Analysis\TestTokenStreamBWComp.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -222,13 +219,11 @@
     <Compile Include="Index\TestFilterIndexReader.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Index\TestIndexCommit.cs" />
     <Compile Include="Index\TestIndexFileDeleter.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Index\TestIndexInput.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\TestIndexModifier.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Index\TestIndexReader.cs">
@@ -328,15 +323,12 @@
     <Compile Include="Search\Function\TestDocValues.cs" />
     <Compile Include="Search\Function\TestFieldScoreQuery.cs" />
     <Compile Include="Search\Function\TestOrdValues.cs" />
-    <Compile Include="Search\Function\TestValueSource.cs" />
     <Compile Include="Search\JustCompileSearch.cs" />
     <Compile Include="Search\MockFilter.cs" />
     <Compile Include="Search\Payloads\PayloadHelper.cs" />
-    <Compile Include="Search\Payloads\TestBoostingTermQuery.cs" />
     <Compile Include="Search\Payloads\TestPayloadNearQuery.cs" />
     <Compile Include="Search\Payloads\TestPayloadTermQuery.cs" />
     <Compile Include="Search\QueryUtils.cs" />
-    <Compile Include="Search\SampleComparable.cs" />
     <Compile Include="Search\SingleDocTestFilter.cs" />
     <Compile Include="Search\Spans\JustCompileSearchSpans.cs" />
     <Compile Include="Search\Spans\TestBasics.cs">
@@ -408,21 +400,17 @@
     <Compile Include="Search\TestQueryWrapperFilter.cs" />
     <Compile Include="Search\TestScoreCachingWrappingScorer.cs" />
     <Compile Include="Search\TestScorerPerf.cs" />
-    <Compile Include="Search\TestSearchHitsWithDeletions.cs" />
     <Compile Include="Search\TestSetNorm.cs" />
     <Compile Include="Search\TestSimilarity.cs" />
     <Compile Include="Search\TestSimpleExplanations.cs" />
     <Compile Include="Search\TestSimpleExplanationsOfNonMatches.cs" />
-    <Compile Include="Search\TestSloppyPhraseQuery.cs" />
     <Compile Include="Search\TestSort.cs" />
     <Compile Include="Search\TestSpanQueryFilter.cs" />
-    <Compile Include="Search\TestStressSort.cs" />
     <Compile Include="Search\TestTermRangeFilter.cs" />
     <Compile Include="Search\TestTermRangeQuery.cs" />
     <Compile Include="Search\TestTermScorer.cs" />
     <Compile Include="Search\TestTermVectors.cs" />
     <Compile Include="Search\TestThreadSafe.cs" />
-    <Compile Include="Search\TestTimeLimitedCollector.cs" />
     <Compile Include="Search\TestTimeLimitingCollector.cs" />
     <Compile Include="Search\TestTopDocsCollector.cs" />
     <Compile Include="Search\TestTopScoreDocCollector.cs" />
@@ -455,9 +443,6 @@
     </Compile>
     <Compile Include="SupportClassException.cs" />
     <Compile Include="TestDemo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestHitIterator.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestMergeSchedulerExternal.cs" />

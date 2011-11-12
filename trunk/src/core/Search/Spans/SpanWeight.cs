@@ -47,7 +47,7 @@ namespace Lucene.Net.Search.Spans
 			terms = new HashSet<Term>();
 			query.ExtractTerms(terms);
 
-			idfExp = similarity.idfExplain(terms, searcher);
+			idfExp = similarity.IdfExplain(terms, searcher);
 			idf = idfExp.GetIdf();
 		}
 		

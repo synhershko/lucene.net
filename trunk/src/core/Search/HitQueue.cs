@@ -21,7 +21,7 @@ using Lucene.Net.Util;
 namespace Lucene.Net.Search
 {
 	
-	public sealed class HitQueue  :PriorityQueue<ScoreDoc>
+	public sealed class HitQueue : PriorityQueue<ScoreDoc>
 	{
 		
 		private bool prePopulate;

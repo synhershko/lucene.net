@@ -43,6 +43,7 @@ namespace Lucene.Net.Search
 				return "My Whacky Query";
 			}
 		}
+
 		private class AnonymousClassCollector:Collector
 		{
 			public AnonymousClassCollector(int[] order, int[] opidx, int skip_op, Lucene.Net.Search.Scorer scorer, int[] sdoc, float maxDiff, Lucene.Net.Search.Query q, Lucene.Net.Search.IndexSearcher s)
@@ -311,7 +312,25 @@ namespace Lucene.Net.Search
 			
 			// we can't put deleted docs before the nested reader, because
 			// it will throw off the docIds
-			IndexReader[] readers = new IndexReader[]{edge < 0?r:IndexReader.Open(MakeEmptyIndex(0)), IndexReader.Open(MakeEmptyIndex(0)), new MultiReader(new IndexReader[]{IndexReader.Open(MakeEmptyIndex(edge < 0?4:0)), IndexReader.Open(MakeEmptyIndex(0)), 0 == edge?r:IndexReader.Open(MakeEmptyIndex(0))}), IndexReader.Open(MakeEmptyIndex(0 < edge?0:7)), IndexReader.Open(MakeEmptyIndex(0)), new MultiReader(new IndexReader[]{IndexReader.Open(MakeEmptyIndex(0 < edge?0:5)), IndexReader.Open(MakeEmptyIndex(0)), 0 < edge?r:IndexReader.Open(MakeEmptyIndex(0))})};
+		    IndexReader[] readers = new IndexReader[]
+		                                {
+		                                    edge < 0 ? r : IndexReader.Open(MakeEmptyIndex(0), true),
+		                                    IndexReader.Open(MakeEmptyIndex(0), true),
+		                                    new MultiReader(new IndexReader[]
+		                                                        {
+		                                                            IndexReader.Open(MakeEmptyIndex(edge < 0 ? 4 : 0), true),
+		                                                            IndexReader.Open(MakeEmptyIndex(0), true),
+		                                                            0 == edge ? r : IndexReader.Open(MakeEmptyIndex(0), true)
+		                                                        }),
+		                                    IndexReader.Open(MakeEmptyIndex(0 < edge ? 0 : 7), true),
+		                                    IndexReader.Open(MakeEmptyIndex(0), true),
+		                                    new MultiReader(new IndexReader[]
+		                                                        {
+		                                                            IndexReader.Open(MakeEmptyIndex(0 < edge ? 0 : 5), true),
+		                                                            IndexReader.Open(MakeEmptyIndex(0), true),
+		                                                            0 < edge ? r : IndexReader.Open(MakeEmptyIndex(0), true)
+		                                                        })
+		                                };
 			IndexSearcher out_Renamed = new IndexSearcher(new MultiReader(readers));
 			out_Renamed.SetSimilarity(s.GetSimilarity());
 			return out_Renamed;
@@ -331,7 +350,24 @@ namespace Lucene.Net.Search
 			
 			// we can't put deleted docs before the nested reader, because
 			// it will through off the docIds
-			Searcher[] searchers = new Searcher[]{edge < 0?s:new IndexSearcher(MakeEmptyIndex(0)), new MultiSearcher(new Searcher[]{new IndexSearcher(MakeEmptyIndex(edge < 0?65:0)), new IndexSearcher(MakeEmptyIndex(0)), 0 == edge?s:new IndexSearcher(MakeEmptyIndex(0))}), new IndexSearcher(MakeEmptyIndex(0 < edge?0:3)), new IndexSearcher(MakeEmptyIndex(0)), new MultiSearcher(new Searcher[]{new IndexSearcher(MakeEmptyIndex(0 < edge?0:5)), new IndexSearcher(MakeEmptyIndex(0)), 0 < edge?s:new IndexSearcher(MakeEmptyIndex(0))})};
+		    Searcher[] searchers = new Searcher[]
+		                               {
+		                                   edge < 0 ? s : new IndexSearcher(MakeEmptyIndex(0), true),
+		                                   new MultiSearcher(new Searcher[]
+		                                                         {
+		                                                             new IndexSearcher(MakeEmptyIndex(edge < 0 ? 65 : 0), true),
+		                                                             new IndexSearcher(MakeEmptyIndex(0), true),
+		                                                             0 == edge ? s : new IndexSearcher(MakeEmptyIndex(0), true)
+		                                                         }),
+		                                   new IndexSearcher(MakeEmptyIndex(0 < edge ? 0 : 3), true),
+		                                   new IndexSearcher(MakeEmptyIndex(0), true),
+		                                   new MultiSearcher(new Searcher[]
+		                                                         {
+		                                                             new IndexSearcher(MakeEmptyIndex(0 < edge ? 0 : 5), true),
+		                                                             new IndexSearcher(MakeEmptyIndex(0), true),
+		                                                             0 < edge ? s : new IndexSearcher(MakeEmptyIndex(0), true)
+		                                                         })
+		                               };
 			MultiSearcher out_Renamed = new MultiSearcher(searchers);
 			out_Renamed.SetSimilarity(s.GetSimilarity());
 			return out_Renamed;
@@ -355,7 +391,7 @@ namespace Lucene.Net.Search
 			Assert.AreEqual(numDeletedDocs, w.MaxDoc(), "writer is missing some deleted docs");
 			Assert.AreEqual(0, w.NumDocs(), "writer has non-deleted docs");
 			w.Close();
-			IndexReader r = IndexReader.Open(d);
+            IndexReader r = IndexReader.Open(d, true);
 			Assert.AreEqual(numDeletedDocs, r.NumDeletedDocs(), "reader has wrong number of deleted docs");
 			r.Close();
 			return d;
@@ -397,7 +433,7 @@ namespace Lucene.Net.Search
 		{
 			//System.out.println("Checking "+q);
 			
-			if (BooleanQuery.GetAllowDocsOutOfOrder())
+			if (q.Weight(s).ScoresDocsOutOfOrder())
 				return ; // in this case order of skipTo() might differ from that of next().
 			
 			int skip_op = 0;
@@ -411,24 +447,19 @@ namespace Lucene.Net.Search
 				// System.out.print(order[i]==skip_op ? " skip()":" next()");
 				// System.out.println();
 				int[] opidx = new int[]{0};
-				
-				Weight w = q.Weight(s);
-				Scorer scorer = w.Scorer(s.GetIndexReader(), true, false);
-				if (scorer == null)
-				{
-					continue;
-				}
+			    int[] lastDoc = new[] {-1};
 				
 				// FUTURE: ensure scorer.doc()==-1
 				
-				int[] sdoc = new int[]{- 1};
 				float maxDiff = 1e-5f;
-				s.Search(q, new AnonymousClassCollector(order, opidx, skip_op, scorer, sdoc, maxDiff, q, s));
+			    IndexReader[] lastReader = new IndexReader[] {null};
+
+				s.Search(q, new AnonymousClassCollector(order, opidx, skip_op, lastReader, lastDoc, maxDiff, q, s));
 				
 				// make sure next call to scorer is false.
-				int op = order[(opidx[0]++) % order.Length];
+				int op2 = order[(opidx[0]++) % order.Length];
 				// System.out.println(op==skip_op ? "last: skip()":"last: next()");
-				bool more = (op == skip_op?scorer.Advance(sdoc[0] + 1):scorer.NextDoc()) != DocIdSetIterator.NO_MORE_DOCS;
+                bool more = (op2 == skip_op ? scorer.Advance(sdoc[0] + 1) : scorer.NextDoc()) != DocIdSetIterator.NO_MORE_DOCS;
 				Assert.IsFalse(more);
 			}
 		}

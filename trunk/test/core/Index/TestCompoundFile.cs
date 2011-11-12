@@ -29,11 +29,6 @@ using _TestUtil = Lucene.Net.Util._TestUtil;
 
 namespace Lucene.Net.Index
 {
-	
-	
-	/// <summary> </summary>
-	/// <version>  $Id: TestCompoundFile.java 780770 2009-06-01 18:34:10Z uschindler $
-	/// </version>
 	[TestFixture]
 	public class TestCompoundFile:LuceneTestCase
 	{

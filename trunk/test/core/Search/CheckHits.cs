@@ -441,7 +441,7 @@ namespace Lucene.Net.Search
 		/// </seealso>
 		public class ExplanationAssertingSearcher:IndexSearcher
 		{
-			public ExplanationAssertingSearcher(Directory d):base(d)
+			public ExplanationAssertingSearcher(Directory d):base(d, true)
 			{
 			}
 			public ExplanationAssertingSearcher(IndexReader r):base(r)
@@ -457,24 +457,10 @@ namespace Lucene.Net.Search
 				CheckExplanations(query);
 				return base.Search(query, filter, n, sort);
 			}
-			/// <deprecated> use {@link #Search(Query, Collector)} instead. 
-			/// </deprecated>
-            [Obsolete("use Search(Query, Collector) instead. ")]
-			public override void  Search(Query query, HitCollector results)
-			{
-				Search(query, new HitCollectorWrapper(results));
-			}
 			public override void  Search(Query query, Collector results)
 			{
 				CheckExplanations(query);
 				base.Search(query, results);
-			}
-			/// <deprecated> use {@link #Search(Query, Filter, Collector)} instead. 
-			/// </deprecated>
-            [Obsolete("use Search(Query, Filter, Collector) instead. ")]
-			public override void  Search(Query query, Filter filter, HitCollector results)
-			{
-				Search(query, filter, new HitCollectorWrapper(results));
 			}
 			public override void  Search(Query query, Filter filter, Collector results)
 			{

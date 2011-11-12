@@ -27,6 +27,11 @@ namespace Lucene.Net.Support
                 return null;
         }
 
+        public static System.IO.FileInfo[] GetFiles(System.IO.DirectoryInfo path)
+        {
+            return path.GetFiles();
+        }
+
         /// <summary>
         /// Returns a list of files in a give directory.
         /// </summary>

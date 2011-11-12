@@ -29,7 +29,10 @@ namespace Lucene.Net.Util
 	/// length <c>maxSize+1</c>, in <see cref="Initialize" />.
 	/// 
 	/// </summary>
-	public abstract class PriorityQueue<T> where T : class
+	// TODO: T needs to be able to return null.  Behavior might be unexpected otherwise, since it returns default(T)
+    //       I only see a non-nullable type used in PriorityQueue in the tests.  may be possible to re-write tests to
+    //       use an IComparable class, and this can be changed back to constraining on class, to return null
+	public abstract class PriorityQueue<T> //where T : class
 	{
 		private int size;
 		private int maxSize;
@@ -81,7 +84,7 @@ namespace Lucene.Net.Util
 		/// </returns>
 		protected internal virtual T GetSentinelObject()
 		{
-			return null;
+			return default(T);
 		}
 		
 		/// <summary>Subclass constructors must call this. </summary>
@@ -158,7 +161,7 @@ namespace Lucene.Net.Util
 			if (size < maxSize)
 			{
 				Add(element);
-				return null; // TODO: java returns null, this shouldn't be an issue? - cc
+				return default(T); // TODO: java returns null, C# can't, TestPriorityQueue relies on a nullable int - cc
 			}
 			else if (size > 0 && !LessThan(element, heap[1]))
 			{
@@ -192,13 +195,13 @@ namespace Lucene.Net.Util
 			{
 				T result = heap[1]; // save first value
 				heap[1] = heap[size]; // move last to first
-				heap[size] = null; // permit GC of objects
+				heap[size] = default(T); // permit GC of objects
 				size--;
 				DownHeap(); // adjust heap
 				return result;
 			}
 			else
-				return null;
+                return default(T);
 		}
 		
 		/// <summary> Should be called when the Object at top changes values. 
@@ -232,7 +235,7 @@ namespace Lucene.Net.Util
 		{
 			for (int i = 0; i <= size; i++)
 			{
-				heap[i] = null;
+                heap[i] = default(T);
 			}
 			size = 0;
 		}

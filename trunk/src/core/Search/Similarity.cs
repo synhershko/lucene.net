@@ -619,7 +619,7 @@ namespace Lucene.Net.Search
 		/// for each term.
 		/// </returns>
 		/// <throws>  IOException </throws>
-		public virtual IDFExplanation idfExplain(ICollection<Term> terms, Searcher searcher)
+		public virtual IDFExplanation IdfExplain(ICollection<Term> terms, Searcher searcher)
 		{
 			int max = searcher.MaxDoc();
 			float idf2 = 0.0f;

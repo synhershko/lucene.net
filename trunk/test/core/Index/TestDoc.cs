@@ -16,6 +16,7 @@
  */
 
 using System;
+using Lucene.Net.Documents;
 using Lucene.Net.Support;
 using NUnit.Framework;
 
@@ -30,11 +31,7 @@ namespace Lucene.Net.Index
 {
 	
 	
-	/// <summary>JUnit adaptation of an older test case DocTest.
-	/// 
-	/// </summary>
-	/// <version>  $Id: TestDoc.java 780770 2009-06-01 18:34:10Z uschindler $
-	/// </version>
+	/// <summary>JUnit adaptation of an older test case DocTest.</summary>
 	[TestFixture]
 	public class TestDoc:LuceneTestCase
 	{
@@ -193,16 +190,17 @@ namespace Lucene.Net.Index
 		{
 			System.IO.FileInfo file = new System.IO.FileInfo(System.IO.Path.Combine(workDir.FullName, fileName));
 			Document doc = FileDocument.Document(file);
+            doc.Add(new Field("contents", new System.IO.StreamReader(file.FullName)));
 			writer.AddDocument(doc);
-			writer.Flush();
+			writer.Commit();
 			return writer.NewestSegment();
 		}
 		
 		
 		private SegmentInfo Merge(SegmentInfo si1, SegmentInfo si2, System.String merged, bool useCompoundFile)
 		{
-			SegmentReader r1 = SegmentReader.Get(si1);
-			SegmentReader r2 = SegmentReader.Get(si2);
+            SegmentReader r1 = SegmentReader.Get(true, si1, IndexReader.DEFAULT_TERMS_INDEX_DIVISOR);
+            SegmentReader r2 = SegmentReader.Get(true, si2, IndexReader.DEFAULT_TERMS_INDEX_DIVISOR);
 			
 			SegmentMerger merger = new SegmentMerger(si1.dir, merged);
 			
@@ -226,7 +224,7 @@ namespace Lucene.Net.Index
 		
 		private void  PrintSegment(System.IO.StreamWriter out_Renamed, SegmentInfo si)
 		{
-			SegmentReader reader = SegmentReader.Get(si);
+			SegmentReader reader = SegmentReader.Get(true, si, IndexReader.DEFAULT_TERMS_INDEX_DIVISOR);
 			
 			for (int i = 0; i < reader.NumDocs(); i++)
 			{

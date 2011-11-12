@@ -1,4 +1,222 @@
-﻿util\
+﻿analysis\tokenattribute\
+analysis\tokenattribute\TestSimpleAttributeImpls.java - IDENTICAL
+analysis\tokenattribute\TestTermAttributeImpl.java - DONE
+analysis\
+analysis\BaseTokenStreamTestCase.java - DONE
+analysis\TestAnalyzers.java - DONE
+analysis\TestASCIIFoldingFilter.java - DONE
+analysis\TestCachingTokenFilter.java - DONE
+analysis\TestCharacterCache.java - REMOVED
+analysis\TestCharArraySet.java - DONE
+analysis\TestCharFilter.java - DONE
+analysis\TestISOLatin1AccentFilter.java - DONE
+analysis\TestKeywordAnalyzer.java - DONE
+analysis\TestLengthFilter.java - DONE
+analysis\TestMappingCharFilter.java - DONE
+analysis\TestNumericTokenStream.java - DONE
+analysis\TestPerFieldAnalzyerWrapper.java - DONE
+analysis\TestStandardAnalyzer.java - DONE
+analysis\TestStopAnalyzer.java - DONE
+analysis\TestStopFilter.java - DONE
+analysis\TestTeeSinkTokenFilter.java - DONE
+analysis\TestTeeTokenFilter.java - REMOVED
+analysis\TestToken.java - DONE
+analysis\TestTokenStreamBWComp.java - REMOVED
+document\
+document\TestBinaryDocument.java - DONE
+document\TestDateTools.java - IDENTICAL
+document\TestDocument.java - DONE
+document\TestNumberTools.java - IDENTICAL
+
+index\
+index\DocHelper.java - DONE
+index\index.19.cfs.zip - IDENTICAL
+index\index.19.nocfs.zip - IDENTICAL
+index\index.20.cfs.zip - IDENTICAL
+index\index.20.nocfs.zip - IDENTICAL
+index\index.21.cfs.zip - IDENTICAL
+index\index.21.nocfs.zip - IDENTICAL
+index\index.22.cfs.zip - IDENTICAL
+index\index.22.nocfs.zip - IDENTICAL
+index\index.23.cfs.zip - IDENTICAL
+index\index.23.nocfs.zip - IDENTICAL
+index\index.24.cfs.zip - IDENTICAL
+index\index.24.nocfs.zip - IDENTICAL
+index\index.30.cfs.zip - Left only: C:\SVN\apache\Lucene\lucene-2.9.4\src\test\org\apache\lucene\index
+index\index.30.nocfs.zip - Left only: C:\SVN\apache\Lucene\lucene-2.9.4\src\test\org\apache\lucene\index
+index\MockIndexInput.java - DONE
+index\TestAddIndexesNoOptimize.java - DONE
+index\TestAtomicUpdate.java - DONE
+index\TestBackwardsCompatibility.java - Text files are different
+index\TestByteSlices.java - DONE
+index\TestCheckIndex.java - DONE
+index\TestCompoundFile.java - DONE
+index\TestConcurrentMergeScheduler.java - DONE
+index\TestCrash.java - DONE
+index\TestDeletionPolicy.java - DONE
+index\TestDirectoryReader.java - DONE
+index\TestDoc.java - DONE
+index\TestDocumentWriter.java - DONE
+index\TestFieldInfos.java - DONE
+index\TestFieldsReader.java - DONE
+index\TestFilterIndexReader.java - DONE
+index\TestIndexCommit.java - DONE
+index\TestIndexFileDeleter.java - DONE
+index\TestIndexInput.java - IDENTICAL
+index\TestIndexReader.java - DONE
+index\TestIndexReaderClone.java - DONE
+index\TestIndexReaderCloneNorms.java - DONE
+index\TestIndexReaderReopen.java - DONE
+index\TestIndexWriter.java - Text files are different
+index\TestIndexWriterDelete.java - Text files are different
+index\TestIndexWriterExceptions.java - Text files are different
+index\TestIndexWriterLockRelease.java - Text files are different
+index\TestIndexWriterMergePolicy.java - Text files are different
+index\TestIndexWriterMerging.java - Text files are different
+index\TestIndexWriterReader.java - Text files are different
+index\TestIsCurrent.java - Text files are different
+index\TestLazyBug.java - Text files are different
+index\TestLazyProxSkipping.java - Text files are different
+index\TestMultiLevelSkipList.java - Text files are different
+index\TestMultiReader.java - Text files are different
+index\TestNewestSegment.java - IDENTICAL
+index\TestNorms.java - Text files are different
+index\TestNRTReaderWithThreads.java - Text files are different
+index\TestOmitTf.java - Text files are different
+index\TestParallelReader.java - Text files are different
+index\TestParallelReaderEmptyIndex.java - IDENTICAL
+index\TestParallelTermEnum.java - Text files are different
+index\TestPayloads.java - Text files are different
+index\TestPositionBasedTermVectorMapper.java - Text files are different
+index\TestRollback.java - IDENTICAL
+index\TestSegmentMerger.java - Text files are different
+index\TestSegmentReader.java - Text files are different
+index\TestSegmentTermDocs.java - Text files are different
+index\TestSegmentTermEnum.java - Text files are different
+index\TestSnapshotDeletionPolicy.java - Text files are different
+index\TestStressIndexing.java - Text files are different
+index\TestStressIndexing2.java - Text files are different
+index\TestTerm.java - IDENTICAL
+index\TestTermdocPerf.java - Text files are different
+index\TestTermVectorsReader.java - Text files are different
+index\TestThreadedOptimize.java - Text files are different
+index\TestTransactionRollback.java - Text files are different
+index\TestTransactions.java - Text files are different
+index\TestWordlistLoader.java - IDENTICAL
+
+
+messages\
+
+
+
+QueryParser\
+
+
+
+search\function
+search\function\FunctionTestSetup.java - DONE
+search\function\JustCompileSearchSpans.java - DONE
+search\function\TestCustomScoreQuery.java - DONE
+search\function\TestDocValues.java - DONE
+search\function\TestFieldScoreQuery.java - DONE
+search\function\TestOrdValues.java - DONE
+search\function\TestValueSource.java - REMOVED
+search\payloads
+search\payloads\PayloadHelper.java - DONE
+search\payloads\TestBoostingTermQuery.java - REMOVED
+search\payloads\TestPayloadNearQuery.java - DONE
+search\payloads\TestPayloadTermQuery.java - DONE
+search\spans
+search\spans\JustCompileSearchSpans.java - DONE
+search\spans\TestBasics.java - DONE
+search\spans\TestFieldMaskingSpanQuery.java - DONE
+search\spans\TestNearSpansOrdered.java - DONE
+search\spans\TestPayloadSpans.java - DONE
+search\spans\TestSpanExplanations.java - IDENTICAL
+search\spans\TestSpanExplanationsOfNonMatches.java - DONE
+search\spans\TestSpans.java - DONE
+search\spans\TestSpansAdvanced.java - DONE
+search\spans\TestSpansAdvanced2.java - DONE
+Search\
+search\BaseTestRangeFilter.java - DONE
+search\CachingWrapperFilterHelper.java - DONE
+search\CheckHits.java - DONE
+search\JustCompileSearch.java - DONE
+search\MockFilter.java - DONE
+search\QueryUtils.java - Text files are different
+search\SampleComparable.java - Left only: C:\SVN\apache\Lucene\lucene-2.9.4\src\test\org\apache\lucene\search
+search\SingleDocTestFilter.java - Text files are different
+search\TestBoolean2.java - Text files are different
+search\TestBooleanMinShouldMatch.java - Text files are different
+search\TestBooleanOr.java - Text files are different
+search\TestBooleanPrefixQuery.java - Text files are different
+search\TestBooleanQuery.java - Text files are different
+search\TestBooleanScorer.java - Text files are different
+search\TestCachingSpanFilter.java - IDENTICAL
+search\TestCachingWrapperFilter.java - Text files are different
+search\TestComplexExplanations.java - Text files are different
+search\TestComplexExplanationsOfNonMatches.java - Text files are different
+search\TestCustomSearcherSort.java - Text files are different
+search\TestDateFilter.java - Text files are different
+search\TestDateSort.java - Text files are different
+search\TestDisjunctionMaxQuery.java - Text files are different
+search\TestDocBoost.java - Text files are different
+search\TestDocIdSet.java - Text files are different
+search\TestElevationComparator.java - Text files are different
+search\TestExplanations.java - Text files are different
+search\TestFieldCache.java - Text files are different
+search\TestFieldCacheRangeFilter.java - Text files are different
+search\TestFieldCacheTermsFilter.java - Text files are different
+search\TestFilteredQuery.java - Text files are different
+search\TestFilteredSearch.java - Text files are different
+search\TestFuzzyQuery.java - Text files are different
+search\TestMatchAllDocsQuery.java - Text files are different
+search\TestMultiPhraseQuery.java - Text files are different
+search\TestMultiSearcher.java - Text files are different
+search\TestMultiSearcherRanking.java - Text files are different
+search\TestMultiTermConstantScore.java - Text files are different
+search\TestMultiThreadTermVectors.java - Text files are different
+search\TestMultiValuedNumericRangeQuery.java - Text files are different
+search\TestNot.java - Text files are different
+search\TestNumericRangeQuery32.java - Text files are different
+search\TestNumericRangeQuery64.java - Text files are different
+search\TestParallelMultiSearcher.java - Text files are different
+search\TestPhrasePrefixQuery.java - Text files are different
+search\TestPhraseQuery.java - Text files are different
+search\TestPositionIncrement.java - Text files are different
+search\TestPositiveScoresOnlyCollector.java - Text files are different
+search\TestPrefixFilter.java - Text files are different
+search\TestPrefixInBooleanQuery.java - Text files are different
+search\TestPrefixQuery.java - Text files are different
+search\TestQueryTermVector.java - IDENTICAL
+search\TestQueryWrapperFilter.java - Text files are different
+search\TestScoreCachingWrappingScorer.java - Text files are different
+search\TestScorerPerf.java - Text files are different
+search\TestSearchHitsWithDeletions.java - Left only: C:\SVN\apache\Lucene\lucene-2.9.4\src\test\org\apache\lucene\search
+search\TestSetNorm.java - Text files are different
+search\TestSimilarity.java - Text files are different
+search\TestSimpleExplanations.java - Text files are different
+search\TestSimpleExplanationsOfNonMatches.java - Text files are different
+search\TestSloppyPhraseQuery.java - Text files are different
+search\TestSort.java - Text files are different
+search\TestSpanQueryFilter.java - Text files are different
+search\TestStressSort.java - Left only: C:\SVN\apache\Lucene\lucene-2.9.4\src\test\org\apache\lucene\search
+search\TestTermRangeFilter.java - Text files are different
+search\TestTermRangeQuery.java - Text files are different
+search\TestTermScorer.java - Text files are different
+search\TestTermVectors.java - Text files are different
+search\TestThreadSafe.java - Text files are different
+search\TestTimeLimitedCollector.java - Left only: C:\SVN\apache\Lucene\lucene-2.9.4\src\test\org\apache\lucene\search
+search\TestTimeLimitingCollector.java - Text files are different
+search\TestTopDocsCollector.java - Text files are different
+search\TestTopScoreDocCollector.java - Text files are different
+search\TestWildcard.java - Text files are different
+
+
+Store\
+
+
+util\
 util\_TestUtil.java - DONE
 util\ArrayUtilTest.java - IDENTICAL
 util\English.java - DONE

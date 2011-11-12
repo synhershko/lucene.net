@@ -34,15 +34,16 @@ namespace Lucene.Net.Util
 		/// <summary>Returns temp dir, containing String arg in its name;
 		/// does not create the directory. 
 		/// </summary>
-		public static System.IO.FileInfo GetTempDir(System.String desc)
+		public static System.IO.DirectoryInfo GetTempDir(System.String desc)
 		{
 			System.String tempDir = System.IO.Path.GetTempPath();
 			if (tempDir == null)
 				throw new System.SystemException("java.io.tmpdir undefined, cannot run test");
-			return new System.IO.FileInfo(System.IO.Path.Combine(tempDir, desc + "." + (new System.Random()).Next(System.Int32.MaxValue)));
+            return new System.IO.DirectoryInfo(System.IO.Path.Combine(tempDir, desc + "." + (new System.Random()).Next(System.Int32.MaxValue)));
 		}
-		
-		public static void  RmDir(System.IO.FileInfo dir)
+
+        // TODO: This is a bit overkill? -cc
+        public static void RmDir(System.IO.DirectoryInfo dir)
 		{
 			bool tmpBool;
 			if (System.IO.File.Exists(dir.FullName))
@@ -91,7 +92,7 @@ namespace Lucene.Net.Util
 		
 		public static void  RmDir(System.String dir)
 		{
-			RmDir(new System.IO.FileInfo(dir));
+            RmDir(new System.IO.DirectoryInfo(dir));
 		}
 		
 		public static void  SyncConcurrentMerges(IndexWriter writer)

@@ -34,8 +34,8 @@ namespace Lucene.Net.Search
     [TestFixture]
 	public class TestTopDocsCollector:LuceneTestCase
 	{
-		
-		private sealed class MyTopsDocCollector:TopDocsCollector
+
+        private sealed class MyTopsDocCollector : TopDocsCollector<ScoreDoc>
 		{
 			
 			private int idx = 0;
@@ -63,7 +63,7 @@ namespace Lucene.Net.Search
 					{
 						pq.Pop();
 					}
-					maxScore = ((ScoreDoc) pq.Pop()).score;
+					maxScore = pq.Pop().score;
 				}
 				
 				return new TopDocs(totalHits, results, maxScore);
@@ -99,11 +99,11 @@ namespace Lucene.Net.Search
 		
 		private Directory dir = new RAMDirectory();
 		
-		private TopDocsCollector doSearch(int numResults)
+		private TopDocsCollector<ScoreDoc> doSearch(int numResults)
 		{
 			Query q = new MatchAllDocsQuery();
-			IndexSearcher searcher = new IndexSearcher(dir);
-			TopDocsCollector tdc = new MyTopsDocCollector(numResults);
+			IndexSearcher searcher = new IndexSearcher(dir, true);
+            TopDocsCollector<ScoreDoc> tdc = new MyTopsDocCollector(numResults);
 			searcher.Search(q, tdc);
 			searcher.Close();
 			return tdc;

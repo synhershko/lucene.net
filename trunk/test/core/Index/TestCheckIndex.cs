@@ -46,7 +46,7 @@ namespace Lucene.Net.Index
 				writer.AddDocument(doc);
 			}
 			writer.Close();
-			IndexReader reader = IndexReader.Open(dir);
+			IndexReader reader = IndexReader.Open(dir, false);
 			reader.DeleteDocument(5);
 			reader.Close();
 			

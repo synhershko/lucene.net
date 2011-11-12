@@ -147,7 +147,7 @@ namespace Lucene.Net.Search
 				InitBlock(enclosingInstance);
 				this.similarity = Enclosing_Instance.GetSimilarity(searcher);
 				
-				idfExp = similarity.idfExplain(Enclosing_Instance.terms, searcher);
+				idfExp = similarity.IdfExplain(Enclosing_Instance.terms, searcher);
 				idf = idfExp.GetIdf();
 			}
 			
