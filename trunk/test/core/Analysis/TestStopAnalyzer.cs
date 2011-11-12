@@ -21,6 +21,7 @@ using NUnit.Framework;
 
 using PositionIncrementAttribute = Lucene.Net.Analysis.Tokenattributes.PositionIncrementAttribute;
 using TermAttribute = Lucene.Net.Analysis.Tokenattributes.TermAttribute;
+using Version = Lucene.Net.Util.Version;
 
 namespace Lucene.Net.Analysis
 {
@@ -29,7 +30,7 @@ namespace Lucene.Net.Analysis
 	public class TestStopAnalyzer:BaseTokenStreamTestCase
 	{
 		
-		private StopAnalyzer stop = new StopAnalyzer(false);
+		private StopAnalyzer stop = new StopAnalyzer(Version.LUCENE_CURRENT);
 		private System.Collections.Hashtable inValidTokens = new System.Collections.Hashtable();
 		
 		public TestStopAnalyzer(System.String s):base(s)
@@ -59,7 +60,7 @@ namespace Lucene.Net.Analysis
 			System.IO.StringReader reader = new System.IO.StringReader("This is a test of the english stop analyzer");
 			TokenStream stream = stop.TokenStream("test", reader);
 			Assert.IsTrue(stream != null);
-			TermAttribute termAtt = (TermAttribute) stream.GetAttribute(typeof(TermAttribute));
+            TermAttribute termAtt = stream.GetAttribute<TermAttribute>();
 			
 			while (stream.IncrementToken())
 			{
@@ -70,56 +71,47 @@ namespace Lucene.Net.Analysis
         [Test]
 		public virtual void  TestStopList()
 		{
-			System.Collections.Hashtable stopWordsSet = new System.Collections.Hashtable();
-			stopWordsSet.Add("good", "good");
-			stopWordsSet.Add("test", "test");
-			stopWordsSet.Add("analyzer", "analyzer");
-			StopAnalyzer newStop = new StopAnalyzer(stopWordsSet);
+			var stopWordsSet = new System.Collections.Generic.HashSet<string>();
+			stopWordsSet.Add("good");
+			stopWordsSet.Add("test");
+			stopWordsSet.Add("analyzer");
+			StopAnalyzer newStop = new StopAnalyzer(Version.LUCENE_24, stopWordsSet);
 			System.IO.StringReader reader = new System.IO.StringReader("This is a good test of the english stop analyzer");
 			TokenStream stream = newStop.TokenStream("test", reader);
 			Assert.IsNotNull(stream);
-			TermAttribute termAtt = (TermAttribute) stream.GetAttribute(typeof(TermAttribute));
-			PositionIncrementAttribute posIncrAtt = (PositionIncrementAttribute) stream.AddAttribute(typeof(PositionIncrementAttribute));
+            TermAttribute termAtt = stream.GetAttribute<TermAttribute>();
+            PositionIncrementAttribute posIncrAtt = stream.AddAttribute<PositionIncrementAttribute>();
 			
 			while (stream.IncrementToken())
 			{
 				System.String text = termAtt.Term();
 				Assert.IsFalse(stopWordsSet.Contains(text));
-				Assert.AreEqual(1, posIncrAtt.GetPositionIncrement()); // by default stop tokenizer does not apply increments.
+                Assert.AreEqual(1, posIncrAtt.GetPositionIncrement()); // in 2.4 stop tokenizer does not apply increments.
 			}
 		}
 		
         [Test]
 		public virtual void  TestStopListPositions()
-		{
-			bool defaultEnable = StopFilter.GetEnablePositionIncrementsDefault();
-			StopFilter.SetEnablePositionIncrementsDefault(true);
-			try
-			{
-				System.Collections.Hashtable stopWordsSet = new System.Collections.Hashtable();
-				stopWordsSet.Add("good", "good");
-				stopWordsSet.Add("test", "test");
-				stopWordsSet.Add("analyzer", "analyzer");
-				StopAnalyzer newStop = new StopAnalyzer(stopWordsSet);
-				System.IO.StringReader reader = new System.IO.StringReader("This is a good test of the english stop analyzer with positions");
-				int[] expectedIncr = new int[]{1, 1, 1, 3, 1, 1, 1, 2, 1};
-				TokenStream stream = newStop.TokenStream("test", reader);
-				Assert.IsNotNull(stream);
-				int i = 0;
-				TermAttribute termAtt = (TermAttribute) stream.GetAttribute(typeof(TermAttribute));
-				PositionIncrementAttribute posIncrAtt = (PositionIncrementAttribute) stream.AddAttribute(typeof(PositionIncrementAttribute));
-				
-				while (stream.IncrementToken())
-				{
-					System.String text = termAtt.Term();
-					Assert.IsFalse(stopWordsSet.Contains(text));
-					Assert.AreEqual(expectedIncr[i++], posIncrAtt.GetPositionIncrement());
-				}
-			}
-			finally
-			{
-				StopFilter.SetEnablePositionIncrementsDefault(defaultEnable);
-			}
-		}
+        {
+            var stopWordsSet = new System.Collections.Generic.HashSet<string>();
+            stopWordsSet.Add("good");
+            stopWordsSet.Add("test");
+            stopWordsSet.Add("analyzed");
+            var newStop = new StopAnalyzer(Version.LUCENE_CURRENT, stopWordsSet);
+            var reader = new System.IO.StringReader("This is a good test of the english stop analyzer with positions");
+            int[] expectedIncr =                   { 1,   1, 1,          3, 1,  1,      1,            2,   1};
+            TokenStream stream = newStop.TokenStream("test", reader);
+            Assert.NotNull(stream);
+            int i = 0;
+            TermAttribute termAtt = stream.GetAttribute<TermAttribute>();
+            PositionIncrementAttribute posIncrAtt = stream.AddAttribute<PositionIncrementAttribute>();
+
+            while (stream.IncrementToken())
+            {
+                string text = termAtt.Term();
+                Assert.IsFalse(stopWordsSet.Contains(text));
+                Assert.AreEqual(expectedIncr[i++], posIncrAtt.GetPositionIncrement());
+            }
+        }
 	}
 }

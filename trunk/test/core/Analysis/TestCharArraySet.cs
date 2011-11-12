@@ -63,13 +63,13 @@ namespace Lucene.Net.Analysis
 		{
 			CharArraySet set_Renamed = new CharArraySet(10, true);
 			System.Int32 val = 1;
-			set_Renamed.Add((System.Object) val);
-			Assert.IsTrue(set_Renamed.Contains((System.Object) val));
-			Assert.IsTrue(set_Renamed.Contains((System.Object) 1));
+			set_Renamed.Add(val);
+			Assert.IsTrue(set_Renamed.Contains(val));
+			Assert.IsTrue(set_Renamed.Contains(1));
 			// test unmodifiable
 			set_Renamed = CharArraySet.UnmodifiableSet(set_Renamed);
-			Assert.IsTrue(set_Renamed.Contains((System.Object) val));
-			Assert.IsTrue(set_Renamed.Contains((System.Object) 1));
+			Assert.IsTrue(set_Renamed.Contains(val));
+			Assert.IsTrue(set_Renamed.Contains(1));
 		}
 		
         [Test]

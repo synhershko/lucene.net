@@ -24,17 +24,18 @@ using StandardTokenizer = Lucene.Net.Analysis.Standard.StandardTokenizer;
 using PayloadAttribute = Lucene.Net.Analysis.Tokenattributes.PayloadAttribute;
 using TermAttribute = Lucene.Net.Analysis.Tokenattributes.TermAttribute;
 using Payload = Lucene.Net.Index.Payload;
+using Version = Lucene.Net.Util.Version;
 
 namespace Lucene.Net.Analysis
 {
 	
 	[TestFixture]
-	public class TestAnalyzers:BaseTokenStreamTestCase
+	public class TestAnalyzers : BaseTokenStreamTestCase
 	{
-		
-		/*public TestAnalyzers(System.String name):base(name)
+        // NOTE: This was commented out before -cc
+		public TestAnalyzers(System.String name) : base(name)
 		{
-		}*/
+		}
 		
 		[Test]
 		public virtual void  TestSimple()
@@ -67,14 +68,14 @@ namespace Lucene.Net.Analysis
 		[Test]
 		public virtual void  TestStop()
 		{
-			Analyzer a = new StopAnalyzer();
+			Analyzer a = new StopAnalyzer(Version.LUCENE_CURRENT);
 			AssertAnalyzesTo(a, "foo bar FOO BAR", new System.String[]{"foo", "bar", "foo", "bar"});
 			AssertAnalyzesTo(a, "foo a bar such FOO THESE BAR", new System.String[]{"foo", "bar", "foo", "bar"});
 		}
 		
 		internal virtual void  VerifyPayload(TokenStream ts)
 		{
-			PayloadAttribute payloadAtt = (PayloadAttribute) ts.GetAttribute(typeof(PayloadAttribute));
+            PayloadAttribute payloadAtt = ts.GetAttribute<PayloadAttribute>();
 			for (byte b = 1; ; b++)
 			{
 				bool hasNext = ts.IncrementToken();
@@ -118,6 +119,10 @@ namespace Lucene.Net.Analysis
 		
 		private class MyStandardAnalyzer:StandardAnalyzer
 		{
+		    public MyStandardAnalyzer() : base(Version.LUCENE_CURRENT)
+		    {
+		        
+		    }
 			public override TokenStream TokenStream(System.String field, System.IO.TextReader reader)
 			{
 				return new WhitespaceAnalyzer().TokenStream(field, reader);
@@ -146,7 +151,7 @@ namespace Lucene.Net.Analysis
 		public PayloadSetter(TokenStream input):base(input)
 		{
 			InitBlock();
-			payloadAtt = (PayloadAttribute) AddAttribute(typeof(PayloadAttribute));
+            payloadAtt = AddAttribute<PayloadAttribute>();
 		}
 		
 		internal byte[] data = new byte[1];
