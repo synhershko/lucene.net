@@ -53,14 +53,14 @@ namespace Lucene.Net.Store
 					// Could be null when MockRAMDirectory.crash() was called
 					if (dir.openFiles[name] != null)
 					{
-						System.Int32 v = (System.Int32) dir.openFiles[name];
+						System.Int32 v = dir.openFiles[name];
 						if (v == 1)
 						{
 							dir.openFiles.Remove(name);
 						}
 						else
 						{
-							v = (System.Int32) (v - 1);
+							v = v - 1;
 							dir.openFiles[name] = v;
 						}
 					}

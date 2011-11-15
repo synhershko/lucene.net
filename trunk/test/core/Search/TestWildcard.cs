@@ -194,7 +194,7 @@ namespace Lucene.Net.Search
 		{
 			System.String field = "content";
 			bool dbg = false;
-			QueryParser qp = new QueryParser(field, new WhitespaceAnalyzer());
+			QueryParser qp = new QueryParser(Util.Version.LUCENE_CURRENT, field, new WhitespaceAnalyzer());
 			qp.SetAllowLeadingWildcard(true);
 			System.String[] docs = new System.String[]{"\\ abcdefg1", "\\79 hijklmn1", "\\\\ opqrstu1"};
 			// queries that should find all docs

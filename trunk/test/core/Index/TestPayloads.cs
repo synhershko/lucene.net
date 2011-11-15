@@ -214,7 +214,7 @@ namespace Lucene.Net.Index
 			PerformTest(dir);
 			
 			// now use a FSDirectory and repeat same test
-			System.IO.FileInfo dirName = _TestUtil.GetTempDir("test_payloads");
+			System.IO.DirectoryInfo dirName = _TestUtil.GetTempDir("test_payloads");
 			dir = FSDirectory.Open(dirName);
 			PerformTest(dir);
 			_TestUtil.RmDir(dirName);
@@ -520,7 +520,7 @@ namespace Lucene.Net.Index
 				this.data = data;
 				this.length = length;
 				this.offset = offset;
-				payloadAtt = (PayloadAttribute) AddAttribute(typeof(PayloadAttribute));
+				payloadAtt =  AddAttribute<PayloadAttribute>();
 			}
 			
 			public override bool IncrementToken()
@@ -626,8 +626,8 @@ namespace Lucene.Net.Index
 				Enclosing_Instance.GenerateRandomData(payload);
 				term = pool.BytesToString(payload);
 				first = true;
-				payloadAtt = (PayloadAttribute) AddAttribute(typeof(PayloadAttribute));
-				termAtt = (TermAttribute) AddAttribute(typeof(TermAttribute));
+				payloadAtt =  AddAttribute<PayloadAttribute>();
+				termAtt =  AddAttribute<TermAttribute>();
 			}
 			
 			public override bool IncrementToken()

@@ -43,7 +43,7 @@ namespace Lucene.Net.Index
 		public RepeatingTokenStream(System.String val)
 		{
 			this.value_Renamed = val;
-			this.termAtt = (TermAttribute) AddAttribute(typeof(TermAttribute));
+			this.termAtt =  AddAttribute<TermAttribute>();
 		}
 		
 		public override bool IncrementToken()

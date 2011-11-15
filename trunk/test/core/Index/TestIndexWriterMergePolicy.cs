@@ -220,7 +220,7 @@ namespace Lucene.Net.Index
 				AddDoc(writer);
 			}
 			CheckInvariants(writer);
-			Assert.AreEqual(10, writer.DocCount());
+			Assert.AreEqual(10, writer.MaxDoc());
 			
 			writer.Close();
 		}

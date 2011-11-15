@@ -434,6 +434,7 @@
     <Compile Include="Store\TestLockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Store\TestMultiMMap.cs" />
     <Compile Include="Store\TestRAMDirectory.cs" />
     <Compile Include="Store\TestWindowsMMap.cs">
       <SubType>Code</SubType>

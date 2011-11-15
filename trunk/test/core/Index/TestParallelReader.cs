@@ -118,7 +118,7 @@ namespace Lucene.Net.Index
 			
 			// one document only:
 			Directory dir2 = new MockRAMDirectory();
-			IndexWriter w2 = new IndexWriter(dir2, new StandardAnalyzer(), true, IndexWriter.MaxFieldLength.LIMITED);
+			IndexWriter w2 = new IndexWriter(dir2, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), true, IndexWriter.MaxFieldLength.LIMITED);
 			Document d3 = new Document();
 			d3.Add(new Field("f3", "v1", Field.Store.YES, Field.Index.ANALYZED));
 			w2.AddDocument(d3);
@@ -170,13 +170,13 @@ namespace Lucene.Net.Index
 			Directory dir2 = GetDir2();
 			
 			// add another document to ensure that the indexes are not optimized
-			IndexWriter modifier = new IndexWriter(dir1, new StandardAnalyzer(), IndexWriter.MaxFieldLength.LIMITED);
+			IndexWriter modifier = new IndexWriter(dir1, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), IndexWriter.MaxFieldLength.LIMITED);
 			Document d = new Document();
 			d.Add(new Field("f1", "v1", Field.Store.YES, Field.Index.ANALYZED));
 			modifier.AddDocument(d);
 			modifier.Close();
 			
-			modifier = new IndexWriter(dir2, new StandardAnalyzer(), IndexWriter.MaxFieldLength.LIMITED);
+			modifier = new IndexWriter(dir2, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), IndexWriter.MaxFieldLength.LIMITED);
 			d = new Document();
 			d.Add(new Field("f2", "v2", Field.Store.YES, Field.Index.ANALYZED));
 			modifier.AddDocument(d);
@@ -189,7 +189,7 @@ namespace Lucene.Net.Index
 			Assert.IsFalse(pr.IsOptimized());
 			pr.Close();
 			
-			modifier = new IndexWriter(dir1, new StandardAnalyzer(), IndexWriter.MaxFieldLength.LIMITED);
+			modifier = new IndexWriter(dir1, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), IndexWriter.MaxFieldLength.LIMITED);
 			modifier.Optimize();
 			modifier.Close();
 			
@@ -201,7 +201,7 @@ namespace Lucene.Net.Index
 			pr.Close();
 			
 			
-			modifier = new IndexWriter(dir2, new StandardAnalyzer(), IndexWriter.MaxFieldLength.LIMITED);
+			modifier = new IndexWriter(dir2, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), IndexWriter.MaxFieldLength.LIMITED);
 			modifier.Optimize();
 			modifier.Close();
 			
@@ -257,7 +257,7 @@ namespace Lucene.Net.Index
 		private Searcher Single()
 		{
 			Directory dir = new MockRAMDirectory();
-			IndexWriter w = new IndexWriter(dir, new StandardAnalyzer(), true, IndexWriter.MaxFieldLength.LIMITED);
+			IndexWriter w = new IndexWriter(dir, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), true, IndexWriter.MaxFieldLength.LIMITED);
 			Document d1 = new Document();
 			d1.Add(new Field("f1", "v1", Field.Store.YES, Field.Index.ANALYZED));
 			d1.Add(new Field("f2", "v1", Field.Store.YES, Field.Index.ANALYZED));
@@ -289,7 +289,7 @@ namespace Lucene.Net.Index
 		private Directory GetDir1()
 		{
 			Directory dir1 = new MockRAMDirectory();
-			IndexWriter w1 = new IndexWriter(dir1, new StandardAnalyzer(), true, IndexWriter.MaxFieldLength.LIMITED);
+			IndexWriter w1 = new IndexWriter(dir1, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), true, IndexWriter.MaxFieldLength.LIMITED);
 			Document d1 = new Document();
 			d1.Add(new Field("f1", "v1", Field.Store.YES, Field.Index.ANALYZED));
 			d1.Add(new Field("f2", "v1", Field.Store.YES, Field.Index.ANALYZED));
@@ -305,7 +305,7 @@ namespace Lucene.Net.Index
 		private Directory GetDir2()
 		{
 			Directory dir2 = new RAMDirectory();
-			IndexWriter w2 = new IndexWriter(dir2, new StandardAnalyzer(), true, IndexWriter.MaxFieldLength.LIMITED);
+			IndexWriter w2 = new IndexWriter(dir2, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), true, IndexWriter.MaxFieldLength.LIMITED);
 			Document d3 = new Document();
 			d3.Add(new Field("f3", "v1", Field.Store.YES, Field.Index.ANALYZED));
 			d3.Add(new Field("f4", "v1", Field.Store.YES, Field.Index.ANALYZED));

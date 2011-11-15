@@ -112,7 +112,7 @@ namespace Lucene.Net.Index
 			
 			protected internal PayloadFilter(TokenStream input):base(input)
 			{
-				payloadAtt = (PayloadAttribute) AddAttribute(typeof(PayloadAttribute));
+				payloadAtt =  AddAttribute<PayloadAttribute>();
 			}
 			
 			public override bool IncrementToken()

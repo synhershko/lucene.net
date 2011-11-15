@@ -132,7 +132,7 @@ namespace Lucene.Net.Index
 				writer.SetMergeFactor(4);
 				//writer.setInfoStream(System.out);
 				
-				int docCount = writer.DocCount();
+				int docCount = writer.MaxDoc();
 				
 				ThreadClass[] threads = new ThreadClass[NUM_THREADS];
 				
@@ -155,7 +155,7 @@ namespace Lucene.Net.Index
 				
 				// System.out.println("TEST: now index=" + writer.segString());
 				
-				Assert.AreEqual(expectedDocCount, writer.DocCount());
+				Assert.AreEqual(expectedDocCount, writer.MaxDoc());
 				
 				if (!autoCommit)
 				{

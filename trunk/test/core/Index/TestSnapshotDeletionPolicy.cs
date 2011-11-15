@@ -106,7 +106,7 @@ namespace Lucene.Net.Index
         [Test]
 		public virtual void  TestSnapshotDeletionPolicy_Renamed()
 		{
-			System.IO.FileInfo dir = new System.IO.FileInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), INDEX_PATH));
+			System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), INDEX_PATH));
 			try
 			{
 				// Sometimes past test leaves the dir
@@ -131,7 +131,7 @@ namespace Lucene.Net.Index
 			Directory dir = new MockRAMDirectory();
 			
 			SnapshotDeletionPolicy dp = new SnapshotDeletionPolicy(new KeepOnlyLastCommitDeletionPolicy());
-			IndexWriter writer = new IndexWriter(dir, true, new StandardAnalyzer(), dp);
+			IndexWriter writer = new IndexWriter(dir, true, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), dp);
 			// Force frequent commits
 			writer.SetMaxBufferedDocs(2);
 			Document doc = new Document();
@@ -143,7 +143,7 @@ namespace Lucene.Net.Index
 			writer.Close();
 			CopyFiles(dir, cp);
 			
-			writer = new IndexWriter(dir, true, new StandardAnalyzer(), dp);
+			writer = new IndexWriter(dir, true, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), dp);
 			CopyFiles(dir, cp);
 			for (int i = 0; i < 7; i++)
 				writer.AddDocument(doc);
@@ -151,7 +151,7 @@ namespace Lucene.Net.Index
 			writer.Close();
 			CopyFiles(dir, cp);
 			dp.Release();
-			writer = new IndexWriter(dir, true, new StandardAnalyzer(), dp);
+			writer = new IndexWriter(dir, true, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), dp);
 			writer.Close();
 			try
 			{
@@ -171,7 +171,7 @@ namespace Lucene.Net.Index
 			long stopTime = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) + 7000;
 			
 			SnapshotDeletionPolicy dp = new SnapshotDeletionPolicy(new KeepOnlyLastCommitDeletionPolicy());
-			IndexWriter writer = new IndexWriter(dir, true, new StandardAnalyzer(), dp);
+			IndexWriter writer = new IndexWriter(dir, true, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), dp);
 			
 			// Force frequent commits
 			writer.SetMaxBufferedDocs(2);

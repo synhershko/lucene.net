@@ -47,7 +47,7 @@ index\index.30.nocfs.zip - Left only: C:\SVN\apache\Lucene\lucene-2.9.4\src\test
 index\MockIndexInput.java - DONE
 index\TestAddIndexesNoOptimize.java - DONE
 index\TestAtomicUpdate.java - DONE
-index\TestBackwardsCompatibility.java - Text files are different
+index\TestBackwardsCompatibility.java - DONE
 index\TestByteSlices.java - DONE
 index\TestCheckIndex.java - DONE
 index\TestCompoundFile.java - DONE
@@ -67,7 +67,7 @@ index\TestIndexReader.java - DONE
 index\TestIndexReaderClone.java - DONE
 index\TestIndexReaderCloneNorms.java - DONE
 index\TestIndexReaderReopen.java - DONE
-index\TestIndexWriter.java - Text files are different
+index\TestIndexWriter.java - DONE
 index\TestIndexWriterDelete.java - Text files are different
 index\TestIndexWriterExceptions.java - Text files are different
 index\TestIndexWriterLockRelease.java - Text files are different
@@ -82,7 +82,7 @@ index\TestMultiReader.java - Text files are different
 index\TestNewestSegment.java - IDENTICAL
 index\TestNorms.java - Text files are different
 index\TestNRTReaderWithThreads.java - Text files are different
-index\TestOmitTf.java - Text files are different
+index\TestOmitTf.java - DONE
 index\TestParallelReader.java - Text files are different
 index\TestParallelReaderEmptyIndex.java - IDENTICAL
 index\TestParallelTermEnum.java - Text files are different
@@ -100,7 +100,7 @@ index\TestTerm.java - IDENTICAL
 index\TestTermdocPerf.java - Text files are different
 index\TestTermVectorsReader.java - Text files are different
 index\TestThreadedOptimize.java - Text files are different
-index\TestTransactionRollback.java - Text files are different
+index\TestTransactionRollback.java - DONE
 index\TestTransactions.java - Text files are different
 index\TestWordlistLoader.java - IDENTICAL
 
@@ -143,33 +143,33 @@ search\CachingWrapperFilterHelper.java - DONE
 search\CheckHits.java - DONE
 search\JustCompileSearch.java - DONE
 search\MockFilter.java - DONE
-search\QueryUtils.java - Text files are different
-search\SampleComparable.java - Left only: C:\SVN\apache\Lucene\lucene-2.9.4\src\test\org\apache\lucene\search
-search\SingleDocTestFilter.java - Text files are different
-search\TestBoolean2.java - Text files are different
-search\TestBooleanMinShouldMatch.java - Text files are different
-search\TestBooleanOr.java - Text files are different
-search\TestBooleanPrefixQuery.java - Text files are different
-search\TestBooleanQuery.java - Text files are different
-search\TestBooleanScorer.java - Text files are different
+search\QueryUtils.java - DONE
+search\SampleComparable.java - REMOVED
+search\SingleDocTestFilter.java - DONE
+search\TestBoolean2.java - DONE
+search\TestBooleanMinShouldMatch.java - DONE
+search\TestBooleanOr.java - DONE
+search\TestBooleanPrefixQuery.java - DONE
+search\TestBooleanQuery.java - DONE
+search\TestBooleanScorer.java - DONE
 search\TestCachingSpanFilter.java - IDENTICAL
-search\TestCachingWrapperFilter.java - Text files are different
-search\TestComplexExplanations.java - Text files are different
-search\TestComplexExplanationsOfNonMatches.java - Text files are different
-search\TestCustomSearcherSort.java - Text files are different
+search\TestCachingWrapperFilter.java - DONE
+search\TestComplexExplanations.java - DONE
+search\TestComplexExplanationsOfNonMatches.java - DONE
+search\TestCustomSearcherSort.java - DONE
 search\TestDateFilter.java - Text files are different
-search\TestDateSort.java - Text files are different
+search\TestDateSort.java - DONE
 search\TestDisjunctionMaxQuery.java - Text files are different
 search\TestDocBoost.java - Text files are different
-search\TestDocIdSet.java - Text files are different
+search\TestDocIdSet.java - DONE
 search\TestElevationComparator.java - Text files are different
-search\TestExplanations.java - Text files are different
+search\TestExplanations.java - DONE
 search\TestFieldCache.java - Text files are different
 search\TestFieldCacheRangeFilter.java - Text files are different
 search\TestFieldCacheTermsFilter.java - Text files are different
 search\TestFilteredQuery.java - Text files are different
-search\TestFilteredSearch.java - Text files are different
-search\TestFuzzyQuery.java - Text files are different
+search\TestFilteredSearch.java - DONE
+search\TestFuzzyQuery.java - DONE
 search\TestMatchAllDocsQuery.java - Text files are different
 search\TestMultiPhraseQuery.java - Text files are different
 search\TestMultiSearcher.java - Text files are different
@@ -184,21 +184,21 @@ search\TestParallelMultiSearcher.java - Text files are different
 search\TestPhrasePrefixQuery.java - Text files are different
 search\TestPhraseQuery.java - Text files are different
 search\TestPositionIncrement.java - Text files are different
-search\TestPositiveScoresOnlyCollector.java - Text files are different
+search\TestPositiveScoresOnlyCollector.java - DONe
 search\TestPrefixFilter.java - Text files are different
 search\TestPrefixInBooleanQuery.java - Text files are different
 search\TestPrefixQuery.java - Text files are different
 search\TestQueryTermVector.java - IDENTICAL
 search\TestQueryWrapperFilter.java - Text files are different
-search\TestScoreCachingWrappingScorer.java - Text files are different
+search\TestScoreCachingWrappingScorer.java - DONE
 search\TestScorerPerf.java - Text files are different
 search\TestSearchHitsWithDeletions.java - Left only: C:\SVN\apache\Lucene\lucene-2.9.4\src\test\org\apache\lucene\search
 search\TestSetNorm.java - Text files are different
-search\TestSimilarity.java - Text files are different
+search\TestSimilarity.java - DONE
 search\TestSimpleExplanations.java - Text files are different
 search\TestSimpleExplanationsOfNonMatches.java - Text files are different
 search\TestSloppyPhraseQuery.java - Text files are different
-search\TestSort.java - Text files are different
+search\TestSort.java - DONE
 search\TestSpanQueryFilter.java - Text files are different
 search\TestStressSort.java - Left only: C:\SVN\apache\Lucene\lucene-2.9.4\src\test\org\apache\lucene\search
 search\TestTermRangeFilter.java - Text files are different
@@ -214,7 +214,19 @@ search\TestWildcard.java - Text files are different
 
 
 Store\
-
+store\_TestHelper.java - IDENTICAL
+store\MockRAMDirectory.java - DONE
+store\MockRAMInputStream.java - DONE
+store\MockRAMOutputStream.java - DONE
+store\TestBufferedIndexInput.java - DONE
+store\TestDirectory.java - IDENTICAL
+store\TestFileSwitchDirectory.java - IDENTICAL
+store\TestHugeRamFile.java - DONE
+store\TestLock.java - DONE
+store\TestLockFactory.java - DONE
+store\TestMultiMMap.java - ******* NEEDS TO BE PORTED *******
+store\TestRAMDirectory.java - DONE
+store\TestWindowsMMap.java - DONE
 
 util\
 util\_TestUtil.java - DONE
@@ -224,7 +236,7 @@ util\util\util\LocalizedTestCase.java - DONE
 util\LuceneTestCase.java - DONE
 util\TestAttributeSource.java - DONE
 util\util\TestBitVector.java - DONE
-util\TestCloseableThreadLocal.java - DONE? * Had to add type parameters to CloseableThreadLocal that java didn't require?
+util\TestCloseableThreadLocal.java - DONE
 util\TestFieldCacheSanityChecker.java - DONE
 util\TestIndexableBinaryStringTools.java - DONE
 util\TestNumericUtils.java - DONE
@@ -237,3 +249,10 @@ util\TestStringHelper.java - IDENTICAL
 util\TestStringIntern.java - DONE
 util\TestVersion.java - DONE
 util\cache\TestSimpleLRUCache.cs - DONE
+
+lucene\
+TestDemo.java - DONE
+TestHitIterator.java - REMOVED
+TestMergeSchedulerExternal.java - DONE
+TestSearch.java - Text files are different
+TestSearchForDuplicates.java - Text files are different

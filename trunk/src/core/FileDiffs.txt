@@ -133,7 +133,7 @@ index\
 	index\FreqProxTermsWriterPerThread.java - Text files are different
 	index\IndexCommit.java - Text files are different
 	index\IndexCommitPoint.java - Removed in 3.x
-	index\IndexDeletionPolicy.java - Text files are different
+	index\IndexDeletionPolicy.java - PORTED
 	index\IndexFileDeleter.java - PORTED
 	index\IndexFileNameFilter.java - Text files are different
 	index\IndexFileNames.java - Text files are different
@@ -147,7 +147,7 @@ index\
 	index\InvertedDocEndConsumer.java - PORTED
 	index\InvertedDocEndConsumerPerField.java - IDENTICAL
 	index\InvertedDocEndConsumerPerThread.java - IDENTICAL
-	index\KeepOnlyLastCommitDeletionPolicy.java - Text files are different
+	index\KeepOnlyLastCommitDeletionPolicy.java - PORTED
 	index\LogByteSizeMergePolicy.java - PORTED
 	index\LogDocMergePolicy.java - PORTED
 	index\LogMergePolicy.java - PORTED
@@ -182,7 +182,7 @@ index\
 	index\SegmentTermVector.java - Text files are different
 	index\SegmentWriteState.java - PORTED
 	index\SerialMergeScheduler.java - Text files are different
-	index\SnapshotDeletionPolicy.java - Text files are different
+	index\SnapshotDeletionPolicy.java - PORTED
 	index\SortedTermVectorMapper.java - Text files are different
 	index\StaleReaderException.java - IDENTICAL
 	index\StoredFieldsWriter.java - Text files are different
@@ -358,7 +358,7 @@ search
 	SimilarityDelegator.java - PORTED
 	SingleTermEnum.java - PORTED
 	SloppyPhraseScorer.java - PORTED
-	Sort.java - Text files are different
+	Sort.java - PORTED
 	SortComparator.java - Removed in 3.x
 	SortComparatorSource.java - Removed in 3.x
 	SortField.java - Text files are different

@@ -183,10 +183,10 @@ namespace Lucene.Net.QueryParsers
 			public TestFilter(TestMultiAnalyzer enclosingInstance, TokenStream in_Renamed):base(in_Renamed)
 			{
 				InitBlock(enclosingInstance);
-				termAtt = (TermAttribute) AddAttribute(typeof(TermAttribute));
-				posIncrAtt = (PositionIncrementAttribute) AddAttribute(typeof(PositionIncrementAttribute));
-				offsetAtt = (OffsetAttribute) AddAttribute(typeof(OffsetAttribute));
-				typeAtt = (TypeAttribute) AddAttribute(typeof(TypeAttribute));
+				termAtt =  AddAttribute<TermAttribute>();
+				posIncrAtt =  AddAttribute<PositionIncrementAttribute>();
+				offsetAtt =  AddAttribute<OffsetAttribute>();
+				typeAtt =  AddAttribute<TypeAttribute>();
 			}
 			
 			public override bool IncrementToken()
@@ -284,8 +284,8 @@ namespace Lucene.Net.QueryParsers
 			public TestPosIncrementFilter(TestMultiAnalyzer enclosingInstance, TokenStream in_Renamed):base(in_Renamed)
 			{
 				InitBlock(enclosingInstance);
-				termAtt = (TermAttribute) AddAttribute(typeof(TermAttribute));
-				posIncrAtt = (PositionIncrementAttribute) AddAttribute(typeof(PositionIncrementAttribute));
+				termAtt =  AddAttribute<TermAttribute>();
+				posIncrAtt =  AddAttribute<PositionIncrementAttribute>();
 			}
 			
 			public override bool IncrementToken()

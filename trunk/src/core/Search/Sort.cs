@@ -96,17 +96,13 @@ namespace Lucene.Net.Search
 	/// <p/>Created: Feb 12, 2004 10:53:57 AM
 	/// 
 	/// </summary>
-	/// <since>   lucene 1.4
-	/// </since>
-	/// <version>  $Id: Sort.java 795179 2009-07-17 18:23:30Z mikemccand $
-	/// </version>
 	[Serializable]
 	public class Sort
 	{
 		
 		/// <summary> Represents sorting by computed relevance. Using this sort criteria returns
 		/// the same results as calling
-		/// <see cref="Searcher.Search(Query)" />Searcher#search()without a sort criteria,
+		/// <see cref="Searcher.Search(Query,int)" />Searcher#search()without a sort criteria,
 		/// only with slightly more overhead.
 		/// </summary>
 		public static readonly Sort RELEVANCE = new Sort();
@@ -118,61 +114,11 @@ namespace Lucene.Net.Search
 		internal SortField[] fields;
 		
 		/// <summary> Sorts by computed relevance. This is the same sort criteria as calling
-		/// <see cref="Searcher.Search(Query)" />without a sort criteria,
+		/// <see cref="Searcher.Search(Query,int)" />without a sort criteria,
 		/// only with slightly more overhead.
 		/// </summary>
 		public Sort():this(SortField.FIELD_SCORE)
 		{
-		}
-		
-		/// <summary> Sorts by the terms in <c>field</c> then by index order (document
-		/// number). The type of value in <c>field</c> is determined
-		/// automatically.
-		/// 
-		/// </summary>
-		/// <seealso cref="SortField.AUTO">
-		/// </seealso>
-		/// <deprecated> Please specify the type explicitly by
-		/// first creating a <see cref="SortField" /> and then use <see cref="Sort(SortField)" />
-		///
-		/// </deprecated>
-        [Obsolete("Please specify the type explicitly by first creating a SortField and then use Sort(SortField)")]
-		public Sort(System.String field)
-		{
-			SetSort(field, false);
-		}
-		
-		/// <summary> Sorts possibly in reverse by the terms in <c>field</c> then by
-		/// index order (document number). The type of value in <c>field</c> is
-		/// determined automatically.
-		/// 
-		/// </summary>
-		/// <seealso cref="SortField.AUTO">
-		/// </seealso>
-		/// <deprecated> Please specify the type explicitly by
-		/// first creating a <see cref="SortField" /> and then use <see cref="Sort(SortField)" />
-		///
-		/// </deprecated>
-        [Obsolete("Please specify the type explicitly by first creating a SortField and then use Sort(SortField)")]
-		public Sort(System.String field, bool reverse)
-		{
-			SetSort(field, reverse);
-		}
-		
-		/// <summary> Sorts in succession by the terms in each field. The type of value in
-		/// <c>field</c> is determined automatically.
-		/// 
-		/// </summary>
-		/// <seealso cref="SortField.AUTO">
-		/// </seealso>
-		/// <deprecated> Please specify the type explicitly by
-		/// first creating <see cref="SortField" />s and then use <see cref="Sort(SortField[])" />
-		///
-		/// </deprecated>
-        [Obsolete("Please specify the type explicitly by first creating SortFields and then use Sort(SortField[])")]
-		public Sort(System.String[] fields)
-		{
-			SetSort(fields);
 		}
 		
 		/// <summary>Sorts by the criteria in the given SortField. </summary>
@@ -182,52 +128,9 @@ namespace Lucene.Net.Search
 		}
 		
 		/// <summary>Sorts in succession by the criteria in each SortField. </summary>
-		public Sort(SortField[] fields)
+		public Sort(params SortField[] fields)
 		{
 			SetSort(fields);
-		}
-		
-		/// <summary> Sets the sort to the terms in <c>field</c> then by index order
-		/// (document number).
-		/// </summary>
-		/// <deprecated> Please specify the type explicitly by
-		/// first creating a <see cref="SortField" /> and then use <see cref="SetSort(SortField)" />
-		///
-		/// </deprecated>
-        [Obsolete("Please specify the type explicitly by first creating a SortField and then use SetSort(SortField)")]
-		public void  SetSort(System.String field)
-		{
-			SetSort(field, false);
-		}
-		
-		/// <summary> Sets the sort to the terms in <c>field</c> possibly in reverse,
-		/// then by index order (document number).
-		/// </summary>
-		/// <deprecated> Please specify the type explicitly by
-		/// first creating a <see cref="SortField" /> and then use <see cref="SetSort(SortField)" />
-		///
-		/// </deprecated>
-        [Obsolete("Please specify the type explicitly by first creating a SortField and then use SetSort(SortField)")]
-		public virtual void  SetSort(System.String field, bool reverse)
-		{
-			fields = new SortField[]{new SortField(field, SortField.AUTO, reverse)};
-		}
-		
-		/// <summary>Sets the sort to the terms in each field in succession.</summary>
-		/// <deprecated> Please specify the type explicitly by
-		/// first creating <see cref="SortField" />s and then use <see cref="SetSort(SortField[])" />
-		/// 
-		/// </deprecated>
-        [Obsolete("Please specify the type explicitly by first creating a SortFields and then use SetSort(SortField[])")]
-		public virtual void  SetSort(System.String[] fieldnames)
-		{
-			int n = fieldnames.Length;
-			SortField[] nfields = new SortField[n];
-			for (int i = 0; i < n; ++i)
-			{
-				nfields[i] = new SortField(fieldnames[i], SortField.AUTO);
-			}
-			fields = nfields;
 		}
 		
 		/// <summary>Sets the sort to the given criteria. </summary>
@@ -237,7 +140,7 @@ namespace Lucene.Net.Search
 		}
 		
 		/// <summary>Sets the sort to the given criteria in succession. </summary>
-		public virtual void  SetSort(SortField[] fields)
+		public virtual void  SetSort(params SortField[] fields)
 		{
 			this.fields = fields;
 		}

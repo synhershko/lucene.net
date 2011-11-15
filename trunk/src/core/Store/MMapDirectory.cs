@@ -308,7 +308,7 @@ namespace Lucene.Net.Store
 		// Because Java's ByteBuffer uses an int to address the
 		// values, it's necessary to access a file >
 		// Integer.MAX_VALUE in size using multiple byte buffers.
-		private class MultiMMapIndexInput:IndexInput, System.ICloneable
+		protected internal class MultiMMapIndexInput:IndexInput, System.ICloneable
 		{
 			private void  InitBlock(MMapDirectory enclosingInstance)
 			{

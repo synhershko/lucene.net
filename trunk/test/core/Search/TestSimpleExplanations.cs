@@ -415,8 +415,8 @@ namespace Lucene.Net.Search
 			Document lDoc3 = new Document();
 			lDoc3.Add(new Field("handle", "1 2", Field.Store.YES, Field.Index.ANALYZED));
 			
-			IndexWriter writerA = new IndexWriter(indexStoreA, new StandardAnalyzer(), true, IndexWriter.MaxFieldLength.LIMITED);
-			IndexWriter writerB = new IndexWriter(indexStoreB, new StandardAnalyzer(), true, IndexWriter.MaxFieldLength.LIMITED);
+			IndexWriter writerA = new IndexWriter(indexStoreA, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), true, IndexWriter.MaxFieldLength.LIMITED);
+			IndexWriter writerB = new IndexWriter(indexStoreB, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), true, IndexWriter.MaxFieldLength.LIMITED);
 			
 			writerA.AddDocument(lDoc);
 			writerA.AddDocument(lDoc2);
@@ -426,7 +426,7 @@ namespace Lucene.Net.Search
 			writerB.AddDocument(lDoc3);
 			writerB.Close();
 			
-			QueryParser parser = new QueryParser("fulltext", new StandardAnalyzer());
+			QueryParser parser = new QueryParser("fulltext", new StandardAnalyzer(Util.Version.LUCENE_CURRENT));
 			Query query = parser.Parse("handle:1");
 			
 			Searcher[] searchers = new Searcher[2];

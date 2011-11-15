@@ -106,7 +106,8 @@ namespace Lucene.Net.Store
 			// run test with chunk size of 10 bytes
 			RunReadBytesAndClose(new SimpleFSIndexInput(tmpInputFile, inputBufferSize, 10), inputBufferSize, r);
 			// run test with chunk size of 100 MB - default
-			RunReadBytesAndClose(new SimpleFSIndexInput(tmpInputFile, inputBufferSize), inputBufferSize, r);
+			RunReadBytesAndClose(new SimpleFSIndexInput(tmpInputFile, inputBufferSize, FSDirectory.DEFAULT_READ_CHUNK_SIZE), inputBufferSize, r);
+            Assert.Pass("Supressing Sub-Tests on NIOFSIndexInput classes");
 			// run test with chunk size of 10 bytes
 			//RunReadBytesAndClose(new NIOFSIndexInput(tmpInputFile, inputBufferSize, 10), inputBufferSize, r);    // {{Aroush-2.9}} suppressing this test since NIOFSIndexInput isn't ported
             System.Console.Out.WriteLine("Suppressing sub-test: 'RunReadBytesAndClose(new NIOFSIndexInput(tmpInputFile, inputBufferSize, 10), inputBufferSize, r);' since NIOFSIndexInput isn't ported");
@@ -284,7 +285,7 @@ namespace Lucene.Net.Store
 		[Test]
 		public virtual void  TestSetBufferSize()
 		{
-			System.IO.FileInfo indexDir = new System.IO.FileInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "testSetBufferSize"));
+			System.IO.DirectoryInfo indexDir = new System.IO.DirectoryInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "testSetBufferSize"));
 			MockFSDirectory dir = new MockFSDirectory(indexDir, NewRandom());
 			try
 			{
@@ -301,7 +302,7 @@ namespace Lucene.Net.Store
 				
 				dir.allIndexInputs.Clear();
 				
-				IndexReader reader = IndexReader.Open(dir);
+				IndexReader reader = IndexReader.Open(dir, false);
 				Term aaa = new Term("content", "aaa");
 				Term bbb = new Term("content", "bbb");
 				Term ccc = new Term("content", "ccc");
@@ -342,7 +343,7 @@ namespace Lucene.Net.Store
 			
 			private Directory dir;
 			
-			public MockFSDirectory(System.IO.FileInfo path, System.Random rand)
+			public MockFSDirectory(System.IO.DirectoryInfo path, System.Random rand)
 			{
 				this.rand = rand;
 				lockFactory = new NoLockFactory();
@@ -411,10 +412,6 @@ namespace Lucene.Net.Store
 			{
 				return dir.FileExists(name);
 			}
-			public override System.String[] List()
-			{
-				return dir.List();
-			}
 			public override System.String[] ListAll()
 			{
 				return dir.ListAll();
@@ -423,10 +420,6 @@ namespace Lucene.Net.Store
 			public override long FileLength(System.String name)
 			{
 				return dir.FileLength(name);
-			}
-			public override void  RenameFile(System.String from, System.String to)
-			{
-				dir.RenameFile(from, to);
 			}
 		}
 	}

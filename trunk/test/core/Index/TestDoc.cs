@@ -44,8 +44,8 @@ namespace Lucene.Net.Index
 		}
 		
 		
-		private System.IO.FileInfo workDir;
-		private System.IO.FileInfo indexDir;
+		private System.IO.DirectoryInfo workDir;
+		private System.IO.DirectoryInfo indexDir;
 		private System.Collections.ArrayList files;
 		
 		
@@ -56,10 +56,10 @@ namespace Lucene.Net.Index
 		public override void  SetUp()
 		{
 			base.SetUp();
-			workDir = new System.IO.FileInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "TestDoc"));
+			workDir = new System.IO.DirectoryInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "TestDoc"));
 			System.IO.Directory.CreateDirectory(workDir.FullName);
 			
-			indexDir = new System.IO.FileInfo(System.IO.Path.Combine(workDir.FullName, "testIndex"));
+			indexDir = new System.IO.DirectoryInfo(System.IO.Path.Combine(workDir.FullName, "testIndex"));
 			System.IO.Directory.CreateDirectory(indexDir.FullName);
 			
 			Directory directory = FSDirectory.Open(indexDir);
@@ -71,14 +71,14 @@ namespace Lucene.Net.Index
 			files.Add(CreateOutput("test2.txt", "This is the second test file"));
 		}
 		
-		private System.IO.FileInfo CreateOutput(System.String name, System.String text)
+		private System.IO.DirectoryInfo CreateOutput(System.String name, System.String text)
 		{
 			System.IO.StreamWriter fw = null;
 			System.IO.StreamWriter pw = null;
 			
 			try
 			{
-				System.IO.FileInfo f = new System.IO.FileInfo(System.IO.Path.Combine(workDir.FullName, name));
+				System.IO.DirectoryInfo f = new System.IO.DirectoryInfo(System.IO.Path.Combine(workDir.FullName, name));
 				bool tmpBool;
 				if (System.IO.File.Exists(f.FullName))
 					tmpBool = true;
@@ -188,7 +188,7 @@ namespace Lucene.Net.Index
 		
 		private SegmentInfo IndexDoc(IndexWriter writer, System.String fileName)
 		{
-			System.IO.FileInfo file = new System.IO.FileInfo(System.IO.Path.Combine(workDir.FullName, fileName));
+			System.IO.DirectoryInfo file = new System.IO.DirectoryInfo(System.IO.Path.Combine(workDir.FullName, fileName));
 			Document doc = FileDocument.Document(file);
             doc.Add(new Field("contents", new System.IO.StreamReader(file.FullName)));
 			writer.AddDocument(doc);

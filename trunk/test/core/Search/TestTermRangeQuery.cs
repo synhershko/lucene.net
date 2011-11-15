@@ -266,7 +266,7 @@ namespace Lucene.Net.Search
 				
 				public SingleCharTokenizer(System.IO.TextReader r):base(r)
 				{
-					termAtt = (TermAttribute) AddAttribute(typeof(TermAttribute));
+					termAtt =  AddAttribute<TermAttribute>();
 				}
 				
 				public override bool IncrementToken()

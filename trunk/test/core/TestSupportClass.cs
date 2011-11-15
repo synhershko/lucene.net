@@ -1190,11 +1190,10 @@ namespace Lucene.Net._SupportClass
                 Assert.AreEqual("Second Line", Reader.ReadToEnd(), "\"ReadToEnd\" method is not implemented");
             }
 
-            public override Token Next()
+            public override bool IncrementToken()
             {
-                return null;
+                return false;
             }
-
         }
 
         [Test]

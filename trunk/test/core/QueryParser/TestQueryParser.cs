@@ -130,8 +130,8 @@ namespace Lucene.Net.QueryParsers
 			/// </summary>
 			public QPTestFilter(TokenStream in_Renamed):base(in_Renamed)
 			{
-				termAtt = (TermAttribute) AddAttribute(typeof(TermAttribute));
-				offsetAtt = (OffsetAttribute) AddAttribute(typeof(OffsetAttribute));
+				termAtt =  AddAttribute<TermAttribute>();
+				offsetAtt =  AddAttribute<OffsetAttribute>();
 			}
 			
 			internal bool inPhrase = false;
@@ -365,7 +365,7 @@ namespace Lucene.Net.QueryParsers
 			AssertQueryEquals("+(apple \"steve jobs\") -(foo bar baz)", null, "+(apple \"steve jobs\") -(foo bar baz)");
 			AssertQueryEquals("+title:(dog OR cat) -author:\"bob dole\"", null, "+(title:dog title:cat) -author:\"bob dole\"");
 			
-			QueryParser qp = new QueryParser("field", new StandardAnalyzer());
+			QueryParser qp = new QueryParser("field", new StandardAnalyzer(Util.Version.LUCENE_CURRENT));
 			// make sure OR is the default:
 			Assert.AreEqual(QueryParser.OR_OPERATOR, qp.GetDefaultOperator());
 			qp.SetDefaultOperator(QueryParser.AND_OPERATOR);
@@ -401,7 +401,7 @@ namespace Lucene.Net.QueryParsers
 			AssertQueryEquals("term 1.0 1 2", null, "term");
 			AssertQueryEquals("term term1 term2", null, "term term term");
 			
-			Analyzer a = new StandardAnalyzer();
+			Analyzer a = new StandardAnalyzer(Util.Version.LUCENE_CURRENT);
 			AssertQueryEquals("3", a, "3");
 			AssertQueryEquals("term 1.0 1 2", a, "term 1.0 1 2");
 			AssertQueryEquals("term term1 term2", a, "term term1 term2");
@@ -897,7 +897,7 @@ namespace Lucene.Net.QueryParsers
 			q = qp.Parse("\"on\"^1.0");
 			Assert.IsNotNull(q);
 			
-			QueryParser qp2 = new QueryParser("field", new StandardAnalyzer());
+			QueryParser qp2 = new QueryParser("field", new StandardAnalyzer(Util.Version.LUCENE_CURRENT));
 			q = qp2.Parse("the^3");
 			// "the" is a stop word so the result is an empty query:
 			Assert.IsNotNull(q);

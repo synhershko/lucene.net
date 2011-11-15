@@ -40,8 +40,8 @@ namespace Lucene.Net.Util
 		{
 			// Tests that null can be set as a valid value (LUCENE-1805). This
 			// previously failed in get().
-			CloseableThreadLocal ctl = new CloseableThreadLocal();
-			ctl.Set((System.Object) null);
+            CloseableThreadLocal<object> ctl = new CloseableThreadLocal<object>();
+			ctl.Set(null);
 			Assert.IsNull(ctl.Get());
 		}
 		

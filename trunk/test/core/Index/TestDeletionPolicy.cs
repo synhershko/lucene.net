@@ -39,18 +39,18 @@ namespace Lucene.Net.Index
 	against it, and add documents to it.*/
 	
 	[TestFixture]
-	public class TestDeletionPolicy:LuceneTestCase
+	public class TestDeletionPolicy : LuceneTestCase
 	{
-		private void  VerifyCommitOrder(System.Collections.IList commits)
+		private void  VerifyCommitOrder<T>(IList<T> commits) where T : IndexCommit
 		{
-			IndexCommit firstCommit = ((IndexCommit) commits[0]);
+			IndexCommit firstCommit = commits[0];
 			long last = SegmentInfos.GenerationFromSegmentsFileName(firstCommit.GetSegmentsFileName());
 			Assert.AreEqual(last, firstCommit.GetGeneration());
 			long lastVersion = firstCommit.GetVersion();
 			long lastTimestamp = firstCommit.GetTimestamp();
 			for (int i = 1; i < commits.Count; i++)
 			{
-				IndexCommit commit = ((IndexCommit) commits[i]);
+				IndexCommit commit = commits[i];
 				long now = SegmentInfos.GenerationFromSegmentsFileName(commit.GetSegmentsFileName());
 				long nowVersion = commit.GetVersion();
 				long nowTimestamp = commit.GetTimestamp();
@@ -86,12 +86,12 @@ namespace Lucene.Net.Index
 			internal int numOnInit;
 			internal int numOnCommit;
 			internal Directory dir;
-			public virtual void  OnInit(System.Collections.IList commits)
+			public virtual void  OnInit<T>(IList<T> commits) where T : IndexCommit
 			{
 				Enclosing_Instance.VerifyCommitOrder(commits);
 				numOnInit++;
 			}
-			public virtual void  OnCommit(System.Collections.IList commits)
+			public virtual void  OnCommit<T>(IList<T> commits) where T : IndexCommit
 			{
 				IndexCommit lastCommit = (IndexCommit) commits[commits.Count - 1];
 				IndexReader r = IndexReader.Open(dir, true);
@@ -126,7 +126,7 @@ namespace Lucene.Net.Index
 			}
 			internal int numOnInit;
 			internal int numOnCommit;
-			public virtual void  OnInit(System.Collections.IList commits)
+			public virtual void  OnInit<T>(IList<T> commits) where T : IndexCommit
 			{
 				Enclosing_Instance.VerifyCommitOrder(commits);
 				numOnInit++;
@@ -139,7 +139,7 @@ namespace Lucene.Net.Index
 					Assert.IsTrue(commit.IsDeleted());
 				}
 			}
-			public virtual void  OnCommit(System.Collections.IList commits)
+			public virtual void  OnCommit<T>(IList<T> commits) where T : IndexCommit
 			{
 				Enclosing_Instance.VerifyCommitOrder(commits);
 				int size = commits.Count;
@@ -179,7 +179,7 @@ namespace Lucene.Net.Index
 				this.numToKeep = numToKeep;
 			}
 			
-			public virtual void  OnInit(System.Collections.IList commits)
+			public virtual void  OnInit<T>(IList<T> commits) where T : IndexCommit
 			{
 				Enclosing_Instance.VerifyCommitOrder(commits);
 				numOnInit++;
@@ -187,20 +187,20 @@ namespace Lucene.Net.Index
 				DoDeletes(commits, false);
 			}
 			
-			public virtual void  OnCommit(System.Collections.IList commits)
+			public virtual void  OnCommit<T>(IList<T> commits) where T : IndexCommit
 			{
 				Enclosing_Instance.VerifyCommitOrder(commits);
 				DoDeletes(commits, true);
 			}
 			
-			private void  DoDeletes(System.Collections.IList commits, bool isCommit)
+			private void  DoDeletes<T>(IList<T> commits, bool isCommit) where T : IndexCommit
 			{
 				
 				// Assert that we really are only called for each new
 				// commit:
 				if (isCommit)
 				{
-					System.String fileName = ((IndexCommit) commits[commits.Count - 1]).GetSegmentsFileName();
+					System.String fileName = commits[commits.Count - 1].GetSegmentsFileName();
 					if (seen.Contains(fileName))
 					{
 						throw new System.SystemException("onCommit was called twice on the same commit point: " + fileName);
@@ -248,17 +248,17 @@ namespace Lucene.Net.Index
 				this.expirationTimeSeconds = seconds;
 			}
 			
-			public virtual void  OnInit(System.Collections.IList commits)
+			public virtual void  OnInit<T>(IList<T> commits) where T : IndexCommit
 			{
 				Enclosing_Instance.VerifyCommitOrder(commits);
 				OnCommit(commits);
 			}
 			
-			public virtual void  OnCommit(System.Collections.IList commits)
+			public virtual void  OnCommit<T>(IList<T> commits) where T : IndexCommit
 			{
 				Enclosing_Instance.VerifyCommitOrder(commits);
 				
-				IndexCommit lastCommit = (IndexCommit) commits[commits.Count - 1];
+				IndexCommit lastCommit = commits[commits.Count - 1];
 				
 				// Any commit older than expireTime should be deleted:
 				double expireTime = dir.FileModified(lastCommit.GetSegmentsFileName()) / 1000.0 - expirationTimeSeconds;

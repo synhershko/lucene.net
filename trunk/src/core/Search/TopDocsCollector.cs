@@ -20,7 +20,6 @@ using Lucene.Net.Util;
 
 namespace Lucene.Net.Search
 {
-	
 	/// <summary> A base class for all collectors that return a <see cref="Lucene.Net.Search.TopDocs" /> output. This
 	/// collector allows easy extension by providing a single constructor which
 	/// accepts a <see cref="PriorityQueue{T}" /> as well as protected members for that
@@ -28,6 +27,9 @@ namespace Lucene.Net.Search
 	/// Extending classes can override <see cref="TopDocs(int, int)" /> and
 	/// <see cref="GetTotalHits()" /> in order to provide their own implementation.
 	/// </summary>
+	// TODO: I don't like this.  Java's type inference allows this class to be defined without the type params wherever its used
+    //       we may be able to get the same functionality via generic variance, but an interface would have to be made for PriorityQueue<T>,
+    //       which is equally stupid.
 	public abstract class TopDocsCollector<T> : Collector where T : ScoreDoc
 	{
 		

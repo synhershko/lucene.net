@@ -109,7 +109,7 @@ namespace Lucene.Net.Search
 			// check result hit ranking
 			if (verbose)
 				System.Console.Out.WriteLine("Query: " + queryStr);
-			QueryParser queryParser = new QueryParser(FIELD_NAME, new StandardAnalyzer());
+			QueryParser queryParser = new QueryParser(FIELD_NAME, new StandardAnalyzer(Util.Version.LUCENE_CURRENT));
 			Query query = queryParser.Parse(queryStr);
 			ScoreDoc[] multiSearcherHits = multiSearcher.Search(query, null, 1000).ScoreDocs;
 			ScoreDoc[] singleSearcherHits = singleSearcher.Search(query, null, 1000).ScoreDocs;
@@ -136,11 +136,11 @@ namespace Lucene.Net.Search
 			base.SetUp();
 			// create MultiSearcher from two seperate searchers
 			Directory d1 = new RAMDirectory();
-			IndexWriter iw1 = new IndexWriter(d1, new StandardAnalyzer(), true, IndexWriter.MaxFieldLength.LIMITED);
+			IndexWriter iw1 = new IndexWriter(d1, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), true, IndexWriter.MaxFieldLength.LIMITED);
 			AddCollection1(iw1);
 			iw1.Close();
 			Directory d2 = new RAMDirectory();
-			IndexWriter iw2 = new IndexWriter(d2, new StandardAnalyzer(), true, IndexWriter.MaxFieldLength.LIMITED);
+			IndexWriter iw2 = new IndexWriter(d2, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), true, IndexWriter.MaxFieldLength.LIMITED);
 			AddCollection2(iw2);
 			iw2.Close();
 			
@@ -151,7 +151,7 @@ namespace Lucene.Net.Search
 			
 			// create IndexSearcher which contains all documents
 			Directory d = new RAMDirectory();
-			IndexWriter iw = new IndexWriter(d, new StandardAnalyzer(), true, IndexWriter.MaxFieldLength.LIMITED);
+			IndexWriter iw = new IndexWriter(d, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), true, IndexWriter.MaxFieldLength.LIMITED);
 			AddCollection1(iw);
 			AddCollection2(iw);
 			iw.Close();

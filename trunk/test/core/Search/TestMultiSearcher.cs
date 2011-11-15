@@ -125,9 +125,9 @@ namespace Lucene.Net.Search
 			lDoc3.Add(new Field("handle", "1", Field.Store.YES, Field.Index.NOT_ANALYZED));
 			
 			// creating an index writer for the first index
-			IndexWriter writerA = new IndexWriter(indexStoreA, new StandardAnalyzer(), true, IndexWriter.MaxFieldLength.LIMITED);
+			IndexWriter writerA = new IndexWriter(indexStoreA, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), true, IndexWriter.MaxFieldLength.LIMITED);
 			// creating an index writer for the second index, but writing nothing
-			IndexWriter writerB = new IndexWriter(indexStoreB, new StandardAnalyzer(), true, IndexWriter.MaxFieldLength.LIMITED);
+			IndexWriter writerB = new IndexWriter(indexStoreB, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), true, IndexWriter.MaxFieldLength.LIMITED);
 			
 			//--------------------------------------------------------------------
 			// scenario 1
@@ -144,7 +144,7 @@ namespace Lucene.Net.Search
 			writerB.Close();
 			
 			// creating the query
-			QueryParser parser = new QueryParser("fulltext", new StandardAnalyzer());
+			QueryParser parser = new QueryParser("fulltext", new StandardAnalyzer(Util.Version.LUCENE_CURRENT));
 			Query query = parser.Parse("handle:1");
 			
 			// building the searchables
@@ -172,7 +172,7 @@ namespace Lucene.Net.Search
 			//--------------------------------------------------------------------
 			
 			// adding one document to the empty index
-			writerB = new IndexWriter(indexStoreB, new StandardAnalyzer(), false, IndexWriter.MaxFieldLength.LIMITED);
+			writerB = new IndexWriter(indexStoreB, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), false, IndexWriter.MaxFieldLength.LIMITED);
 			writerB.AddDocument(lDoc);
 			writerB.Optimize();
 			writerB.Close();
@@ -219,7 +219,7 @@ namespace Lucene.Net.Search
 			readerB.Close();
 			
 			// optimizing the index with the writer
-			writerB = new IndexWriter(indexStoreB, new StandardAnalyzer(), false, IndexWriter.MaxFieldLength.LIMITED);
+			writerB = new IndexWriter(indexStoreB, new StandardAnalyzer(Util.Version.LUCENE_CURRENT), false, IndexWriter.MaxFieldLength.LIMITED);
 			writerB.Optimize();
 			writerB.Close();
 			

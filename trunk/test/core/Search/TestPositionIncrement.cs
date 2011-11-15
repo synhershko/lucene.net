@@ -71,9 +71,9 @@ namespace Lucene.Net.Search
 				private void  InitBlock(AnonymousClassAnalyzer enclosingInstance)
 				{
 					this.enclosingInstance = enclosingInstance;
-					posIncrAtt = (PositionIncrementAttribute) AddAttribute(typeof(PositionIncrementAttribute));
-					termAtt = (TermAttribute) AddAttribute(typeof(TermAttribute));
-					offsetAtt = (OffsetAttribute) AddAttribute(typeof(OffsetAttribute));
+					posIncrAtt =  AddAttribute<PositionIncrementAttribute>();
+					termAtt =  AddAttribute<TermAttribute>();
+					offsetAtt =  AddAttribute<OffsetAttribute>();
 				}
 				private AnonymousClassAnalyzer enclosingInstance;
 				public AnonymousClassAnalyzer Enclosing_Instance
@@ -411,9 +411,9 @@ namespace Lucene.Net.Search
 			this.fieldName = fieldName;
 			pos = 0;
 			i = 0;
-			posIncrAttr = (PositionIncrementAttribute) input.AddAttribute(typeof(PositionIncrementAttribute));
-			payloadAttr = (PayloadAttribute) input.AddAttribute(typeof(PayloadAttribute));
-			termAttr = (TermAttribute) input.AddAttribute(typeof(TermAttribute));
+			posIncrAttr =  input.AddAttribute<PositionIncrementAttribute>();
+			payloadAttr =  input.AddAttribute<PayloadAttribute>();
+			termAttr =  input.AddAttribute<TermAttribute>();
 		}
 		
 		public override bool IncrementToken()

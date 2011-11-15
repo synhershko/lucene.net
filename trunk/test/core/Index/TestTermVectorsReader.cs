@@ -178,9 +178,9 @@ namespace Lucene.Net.Index
 			public MyTokenStream(TestTermVectorsReader enclosingInstance)
 			{
 				InitBlock(enclosingInstance);
-				termAtt = (TermAttribute) AddAttribute(typeof(TermAttribute));
-				posIncrAtt = (PositionIncrementAttribute) AddAttribute(typeof(PositionIncrementAttribute));
-				offsetAtt = (OffsetAttribute) AddAttribute(typeof(OffsetAttribute));
+				termAtt =  AddAttribute<TermAttribute>();
+				posIncrAtt =  AddAttribute<PositionIncrementAttribute>();
+				offsetAtt =  AddAttribute<OffsetAttribute>();
 			}
 			
 			public override bool IncrementToken()
