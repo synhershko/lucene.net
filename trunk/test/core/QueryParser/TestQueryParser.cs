@@ -116,9 +116,15 @@ namespace Lucene.Net.QueryParsers
 			}
 		}
 
-        public TestQueryParser(System.String name):base(name, dataTestWithDifferentLocals) // TODO: was commented out
+        public TestQueryParser(System.String name)
+            : base(name, dataTestWithDifferentLocals) // TODO: was commented out
         {
         }
+
+	    public TestQueryParser() : base(string.Empty, dataTestWithDifferentLocals)
+	    {
+	        
+	    }
 		
 		public static Analyzer qpAnalyzer = new QPTestAnalyzer();
 		

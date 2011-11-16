@@ -433,7 +433,7 @@ namespace Lucene.Net.QueryParsers
 			if (fieldToDateResolution == null)
 			{
 				// lazily initialize Dictionary
-				fieldToDateResolution = new Dictionary<string,DateTools.Resolution>();
+				fieldToDateResolution = new HashMap<string,DateTools.Resolution>();
 			}
 			
 			fieldToDateResolution[fieldName] = dateResolution;

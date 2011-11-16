@@ -60,10 +60,7 @@ namespace Lucene.Net.Analysis
 		    else
 		    {
 		        this.stopWords = new CharArraySet(stopWords.Count, ignoreCase);
-		        foreach (var word in stopWords)
-		        {
-		            this.stopWords.Add(word);
-		        }
+		        this.stopWords.AddAll(stopWords);
 		    }
 		    this.enablePositionIncrements = enablePositionIncrements;
 		    termAtt = AddAttribute<TermAttribute>();
@@ -113,8 +110,7 @@ namespace Lucene.Net.Analysis
 		public static ISet<string> MakeStopSet(string[] stopWords, bool ignoreCase)
 		{
 			CharArraySet stopSet = new CharArraySet(stopWords.Length, ignoreCase);
-            foreach(var s in stopWords)
-                stopSet.Add(s);
+		    stopSet.AddAll(stopWords);
 			return stopSet;
 		}
 		

@@ -453,7 +453,6 @@ namespace Lucene.Net.Index
 		* setNorm, and search */
 		public virtual void  ChangeIndexNoAdds(System.String dirName)
 		{
-			
 			dirName = FullDir(dirName);
 			
 			Directory dir = FSDirectory.Open(new System.IO.DirectoryInfo(dirName));
@@ -527,7 +526,7 @@ namespace Lucene.Net.Index
 			writer.Close();
 			
 			// Delete one doc so we get a .del file:
-			IndexReader reader = IndexReader.Open(dir);
+		    IndexReader reader = IndexReader.Open(dir, false);
 			Term searchTerm = new Term("id", "7");
 			int delCount = reader.DeleteDocuments(searchTerm);
 			Assert.AreEqual(1, delCount, "didn't delete the right number of documents");

@@ -29,6 +29,7 @@ namespace Lucene.Net.Support
     /// </summary>
     /// <typeparam name="TKey">The type of keys in the dictionary</typeparam>
     /// <typeparam name="TValue">The type of values in the dictionary</typeparam>
+    [Serializable]
     public class HashMap<TKey, TValue> : IDictionary<TKey, TValue>
     {
         private Dictionary<TKey, TValue> _dict;
@@ -49,6 +50,7 @@ namespace Lucene.Net.Support
         }
 
         public HashMap(IEnumerable<KeyValuePair<TKey, TValue>> other)
+            : this(0)
         {
             foreach (var kvp in other)
             {

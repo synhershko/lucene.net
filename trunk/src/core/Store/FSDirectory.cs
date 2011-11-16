@@ -486,7 +486,7 @@ namespace Lucene.Net.Store
 		/// </summary>
 		/// <seealso cref="SetReadChunkSize">
 		/// </seealso>
-		public static readonly int DEFAULT_READ_CHUNK_SIZE;
+		public static readonly int DEFAULT_READ_CHUNK_SIZE = Constants.JRE_IS_64BIT ? int.MaxValue: 100 * 1024 * 1024;
 		
 		// LUCENE-1566
 		private int chunkSize = DEFAULT_READ_CHUNK_SIZE;

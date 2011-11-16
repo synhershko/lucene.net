@@ -422,7 +422,7 @@ namespace Lucene.Net.Index
 				
 			}
 
-            private IDictionary<SegmentInfo, SegmentReader> readerMap = new Dictionary<SegmentInfo, SegmentReader>();
+            private IDictionary<SegmentInfo, SegmentReader> readerMap = new HashMap<SegmentInfo, SegmentReader>();
 			
 			/// <summary>Forcefully clear changes for the specifed segments,
 			/// and remove from the pool.   This is called on succesful merge. 
@@ -555,6 +555,7 @@ namespace Lucene.Net.Index
                 // TODO: assert Thread.holdsLock(IndexWriter.this);
 				lock (this)
 				{
+				    var toRemove = new List<SegmentInfo>();
 				    var iter = readerMap.GetEnumerator();
 					while (iter.MoveNext())
 					{
@@ -570,7 +571,7 @@ namespace Lucene.Net.Index
                             enclosingInstance.deleter.Checkpoint(enclosingInstance.segmentInfos, false);
 						}
 
-                        readerMap.Remove(ent.Key); 
+                        toRemove.Add(ent.Key); 
 						
 						// NOTE: it is allowed that this decRef does not
 						// actually close the SR; this can happen when a
@@ -578,6 +579,8 @@ namespace Lucene.Net.Index
 						// IndexWriter instance is closed
 						sr.DecRef();
 					}
+                    foreach (var key in toRemove)
+                        readerMap.Remove(key);
 				}
 			}
 			

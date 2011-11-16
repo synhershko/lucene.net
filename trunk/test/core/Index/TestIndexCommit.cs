@@ -7,7 +7,7 @@ using Lucene.Net.Store;
 using Lucene.Net.Util;
 using NUnit.Framework;
 
-namespace Lucene.Net.Test.Index
+namespace Lucene.Net.Index
 {
     public class TestIndexCommit : LuceneTestCase
     {

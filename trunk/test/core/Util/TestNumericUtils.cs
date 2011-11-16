@@ -79,9 +79,9 @@ namespace Lucene.Net.Util
                 neededBounds.MoveNext();
                 unchecked
                 {
-                    Assert.AreEqual((long)neededBounds.Current, (ulong) Number.URShift(min, shift), "inner min bound");
+                    Assert.AreEqual((long)neededBounds.Current, Number.URShift(min, shift), "inner min bound");
                     neededBounds.MoveNext();
-                    Assert.AreEqual((long)neededBounds.Current, (ulong)Number.URShift(max, shift), "inner max bound");
+                    Assert.AreEqual((long)neededBounds.Current, Number.URShift(max, shift), "inner max bound");
                 }
 			}
 		}

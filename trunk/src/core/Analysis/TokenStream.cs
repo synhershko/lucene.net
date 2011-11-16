@@ -80,7 +80,6 @@ namespace Lucene.Net.Analysis
 	{
 		/// <summary> A TokenStream using the default attribute factory.</summary>
 		protected internal TokenStream()
-            : base()
 		{ }
 		
 		/// <summary> A TokenStream that uses the same attributes as the supplied one.</summary>

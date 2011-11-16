@@ -213,7 +213,7 @@ namespace Lucene.Net.Analysis
 				CharArraySet.UnmodifiableSet(null);
 				Assert.Fail("can not make null unmodifiable");
 			}
-			catch (System.NullReferenceException e)
+            catch (System.ArgumentNullException e)
 			{
 				// expected
 			}

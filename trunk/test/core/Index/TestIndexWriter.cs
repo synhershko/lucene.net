@@ -61,10 +61,10 @@ namespace Lucene.Net.Index
     [TestFixture]
     public class TestIndexWriter : BaseTokenStreamTestCase
     {
-        public TestIndexWriter(System.String name)
-            : base(name)
-        {
-        }
+        //public TestIndexWriter(System.String name)
+        //    : base(name)
+        //{
+        //}
 
         public class MyRAMDirectory : RAMDirectory
         {

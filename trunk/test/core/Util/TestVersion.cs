@@ -32,7 +32,7 @@ namespace Lucene.Net.Util
             }
             Assert.IsTrue(Version.LUCENE_30.OnOrAfter(Version.LUCENE_29));
             Assert.IsTrue(Version.LUCENE_30.OnOrAfter(Version.LUCENE_30));
-            Assert.IsTrue(Version.LUCENE_29.OnOrAfter(Version.LUCENE_30));
+            Assert.IsFalse(Version.LUCENE_29.OnOrAfter(Version.LUCENE_30));
         }
     }
 }

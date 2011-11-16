@@ -31,9 +31,20 @@ namespace Lucene.Net.Util
         }
 
 	    private void  InitBlock()
-		{
-			sizes = new IdentityDictionary<Type, int>();
-		}
+	    {
+	        sizes = new IdentityDictionary<Type, int>()
+	                    {
+	                        {typeof (bool), 1},
+	                        {typeof (byte), 1},
+                            {typeof(sbyte), 1},
+	                        {typeof (char), 2},
+	                        {typeof (short), 2},
+	                        {typeof (int), 4},
+	                        {typeof (float), 4},
+	                        {typeof (double), 8},
+	                        {typeof (long), 8}
+	                    };
+	    }
 		// best guess primitive sizes
         private System.Collections.Generic.Dictionary<Type, int> sizes;
 		

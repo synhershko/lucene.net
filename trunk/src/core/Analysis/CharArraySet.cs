@@ -359,9 +359,7 @@ namespace Lucene.Net.Analysis
 
         public void Clear()
         {
-            if (_ReadOnly) throw new NotSupportedException();
-            _Entries = null;
-            _Count = 0;
+            throw new NotSupportedException("Remove not supported!");
         }
 
         public bool IsReadOnly

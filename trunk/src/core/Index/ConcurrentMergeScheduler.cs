@@ -192,7 +192,6 @@ namespace Lucene.Net.Index
 		
 		public override void  Merge(IndexWriter writer)
 		{
-			
 			// TODO: .NET doesn't support this - Look into it
 			// assert !Thread.holdsLock(writer);
 			
@@ -262,7 +261,7 @@ namespace Lucene.Net.Index
 						if (Verbose())
 							Message("  consider merge " + merge.SegString(dir));
 
-					    System.Diagnostics.Debug.Assert(mergeThreadCount < maxThreadCount);
+					    System.Diagnostics.Debug.Assert(MergeThreadCount() < maxThreadCount);
 												
 						// OK to spawn a new merge thread to handle this
 						// merge:

@@ -16,6 +16,7 @@
  */
 
 using System;
+using Lucene.Net.Support;
 
 namespace Lucene.Net.Analysis
 {
@@ -47,7 +48,7 @@ namespace Lucene.Net.Analysis
 				char c = singleMatch[i];
 				if (currMap.submap == null)
 				{
-					currMap.submap = new System.Collections.Generic.Dictionary<char, NormalizeCharMap>(1);
+					currMap.submap = new HashMap<char, NormalizeCharMap>(1);
 				}
 				NormalizeCharMap map = currMap.submap[c];
 				if (map == null)

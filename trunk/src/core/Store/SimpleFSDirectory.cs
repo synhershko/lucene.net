@@ -37,32 +37,22 @@ namespace Lucene.Net.Store
         /// <param name="lockFactory">the lock factory to use, or null for the default.
         /// </param>
         /// <throws>  IOException </throws>
-        public SimpleFSDirectory(System.IO.DirectoryInfo path, LockFactory lockFactory) : base(path, lockFactory)
+        public SimpleFSDirectory(System.IO.DirectoryInfo path, LockFactory lockFactory)
+            : base(path, lockFactory)
         {
         }
-		
-		/// <summary>Create a new SimpleFSDirectory for the named location and the default lock factory.
-		/// 
-		/// </summary>
-		/// <param name="path">the path of the directory
-		/// </param>
-		/// <throws>  IOException </throws>
-        [System.Obsolete("Use the constructor that takes a DirectoryInfo, this will be removed in the 3.0 release")]
-		public SimpleFSDirectory(System.IO.FileInfo path):base(new System.IO.DirectoryInfo(path.FullName), null)
-		{
-		}
-		
-        /// <summary>Create a new SimpleFSDirectory for the named location and the default lock factory.
+
+	    /// <summary>Create a new SimpleFSDirectory for the named location and the default lock factory.
         /// 
         /// </summary>
         /// <param name="path">the path of the directory
         /// </param>
         /// <throws>  IOException </throws>
         public SimpleFSDirectory(System.IO.DirectoryInfo path) : base(path, null)
-        {
-        }
+	    {
+	    }
 
-		/// <summary>Creates an IndexOutput for the file with the given name. </summary>
+	    /// <summary>Creates an IndexOutput for the file with the given name. </summary>
 		public override IndexOutput CreateOutput(System.String name)
 		{
 			InitOutput(name);
@@ -76,9 +66,9 @@ namespace Lucene.Net.Store
 			return new SimpleFSIndexInput(new System.IO.FileInfo(System.IO.Path.Combine(directory.FullName, name)), bufferSize, GetReadChunkSize());
 		}
 		
-		public /*protected internal*/class SimpleFSIndexInput:BufferedIndexInput, System.ICloneable
+		protected internal class SimpleFSIndexInput:BufferedIndexInput, System.ICloneable
 		{
-			
+			// TODO: This is a bad way to handle memory and disposing
 			protected internal class Descriptor:System.IO.BinaryReader
 			{
 				// remember if the file is open, so that we don't try to close it
@@ -119,14 +109,15 @@ namespace Lucene.Net.Store
 			internal bool isClone;
 			//  LUCENE-1566 - maximum read length on a 32bit JVM to prevent incorrect OOM 
 			protected internal int chunkSize;
-			
-			public SimpleFSIndexInput(System.IO.FileInfo path, int bufferSize, int chunkSize):base(bufferSize)
-			{
-				file = new Descriptor(path, System.IO.FileAccess.Read);
-				this.chunkSize = chunkSize;
-			}
-			
-			/// <summary>IndexInput methods </summary>
+
+            public SimpleFSIndexInput(System.IO.FileInfo path, int bufferSize, int chunkSize)
+                : base(bufferSize)
+            {
+                file = new Descriptor(path, System.IO.FileAccess.Read);
+                this.chunkSize = chunkSize;
+            }
+
+		    /// <summary>IndexInput methods </summary>
 			public override void  ReadInternal(byte[] b, int offset, int len)
 			{
 				lock (file)

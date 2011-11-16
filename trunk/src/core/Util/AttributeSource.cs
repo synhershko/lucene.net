@@ -65,24 +65,24 @@ namespace Lucene.Net.Util
                     {
                         throw new System.ArgumentException("Could not instantiate implementing class for " + typeof(TAttImpl).FullName);
 					}
-					catch (System.Exception e)
-					{
-                        throw new System.ArgumentException("Could not instantiate implementing class for " + typeof(TAttImpl).FullName);
-					}
+                    //catch (System.Exception e)
+                    //{
+                    //    throw new System.ArgumentException("Could not instantiate implementing class for " + typeof(TAttImpl).FullName);
+                    //}
 				}
 
-                private static System.Type GetClassForInterface<TAttImpl>() where TAttImpl : Attribute
+                private static System.Type GetClassForInterface<T>() where T : Attribute
 				{
 					lock (attClassImplMap)
 					{
-					    var attClass = typeof (TAttImpl);
+					    var attClass = typeof (T);
                         WeakReference refz = attClassImplMap[attClass];
                         System.Type clazz = (refz == null) ? null : ((System.Type) refz.Target);
 						if (clazz == null)
 						{
 							try
 							{
-                                string name = attClass.FullName + "Impl," + attClass.Assembly.FullName;
+                                string name = attClass.FullName + "Impl, " + attClass.Assembly.FullName;
 								attClassImplMap.Add(attClass, new WeakReference( clazz = System.Type.GetType(name, true))); //OK
 							}
                             catch (System.TypeLoadException e) // was System.Exception

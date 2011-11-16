@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using System.Collections.Generic;
 using NUnit.Framework;
 
 using PositionIncrementAttribute = Lucene.Net.Analysis.Tokenattributes.PositionIncrementAttribute;
@@ -31,7 +31,7 @@ namespace Lucene.Net.Analysis
 	{
 		
 		private StopAnalyzer stop = new StopAnalyzer(Version.LUCENE_CURRENT);
-		private System.Collections.Hashtable inValidTokens = new System.Collections.Hashtable();
+		private HashSet<string> inValidTokens = new HashSet<string>();
 		
 		public TestStopAnalyzer(System.String s):base(s)
 		{
@@ -45,12 +45,7 @@ namespace Lucene.Net.Analysis
 		public override void  SetUp()
 		{
 			base.SetUp();
-			
-			System.Collections.IEnumerator it = StopAnalyzer.ENGLISH_STOP_WORDS_SET.GetEnumerator();
-			while (it.MoveNext())
-			{
-				inValidTokens.Add(it.Current, it.Current);
-			}
+			inValidTokens.UnionWith(StopAnalyzer.ENGLISH_STOP_WORDS_SET);
 		}
 		
         [Test]
@@ -96,7 +91,7 @@ namespace Lucene.Net.Analysis
             var stopWordsSet = new System.Collections.Generic.HashSet<string>();
             stopWordsSet.Add("good");
             stopWordsSet.Add("test");
-            stopWordsSet.Add("analyzed");
+            stopWordsSet.Add("analyzer");
             var newStop = new StopAnalyzer(Version.LUCENE_CURRENT, stopWordsSet);
             var reader = new System.IO.StringReader("This is a good test of the english stop analyzer with positions");
             int[] expectedIncr =                   { 1,   1, 1,          3, 1,  1,      1,            2,   1};

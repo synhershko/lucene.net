@@ -502,6 +502,8 @@
     <None Include="Index\index.23.nocfs.zip" />
     <None Include="Index\index.24.cfs.zip" />
     <None Include="Index\index.24.nocfs.zip" />
+    <None Include="Index\index.29.cfs.zip" />
+    <None Include="Index\index.29.nocfs.zip" />
     <None Include="Lucene.Net.snk" />
   </ItemGroup>
   <ItemGroup>

@@ -115,7 +115,7 @@ namespace Lucene.Net.QueryParsers
 		[Test]
 		public virtual void  TestPosIncrementAnalyzer()
 		{
-			QueryParser qp = new QueryParser(Util.Version.LUCENE_CURRENT, "", new PosIncrementAnalyzer(this));
+            QueryParser qp = new QueryParser(Util.Version.LUCENE_24, "", new PosIncrementAnalyzer(this));
 			Assert.AreEqual("quick brown", qp.Parse("the quick brown").ToString());
 			Assert.AreEqual("\"quick brown\"", qp.Parse("\"the quick brown\"").ToString());
 			Assert.AreEqual("quick brown fox", qp.Parse("the quick brown fox").ToString());

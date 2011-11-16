@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using Lucene.Net.Support;
 
 namespace Lucene.Net.Analysis
 {
@@ -43,7 +44,7 @@ namespace Lucene.Net.Analysis
 	public class PerFieldAnalyzerWrapper:Analyzer
 	{
 		private Analyzer defaultAnalyzer;
-		private IDictionary<string, Analyzer> analyzerMap = new Dictionary<string, Analyzer>();
+		private IDictionary<string, Analyzer> analyzerMap = new HashMap<string, Analyzer>();
 		
 		
 		/// <summary> Constructs with default analyzer.

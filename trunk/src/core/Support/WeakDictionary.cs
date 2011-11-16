@@ -11,7 +11,7 @@ namespace Lucene.Net.Support
         private int _gcCollections = 0;
         private int _changes = 0;
 
-        public WeakDictionary(int initialCapacity)
+        public WeakDictionary(int initialCapacity) : this(initialCapacity, Enumerable.Empty<KeyValuePair<TKey, TValue>>())
         { }
 
         public WeakDictionary() : this(32, Enumerable.Empty<KeyValuePair<TKey, TValue>>())
@@ -31,25 +31,26 @@ namespace Lucene.Net.Support
 
         private void Clean()
         {
-            while (!_hm.Keys.Where(x => x != null).Any(x => !x.IsAlive))
+            if (_hm.Count == 0) return;
+            while (_hm.Keys.Where(x => x != null).Any(x => !x.IsAlive))
             {
-                _hm.Remove(_hm.Keys.Where(x => !x.IsAlive).First());
+                _hm.Remove(_hm.Keys.Where(x => x != null && !x.IsAlive).First());
             }
         }
 
         private void CleanIfNeeded()
         {
-            _gcCollections = GC.CollectionCount(0);
-            if (_gcCollections > 0)
+            int currentColCount = GC.CollectionCount(0);
+            if (currentColCount > _gcCollections)
             {
                 Clean();
-                _gcCollections = 0;
+                _gcCollections = currentColCount;
             }
         }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            foreach (var kvp in Enumerable.Where(_hm, x => x.Key.IsAlive))
+            foreach (var kvp in _hm.Where(x => x.Key.IsAlive))
             {
                 yield return new KeyValuePair<TKey, TValue>(kvp.Key.Target, kvp.Value);
             }
@@ -240,7 +241,7 @@ namespace Lucene.Net.Support
 
             public override bool Equals(object obj)
             {
-                if (!reference.IsAlive) return false;
+                if (!reference.IsAlive || obj == null) return false;
 
                 if (GetHashCode() != obj.GetHashCode()) return false;
 
