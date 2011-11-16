@@ -151,9 +151,9 @@ namespace Lucene.Net.Index
 		Run one indexer and 2 searchers against single index as
 		stress test.
 		*/
-		public virtual void  RunStressTest(Directory directory, bool autoCommit, MergeScheduler mergeScheduler)
+		public virtual void  RunStressTest(Directory directory, MergeScheduler mergeScheduler)
 		{
-			IndexWriter modifier = new IndexWriter(directory, autoCommit, ANALYZER, true);
+		    IndexWriter modifier = new IndexWriter(directory, ANALYZER, true, IndexWriter.MaxFieldLength.UNLIMITED);
 			
 			modifier.SetMaxBufferedDocs(10);
 			
@@ -204,36 +204,16 @@ namespace Lucene.Net.Index
 		public virtual void  TestStressIndexAndSearching()
 		{
 			RANDOM = NewRandom();
-			
-			// RAMDir
-			Directory directory = new MockRAMDirectory();
-			RunStressTest(directory, true, null);
-			directory.Close();
-			
-			// FSDir
-			System.IO.FileInfo dirPath = _TestUtil.GetTempDir("lucene.test.stress");
-			directory = FSDirectory.Open(dirPath);
-			RunStressTest(directory, true, null);
-			directory.Close();
-			
+
 			// With ConcurrentMergeScheduler, in RAMDir
-			directory = new MockRAMDirectory();
-			RunStressTest(directory, true, new ConcurrentMergeScheduler());
+			Directory directory = new MockRAMDirectory();
+			RunStressTest(directory, new ConcurrentMergeScheduler());
 			directory.Close();
 			
 			// With ConcurrentMergeScheduler, in FSDir
+		    var dirPath = _TestUtil.GetTempDir("lucene.test.stress");
 			directory = FSDirectory.Open(dirPath);
-			RunStressTest(directory, true, new ConcurrentMergeScheduler());
-			directory.Close();
-			
-			// With ConcurrentMergeScheduler and autoCommit=false, in RAMDir
-			directory = new MockRAMDirectory();
-			RunStressTest(directory, false, new ConcurrentMergeScheduler());
-			directory.Close();
-			
-			// With ConcurrentMergeScheduler and autoCommit=false, in FSDir
-			directory = FSDirectory.Open(dirPath);
-			RunStressTest(directory, false, new ConcurrentMergeScheduler());
+			RunStressTest(directory, new ConcurrentMergeScheduler());
 			directory.Close();
 			
 			_TestUtil.RmDir(dirPath);

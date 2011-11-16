@@ -135,7 +135,7 @@ namespace Lucene.Net.Store
 		/// </param>
 		public virtual void  SetLockFactory(LockFactory lockFactory)
 		{
-		    System.Diagnostics.Debug.Assert(this.lockFactory != null);
+		    System.Diagnostics.Debug.Assert(lockFactory != null);
 			this.lockFactory = lockFactory;
 			lockFactory.SetLockPrefix(this.GetLockID());
 		}

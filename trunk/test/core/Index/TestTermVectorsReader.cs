@@ -63,7 +63,7 @@ namespace Lucene.Net.Index
             InitBlock();
         }
 		
-		internal class TestToken : System.IComparable
+		internal class TestToken : System.IComparable<TestToken>
 		{
 			public TestToken(TestTermVectorsReader enclosingInstance)
 			{
@@ -86,9 +86,9 @@ namespace Lucene.Net.Index
 			internal int pos;
 			internal int startOffset;
 			internal int endOffset;
-			public virtual int CompareTo(System.Object other)
+			public virtual int CompareTo(TestToken other)
 			{
-				return pos - ((TestToken) other).pos;
+				return pos - other.pos;
 			}
 		}
 		
@@ -147,7 +147,7 @@ namespace Lucene.Net.Index
 			//terms
 			for (int j = 0; j < 5; j++)
 				writer.AddDocument(doc);
-			writer.Flush();
+			writer.Commit();
 			seg = writer.NewestSegment().name;
 			writer.Close();
 			
@@ -446,7 +446,7 @@ namespace Lucene.Net.Index
 			}
 			
 			// test setDocumentNumber()
-			IndexReader ir = IndexReader.Open(dir);
+		    IndexReader ir = IndexReader.Open(dir, true);
 			DocNumAwareMapper docNumAwareMapper = new DocNumAwareMapper();
 			Assert.AreEqual(- 1, docNumAwareMapper.GetDocumentNumber());
 			

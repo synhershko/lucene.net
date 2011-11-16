@@ -126,7 +126,7 @@ namespace Lucene.Net.Index
 		
 		private int refCount;
 		
-		internal static int DEFAULT_TERMS_INDEX_DIVISOR = 1;
+		protected internal static int DEFAULT_TERMS_INDEX_DIVISOR = 1;
 		
 		/// <summary>Expert: returns the current refCount for this reader </summary>
 		public virtual int GetRefCount()

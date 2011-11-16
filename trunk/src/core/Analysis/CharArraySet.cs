@@ -69,6 +69,12 @@ namespace Lucene.Net.Analysis
             Init(startSize, ignoreCase);
         }
 
+        public CharArraySet(IEnumerable<string> c, bool ignoreCase)
+        {
+            Init(c.Count(), ignoreCase);
+            AddItems(c);
+        }
+
         /// <summary>Create set from a Collection of char[] or String </summary>
         public CharArraySet(IEnumerable<object> c, bool ignoreCase)
         {

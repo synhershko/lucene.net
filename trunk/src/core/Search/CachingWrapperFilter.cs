@@ -32,7 +32,7 @@ namespace Lucene.Net.Search
 	[Serializable]
 	public class CachingWrapperFilter:Filter
 	{
-		internal Filter filter;
+		protected internal Filter filter;
 
         ///
         /// Expert: Specifies how new deletions against a reopened

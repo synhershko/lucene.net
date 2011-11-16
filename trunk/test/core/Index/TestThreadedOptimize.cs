@@ -107,10 +107,10 @@ namespace Lucene.Net.Index
 			failed = true;
 		}
 		
-		public virtual void  runTest(Directory directory, bool autoCommit, MergeScheduler merger)
+		public virtual void  runTest(Directory directory, MergeScheduler merger)
 		{
 			
-			IndexWriter writer = new IndexWriter(directory, autoCommit, ANALYZER, true);
+			IndexWriter writer = new IndexWriter(directory, ANALYZER, true, IndexWriter.MaxFieldLength.UNLIMITED);
 			writer.SetMaxBufferedDocs(2);
 			if (merger != null)
 				writer.SetMergeScheduler(merger);
@@ -131,8 +131,6 @@ namespace Lucene.Net.Index
 				
 				writer.SetMergeFactor(4);
 				//writer.setInfoStream(System.out);
-				
-				int docCount = writer.MaxDoc();
 				
 				ThreadClass[] threads = new ThreadClass[NUM_THREADS];
 				
@@ -157,14 +155,11 @@ namespace Lucene.Net.Index
 				
 				Assert.AreEqual(expectedDocCount, writer.MaxDoc());
 				
-				if (!autoCommit)
-				{
-					writer.Close();
-					writer = new IndexWriter(directory, autoCommit, ANALYZER, false);
-					writer.SetMaxBufferedDocs(2);
-				}
-				
-				IndexReader reader = IndexReader.Open(directory);
+				writer.Close();
+				writer = new IndexWriter(directory, ANALYZER, false, IndexWriter.MaxFieldLength.UNLIMITED);
+				writer.SetMaxBufferedDocs(2);
+
+			    IndexReader reader = IndexReader.Open(directory, true);
 				Assert.IsTrue(reader.IsOptimized());
 				Assert.AreEqual(expectedDocCount, reader.NumDocs());
 				reader.Close();
@@ -180,10 +175,8 @@ namespace Lucene.Net.Index
 		public virtual void  TestThreadedOptimize_Renamed()
 		{
 			Directory directory = new MockRAMDirectory();
-			runTest(directory, false, new SerialMergeScheduler());
-			runTest(directory, true, new SerialMergeScheduler());
-			runTest(directory, false, new ConcurrentMergeScheduler());
-			runTest(directory, true, new ConcurrentMergeScheduler());
+			runTest(directory, new SerialMergeScheduler());
+			runTest(directory, new ConcurrentMergeScheduler());
 			directory.Close();
 			
 			System.String tempDir = AppSettings.Get("tempDir", "");
@@ -191,11 +184,9 @@ namespace Lucene.Net.Index
 				throw new System.IO.IOException("tempDir undefined, cannot run test");
 			
 			System.String dirName = tempDir + "/luceneTestThreadedOptimize";
-			directory = FSDirectory.Open(new System.IO.FileInfo(dirName));
-			runTest(directory, false, new SerialMergeScheduler());
-			runTest(directory, true, new SerialMergeScheduler());
-			runTest(directory, false, new ConcurrentMergeScheduler());
-			runTest(directory, true, new ConcurrentMergeScheduler());
+			directory = FSDirectory.Open(new System.IO.DirectoryInfo(dirName));
+			runTest(directory, new SerialMergeScheduler());
+			runTest(directory, new ConcurrentMergeScheduler());
 			directory.Close();
 			_TestUtil.RmDir(dirName);
 		}

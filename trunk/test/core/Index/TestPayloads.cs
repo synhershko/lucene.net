@@ -261,7 +261,7 @@ namespace Lucene.Net.Index
 			}
 			
 			// make sure we create more than one segment to test merging
-			writer.Flush();
+			writer.Commit();
 			
 			// now we make sure to have different payload lengths next at the next skip point        
 			for (int i = 0; i < numDocs; i++)
@@ -280,7 +280,7 @@ namespace Lucene.Net.Index
 			* Verify the index
 			* first we test if all payloads are stored correctly
 			*/
-			IndexReader reader = IndexReader.Open(dir);
+		    IndexReader reader = IndexReader.Open(dir, true);
 			
 			byte[] verifyPayloadData = new byte[payloadDataLength];
 			offset = 0;
@@ -388,8 +388,8 @@ namespace Lucene.Net.Index
 			writer.Optimize();
 			// flush
 			writer.Close();
-			
-			reader = IndexReader.Open(dir);
+
+		    reader = IndexReader.Open(dir, true);
 			tp = reader.TermPositions(new Term(fieldName, singleTerm));
 			tp.Next();
 			tp.NextPosition();
@@ -573,7 +573,7 @@ namespace Lucene.Net.Index
 				ingesters[i].Join();
 			}
 			writer.Close();
-			IndexReader reader = IndexReader.Open(dir);
+		    IndexReader reader = IndexReader.Open(dir, true);
 			TermEnum terms = reader.Terms();
 			while (terms.Next())
 			{

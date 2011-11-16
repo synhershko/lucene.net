@@ -216,8 +216,8 @@ namespace Lucene.Net.Index
 			r1.Close();
 			writer.Close();
 			Assert.IsTrue(r2.IsCurrent());
-			
-			IndexReader r3 = IndexReader.Open(dir1);
+
+		    IndexReader r3 = IndexReader.Open(dir1, true);
 			Assert.IsTrue(r3.IsCurrent());
 			Assert.IsTrue(r2.IsCurrent());
 			Assert.AreEqual(0, Count(new Term("id", id10), r3));
@@ -402,8 +402,8 @@ namespace Lucene.Net.Index
 			Assert.IsTrue(addDirThreads.failures.Count == 0);
 			
 			_TestUtil.CheckIndex(mainDir);
-			
-			IndexReader reader = IndexReader.Open(mainDir);
+
+		    IndexReader reader = IndexReader.Open(mainDir, true);
 			Assert.AreEqual(addDirThreads.count.IntValue(), reader.NumDocs());
 			//Assert.AreEqual(100 + numDirs * (3 * numIter / 4) * addDirThreads.NUM_THREADS
 			//    * addDirThreads.NUM_INIT_DOCS, reader.numDocs());
@@ -526,7 +526,7 @@ namespace Lucene.Net.Index
 					}
 					catch (System.Threading.ThreadInterruptedException ie)
 					{
-						ThreadClass.Current().Interrupt();
+					    throw;
 					}
 			}
 		}
@@ -626,7 +626,7 @@ namespace Lucene.Net.Index
 				
 				readers = new IndexReader[numDirs];
 				for (int i = 0; i < numDirs; i++)
-					readers[i] = IndexReader.Open(addDir);
+				    readers[i] = IndexReader.Open(addDir, false);
 			}
 			
 			internal virtual void  JoinThreads()
@@ -638,7 +638,7 @@ namespace Lucene.Net.Index
 					}
 					catch (System.Threading.ThreadInterruptedException ie)
 					{
-						ThreadClass.Current().Interrupt();
+					    throw;
 					}
 			}
 			
@@ -680,7 +680,8 @@ namespace Lucene.Net.Index
 				{
 					
 					case 0: 
-						mainWriter.AddIndexes(dirs);
+						mainWriter.AddIndexesNoOptimize(dirs);
+                        mainWriter.Optimize();
 						break;
 					
 					case 1: 
@@ -1157,7 +1158,7 @@ namespace Lucene.Net.Index
 			w.ExpungeDeletes();
 			w.Close();
 			r.Close();
-			r = IndexReader.Open(dir);
+			r = IndexReader.Open(dir, true);
 			Assert.AreEqual(1, r.NumDocs());
 			Assert.IsFalse(r.HasDeletions());
 			r.Close();

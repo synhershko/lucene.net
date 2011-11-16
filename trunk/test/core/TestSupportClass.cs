@@ -32,7 +32,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Security.Permissions;
 using Lucene.Net.Test;
-
+using Version = Lucene.Net.Util.Version;
 
 
 namespace Lucene.Net._SupportClass
@@ -350,9 +350,9 @@ namespace Lucene.Net._SupportClass
 
             System.Threading.Tasks.Parallel.For(0, LoopCount, (i) =>
             {
-                analyzers[i] = new Lucene.Net.Analysis.Standard.StandardAnalyzer();
+                analyzers[i] = new Lucene.Net.Analysis.Standard.StandardAnalyzer(Version.LUCENE_CURRENT);
                 dirs[i] = new RAMDirectory();
-                indexWriters[i] = new IndexWriter(dirs[i], analyzers[i], true);
+                indexWriters[i] = new IndexWriter(dirs[i], analyzers[i], true, IndexWriter.MaxFieldLength.UNLIMITED);
             });
 
             System.Threading.Tasks.Parallel.For(0, LoopCount, (i) =>
@@ -924,7 +924,7 @@ namespace Lucene.Net._SupportClass
                 IndexWriter writer;
                 IndexReader reader;
 
-                using (writer = new IndexWriter(dir, new WhitespaceAnalyzer(), true))
+                using (writer = new IndexWriter(dir, new WhitespaceAnalyzer(), true, IndexWriter.MaxFieldLength.UNLIMITED))
                 {
                     Field field = new Field("name", "value", Field.Store.YES,Field.Index.ANALYZED);
                     doc = new Document();
@@ -1025,7 +1025,7 @@ namespace Lucene.Net._SupportClass
         [Test]
         public void TestFSDirectorySync()
         {
-            System.IO.FileInfo path = new System.IO.FileInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "testsync"));
+            System.IO.DirectoryInfo path = new System.IO.DirectoryInfo(System.IO.Path.Combine(AppSettings.Get("tempDir", ""), "testsync"));
             Lucene.Net.Store.Directory directory = new Lucene.Net.Store.SimpleFSDirectory(path, null);
             try
             {
@@ -1047,7 +1047,7 @@ namespace Lucene.Net._SupportClass
         [Test]
         public void Test()
         {
-            Lucene.Net.Util.Cache.SimpleLRUCache cache = new Lucene.Net.Util.Cache.SimpleLRUCache(3);
+            Lucene.Net.Util.Cache.SimpleLRUCache<string, string> cache = new Lucene.Net.Util.Cache.SimpleLRUCache<string, string>(3);
             cache.Put("a", "a");
             cache.Put("b", "b");
             cache.Put("c", "c");
@@ -1115,9 +1115,9 @@ namespace Lucene.Net._SupportClass
             Lucene.Net.Store.RAMDirectory ramDIR = new Lucene.Net.Store.RAMDirectory();
 
             //Index 1 Doc
-            Lucene.Net.Index.IndexWriter wr = new Lucene.Net.Index.IndexWriter(ramDIR, new Lucene.Net.Analysis.WhitespaceAnalyzer(), true);
+            Lucene.Net.Index.IndexWriter wr = new Lucene.Net.Index.IndexWriter(ramDIR, new Lucene.Net.Analysis.WhitespaceAnalyzer(), true, IndexWriter.MaxFieldLength.UNLIMITED);
             Lucene.Net.Documents.Document doc = new Lucene.Net.Documents.Document();
-            doc.Add(new Lucene.Net.Documents.Field("field1", "value1 value11", Lucene.Net.Documents.Field.Store.YES, Lucene.Net.Documents.Field.Index.TOKENIZED));
+            doc.Add(new Lucene.Net.Documents.Field("field1", "value1 value11", Lucene.Net.Documents.Field.Store.YES, Lucene.Net.Documents.Field.Index.ANALYZED));
             wr.AddDocument(doc);
             wr.Close();
 
@@ -1135,15 +1135,15 @@ namespace Lucene.Net._SupportClass
             Lucene.Net.Store.RAMDirectory ramDIR2 = (Lucene.Net.Store.RAMDirectory)serializer.Deserialize(memoryStream);
 
             //Add 1 more doc
-            wr = new Lucene.Net.Index.IndexWriter(ramDIR2, new Lucene.Net.Analysis.WhitespaceAnalyzer(), false);
+            wr = new Lucene.Net.Index.IndexWriter(ramDIR2, new Lucene.Net.Analysis.WhitespaceAnalyzer(), false, IndexWriter.MaxFieldLength.UNLIMITED);
             doc = new Lucene.Net.Documents.Document();
-            doc.Add(new Lucene.Net.Documents.Field("field1", "value1 value11", Lucene.Net.Documents.Field.Store.YES, Lucene.Net.Documents.Field.Index.TOKENIZED));
+            doc.Add(new Lucene.Net.Documents.Field("field1", "value1 value11", Lucene.Net.Documents.Field.Store.YES, Lucene.Net.Documents.Field.Index.ANALYZED));
             wr.AddDocument(doc);
             wr.Close();
 
             //Search
             Lucene.Net.Search.IndexSearcher s = new Lucene.Net.Search.IndexSearcher(ramDIR2);
-            Lucene.Net.QueryParsers.QueryParser qp = new Lucene.Net.QueryParsers.QueryParser("field1", new Lucene.Net.Analysis.Standard.StandardAnalyzer());
+            Lucene.Net.QueryParsers.QueryParser qp = new Lucene.Net.QueryParsers.QueryParser(Version.LUCENE_CURRENT, "field1", new Lucene.Net.Analysis.Standard.StandardAnalyzer(Version.LUCENE_CURRENT));
             Lucene.Net.Search.Query q = qp.Parse("value1");
             Lucene.Net.Search.TopDocs topDocs = s.Search(q, 100);
             s.Close();
@@ -1158,10 +1158,10 @@ namespace Lucene.Net._SupportClass
         [Description("LUCENENET-150")]
         public void Test_Index_ReusableStringReader()
         {
-            Lucene.Net.Index.IndexWriter wr = new Lucene.Net.Index.IndexWriter(new Lucene.Net.Store.RAMDirectory(), new TestAnalyzer(), true);
+            Lucene.Net.Index.IndexWriter wr = new Lucene.Net.Index.IndexWriter(new Lucene.Net.Store.RAMDirectory(), new TestAnalyzer(), true, IndexWriter.MaxFieldLength.UNLIMITED);
 
             Lucene.Net.Documents.Document doc = new Lucene.Net.Documents.Document();
-            Lucene.Net.Documents.Field f1 = new Lucene.Net.Documents.Field("f1", TEST_STRING, Lucene.Net.Documents.Field.Store.YES, Lucene.Net.Documents.Field.Index.TOKENIZED);
+            Lucene.Net.Documents.Field f1 = new Lucene.Net.Documents.Field("f1", TEST_STRING, Lucene.Net.Documents.Field.Store.YES, Lucene.Net.Documents.Field.Index.ANALYZED);
             doc.Add(f1);
             wr.AddDocument(doc);
 
@@ -1300,17 +1300,17 @@ namespace Lucene.Net._SupportClass
 
         void LUCENENET_100_CreateIndex()
         {
-            Lucene.Net.Index.IndexWriter w = new Lucene.Net.Index.IndexWriter(LUCENENET_100_Dir, new Lucene.Net.Analysis.Standard.StandardAnalyzer(), true);
+            Lucene.Net.Index.IndexWriter w = new Lucene.Net.Index.IndexWriter(LUCENENET_100_Dir, new Lucene.Net.Analysis.Standard.StandardAnalyzer(Version.LUCENE_CURRENT), true, IndexWriter.MaxFieldLength.UNLIMITED);
 
-            Lucene.Net.Documents.Field f1 = new Lucene.Net.Documents.Field("field1", "dark side of the moon", Lucene.Net.Documents.Field.Store.YES, Lucene.Net.Documents.Field.Index.TOKENIZED);
-            Lucene.Net.Documents.Field f2 = new Lucene.Net.Documents.Field("field2", "123", Lucene.Net.Documents.Field.Store.YES, Lucene.Net.Documents.Field.Index.UN_TOKENIZED);
+            Lucene.Net.Documents.Field f1 = new Lucene.Net.Documents.Field("field1", "dark side of the moon", Lucene.Net.Documents.Field.Store.YES, Lucene.Net.Documents.Field.Index.ANALYZED);
+            Lucene.Net.Documents.Field f2 = new Lucene.Net.Documents.Field("field2", "123", Lucene.Net.Documents.Field.Store.YES, Lucene.Net.Documents.Field.Index.NOT_ANALYZED);
             Lucene.Net.Documents.Document d = new Lucene.Net.Documents.Document();
             d.Add(f1);
             d.Add(f2);
             w.AddDocument(d);
 
-            f1 = new Lucene.Net.Documents.Field("field1", "Fly me to the moon", Lucene.Net.Documents.Field.Store.YES, Lucene.Net.Documents.Field.Index.TOKENIZED);
-            f2 = new Lucene.Net.Documents.Field("field2", "456", Lucene.Net.Documents.Field.Store.YES, Lucene.Net.Documents.Field.Index.UN_TOKENIZED);
+            f1 = new Lucene.Net.Documents.Field("field1", "Fly me to the moon", Lucene.Net.Documents.Field.Store.YES, Lucene.Net.Documents.Field.Index.ANALYZED);
+            f2 = new Lucene.Net.Documents.Field("field2", "456", Lucene.Net.Documents.Field.Store.YES, Lucene.Net.Documents.Field.Index.NOT_ANALYZED);
             d = new Lucene.Net.Documents.Document();
             d.Add(f1);
             d.Add(f2);

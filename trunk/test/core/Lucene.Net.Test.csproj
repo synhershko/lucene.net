@@ -32,8 +32,7 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>Lucene.Net.Test</AssemblyName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Lucene.Net.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -112,6 +111,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);$(ExternalConstants)</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, processorArchitecture=MSIL">
@@ -500,6 +502,7 @@
     <None Include="Index\index.23.nocfs.zip" />
     <None Include="Index\index.24.cfs.zip" />
     <None Include="Index\index.24.nocfs.zip" />
+    <None Include="Lucene.Net.snk" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messages\MessagesTestBundle.ja.resources">

@@ -115,14 +115,15 @@ namespace Lucene.Net.Search
 				Add(docText[i % docText.Length], iw);
 			}
 			iw.Close();
-			searcher = new IndexSearcher(directory);
+		    searcher = new IndexSearcher(directory, true);
 			
 			System.String qtxt = "one";
+            // start from 1, so that the 0th doc never matches
 			for (int i = 0; i < docText.Length; i++)
 			{
 				qtxt += (' ' + docText[i]); // large query so that search will be longer
 			}
-			QueryParser queryParser = new QueryParser(FIELD_NAME, new WhitespaceAnalyzer());
+			QueryParser queryParser = new QueryParser(Util.Version.LUCENE_CURRENT, FIELD_NAME, new WhitespaceAnalyzer());
 			query = queryParser.Parse(qtxt);
 			
 			// warm the searcher
@@ -391,8 +392,7 @@ namespace Lucene.Net.Search
 					}
 					catch (System.Threading.ThreadInterruptedException ie)
 					{
-						ThreadClass.Current().Interrupt();
-						throw new System.SystemException("", ie);
+					    throw;
 					}
 				}
 				System.Diagnostics.Debug.Assert(docId >= 0, "base=" + docBase + " doc=" + doc);

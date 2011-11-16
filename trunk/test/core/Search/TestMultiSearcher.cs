@@ -36,11 +36,7 @@ using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
 namespace Lucene.Net.Search
 {
 	
-	/// <summary> Tests {@link MultiSearcher} class.
-	/// 
-	/// </summary>
-	/// <version>  $Id: TestMultiSearcher.java 781130 2009-06-02 19:16:20Z mikemccand $
-	/// </version>
+	/// <summary>Tests {@link MultiSearcher} class.</summary>
     [TestFixture]
 	public class TestMultiSearcher:LuceneTestCase
 	{
@@ -144,14 +140,14 @@ namespace Lucene.Net.Search
 			writerB.Close();
 			
 			// creating the query
-			QueryParser parser = new QueryParser("fulltext", new StandardAnalyzer(Util.Version.LUCENE_CURRENT));
+			QueryParser parser = new QueryParser(Util.Version.LUCENE_CURRENT, "fulltext", new StandardAnalyzer(Util.Version.LUCENE_CURRENT));
 			Query query = parser.Parse("handle:1");
 			
 			// building the searchables
 			Searcher[] searchers = new Searcher[2];
 			// VITAL STEP:adding the searcher for the empty index first, before the searcher for the populated index
-			searchers[0] = new IndexSearcher(indexStoreB);
-			searchers[1] = new IndexSearcher(indexStoreA);
+			searchers[0] = new IndexSearcher(indexStoreB, true);
+			searchers[1] = new IndexSearcher(indexStoreA, true);
 			// creating the multiSearcher
 			Searcher mSearcher = GetMultiSearcherInstance(searchers);
 			// performing the search
@@ -180,8 +176,8 @@ namespace Lucene.Net.Search
 			// building the searchables
 			Searcher[] searchers2 = new Searcher[2];
 			// VITAL STEP:adding the searcher for the empty index first, before the searcher for the populated index
-			searchers2[0] = new IndexSearcher(indexStoreB);
-			searchers2[1] = new IndexSearcher(indexStoreA);
+			searchers2[0] = new IndexSearcher(indexStoreB, true);
+			searchers2[1] = new IndexSearcher(indexStoreA, true);
 			// creating the mulitSearcher
 			MultiSearcher mSearcher2 = GetMultiSearcherInstance(searchers2);
 			// performing the same search
@@ -214,7 +210,7 @@ namespace Lucene.Net.Search
 			
 			// deleting the document just added, this will cause a different exception to take place
 			Term term = new Term("id", "doc1");
-			IndexReader readerB = IndexReader.Open(indexStoreB);
+		    IndexReader readerB = IndexReader.Open(indexStoreB, false);
 			readerB.DeleteDocuments(term);
 			readerB.Close();
 			
@@ -226,8 +222,8 @@ namespace Lucene.Net.Search
 			// building the searchables
 			Searcher[] searchers3 = new Searcher[2];
 			
-			searchers3[0] = new IndexSearcher(indexStoreB);
-			searchers3[1] = new IndexSearcher(indexStoreA);
+			searchers3[0] = new IndexSearcher(indexStoreB, true);
+			searchers3[1] = new IndexSearcher(indexStoreA, true);
 			// creating the mulitSearcher
 			Searcher mSearcher3 = GetMultiSearcherInstance(searchers3);
 			// performing the same search
@@ -295,8 +291,8 @@ namespace Lucene.Net.Search
 			InitIndex(ramDirectory1, 10, true, null); // documents with a single token "doc0", "doc1", etc...
 			InitIndex(ramDirectory2, 10, true, "x"); // documents with two tokens "doc0" and "x", "doc1" and x, etc...
 			
-			indexSearcher1 = new IndexSearcher(ramDirectory1);
-			indexSearcher2 = new IndexSearcher(ramDirectory2);
+			indexSearcher1 = new IndexSearcher(ramDirectory1, true);
+			indexSearcher2 = new IndexSearcher(ramDirectory2, true);
 			
 			MultiSearcher searcher = GetMultiSearcherInstance(new Searcher[]{indexSearcher1, indexSearcher2});
 			Assert.IsTrue(searcher != null, "searcher is null and it shouldn't be");
@@ -353,8 +349,8 @@ namespace Lucene.Net.Search
 			// First put the documents in the same index
 			InitIndex(ramDirectory1, nDocs, true, null); // documents with a single token "doc0", "doc1", etc...
 			InitIndex(ramDirectory1, nDocs, false, "x"); // documents with two tokens "doc0" and "x", "doc1" and x, etc...
-			
-			indexSearcher1 = new IndexSearcher(ramDirectory1);
+
+		    indexSearcher1 = new IndexSearcher(ramDirectory1, true);
 			indexSearcher1.SetDefaultFieldSortScoring(true, true);
 			
 			hits = indexSearcher1.Search(query, null, 1000).ScoreDocs;
@@ -382,9 +378,9 @@ namespace Lucene.Net.Search
 			InitIndex(ramDirectory1, nDocs, true, null); // documents with a single token "doc0", "doc1", etc...
 			InitIndex(ramDirectory2, nDocs, true, "x"); // documents with two tokens "doc0" and "x", "doc1" and x, etc...
 			
-			indexSearcher1 = new IndexSearcher(ramDirectory1);
+			indexSearcher1 = new IndexSearcher(ramDirectory1, true);
 			indexSearcher1.SetDefaultFieldSortScoring(true, true);
-			indexSearcher2 = new IndexSearcher(ramDirectory2);
+			indexSearcher2 = new IndexSearcher(ramDirectory2, true);
 			indexSearcher2.SetDefaultFieldSortScoring(true, true);
 			
 			Searcher searcher = GetMultiSearcherInstance(new Searcher[]{indexSearcher1, indexSearcher2});
@@ -420,7 +416,7 @@ namespace Lucene.Net.Search
 		{
 			RAMDirectory dir = new RAMDirectory();
 			InitIndex(dir, 10, true, "x"); // documents with two tokens "doc0" and "x", "doc1" and x, etc...
-			IndexSearcher srchr = new IndexSearcher(dir);
+		    IndexSearcher srchr = new IndexSearcher(dir, true);
 			MultiSearcher msrchr = GetMultiSearcherInstance(new Searcher[]{srchr});
 			
 			Similarity customSimilarity = new AnonymousClassDefaultSimilarity(this);
@@ -440,7 +436,22 @@ namespace Lucene.Net.Search
 			
 			// The scores from the IndexSearcher and Multisearcher should be the same
 			// if the same similarity is used.
-			Assert.AreEqual(score1, scoreN, 1e-6, "MultiSearcher score must be equal to single esrcher score!");
+			Assert.AreEqual(score1, scoreN, 1e-6, "MultiSearcher score must be equal to single searcher score!");
 		}
+
+        public void TestDocFreq()
+        {
+            RAMDirectory dir1 = new RAMDirectory();
+            RAMDirectory dir2 = new RAMDirectory();
+
+            InitIndex(dir1, 10, true, "x"); // documents with two tokens "doc0" and "x", "doc1" and x, etc...
+            InitIndex(dir2, 5, true, "x"); // documents with two tokens "doc0" and "x", "doc1" and x, etc...
+            IndexSearcher searcher1 = new IndexSearcher(dir1, true);
+            IndexSearcher searcher2 = new IndexSearcher(dir2, true);
+
+            MultiSearcher multiSearcher = GetMultiSearcherInstance(new Searcher[] { searcher1, searcher2 });
+            Assert.AreEqual(15, multiSearcher.DocFreq(new Term("contents", "x")));
+
+        }
 	}
 }

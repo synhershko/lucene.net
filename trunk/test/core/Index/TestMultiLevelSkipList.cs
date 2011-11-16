@@ -57,7 +57,7 @@ namespace Lucene.Net.Index
 				d1.Add(new Field(term.Field(), term.Text(), Field.Store.NO, Field.Index.ANALYZED));
 				writer.AddDocument(d1);
 			}
-			writer.Flush();
+			writer.Commit();
 			writer.Optimize();
 			writer.Close();
 			

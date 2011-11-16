@@ -34,10 +34,7 @@ namespace Lucene.Net.Search
 	
 	/// <summary> Tests {@link MultiSearcher} ranking, i.e. makes sure this bug is fixed:
 	/// http://issues.apache.org/bugzilla/show_bug.cgi?id=31841
-	/// 
 	/// </summary>
-	/// <version>  $Id: TestMultiSearcher.java 150492 2004-09-06 22:01:49Z dnaber $
-	/// </version>
     [TestFixture]
 	public class TestMultiSearcherRanking:LuceneTestCase
 	{
@@ -109,7 +106,7 @@ namespace Lucene.Net.Search
 			// check result hit ranking
 			if (verbose)
 				System.Console.Out.WriteLine("Query: " + queryStr);
-			QueryParser queryParser = new QueryParser(FIELD_NAME, new StandardAnalyzer(Util.Version.LUCENE_CURRENT));
+			QueryParser queryParser = new QueryParser(Util.Version.LUCENE_CURRENT, FIELD_NAME, new StandardAnalyzer(Util.Version.LUCENE_CURRENT));
 			Query query = queryParser.Parse(queryStr);
 			ScoreDoc[] multiSearcherHits = multiSearcher.Search(query, null, 1000).ScoreDocs;
 			ScoreDoc[] singleSearcherHits = singleSearcher.Search(query, null, 1000).ScoreDocs;
@@ -145,8 +142,8 @@ namespace Lucene.Net.Search
 			iw2.Close();
 			
 			Searchable[] s = new Searchable[2];
-			s[0] = new IndexSearcher(d1);
-			s[1] = new IndexSearcher(d2);
+			s[0] = new IndexSearcher(d1, true);
+            s[1] = new IndexSearcher(d2, true);
 			multiSearcher = new MultiSearcher(s);
 			
 			// create IndexSearcher which contains all documents
@@ -155,7 +152,7 @@ namespace Lucene.Net.Search
 			AddCollection1(iw);
 			AddCollection2(iw);
 			iw.Close();
-			singleSearcher = new IndexSearcher(d);
+            singleSearcher = new IndexSearcher(d, true);
 		}
 		
 		private void  AddCollection1(IndexWriter iw)
