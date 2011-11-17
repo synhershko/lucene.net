@@ -67,7 +67,6 @@ namespace Lucene.Net.Index
 		// FreqProxFieldMergeState, and code to visit all Fields
 		// under the same FieldInfo together, up into TermsHash*.
 		// Other writers would presumably share alot of this...
-
         public override void Flush(IDictionary<TermsHashConsumerPerThread, ICollection<TermsHashConsumerPerField>> threadsAndFields, SegmentWriteState state)
 		{
 			

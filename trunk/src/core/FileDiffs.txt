@@ -120,17 +120,17 @@ index\
 	index\FieldsWriter.java - PORTED
 	index\FilterIndexReader.java - PORTED
 	index\FormatPostingsDocsConsumer.java - IDENTICAL
-	index\FormatPostingsDocsWriter.java - Text files are different
+	index\FormatPostingsDocsWriter.java - PORTED
 	index\FormatPostingsFieldsConsumer.java - IDENTICAL
-	index\FormatPostingsFieldsWriter.java - Text files are different
-	index\FormatPostingsPositionsConsumer.java - Text files are different
-	index\FormatPostingsPositionsWriter.java - Text files are different
+	index\FormatPostingsFieldsWriter.java - PORTED
+	index\FormatPostingsPositionsConsumer.java - PORTED
+	index\FormatPostingsPositionsWriter.java - PORTED
 	index\FormatPostingsTermsConsumer.java - IDENTICAL
-	index\FormatPostingsTermsWriter.java - Text files are different
+	index\FormatPostingsTermsWriter.java - PORTED
 	index\FreqProxFieldMergeState.java - IDENTICAL
-	index\FreqProxTermsWriter.java - Text files are different
-	index\FreqProxTermsWriterPerField.java - Text files are different
-	index\FreqProxTermsWriterPerThread.java - Text files are different
+	index\FreqProxTermsWriter.java - PORTED
+	index\FreqProxTermsWriterPerField.java - PORTED
+	index\FreqProxTermsWriterPerThread.java - PORTED
 	index\IndexCommit.java - DONE
 	index\IndexCommitPoint.java - Removed in 3.x
 	index\IndexDeletionPolicy.java - PORTED
@@ -159,12 +159,12 @@ index\
 	index\MultipleTermPositions.java - PORTED
 	index\MultiReader.java - PORTED
 	index\NormsWriter.java - PORTED
-	index\NormsWriterPerField.java - Text files are different
-	index\NormsWriterPerThread.java - Text files are different
+	index\NormsWriterPerField.java - PORTED
+	index\NormsWriterPerThread.java - PORTED
 	index\package.html - IDENTICAL
 	index\ParallelReader.java - PORTED
-	index\Payload.java - Text files are different
-	index\PositionBasedTermVectorMapper.java - Text files are different
+	index\Payload.java - PORTED
+	index\PositionBasedTermVectorMapper.java - PORTED
 	index\RawPostingList.java - IDENTICAL
 	index\ReadOnlyDirectoryReader.java - PORTED
 	index\ReadOnlySegmentReader.java - PORTED
@@ -198,19 +198,19 @@ index\
 	index\TermPositions.java - IDENTICAL
 	index\TermPositionVector.java - IDENTICAL
 	index\TermsHash.java - PORTED
-	index\TermsHashConsumer.java - Text files are different
+	index\TermsHashConsumer.java - PORTED
 	index\TermsHashConsumerPerField.java - IDENTICAL
 	index\TermsHashConsumerPerThread.java - IDENTICAL
-	index\TermsHashPerField.java - Text files are different
-	index\TermsHashPerThread.java - Text files are different
-	index\TermVectorEntry.java - Text files are different
-	index\TermVectorEntryFreqSortedComparator.java - Text files are different
+	index\TermsHashPerField.java - PORTED
+	index\TermsHashPerThread.java - PORTED
+	index\TermVectorEntry.java - PORTED
+	index\TermVectorEntryFreqSortedComparator.java - PORTED
 	index\TermVectorMapper.java - IDENTICAL
 	index\TermVectorOffsetInfo.java - PORTED
 	index\TermVectorsReader.java - PORTED
-	index\TermVectorsTermsWriter.java - Text files are different
-	index\TermVectorsTermsWriterPerField.java - Text files are different
-	index\TermVectorsTermsWriterPerThread.java - Text files are different
+	index\TermVectorsTermsWriter.java - PORTED
+	index\TermVectorsTermsWriterPerField.java - PORTED
+	index\TermVectorsTermsWriterPerThread.java - PORTED
 	index\TermVectorsWriter.java - IDENTICAL
 
 messages\
@@ -325,7 +325,7 @@ search
 	IndexSearcher.java - PORTED
 	MatchAllDocsQuery.java - PORTED
 	MultiPhraseQuery.java - PORTED
-	MultiSearcher.java - PORTED * Double check on MultiSearcherCallableNoSort/Sort, use use of new Object() rather than dummy lock.  Shouldn't make a difference, seems to be used because ParallelMultiSearcher uses a ReEntrantLock instead of synchronized
+	MultiSearcher.java - PORTED * Double check on MultiSearcherCallableNoSort/Sort, use of new Object() rather than dummy lock.  Shouldn't make a difference, seems to be used because ParallelMultiSearcher uses a ReEntrantLock instead of synchronized
 	MultiTermQuery.java - Text files are different
 	MultiTermQueryWrapperFilter.java - Text files are different
 	NumericRangeFilter.java - Text files are different

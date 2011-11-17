@@ -3981,6 +3981,8 @@ namespace Lucene.Net.Index
                         isCommit = true;
                     if ("Lucene.Net.Store.MockRAMDirectory".Equals(className) && "DeleteFile".Equals(sf.GetMethod().Name))
                         isDelete = true;
+                    if ("Lucene.Net.Index.SegmentInfos".Equals(className))
+                        Console.WriteLine(sf.GetMethod().Name);
                 }
 
                 if (isCommit)

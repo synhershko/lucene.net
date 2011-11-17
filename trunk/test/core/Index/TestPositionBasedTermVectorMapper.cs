@@ -81,7 +81,7 @@ namespace Lucene.Net.Index
 				System.String token = tokens[i];
 				mapper.Map(token, 1, null, thePositions[i]);
 			}
-			System.Collections.IDictionary map = mapper.GetFieldToTerms();
+			var map = mapper.GetFieldToTerms();
 			Assert.IsTrue(map != null, "map is null and it shouldn't be");
 			Assert.IsTrue(map.Count == 1, "map Size: " + map.Count + " is not: " + 1);
 			System.Collections.IDictionary positions = (System.Collections.IDictionary) map["test"];
