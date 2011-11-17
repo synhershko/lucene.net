@@ -398,8 +398,9 @@ namespace Lucene.Net.Store
 						// In 3.0 we will change this to throw
 						// InterruptedException instead
                         // TODO: Change this to throwing a new ThreadInterruptedException when class is build
-						ThreadClass.Current().Interrupt();
-                        throw new System.SystemException(ie.ToString(), ie);
+                        // ThreadClass.Current().Interrupt();
+                        // throw new System.SystemException(ie.ToString(), ie);
+					    throw;
 					}
 				}
 			}

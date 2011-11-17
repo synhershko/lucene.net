@@ -1303,6 +1303,11 @@ namespace Lucene.Net.Index
             
             public override void  Close()
             {
+                Dispose();
+            }
+
+            public override void Dispose()
+            {
                 queue.Close();
             }
         }
@@ -1492,6 +1497,11 @@ namespace Lucene.Net.Index
             }
             
             public virtual void  Close()
+            {
+                Dispose();
+            }
+
+            public virtual void Dispose()
             {
                 for (int i = 0; i < readerTermDocs.Length; i++)
                 {

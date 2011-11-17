@@ -53,7 +53,7 @@ namespace Lucene.Net.Index
 			
 			public override void  Eval(MockRAMDirectory dir)
 			{
-				if (doFail && Thread.CurrentThread.Name.Equals("main")) // TODO: This may not work -cc
+				if (doFail)// && Thread.CurrentThread.Name.Equals("main")) // TODO: This does not work -cc
 				{
 					System.Diagnostics.StackTrace trace = new System.Diagnostics.StackTrace();
 					for (int i = 0; i < trace.FrameCount; i++)

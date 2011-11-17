@@ -29,7 +29,7 @@ namespace Lucene.Net.Index
 	/// <seealso cref="IndexReader.TermDocs()">
 	/// </seealso>
 	
-	public interface TermDocs
+	public interface TermDocs : IDisposable
 	{
 		/// <summary>Sets this to the data for a term.
 		/// The enumeration is reset to the start of the data for this term.

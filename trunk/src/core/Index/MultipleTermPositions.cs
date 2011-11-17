@@ -188,9 +188,14 @@ namespace Lucene.Net.Index
 		
 		public void  Close()
 		{
-			while (_termPositionsQueue.Size() > 0)
-				_termPositionsQueue.Pop().Close();
+		    Dispose();
 		}
+
+        public void Dispose()
+        {
+            while (_termPositionsQueue.Size() > 0)
+                _termPositionsQueue.Pop().Close();
+        }
 		
 		/// <summary> Not implemented.</summary>
 		/// <throws>  UnsupportedOperationException </throws>

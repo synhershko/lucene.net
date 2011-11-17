@@ -76,8 +76,12 @@ namespace Lucene.Net.Index
 			}
 			public virtual void  Close()
 			{
-				in_Renamed.Close();
+				Dispose();
 			}
+            public virtual void Dispose()
+            {
+                in_Renamed.Close();
+            }
 		}
 		
 		/// <summary>Base class for filtering <see cref="TermPositions" /> implementations. </summary>
@@ -135,8 +139,12 @@ namespace Lucene.Net.Index
 			}
 			public override void  Close()
 			{
-				in_Renamed.Close();
+				Dispose();
 			}
+            public override void Dispose()
+            {
+                in_Renamed.Close();
+            }
 		}
 		
 		protected internal IndexReader in_Renamed;

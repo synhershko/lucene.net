@@ -111,10 +111,15 @@ namespace Lucene.Net.Index
 		
 		public virtual void  Close()
 		{
-			freqStream.Close();
-			if (skipListReader != null)
-				skipListReader.Close();
+		    Dispose();
 		}
+
+        public virtual void Dispose()
+        {
+            freqStream.Close();
+            if (skipListReader != null)
+                skipListReader.Close();
+        }
 		
 		public int Doc()
 		{

@@ -32,6 +32,7 @@ namespace Lucene.Net.Support
     [Serializable]
     public class HashMap<TKey, TValue> : IDictionary<TKey, TValue>
     {
+        private EqualityComparer<TKey> _comparer;
         private Dictionary<TKey, TValue> _dict;
 
         // Indicates if a null key has been assigned, used for iteration
@@ -46,6 +47,7 @@ namespace Lucene.Net.Support
         public HashMap(int initialCapacity)
         {
             _dict = new Dictionary<TKey, TValue>(initialCapacity);
+            _comparer = EqualityComparer<TKey>.Default;
             _hasNullValue = false;
         }
 
@@ -91,7 +93,7 @@ namespace Lucene.Net.Support
 
         void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
         {
-            if (item.Key.Equals(default(TKey)))
+            if (_comparer.Equals(item.Key, default(TKey)))
             {
                 _hasNullValue = true;
                 _nullValue = item.Value;
@@ -111,7 +113,7 @@ namespace Lucene.Net.Support
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
         {
-            if (item.Key.Equals(default(TKey)))
+            if (_comparer.Equals(item.Key, default(TKey)))
             {
                 return _hasNullValue && EqualityComparer<TValue>.Default.Equals(item.Value, _nullValue);
             }
@@ -126,7 +128,7 @@ namespace Lucene.Net.Support
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            if (item.Key.Equals(default(TKey)))
+            if (_comparer.Equals(item.Key, default(TKey)))
             {
                 if (!_hasNullValue)
                     return false;
@@ -155,9 +157,13 @@ namespace Lucene.Net.Support
 
         public bool ContainsKey(TKey key)
         {
-            if (key.Equals(default(TKey)) && _hasNullValue)
+            if (_comparer.Equals(key, default(TKey)))
             {
-                return true;
+                if (_hasNullValue)
+                {
+                    return true;
+                }
+                return false;
             }
 
             return _dict.ContainsKey(key);
@@ -165,7 +171,7 @@ namespace Lucene.Net.Support
 
         public void Add(TKey key, TValue value)
         {
-            if (key.Equals(default(TKey)))
+            if (_comparer.Equals(key, default(TKey)))
             {
                 _hasNullValue = true;
                 _nullValue = value;
@@ -185,7 +191,7 @@ namespace Lucene.Net.Support
 
         public bool Remove(TKey key)
         {
-            if (key.Equals(default(TKey)))
+            if (_comparer.Equals(key, default(TKey)))
             {
                 _hasNullValue = false;
                 _nullValue = default(TValue);
@@ -199,7 +205,7 @@ namespace Lucene.Net.Support
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            if (key.Equals(default(TKey)))
+            if (_comparer.Equals(key, default(TKey)))
             {
                 if (_hasNullValue)
                 {
@@ -220,7 +226,7 @@ namespace Lucene.Net.Support
         {
             get
             {
-                if (key.Equals(default(TKey)))
+                if (_comparer.Equals(key, default(TKey)))
                 {
                     if (!_hasNullValue)
                     {
@@ -232,7 +238,7 @@ namespace Lucene.Net.Support
             }
             set
             {
-                if (key.Equals(default(TKey)))
+                if (_comparer.Equals(key, default(TKey)))
                 {
                     _nullValue = value;
                 }

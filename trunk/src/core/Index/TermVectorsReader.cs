@@ -23,9 +23,6 @@ using IndexInput = Lucene.Net.Store.IndexInput;
 
 namespace Lucene.Net.Index
 {
-	
-	/// <version>  $Id: TermVectorsReader.java 687046 2008-08-19 13:01:11Z mikemccand $
-	/// </version>
 	public class TermVectorsReader : System.ICloneable
 	{
 		

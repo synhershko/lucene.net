@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+using System;
 using Lucene.Net.Index;
 
 namespace Lucene.Net.Search
@@ -64,6 +65,11 @@ namespace Lucene.Net.Search
                 _endEnum = true;
                 return false;
             }
+        }
+
+        public override void Dispose()
+        {
+            
         }
     }
 }

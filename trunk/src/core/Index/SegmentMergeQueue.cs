@@ -21,7 +21,7 @@ using Lucene.Net.Util;
 namespace Lucene.Net.Index
 {
 	
-	sealed class SegmentMergeQueue:PriorityQueue<SegmentMergeInfo>
+	sealed class SegmentMergeQueue : PriorityQueue<SegmentMergeInfo>
 	{
 		internal SegmentMergeQueue(int size)
 		{

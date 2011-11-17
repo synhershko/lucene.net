@@ -32,10 +32,9 @@ namespace Lucene.Net.Analysis
 	[TestFixture]
 	public class TestAnalyzers : BaseTokenStreamTestCase
 	{
-        // NOTE: This was commented out before -cc
-		public TestAnalyzers(System.String name) : base(name)
-		{
-		}
+        //public TestAnalyzers(System.String name) : base(name)
+        //{
+        //}
 		
 		[Test]
 		public virtual void  TestSimple()

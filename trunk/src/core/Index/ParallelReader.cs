@@ -635,9 +635,14 @@ namespace Lucene.Net.Index
 			
 			public override void  Close()
 			{
-				if (termEnum != null)
-					termEnum.Close();
+			    Dispose();
 			}
+
+            public override void Dispose()
+            {
+                if (termEnum != null)
+                    termEnum.Close();
+            }
 		}
 		
 		// wrap a TermDocs in order to support seek(Term)
@@ -719,9 +724,14 @@ namespace Lucene.Net.Index
 			
 			public virtual void  Close()
 			{
-				if (termDocs != null)
-					termDocs.Close();
+			    Dispose();
 			}
+
+            public virtual void Dispose()
+            {
+                if (termDocs != null)
+                    termDocs.Close();
+            }
 		}
 		
 		private class ParallelTermPositions:ParallelTermDocs, TermPositions

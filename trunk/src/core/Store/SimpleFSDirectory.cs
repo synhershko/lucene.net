@@ -69,7 +69,7 @@ namespace Lucene.Net.Store
 		protected internal class SimpleFSIndexInput:BufferedIndexInput, System.ICloneable
 		{
 			// TODO: This is a bad way to handle memory and disposing
-			protected internal class Descriptor:System.IO.BinaryReader
+			protected internal class Descriptor : System.IO.BinaryReader
 			{
 				// remember if the file is open, so that we don't try to close it
 				// more than once
@@ -89,7 +89,7 @@ namespace Lucene.Net.Store
 					if (isOpen)
 					{
 						isOpen = false;
-						base.Close();
+                        base.Close();
 					}
 				}
 			

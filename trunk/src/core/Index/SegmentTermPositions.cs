@@ -58,10 +58,15 @@ namespace Lucene.Net.Index
 		
 		public override void  Close()
 		{
-			base.Close();
-			if (proxStream != null)
-				proxStream.Close();
+            Dispose();
 		}
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            if (proxStream != null)
+                proxStream.Close();
+        }
 		
 		public int NextPosition()
 		{

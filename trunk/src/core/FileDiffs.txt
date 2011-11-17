@@ -83,7 +83,7 @@ index\
 	index\AllTermDocs.java - IDENTICAL
 	index\BufferedDeletes.java - PORTED
 	index\ByteBlockPool.java - PORTED
-	index\ByteSliceReader.java - Text files are different
+	index\ByteSliceReader.java - PORTED
 	index\ByteSliceWriter.java - IDENTICAL
 	index\CharBlockPool.java - IDENTICAL
 	index\CheckIndex.java - PORTED
@@ -135,8 +135,8 @@ index\
 	index\IndexCommitPoint.java - Removed in 3.x
 	index\IndexDeletionPolicy.java - PORTED
 	index\IndexFileDeleter.java - PORTED
-	index\IndexFileNameFilter.java - Text files are different
-	index\IndexFileNames.java - Text files are different
+	index\IndexFileNameFilter.java - DONE
+	index\IndexFileNames.java - DONE
 	index\IndexModifier.java - Removed in 3.x
 	index\IndexReader.java - PORTED
 	index\IndexWriter.java - PORTED
@@ -167,30 +167,30 @@ index\
 	index\PositionBasedTermVectorMapper.java - Text files are different
 	index\RawPostingList.java - IDENTICAL
 	index\ReadOnlyDirectoryReader.java - PORTED
-	index\ReadOnlySegmentReader.java - Text files are different
-	index\ReusableStringReader.java - Text files are different
+	index\ReadOnlySegmentReader.java - PORTED
+	index\ReusableStringReader.java - PORTED
 	index\SegmentInfo.java - PORTED
-	index\SegmentInfos.java - PORTED * doesn't inherit from a generic equiv as in java
+	index\SegmentInfos.java - PORTED * doesn't inherit from a generic equiv as in java (java's is threadsafe)
 	index\SegmentMergeInfo.java - IDENTICAL
-	index\SegmentMergeQueue.java - Text files are different
-	index\SegmentMerger.java - Text files are different
+	index\SegmentMergeQueue.java - PORTED
+	index\SegmentMerger.java - PORTED
 	index\SegmentReader.java - PORTED
 	index\SegmentTermDocs.java - IDENTICAL
-	index\SegmentTermEnum.java - Text files are different
-	index\SegmentTermPositions.java - Text files are different
+	index\SegmentTermEnum.java - PORTED
+	index\SegmentTermPositions.java - PORTED
 	index\SegmentTermPositionVector.java - IDENTICAL
-	index\SegmentTermVector.java - Text files are different
+	index\SegmentTermVector.java - PORTED
 	index\SegmentWriteState.java - PORTED
-	index\SerialMergeScheduler.java - Text files are different
+	index\SerialMergeScheduler.java - PORTED
 	index\SnapshotDeletionPolicy.java - PORTED
-	index\SortedTermVectorMapper.java - PORTEDS
+	index\SortedTermVectorMapper.java - PORTED
 	index\StaleReaderException.java - IDENTICAL
-	index\StoredFieldsWriter.java - Text files are different
+	index\StoredFieldsWriter.java - PORTED
 	index\StoredFieldsWriterPerThread.java - IDENTICAL
-	index\Term.java - Text files are different
-	index\TermBuffer.java - Text files are different
-	index\TermDocs.java - Text files are different
-	index\TermEnum.java - Text files are different
+	index\Term.java - PORTED
+	index\TermBuffer.java - PORTED
+	index\TermDocs.java - PORTED
+	index\TermEnum.java - PORTED
 	index\TermFreqVector.java - IDENTICAL
 	index\TermInfo.java - IDENTICAL
 	index\TermInfosReader.java - PORTED
@@ -206,8 +206,8 @@ index\
 	index\TermVectorEntry.java - Text files are different
 	index\TermVectorEntryFreqSortedComparator.java - Text files are different
 	index\TermVectorMapper.java - IDENTICAL
-	index\TermVectorOffsetInfo.java - Text files are different
-	index\TermVectorsReader.java - Text files are different
+	index\TermVectorOffsetInfo.java - PORTED
+	index\TermVectorsReader.java - PORTED
 	index\TermVectorsTermsWriter.java - Text files are different
 	index\TermVectorsTermsWriterPerField.java - Text files are different
 	index\TermVectorsTermsWriterPerThread.java - Text files are different
@@ -391,7 +391,7 @@ store
 	ChecksumIndexOutput.java - PORTED
 	Directory.java - PORTED
 	FileSwitchDirectory.java - PORTED
-	FSDirectory.java - Text files are different
+	FSDirectory.java - PORTED
 	FSLockFactory.java - IDENTICAL
 	IndexInput.java - PORTED * See IDisposable
 	IndexOutput.java - PORTED * See IDisposable

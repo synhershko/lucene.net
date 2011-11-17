@@ -631,10 +631,15 @@ namespace Lucene.Net.Search
 			//@Override
 			public override void  Close()
 			{
-				rangeBounds.Clear();
-				currentUpperBound = null;
-				base.Close();
+			    Dispose();	
 			}
+
+		    public override void Dispose()
+		    {
+                rangeBounds.Clear();
+                currentUpperBound = null;
+                base.Dispose();
+		    }
 		}
 	}
 }

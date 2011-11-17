@@ -21,11 +21,7 @@ using Lucene.Net.Support;
 namespace Lucene.Net.Index
 {
 	
-	/// <summary> Useful constants representing filenames and extensions used by lucene
-	/// 
-	/// </summary>
-	/// <version>  $rcs = ' $Id: Exp $ ' ;
-	/// </version>
+	/// <summary>Useful constants representing filenames and extensions used by lucene</summary>
 	public sealed class IndexFileNames
 	{
 		

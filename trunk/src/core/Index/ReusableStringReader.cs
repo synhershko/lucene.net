@@ -51,6 +51,7 @@ namespace Lucene.Net.Index
             }
             else if (0 == left)
             {
+                // don't keep a reference (s could have been very large)
                 s = null;
                 return 0;
             }

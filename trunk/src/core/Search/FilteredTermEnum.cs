@@ -110,10 +110,15 @@ namespace Lucene.Net.Search
 		/// <summary>Closes the enumeration to further activity, freeing resources.  </summary>
 		public override void  Close()
 		{
-			if (actualEnum != null)
-				actualEnum.Close();
-			currentTerm = null;
-			actualEnum = null;
+            Dispose();
 		}
+
+        public override void Dispose()
+        {
+            if (actualEnum != null)
+                actualEnum.Close();
+            currentTerm = null;
+            actualEnum = null;
+        }
 	}
 }

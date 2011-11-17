@@ -128,11 +128,6 @@ namespace Lucene.Net.Index
 			return result;
 		}
 		
-		public int CompareTo(System.Object other)
-		{
-			return CompareTo((Term) other);
-		}
-		
 		/// <summary>Compares two terms, returning a negative integer if this
 		/// term belongs before the argument, zero if this term is equal to the
 		/// argument, and a positive integer if this term belongs after the argument.

@@ -2088,6 +2088,7 @@ namespace Lucene.Net.Index
 							if (infoStream != null)
 								Message("hit exception building compound file doc store for segment " + docStoreSegment);
 							deleter.DeleteFile(compoundFileName);
+                            docWriter.Abort();
 						}
 					}
 					
