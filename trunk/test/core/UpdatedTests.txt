@@ -83,7 +83,7 @@ index\TestNewestSegment.java - IDENTICAL
 index\TestNorms.java - DONE
 index\TestNRTReaderWithThreads.java - Text files are different
 index\TestOmitTf.java - DONE
-index\TestParallelReader.java - Text files are different
+index\TestParallelReader.java - DONE
 index\TestParallelReaderEmptyIndex.java - IDENTICAL
 index\TestParallelTermEnum.java - Text files are different
 index\TestPayloads.java - DONE
@@ -204,7 +204,7 @@ search\TestSort.java - DONE
 search\TestSpanQueryFilter.java - Text files are different
 search\TestStressSort.java - REMOVED
 search\TestTermRangeFilter.java - DONE
-search\TestTermRangeQuery.java - Text files are different
+search\TestTermRangeQuery.java - DONE
 search\TestTermScorer.java - Text files are different
 search\TestTermVectors.java - DONE
 search\TestThreadSafe.java - DONE

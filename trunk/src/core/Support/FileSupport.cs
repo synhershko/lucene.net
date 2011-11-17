@@ -26,10 +26,12 @@ namespace Lucene.Net.Support
             else
                 return null;
         }
-
+        
+        // TODO: This filesupport thing is silly.  Same goes with _TestUtil's RMDir.
+        //       If we're removing a directory
         public static System.IO.FileInfo[] GetFiles(System.IO.DirectoryInfo path)
         {
-            return path.GetFiles();
+            return GetFiles(new FileInfo(path.FullName));
         }
 
         /// <summary>

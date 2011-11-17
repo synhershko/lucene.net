@@ -75,9 +75,8 @@ namespace Lucene.Net.Store
 		/// <param name="lockDirName">where lock files should be created.
 		/// </param>
 		public SimpleFSLockFactory(System.String lockDirName)
+            : this(new System.IO.DirectoryInfo(lockDirName))
 		{
-			lockDir = new System.IO.DirectoryInfo(lockDirName);
-			SetLockDir(lockDir);
 		}
 		
 		public override Lock MakeLock(System.String lockName)

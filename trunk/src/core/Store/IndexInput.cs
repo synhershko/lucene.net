@@ -16,6 +16,7 @@
  */
 
 using System;
+using Lucene.Net.Support;
 
 namespace Lucene.Net.Store
 {
@@ -262,7 +263,7 @@ namespace Lucene.Net.Store
 		// returns Map<String, String>
 		public virtual System.Collections.Generic.IDictionary<string,string> ReadStringStringMap()
 		{
-            System.Collections.Generic.Dictionary<string, string> map = new System.Collections.Generic.Dictionary<string, string>();
+            var map = new HashMap<string, string>();
 			int count = ReadInt();
 			for (int i = 0; i < count; i++)
 			{

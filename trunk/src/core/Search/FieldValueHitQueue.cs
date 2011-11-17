@@ -29,14 +29,8 @@ namespace Lucene.Net.Search
 	/// incompatible ways in the next release.
 	/// 
 	/// </summary>
-	/// <since> 2.9
-	/// </since>
-	/// <version>  $Id:
-	/// </version>
-	/// <seealso cref="Searcher.Search(Query,Filter,int,Sort)">
-	/// </seealso>
-	/// <seealso cref="FieldCache">
-	/// </seealso>
+	/// <seealso cref="Searcher.Search(Query,Filter,int,Sort)"></seealso>
+	/// <seealso cref="FieldCache"></seealso>
 	public abstract class FieldValueHitQueue : PriorityQueue<FieldValueHitQueue.Entry>
 	{
         // had to change from internal to public, due to public accessability of FieldValueHitQueue
@@ -119,9 +113,6 @@ namespace Lucene.Net.Search
 				for (int i = 0; i < numComparators; ++i)
 				{
 					SortField field = fields[i];
-					
-					// AUTO is resolved before we are called
-					System.Diagnostics.Debug.Assert(field.GetType() != SortField.AUTO);
 					
 					reverseMul[i] = field.reverse?- 1:1;
 					comparators[i] = field.GetComparator(size, i);

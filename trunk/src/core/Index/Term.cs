@@ -30,7 +30,7 @@ namespace Lucene.Net.Index
 	/// </summary>
 	
 	[Serializable]
-    public sealed class Term : System.IComparable
+    public sealed class Term : System.IComparable<Term>
 	{
 		internal System.String field;
 		internal System.String text;

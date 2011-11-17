@@ -162,7 +162,7 @@ index\
 	index\NormsWriterPerField.java - Text files are different
 	index\NormsWriterPerThread.java - Text files are different
 	index\package.html - IDENTICAL
-	index\ParallelReader.java - Text files are different
+	index\ParallelReader.java - DONE
 	index\Payload.java - Text files are different
 	index\PositionBasedTermVectorMapper.java - Text files are different
 	index\RawPostingList.java - IDENTICAL
@@ -352,8 +352,8 @@ search
 	ScoreDoc.java - Text files are different
 	ScoreDocComparator.java - Removed in 3.x
 	Scorer.java - Text files are different
-	Searchable.java - Text files are different
-	Searcher.java - Text files are different
+	Searchable.java - DONE
+	Searcher.java - DONE
 	Similarity.java - PORTED
 	SimilarityDelegator.java - PORTED
 	SingleTermEnum.java - PORTED

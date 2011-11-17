@@ -77,8 +77,8 @@ namespace Lucene.Net.Index
 			Directory dir1 = GetDir1();
 			Directory dir2 = GetDir2();
 			ParallelReader pr = new ParallelReader();
-			pr.Add(IndexReader.Open(dir1));
-			pr.Add(IndexReader.Open(dir2));
+            pr.Add(IndexReader.Open(dir1, false));
+            pr.Add(IndexReader.Open(dir2, false));
             System.Collections.Generic.ICollection<string> fieldNames = pr.GetFieldNames(IndexReader.FieldOption.ALL);
 			Assert.AreEqual(4, fieldNames.Count);
 			Assert.IsTrue(CollectionsHelper.Contains(fieldNames, "f1"));
@@ -93,8 +93,8 @@ namespace Lucene.Net.Index
 			Directory dir1 = GetDir1();
 			Directory dir2 = GetDir2();
 			ParallelReader pr = new ParallelReader();
-			pr.Add(IndexReader.Open(dir1));
-			pr.Add(IndexReader.Open(dir2));
+            pr.Add(IndexReader.Open(dir1, false));
+            pr.Add(IndexReader.Open(dir2, false));
 			
 			Document doc11 = pr.Document(0, new MapFieldSelector(new System.String[]{"f1"}));
 			Document doc24 = pr.Document(1, new MapFieldSelector(new System.Collections.ArrayList(new System.String[]{"f4"})));
@@ -125,10 +125,10 @@ namespace Lucene.Net.Index
 			w2.Close();
 			
 			ParallelReader pr = new ParallelReader();
-			pr.Add(IndexReader.Open(dir1));
+            pr.Add(IndexReader.Open(dir1, false));
 			try
 			{
-				pr.Add(IndexReader.Open(dir2));
+                pr.Add(IndexReader.Open(dir2, false));
 				Assert.Fail("didn't get exptected exception: indexes don't have same number of documents");
 			}
 			catch (System.ArgumentException e)
@@ -143,19 +143,19 @@ namespace Lucene.Net.Index
 			Directory dir1 = GetDir1();
 			Directory dir2 = GetDir2();
 			ParallelReader pr = new ParallelReader();
-			pr.Add(IndexReader.Open(dir1));
-			pr.Add(IndexReader.Open(dir2));
+			pr.Add(IndexReader.Open(dir1, false));
+            pr.Add(IndexReader.Open(dir2, false));
 			
 			Assert.IsTrue(pr.IsCurrent());
-			IndexReader modifier = IndexReader.Open(dir1);
+            IndexReader modifier = IndexReader.Open(dir1, false);
 			modifier.SetNorm(0, "f1", 100);
 			modifier.Close();
 			
 			// one of the two IndexReaders which ParallelReader is using
 			// is not current anymore
 			Assert.IsFalse(pr.IsCurrent());
-			
-			modifier = IndexReader.Open(dir2);
+
+            modifier = IndexReader.Open(dir2, false);
 			modifier.SetNorm(0, "f3", 100);
 			modifier.Close();
 			
@@ -184,8 +184,8 @@ namespace Lucene.Net.Index
 			
 			
 			ParallelReader pr = new ParallelReader();
-			pr.Add(IndexReader.Open(dir1));
-			pr.Add(IndexReader.Open(dir2));
+            pr.Add(IndexReader.Open(dir1, false));
+            pr.Add(IndexReader.Open(dir2, false));
 			Assert.IsFalse(pr.IsOptimized());
 			pr.Close();
 			
@@ -194,8 +194,8 @@ namespace Lucene.Net.Index
 			modifier.Close();
 			
 			pr = new ParallelReader();
-			pr.Add(IndexReader.Open(dir1));
-			pr.Add(IndexReader.Open(dir2));
+            pr.Add(IndexReader.Open(dir1, false));
+            pr.Add(IndexReader.Open(dir2, false));
 			// just one of the two indexes are optimized
 			Assert.IsFalse(pr.IsOptimized());
 			pr.Close();
@@ -206,8 +206,8 @@ namespace Lucene.Net.Index
 			modifier.Close();
 			
 			pr = new ParallelReader();
-			pr.Add(IndexReader.Open(dir1));
-			pr.Add(IndexReader.Open(dir2));
+            pr.Add(IndexReader.Open(dir1, false));
+            pr.Add(IndexReader.Open(dir2, false));
 			// now both indexes are optimized
 			Assert.IsTrue(pr.IsOptimized());
 			pr.Close();
@@ -219,8 +219,8 @@ namespace Lucene.Net.Index
 			Directory dir1 = GetDir1();
 			Directory dir2 = GetDir2();
 			ParallelReader pr = new ParallelReader();
-			pr.Add(IndexReader.Open(dir1));
-			pr.Add(IndexReader.Open(dir2));
+            pr.Add(IndexReader.Open(dir1, false));
+            pr.Add(IndexReader.Open(dir2, false));
 			int NUM_DOCS = 2;
 			TermDocs td = pr.TermDocs(null);
 			for (int i = 0; i < NUM_DOCS; i++)
@@ -271,8 +271,8 @@ namespace Lucene.Net.Index
 			d2.Add(new Field("f4", "v2", Field.Store.YES, Field.Index.ANALYZED));
 			w.AddDocument(d2);
 			w.Close();
-			
-			return new IndexSearcher(dir);
+
+            return new IndexSearcher(dir, false);
 		}
 		
 		// Fields 1 & 2 in one index, 3 & 4 in other, with ParallelReader:
@@ -281,8 +281,8 @@ namespace Lucene.Net.Index
 			Directory dir1 = GetDir1();
 			Directory dir2 = GetDir2();
 			ParallelReader pr = new ParallelReader();
-			pr.Add(IndexReader.Open(dir1));
-			pr.Add(IndexReader.Open(dir2));
+            pr.Add(IndexReader.Open(dir1, false));
+            pr.Add(IndexReader.Open(dir2, false));
 			return new IndexSearcher(pr);
 		}
 		

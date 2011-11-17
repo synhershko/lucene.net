@@ -127,7 +127,7 @@ namespace Lucene.Net.Index
 		// or wrote; this is normally the same as generation except if
 		// there was an IOException that had interrupted a commit
 
-        private System.Collections.Generic.IDictionary<string, string> userData = new System.Collections.Generic.Dictionary<string, string>(); // Opaque Map<String, String> that user can specify during IndexWriter.commit
+        private IDictionary<string, string> userData = new HashMap<string, string>(); // Opaque Map<String, String> that user can specify during IndexWriter.commit
 		
 		/// <summary> If non-null, information about loading segments_N files</summary>
 		/// <seealso cref="SetInfoStream">
@@ -315,20 +315,20 @@ namespace Lucene.Net.Index
 					}
 					else if (0 != input.ReadByte())
 					{
-                        // TODO: In java, this is a read-only dictionary, probably for a reason, though
-                        //       I can't see immediately why.  We'd have to roll our own, I can't find
-                        //       and equivelant in the BCL
-                        userData = new System.Collections.Generic.Dictionary<string,string>();
+                        // TODO: Should be read-only map
+                        userData = new HashMap<string,string>();
 						userData.Add("userData", input.ReadString());
 					}
 					else
 					{
-                        userData = new System.Collections.Generic.Dictionary<string, string>();
+                        // TODO: Should be empty read-only map
+                        userData = new HashMap<string, string>();
 					}
 				}
 				else
 				{
-                    userData = new System.Collections.Generic.Dictionary<string, string>();
+                    // TODO: Should be empty read-only map
+                    userData = new HashMap<string, string>();
 				}
 				
 				if (format <= FORMAT_CHECKSUM)
@@ -1037,7 +1037,7 @@ namespace Lucene.Net.Index
 		{
 			if (data == null)
 			{
-				userData = new System.Collections.Generic.Dictionary<string,string>();
+			    userData = new HashMap<string, string>();
 			}
 			else
 			{

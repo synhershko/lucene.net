@@ -118,7 +118,7 @@ namespace Lucene.Net.Search
 		{
 			// log("Run testFieldSortSingleSearcher");
 			// define the sort criteria
-			Sort custSort = new Sort(new SortField("publicationDate_"), SortField.FIELD_SCORE);
+			Sort custSort = new Sort(new SortField("publicationDate_", SortField.STRING), SortField.FIELD_SCORE);
 			Searcher searcher = new MultiSearcher(new Searcher[]{new CustomSearcher(this, index, 2)});
 			// search and check hits
 			MatchHits(searcher, custSort);
@@ -129,7 +129,7 @@ namespace Lucene.Net.Search
 		{
 			// log("Run testFieldSortMultiCustomSearcher");
 			// define the sort criteria
-			Sort custSort = new Sort(new SortField("publicationDate_"), SortField.FIELD_SCORE);
+            Sort custSort = new Sort(new SortField("publicationDate_", SortField.STRING), SortField.FIELD_SCORE);
 			Searcher searcher = new MultiSearcher(new Searchable[]{new CustomSearcher(this, index, 0), new CustomSearcher(this, index, 2)});
 			// search and check hits
 			MatchHits(searcher, custSort);
@@ -231,10 +231,12 @@ namespace Lucene.Net.Search
 				
 			}
 			private int switcher;
-			/// <param name="directory">
-			/// </param>
-			/// <throws>  IOException </throws>
-			public CustomSearcher(TestCustomSearcherSort enclosingInstance, Directory directory, int switcher):base(directory)
+
+		    /// <param name="directory">
+		    /// </param>
+		    /// <throws>  IOException </throws>
+		    public CustomSearcher(TestCustomSearcherSort enclosingInstance, Directory directory, int switcher)
+		        : base(directory, true)
 			{
 				InitBlock(enclosingInstance);
 				this.switcher = switcher;

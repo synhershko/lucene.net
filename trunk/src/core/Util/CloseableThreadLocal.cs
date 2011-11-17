@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Lucene.Net.Support;
 
@@ -96,14 +97,14 @@ namespace Lucene.Net.Util
             {
                 //hardRefs[Thread.CurrentThread] = @object;
                 hardRefs.Add(Thread.CurrentThread, @object);
-
+                
+                // Java's iterator can remove, .NET's cannot
+                var threadsToRemove = hardRefs.Keys.Where(thread => !thread.IsAlive).ToList();
                 // Purge dead threads
-                foreach (var thread in hardRefs.Keys)
+                foreach (var thread in threadsToRemove)
                 {
-                    if (!thread.IsAlive)
-                        hardRefs.Remove(thread);
+                    hardRefs.Remove(thread);
                 }
-
             }
         }
 

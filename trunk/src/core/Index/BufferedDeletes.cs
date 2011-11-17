@@ -97,12 +97,12 @@ namespace Lucene.Net.Index
 			numTerms += in_Renamed.numTerms;
 			bytesUsed += in_Renamed.bytesUsed;
 		    foreach (KeyValuePair<Term, Num> term in in_Renamed.terms)
-		    {
-		        terms.Add(term);
+            {
+                terms[term.Key] = term.Value;
 		    }
             foreach (KeyValuePair<Query, int> term in in_Renamed.queries)
             {
-                queries.Add(term);
+                queries[term.Key] = term.Value;
             }
 
 			docIDs.AddRange(in_Renamed.docIDs);
@@ -134,7 +134,6 @@ namespace Lucene.Net.Index
 		{
 			lock (this)
 			{
-				
 				IDictionary<Term, Num> newDeleteTerms;
 				
 				// Remap delete-by-term
@@ -179,7 +178,7 @@ namespace Lucene.Net.Index
                     newDeleteQueries = new HashMap<Query, int>(queries.Count);
 					foreach(var entry in queries)
 					{
-						int num = (int)entry.Value;
+						int num = entry.Value;
 						newDeleteQueries[entry.Key] = mapper.Remap(num);
 					}
 				}

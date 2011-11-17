@@ -2812,14 +2812,14 @@ namespace Lucene.Net.Index
                         if (ioe.Message.StartsWith("fake disk full at") || ioe.Message.Equals("now failing on purpose"))
                         {
                             diskFull = true;
-                            try
-                            {
+                            //try
+                            //{
                                 System.Threading.Thread.Sleep(new System.TimeSpan((System.Int64)10000 * 1));
-                            }
-                            catch (System.Threading.ThreadInterruptedException ie)
-                            {
-                                throw;
-                            }
+                            //}
+                            //catch (System.Threading.ThreadInterruptedException ie)
+                            //{
+                            //    throw;
+                            //}
                             if (fullCount++ >= 5)
                                 break;
                         }
@@ -3627,7 +3627,7 @@ namespace Lucene.Net.Index
                 writer.AddDocument(document);
             writer.Close();
 
-            IndexReader ir = IndexReader.Open(dir, true);
+            IndexReader ir = IndexReader.Open(dir, false);
             Assert.AreEqual(10, ir.MaxDoc());
             Assert.AreEqual(10, ir.NumDocs());
             ir.DeleteDocument(0);
@@ -3641,7 +3641,7 @@ namespace Lucene.Net.Index
             writer.ExpungeDeletes();
             Assert.AreEqual(8, writer.NumDocs());
             writer.Close();
-            ir = IndexReader.Open(dir);
+            ir = IndexReader.Open(dir, true);
             Assert.AreEqual(8, ir.MaxDoc());
             Assert.AreEqual(8, ir.NumDocs());
             ir.Close();
@@ -3669,7 +3669,7 @@ namespace Lucene.Net.Index
                 writer.AddDocument(document);
             writer.Close();
 
-            IndexReader ir = IndexReader.Open(dir, true);
+            IndexReader ir = IndexReader.Open(dir, false);
             Assert.AreEqual(98, ir.MaxDoc());
             Assert.AreEqual(98, ir.NumDocs());
             for (int i = 0; i < 98; i += 2)
@@ -5782,7 +5782,7 @@ namespace Lucene.Net.Index
             w.AddDocument(doc);
 
             // commit to "first"
-            Dictionary<string, string> commitData = new Dictionary<string, string>();
+            IDictionary<string, string> commitData = new HashMap<string, string>();
             commitData["tag"]="first";
             w.Commit(commitData);
 
@@ -5796,7 +5796,9 @@ namespace Lucene.Net.Index
             IndexCommit commit = null;
             foreach(var c in IndexReader.ListCommits(dir))
             {
-                string tag = c.GetUserData()["tag"];
+                //string tag = c.GetUserData()["tag"];
+                var thing = c.GetUserData();
+                string tag = thing["tag"];
                 if ("first".Equals(tag))
                 {
                     commit = c;

@@ -97,7 +97,7 @@ namespace Lucene.Net.Search
 			writer.Close();
 			
 			// reset the boost of each instance of this document
-			IndexReader reader = IndexReader.Open(store);
+			IndexReader reader = IndexReader.Open(store, false);
 			reader.SetNorm(0, "field", 1.0f);
 			reader.SetNorm(1, "field", 2.0f);
 			reader.SetNorm(2, "field", 4.0f);
@@ -107,7 +107,7 @@ namespace Lucene.Net.Search
 			// check that searches are ordered by this boost
 			float[] scores = new float[4];
 			
-			new IndexSearcher(store).Search(new TermQuery(new Term("field", "word")), new AnonymousClassCollector(scores, this));
+			new IndexSearcher(store, true).Search(new TermQuery(new Term("field", "word")), new AnonymousClassCollector(scores, this));
 			
 			float lastScore = 0.0f;
 			

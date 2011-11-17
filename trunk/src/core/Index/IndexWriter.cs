@@ -4170,7 +4170,6 @@ namespace Lucene.Net.Index
 		{
 			lock (this)
 			{
-				
 				if (hitOOM)
 				{
 					throw new System.SystemException("this writer hit an OutOfMemoryError; cannot flush");
