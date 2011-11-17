@@ -91,31 +91,7 @@ namespace Lucene.Net.Index
 				// do nothing
 			}
 		}
-		[Serializable]
-		private class AnonymousClassFieldSelector : FieldSelector
-		{
-			public AnonymousClassFieldSelector(SegmentMerger enclosingInstance)
-			{
-				InitBlock(enclosingInstance);
-			}
-			private void  InitBlock(SegmentMerger enclosingInstance)
-			{
-				this.enclosingInstance = enclosingInstance;
-			}
-			private SegmentMerger enclosingInstance;
-			public SegmentMerger Enclosing_Instance
-			{
-				get
-				{
-					return enclosingInstance;
-				}
-				
-			}
-			public FieldSelectorResult Accept(System.String fieldName)
-			{
-				return FieldSelectorResult.LOAD_FOR_MERGE;
-			}
-		}
+
 		private void  InitBlock()
 		{
 			termIndexInterval = IndexWriter.DEFAULT_TERM_INDEX_INTERVAL;

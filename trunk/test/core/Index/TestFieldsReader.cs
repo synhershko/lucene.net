@@ -16,6 +16,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using Lucene.Net.Support;
 using NUnit.Framework;
 
@@ -150,15 +151,15 @@ namespace Lucene.Net.Index
 			FieldsReader reader = new FieldsReader(dir, TEST_SEGMENT_NAME, fieldInfos);
 			Assert.IsTrue(reader != null);
 			Assert.IsTrue(reader.Size() == 1);
-			System.Collections.Hashtable loadFieldNames = new System.Collections.Hashtable();
-			CollectionsHelper.AddIfNotContains(loadFieldNames, DocHelper.TEXT_FIELD_1_KEY);
-			CollectionsHelper.AddIfNotContains(loadFieldNames, DocHelper.TEXT_FIELD_UTF1_KEY);
-			System.Collections.Hashtable lazyFieldNames = new System.Collections.Hashtable();
+			ISet<string> loadFieldNames = new HashSet<string>();
+			loadFieldNames.Add(DocHelper.TEXT_FIELD_1_KEY);
+			loadFieldNames.Add(DocHelper.TEXT_FIELD_UTF1_KEY);
+            ISet<string> lazyFieldNames = new HashSet<string>();
 			//new String[]{DocHelper.LARGE_LAZY_FIELD_KEY, DocHelper.LAZY_FIELD_KEY, DocHelper.LAZY_FIELD_BINARY_KEY};
-			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LARGE_LAZY_FIELD_KEY);
-			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_KEY);
-			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_BINARY_KEY);
-			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.TEXT_FIELD_UTF2_KEY);
+			lazyFieldNames.Add(DocHelper.LARGE_LAZY_FIELD_KEY);
+			lazyFieldNames.Add(DocHelper.LAZY_FIELD_KEY);
+			lazyFieldNames.Add(DocHelper.LAZY_FIELD_BINARY_KEY);
+			lazyFieldNames.Add(DocHelper.TEXT_FIELD_UTF2_KEY);
 			SetBasedFieldSelector fieldSelector = new SetBasedFieldSelector(loadFieldNames, lazyFieldNames);
 			Document doc = reader.Doc(0, fieldSelector);
 			Assert.IsTrue(doc != null, "doc is null and it shouldn't be");
@@ -202,14 +203,14 @@ namespace Lucene.Net.Index
 			FieldsReader reader = new FieldsReader(dir, TEST_SEGMENT_NAME, fieldInfos);
 			Assert.IsTrue(reader != null);
 			Assert.IsTrue(reader.Size() == 1);
-			System.Collections.Hashtable loadFieldNames = new System.Collections.Hashtable();
-			CollectionsHelper.AddIfNotContains(loadFieldNames, DocHelper.TEXT_FIELD_1_KEY);
-			CollectionsHelper.AddIfNotContains(loadFieldNames, DocHelper.TEXT_FIELD_UTF1_KEY);
-			System.Collections.Hashtable lazyFieldNames = new System.Collections.Hashtable();
-			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LARGE_LAZY_FIELD_KEY);
-			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_KEY);
-			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LAZY_FIELD_BINARY_KEY);
-			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.TEXT_FIELD_UTF2_KEY);
+            ISet<string> loadFieldNames = new HashSet<string>();
+            loadFieldNames.Add(DocHelper.TEXT_FIELD_1_KEY);
+            loadFieldNames.Add(DocHelper.TEXT_FIELD_UTF1_KEY);
+            ISet<string> lazyFieldNames = new HashSet<string>();
+            lazyFieldNames.Add(DocHelper.LARGE_LAZY_FIELD_KEY);
+            lazyFieldNames.Add(DocHelper.LAZY_FIELD_KEY);
+            lazyFieldNames.Add(DocHelper.LAZY_FIELD_BINARY_KEY);
+            lazyFieldNames.Add(DocHelper.TEXT_FIELD_UTF2_KEY);
 			SetBasedFieldSelector fieldSelector = new SetBasedFieldSelector(loadFieldNames, lazyFieldNames);
 			Document doc = reader.Doc(0, fieldSelector);
 			Assert.IsTrue(doc != null, "doc is null and it shouldn't be");
@@ -279,9 +280,9 @@ namespace Lucene.Net.Index
 			long lazyTime = 0;
 			long regularTime = 0;
 			int length = 50;
-			System.Collections.Hashtable lazyFieldNames = new System.Collections.Hashtable();
-			CollectionsHelper.AddIfNotContains(lazyFieldNames, DocHelper.LARGE_LAZY_FIELD_KEY);
-			SetBasedFieldSelector fieldSelector = new SetBasedFieldSelector(new System.Collections.Hashtable(), lazyFieldNames);
+			ISet<string> lazyFieldNames = new HashSet<string>();
+			lazyFieldNames.Add(DocHelper.LARGE_LAZY_FIELD_KEY);
+			SetBasedFieldSelector fieldSelector = new SetBasedFieldSelector(new HashSet<string>(), lazyFieldNames);
 			
 			for (int i = 0; i < length; i++)
 			{

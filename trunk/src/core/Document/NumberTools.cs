@@ -44,9 +44,9 @@ namespace Lucene.Net.Documents
 	/// To index and efficiently query numeric values use <see cref="NumericField" />
 	/// and <see cref="NumericRangeQuery" />.
 	/// This class is included for use with existing
-	/// indices and will be removed in a future release.
+	/// indices and will be removed in a future release (possibly Lucene 4.0).
 	/// </deprecated>
-    [Obsolete("For new indexes use NumericUtils instead, which provides a sortable binary representation (prefix encoded) of numeric values. To index and efficiently query numeric values use NumericField and NumericRangeQuery. This class is included for use with existing indices and will be removed in a future release.")]
+    [Obsolete("For new indexes use NumericUtils instead, which provides a sortable binary representation (prefix encoded) of numeric values. To index and efficiently query numeric values use NumericField and NumericRangeQuery. This class is included for use with existing indices and will be removed in a future release (possibly Lucene 4.0).")]
 	public class NumberTools
 	{
 		

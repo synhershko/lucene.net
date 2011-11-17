@@ -57,9 +57,9 @@ namespace Lucene.Net.Documents
 	/// <deprecated> If you build a new index, use <see cref="DateTools" /> or 
 	/// <see cref="NumericField" /> instead.
 	/// This class is included for use with existing
-	/// indices and will be removed in a future release.
+	/// indices and will be removed in a future (possibly Lucene 4.0)
 	/// </deprecated>
-    [Obsolete("If you build a new index, use DateTools or NumericField instead.This class is included for use with existing indices and will be removed in a future release.")]
+    [Obsolete("If you build a new index, use DateTools or NumericField instead.This class is included for use with existing indices and will be removed in a future release (possibly Lucene 4.0).")]
 	public class DateField
 	{
 		

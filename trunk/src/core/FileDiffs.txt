@@ -63,20 +63,20 @@ analysis\WordlistLoader.java - PORTED
 
 document\
 document\AbstractField.java - PORTED
-document\CompressionTools.java - Text files are different
-document\DateField.java - Text files are different
-document\DateTools.java - Text files are different
+document\CompressionTools.java - PORTED
+document\DateField.java - PORTED
+document\DateTools.java - PORTED
 document\Document.java - PORTED
 document\Field.java - PORTED
 document\Fieldable.java - PORTED
 document\FieldSelector.java - IDENTICAL
-document\FieldSelectorResult.java - Text files are different
+document\FieldSelectorResult.java - PORTED
 document\LoadFirstFieldSelector.java - IDENTICAL
-document\MapFieldSelector.java - Text files are different
-document\NumberTools.java - Text files are different
+document\MapFieldSelector.java - PORTED
+document\NumberTools.java - PORTED
 document\NumericField.java - PORTED
 document\package.html - IDENTICAL
-document\SetBasedFieldSelector.java - Text files are different
+document\SetBasedFieldSelector.java - PORTED
 
 index\
 	index\AbstractAllTermDocs.java - IDENTICAL
