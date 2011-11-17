@@ -205,14 +205,14 @@ search\TestSpanQueryFilter.java - Text files are different
 search\TestStressSort.java - REMOVED
 search\TestTermRangeFilter.java - DONE
 search\TestTermRangeQuery.java - DONE
-search\TestTermScorer.java - Text files are different
+search\TestTermScorer.java - DONE
 search\TestTermVectors.java - DONE
 search\TestThreadSafe.java - DONE
 search\TestTimeLimitedCollector.java - REMOVED
 search\TestTimeLimitingCollector.java - DONE
 search\TestTopDocsCollector.java - Text files are different
 search\TestTopScoreDocCollector.java - DONE
-search\TestWildcard.java - Text files are different
+search\TestWildcard.java - DONE
 
 
 Store\

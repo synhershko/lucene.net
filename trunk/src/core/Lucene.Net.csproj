@@ -329,7 +329,6 @@
     <Compile Include="Index\FreqProxTermsWriterPerField.cs" />
     <Compile Include="Index\FreqProxTermsWriterPerThread.cs" />
     <Compile Include="Index\IndexCommit.cs" />
-    <Compile Include="Index\IndexCommitPoint.cs" />
     <Compile Include="Index\IndexDeletionPolicy.cs" />
     <Compile Include="Index\IndexFileDeleter.cs">
       <SubType>Code</SubType>

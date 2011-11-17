@@ -190,10 +190,9 @@ namespace Lucene.Net.Index
                         if (d.Get("content3") != null) continue;
                         count++;
                         // read the size from the binary value using BinaryReader (this prevents us from doing the shift ops ourselves):
-                        BinaryReader ds =
-                            new BinaryReader(new MemoryStream(d.GetFieldable("compressed").GetBinaryValue()));
-                        int actualSize = ds.ReadInt32();
-                        ds.Close();
+                        // ugh, Java uses Big-Endian streams, so we need to do it manually.
+                        byte[] encodedSize = d.GetFieldable("compressed").GetBinaryValue().Take(4).Reverse().ToArray();
+                        int actualSize = BitConverter.ToInt32(encodedSize, 0);
                         int compressedSize = int.Parse(d.Get("compressedSize"));
                         bool binary = int.Parse(d.Get("id"))%2 > 0;
                         int shouldSize = shouldStillBeCompressed
@@ -318,11 +317,10 @@ namespace Lucene.Net.Index
 					var fields = d.GetFields();
 					if (!oldName.StartsWith("19.") && !oldName.StartsWith("20.") && !oldName.StartsWith("21.") && !oldName.StartsWith("22."))
 					{
-						
 						if (d.GetField("content3") == null)
 						{
 						    int numFields = oldName.StartsWith("29.") ? 7 : 5;
-							Assert.AreEqual(5, fields.Count);
+							Assert.AreEqual(numFields, fields.Count);
 							Field f = d.GetField("id");
 							Assert.AreEqual("" + i, f.StringValue());
 							

@@ -438,7 +438,7 @@ namespace Lucene.Net.Search
 	                                                ScoreDoc[] scoreDocs = docs.scoreDocs;
                                                     for (int j = 0; j < scoreDocs.Length; j++) // merge scoreDocs into hq
                                                     {
-                                                        FieldDoc fieldDoc = (FieldDoc) scoreDocs[i];
+                                                        FieldDoc fieldDoc = (FieldDoc) scoreDocs[j];
                                                         fieldDoc.doc += starts[i]; //convert doc
                                                         //it would be so nice if we had a thread-safe insert
                                                         lock (theLock)

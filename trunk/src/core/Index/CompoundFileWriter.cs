@@ -16,7 +16,7 @@
  */
 
 using System;
-
+using System.Collections.Generic;
 using Directory = Lucene.Net.Store.Directory;
 using IndexInput = Lucene.Net.Store.IndexInput;
 using IndexOutput = Lucene.Net.Store.IndexOutput;
@@ -43,11 +43,7 @@ namespace Lucene.Net.Index
 	/// file. The {directory} that follows has that many entries. Each directory entry
 	/// contains a long pointer to the start of this file's data section, and a String
 	/// with that file's name.
-	/// 
-	/// 
 	/// </summary>
-	/// <version>  $Id: CompoundFileWriter.java 690539 2008-08-30 17:33:06Z mikemccand $
-	/// </version>
 	public sealed class CompoundFileWriter
 	{
 		
@@ -66,8 +62,8 @@ namespace Lucene.Net.Index
 		
 		private Directory directory;
 		private System.String fileName;
-        private System.Collections.Hashtable ids;
-		private System.Collections.ArrayList entries;
+        private HashSet<string> ids;
+		private LinkedList<FileEntry> entries;
 		private bool merged = false;
 		private SegmentMerger.CheckAbort checkAbort;
 		
@@ -88,8 +84,8 @@ namespace Lucene.Net.Index
 			this.checkAbort = checkAbort;
 			directory = dir;
 			fileName = name;
-            ids = new System.Collections.Hashtable();
-			entries = new System.Collections.ArrayList();
+            ids = new HashSet<string>();
+			entries = new LinkedList<FileEntry>();
 		}
 		
 		/// <summary>Returns the directory of the compound file. </summary>
@@ -123,7 +119,7 @@ namespace Lucene.Net.Index
 			
             try
             {
-                ids.Add(file, file);
+                ids.Add(file);
             }
             catch (Exception)
             {
@@ -132,7 +128,7 @@ namespace Lucene.Net.Index
 			
 			FileEntry entry = new FileEntry();
 			entry.file = file;
-			entries.Add(entry);
+			entries.AddLast(entry);
 		}
 		
 		/// <summary>Merge files with the extensions added up to now.
@@ -165,11 +161,9 @@ namespace Lucene.Net.Index
 				// Write the directory with all offsets at 0.
 				// Remember the positions of directory entries so that we can
 				// adjust the offsets later
-				System.Collections.IEnumerator it = entries.GetEnumerator();
 				long totalSize = 0;
-				while (it.MoveNext())
+				foreach(FileEntry fe in entries)
 				{
-					FileEntry fe = (FileEntry) it.Current;
 					fe.directoryOffset = os.GetFilePointer();
 					os.WriteLong(0); // for now
 					os.WriteString(fe.file);
@@ -188,19 +182,15 @@ namespace Lucene.Net.Index
 				// Open the files and copy their data into the stream.
 				// Remember the locations of each file's data section.
 				byte[] buffer = new byte[16384];
-				it = entries.GetEnumerator();
-				while (it.MoveNext())
+				foreach(FileEntry fe in entries)
 				{
-					FileEntry fe = (FileEntry) it.Current;
 					fe.dataOffset = os.GetFilePointer();
 					CopyFile(fe, os, buffer);
 				}
 				
 				// Write the data offsets into the directory of the compound stream
-				it = entries.GetEnumerator();
-				while (it.MoveNext())
+				foreach(FileEntry fe in entries)
 				{
-					FileEntry fe = (FileEntry) it.Current;
 					os.Seek(fe.directoryOffset);
 					os.WriteLong(fe.dataOffset);
 				}

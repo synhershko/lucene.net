@@ -88,21 +88,21 @@ index\
 	index\CharBlockPool.java - IDENTICAL
 	index\CheckIndex.java - PORTED
 	index\CompoundFileReader.java - PORTED
-	index\CompoundFileWriter.java - Text files are different
+	index\CompoundFileWriter.java - PORTED
 	index\ConcurrentMergeScheduler.java - PORTED
 	index\CorruptIndexException.java - IDENTICAL
-	index\DefaultSkipListReader.java - Text files are different
-	index\DefaultSkipListWriter.java - Text files are different
+	index\DefaultSkipListReader.java - PORTED
+	index\DefaultSkipListWriter.java - PORTED
 	index\DirectoryOwningReader.java - Removed in 3.x
-	index\DirectoryReader.java - Text files are different
+	index\DirectoryReader.java - PORTED
 	index\DocConsumer.java - PORTED
 	index\DocConsumerPerThread.java - IDENTICAL
 	index\DocFieldConsumer.java - PORTED
 	index\DocFieldConsumerPerField.java - IDENTICAL
 	index\DocFieldConsumerPerThread.java - IDENTICAL
 	index\DocFieldConsumers.java - PORTED
-	index\DocFieldConsumersPerField.java - Text files are different
-	index\DocFieldConsumersPerThread.java - Text files are different
+	index\DocFieldConsumersPerField.java - PORTED
+	index\DocFieldConsumersPerThread.java - PORTED
 	index\DocFieldProcessor.java - PORTED
 	index\DocFieldProcessorPerField.java - IDENTICAL
 	index\DocFieldProcessorPerThread.java - PORTED
@@ -111,11 +111,11 @@ index\
 	index\DocInverterPerThread.java - PORTED
 	index\DocumentsWriter.java - PORTED
 	index\DocumentsWriterThreadState.java - PORTED
-	index\FieldInfo.java - Text files are different
+	index\FieldInfo.java - PORTED
 	index\FieldInfos.java - PORTED
 	index\FieldInvertState.java - IDENTICAL
 	index\FieldReaderException.java - IDENTICAL
-	index\FieldSortedTermVectorMapper.java - Text files are different
+	index\FieldSortedTermVectorMapper.java - PORTED
 	index\FieldsReader.java - PORTED
 	index\FieldsWriter.java - PORTED
 	index\FilterIndexReader.java - PORTED
@@ -131,7 +131,7 @@ index\
 	index\FreqProxTermsWriter.java - Text files are different
 	index\FreqProxTermsWriterPerField.java - Text files are different
 	index\FreqProxTermsWriterPerThread.java - Text files are different
-	index\IndexCommit.java - Text files are different
+	index\IndexCommit.java - DONE
 	index\IndexCommitPoint.java - Removed in 3.x
 	index\IndexDeletionPolicy.java - PORTED
 	index\IndexFileDeleter.java - PORTED
@@ -154,7 +154,7 @@ index\
 	index\MergeDocIDRemapper.java - IDENTICAL
 	index\MergePolicy.java - PORTED
 	index\MergeScheduler.java - IDENTICAL
-	index\MultiLevelSkipListReader.java - Text files are different
+	index\MultiLevelSkipListReader.java - PORTED
 	index\MultiLevelSkipListWriter.java - IDENTICAL
 	index\MultipleTermPositions.java - PORTED
 	index\MultiReader.java - PORTED
@@ -162,7 +162,7 @@ index\
 	index\NormsWriterPerField.java - Text files are different
 	index\NormsWriterPerThread.java - Text files are different
 	index\package.html - IDENTICAL
-	index\ParallelReader.java - DONE
+	index\ParallelReader.java - PORTED
 	index\Payload.java - Text files are different
 	index\PositionBasedTermVectorMapper.java - Text files are different
 	index\RawPostingList.java - IDENTICAL
@@ -183,7 +183,7 @@ index\
 	index\SegmentWriteState.java - PORTED
 	index\SerialMergeScheduler.java - Text files are different
 	index\SnapshotDeletionPolicy.java - PORTED
-	index\SortedTermVectorMapper.java - Text files are different
+	index\SortedTermVectorMapper.java - PORTEDS
 	index\StaleReaderException.java - IDENTICAL
 	index\StoredFieldsWriter.java - Text files are different
 	index\StoredFieldsWriterPerThread.java - IDENTICAL
@@ -352,8 +352,8 @@ search
 	ScoreDoc.java - Text files are different
 	ScoreDocComparator.java - Removed in 3.x
 	Scorer.java - Text files are different
-	Searchable.java - DONE
-	Searcher.java - DONE
+	Searchable.java - PORTED
+	Searcher.java - PORTED
 	Similarity.java - PORTED
 	SimilarityDelegator.java - PORTED
 	SingleTermEnum.java - PORTED

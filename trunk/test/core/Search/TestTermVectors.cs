@@ -347,10 +347,10 @@ namespace Lucene.Net.Search
 				}
 				SortedTermVectorMapper mapper = new SortedTermVectorMapper(new TermVectorEntryFreqSortedComparator());
 				knownSearcher.reader_ForNUnit.GetTermFreqVector(hits[1].doc, mapper);
-				System.Collections.Generic.SortedDictionary<object, object> vectorEntrySet = mapper.GetTermVectorEntrySet();
+				var vectorEntrySet = mapper.GetTermVectorEntrySet();
 				Assert.IsTrue(vectorEntrySet.Count == 10, "mapper.getTermVectorEntrySet() Size: " + vectorEntrySet.Count + " is not: " + 10);
 				TermVectorEntry last = null;
-                foreach(TermVectorEntry tve in vectorEntrySet.Keys)
+                foreach(TermVectorEntry tve in vectorEntrySet)
 				{
 					if (tve != null && last != null)
 					{
@@ -364,9 +364,9 @@ namespace Lucene.Net.Search
 				
 				FieldSortedTermVectorMapper fieldMapper = new FieldSortedTermVectorMapper(new TermVectorEntryFreqSortedComparator());
 				knownSearcher.reader_ForNUnit.GetTermFreqVector(hits[1].doc, fieldMapper);
-				System.Collections.IDictionary map = fieldMapper.GetFieldToTerms();
+				var map = fieldMapper.GetFieldToTerms();
 				Assert.IsTrue(map.Count == 2, "map Size: " + map.Count + " is not: " + 2);
-				vectorEntrySet = (System.Collections.Generic.SortedDictionary<Object,Object>) map["field"];
+				vectorEntrySet = map["field"];
 				Assert.IsTrue(vectorEntrySet != null, "vectorEntrySet is null and it shouldn't be");
 				Assert.IsTrue(vectorEntrySet.Count == 10, "vectorEntrySet Size: " + vectorEntrySet.Count + " is not: " + 10);
 				knownSearcher.Close();

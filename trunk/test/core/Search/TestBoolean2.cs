@@ -256,7 +256,7 @@ namespace Lucene.Net.Search
 				for (int i = 0; i < 1000; i++)
 				{
 					int level = rnd.Next(3);
-					q1 = RandBoolQuery(new System.Random(rnd.Next(System.Int32.MaxValue)), rnd.Next(0, 1) == 0 ? false : true, level, field, vals, null);
+					q1 = RandBoolQuery(new System.Random(rnd.Next(System.Int32.MaxValue)), rnd.Next(0, 2) == 0 ? false : true, level, field, vals, null);
 					
 					// Can't sort by relevance since floating point numbers may not quite
 					// match up.
@@ -276,7 +276,7 @@ namespace Lucene.Net.Search
 
                     BooleanQuery q3 = new BooleanQuery();
 				    q3.Add(q1, BooleanClause.Occur.SHOULD);
-                    q3.Add(new PrefixQuery(new Term("Field", "b")), BooleanClause.Occur.SHOULD);
+                    q3.Add(new PrefixQuery(new Term("field2", "b")), BooleanClause.Occur.SHOULD);
 				    TopDocs hits4 = bigSearcher.Search(q3, 1);
 				    Assert.AreEqual(mulFactor*collector.totalHits + NUM_EXTRA_DOCS/2, hits4.TotalHits);
 				}

@@ -262,13 +262,13 @@ namespace Lucene.Net.Index
 			IndexReader reader = IndexReader.Open(d, false);
 			FieldSortedTermVectorMapper mapper = new FieldSortedTermVectorMapper(new TermVectorEntryFreqSortedComparator());
 			reader.GetTermFreqVector(0, mapper);
-			System.Collections.IDictionary map = mapper.GetFieldToTerms();
+			var map = mapper.GetFieldToTerms();
 			Assert.IsTrue(map != null, "map is null and it shouldn't be");
 			Assert.IsTrue(map.Count == 4, "map Size: " + map.Count + " is not: " + 4);
-            System.Collections.Generic.SortedDictionary<object, object> set_Renamed = (System.Collections.Generic.SortedDictionary<object, object>)map["termvector"];
-            foreach (System.Collections.Generic.KeyValuePair<object, object> item in set_Renamed)
+            var set_Renamed = map["termvector"];
+            foreach (var item in set_Renamed)
 			{
-                TermVectorEntry entry =  (TermVectorEntry)item.Key;
+                TermVectorEntry entry =  (TermVectorEntry)item;
 				Assert.IsTrue(entry != null, "entry is null and it shouldn't be");
 				System.Console.Out.WriteLine("Entry: " + entry);
 			}

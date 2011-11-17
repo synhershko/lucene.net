@@ -114,9 +114,10 @@ namespace Lucene.Net.Search
             //search each searchable
             for (int i = 0; i < searchables.Length; i++)
             {
+                int cur = i;
                 tasks[i] =
-                    Task.Factory.StartNew(() => MultiSearcherCallableNoSort(lockObj, searchables[i], weight, filter,
-                                                                            nDocs, hq, i, starts));
+                    Task.Factory.StartNew(() => MultiSearcherCallableNoSort(lockObj, searchables[cur], weight, filter,
+                                                                            nDocs, hq, cur, starts));
             }
 
 		    int totalHits = 0;
@@ -148,10 +149,10 @@ namespace Lucene.Net.Search
             Task<TopFieldDocs>[] tasks = new Task<TopFieldDocs>[searchables.Length];
             for (int i = 0; i < searchables.Length; i++) // search each searchable
             {
+                int cur = i;
                 tasks[i] =
                     Task.Factory.StartNew(
-                        () =>
-                        MultiSearcherCallableWithSort(lockObj, searchables[i], weight, filter, nDocs, hq, sort, i,
+                        () => MultiSearcherCallableWithSort(lockObj, searchables[cur], weight, filter, nDocs, hq, sort, cur,
                                                       starts));
             }
 

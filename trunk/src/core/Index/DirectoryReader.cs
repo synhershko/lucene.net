@@ -254,15 +254,14 @@ namespace Lucene.Net.Index
             
             // we put the old SegmentReaders in a map, that allows us
             // to lookup a reader using its segment name
-            // TODO: Leave as Object or java's Integer class?
-            System.Collections.Generic.IDictionary<string, object> segmentReaders = new HashMap<string, object>();
+            System.Collections.Generic.IDictionary<string, int> segmentReaders = new HashMap<string, int>();
             
             if (oldReaders != null)
             {
                 // create a Map SegmentName->SegmentReader
                 for (int i = 0; i < oldReaders.Length; i++)
                 {
-                    segmentReaders[oldReaders[i].GetSegmentName()] = (System.Int32) i;
+                    segmentReaders[oldReaders[i].GetSegmentName()] = i;
                 }
             }
             
@@ -275,8 +274,7 @@ namespace Lucene.Net.Index
             for (int i = infos.Count - 1; i >= 0; i--)
             {
                 // find SegmentReader for this segment
-                int? oldReaderIndex = (int?)segmentReaders[infos.Info(i).name];
-                if (oldReaderIndex.HasValue == false)
+                if (!segmentReaders.ContainsKey(infos.Info(i).name))
                 {
                     // this is a new segment, no old SegmentReader can be reused
                     newReaders[i] = null;
@@ -284,7 +282,7 @@ namespace Lucene.Net.Index
                 else
                 {
                     // there is an old reader for this segment - we'll try to reopen it
-                    newReaders[i] = oldReaders[oldReaderIndex.Value];
+                    newReaders[i] = oldReaders[segmentReaders[infos.Info(i).name]];
                 }
                 
                 bool success = false;
@@ -359,7 +357,7 @@ namespace Lucene.Net.Index
             {
                 foreach(var entry in oldNormsCache)
                 {
-                    System.String field = (System.String) entry.Key;
+                    System.String field = entry.Key;
                     if (!HasNorms(field))
                     {
                         continue;
@@ -371,17 +369,17 @@ namespace Lucene.Net.Index
                     
                     for (int i = 0; i < subReaders.Length; i++)
                     {
-                        int? oldReaderIndex = (int?)segmentReaders[subReaders[i].GetSegmentName()];
-
+                        int oldReaderIndex = segmentReaders[subReaders[i].GetSegmentName()];
+                        
                         // this SegmentReader was not re-opened, we can copy all of its norms 
-                        if (oldReaderIndex.HasValue &&
-                             (oldReaders[oldReaderIndex.Value] == subReaders[i]
-                               || oldReaders[oldReaderIndex.Value].norms[field] == subReaders[i].norms[field]))
+                        if (segmentReaders.ContainsKey(subReaders[i].GetSegmentName()) &&
+                             (oldReaders[oldReaderIndex] == subReaders[i]
+                               || oldReaders[oldReaderIndex].norms[field] == subReaders[i].norms[field]))
                         {
                             // we don't have to synchronize here: either this constructor is called from a SegmentReader,
                             // in which case no old norms cache is present, or it is called from MultiReader.reopen(),
                             // which is synchronized
-                            Array.Copy(oldBytes, oldStarts[oldReaderIndex.Value], bytes, starts[i], starts[i + 1] - starts[i]);
+                            Array.Copy(oldBytes, oldStarts[oldReaderIndex], bytes, starts[i], starts[i + 1] - starts[i]);
                         }
                         else
                         {
