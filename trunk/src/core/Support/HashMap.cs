@@ -13,13 +13,15 @@ namespace Lucene.Net.Support
     /// only supports null values not keys.  Also, <c>V Get(TKey)</c>
     /// method in Java returns null if the key doesn't exist, instead of throwing
     /// an exception.  This implementation doesn't throw an exception when a key 
-    /// doesn't exist, it will return null.
+    /// doesn't exist, it will return null.  This class is slower than using a 
+    /// <see cref="Dictionary{TKey, TValue}"/>, because of extra checks that have to be
+    /// done on each access, to check for null.
     /// </para>
     /// <para>
-    /// <b>NOTE:</b> This class shouldn't be used with non-nullable value types.
-    /// Using them will cause unexpected behavior, because of comparisons to default(T)
-    /// which, Nullable&lt;T&gt; returns as null, and any other value types will not. A
-    /// Dictionary would work fine in that use case.
+    /// <b>NOTE:</b> This class works best with nullable types.  default(T) is returned
+    /// when a key doesn't exist in the collection (this being similar to how Java returns
+    /// null).  Therefore, if the expected behavior of the java code is to execute code
+    /// based on if the key exists, when the key is an integer type, it will return 0 instead of null.
     /// </para>
     /// <remaks>
     /// Consider also implementing IDictionary, IEnumerable, and ICollection
@@ -32,13 +34,15 @@ namespace Lucene.Net.Support
     [Serializable]
     public class HashMap<TKey, TValue> : IDictionary<TKey, TValue>
     {
-        private EqualityComparer<TKey> _comparer;
-        private Dictionary<TKey, TValue> _dict;
+        internal EqualityComparer<TKey> _comparer;
+        internal Dictionary<TKey, TValue> _dict;
 
         // Indicates if a null key has been assigned, used for iteration
         private bool _hasNullValue;
         // stores the value for the null key
         private TValue _nullValue;
+        // Indicates the type of key is a non-nullable valuetype
+        private bool _isValueType;
 
         public HashMap()
             : this(0)
@@ -49,6 +53,11 @@ namespace Lucene.Net.Support
             _dict = new Dictionary<TKey, TValue>(initialCapacity);
             _comparer = EqualityComparer<TKey>.Default;
             _hasNullValue = false;
+
+            if (typeof(TKey).IsValueType)
+            {
+                _isValueType = Nullable.GetUnderlyingType(typeof(TKey)) == null;
+            }
         }
 
         public HashMap(IEnumerable<KeyValuePair<TKey, TValue>> other)
@@ -62,7 +71,7 @@ namespace Lucene.Net.Support
 
         public bool ContainsValue(TValue value)
         {
-            if (_hasNullValue && _nullValue.Equals(value))
+            if (!_isValueType && _hasNullValue && _nullValue.Equals(value))
                 return true;
 
             return _dict.ContainsValue(value);
@@ -72,7 +81,7 @@ namespace Lucene.Net.Support
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            if (_hasNullValue)
+            if (!_isValueType && _hasNullValue)
             {
                 yield return new KeyValuePair<TKey, TValue>(default(TKey), _nullValue);
             }
@@ -93,15 +102,7 @@ namespace Lucene.Net.Support
 
         void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
         {
-            if (_comparer.Equals(item.Key, default(TKey)))
-            {
-                _hasNullValue = true;
-                _nullValue = item.Value;
-            }
-            else
-            {
-                _dict.Add(item.Key, item.Value);
-            }
+            Add(item.Key, item.Value);
         }
 
         public void Clear()
@@ -113,7 +114,7 @@ namespace Lucene.Net.Support
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
         {
-            if (_comparer.Equals(item.Key, default(TKey)))
+            if (!_isValueType && _comparer.Equals(item.Key, default(TKey)))
             {
                 return _hasNullValue && EqualityComparer<TValue>.Default.Equals(item.Value, _nullValue);
             }
@@ -128,7 +129,7 @@ namespace Lucene.Net.Support
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            if (_comparer.Equals(item.Key, default(TKey)))
+            if (!_isValueType && _comparer.Equals(item.Key, default(TKey)))
             {
                 if (!_hasNullValue)
                     return false;
@@ -157,7 +158,7 @@ namespace Lucene.Net.Support
 
         public bool ContainsKey(TKey key)
         {
-            if (_comparer.Equals(key, default(TKey)))
+            if (!_isValueType && _comparer.Equals(key, default(TKey)))
             {
                 if (_hasNullValue)
                 {
@@ -171,27 +172,20 @@ namespace Lucene.Net.Support
 
         public void Add(TKey key, TValue value)
         {
-            if (_comparer.Equals(key, default(TKey)))
+            if (!_isValueType && _comparer.Equals(key, default(TKey)))
             {
                 _hasNullValue = true;
                 _nullValue = value;
             }
             else
             {
-                if (_dict.ContainsKey(key))
-                {
-                    _dict[key] = value;
-                }
-                else
-                {
-                    _dict.Add(key, value);
-                }
+                _dict[key] = value;
             }
         }
 
         public bool Remove(TKey key)
         {
-            if (_comparer.Equals(key, default(TKey)))
+            if (!_isValueType && _comparer.Equals(key, default(TKey)))
             {
                 _hasNullValue = false;
                 _nullValue = default(TValue);
@@ -205,7 +199,7 @@ namespace Lucene.Net.Support
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            if (_comparer.Equals(key, default(TKey)))
+            if (!_isValueType && _comparer.Equals(key, default(TKey)))
             {
                 if (_hasNullValue)
                 {
@@ -226,7 +220,7 @@ namespace Lucene.Net.Support
         {
             get
             {
-                if (_comparer.Equals(key, default(TKey)))
+                if (!_isValueType && _comparer.Equals(key, default(TKey)))
                 {
                     if (!_hasNullValue)
                     {
@@ -236,17 +230,7 @@ namespace Lucene.Net.Support
                 }
                 return _dict.ContainsKey(key) ? _dict[key] : default(TValue);
             }
-            set
-            {
-                if (_comparer.Equals(key, default(TKey)))
-                {
-                    _nullValue = value;
-                }
-                else
-                {
-                    _dict[key] = value;
-                }
-            }
+            set { Add(key, value); }
         }
 
         public ICollection<TKey> Keys

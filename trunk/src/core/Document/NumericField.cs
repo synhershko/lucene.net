@@ -16,13 +16,11 @@
  */
 
 using System;
-
+using Lucene.Net.Search;
 using NumericTokenStream = Lucene.Net.Analysis.NumericTokenStream;
 using TokenStream = Lucene.Net.Analysis.TokenStream;
 using NumericUtils = Lucene.Net.Util.NumericUtils;
 using FieldCache = Lucene.Net.Search.FieldCache;
-using NumericRangeFilter = Lucene.Net.Search.NumericRangeFilter;
-using NumericRangeQuery = Lucene.Net.Search.NumericRangeQuery;
 using SortField = Lucene.Net.Search.SortField;
 
 namespace Lucene.Net.Documents
@@ -67,7 +65,7 @@ namespace Lucene.Net.Documents
 	/// <c>long</c> value.<p/>
 	/// 
 	/// <p/>To perform range querying or filtering against a
-	/// <c>NumericField</c>, use <see cref="NumericRangeQuery" /> or <see cref="NumericRangeFilter" />
+	/// <c>NumericField</c>, use <see cref="NumericRangeQuery{T}" /> or <see cref="NumericRangeFilter{T}" />
 	///.  To sort according to a
 	/// <c>NumericField</c>, use the normal numeric sort types, eg
 	/// <see cref="SortField.INT" />  <c>NumericField</c> values
@@ -105,8 +103,8 @@ namespace Lucene.Net.Documents
 	/// use the expert constructor <see cref="NumericField(String,int,Field.Store,bool)" />
 	/// if you'd
 	/// like to change the value.  Note that you must also
-	/// specify a congruent value when creating <see cref="NumericRangeQuery" />
-	/// or <see cref="NumericRangeFilter" />.
+	/// specify a congruent value when creating <see cref="NumericRangeQuery{T}" />
+	/// or <see cref="NumericRangeFilter{T}" />.
 	/// For low cardinality fields larger precision steps are good.
 	/// If the cardinality is &lt; 100, it is fair
 	/// to use <see cref="int.MaxValue" />, which produces one
@@ -115,7 +113,7 @@ namespace Lucene.Net.Documents
 	/// <p/>For more information on the internals of numeric trie
 	/// indexing, including the <a
 	/// href="../search/NumericRangeQuery.html#precisionStepDesc"><c>precisionStep</c></a>
-	/// configuration, see <see cref="NumericRangeQuery" />. The format of
+	/// configuration, see <see cref="NumericRangeQuery{T}" />. The format of
 	/// indexed values is described in <see cref="NumericUtils" />.
 	/// 
 	/// <p/>If you only need to sort by numeric value, and never

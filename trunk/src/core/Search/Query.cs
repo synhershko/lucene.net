@@ -16,6 +16,7 @@
  */
 
 using System;
+using System.Linq;
 using Lucene.Net.Index;
 using IndexReader = Lucene.Net.Index.IndexReader;
 
@@ -34,7 +35,7 @@ namespace Lucene.Net.Search
     /// <item> <see cref="MultiPhraseQuery" /> </item>
     /// <item> <see cref="FuzzyQuery" /> </item>
     /// <item> <see cref="TermRangeQuery" /> </item>
-    /// <item> <see cref="NumericRangeQuery" /> </item>
+    /// <item> <see cref="NumericRangeQuery{T}" /> </item>
     /// <item> <see cref="Lucene.Net.Search.Spans.SpanQuery" /> </item>
 	/// </list>
 	/// <p/>A parser for queries is contained in:
@@ -166,10 +167,7 @@ namespace Lucene.Net.Search
 			// optimization: if we have just one query, just return it
 			if (uniques.Count == 1)
 			{
-                foreach (Query key in uniques)
-                {
-                    return key;
-                }
+			    return uniques.First();
 			}
 			BooleanQuery result = new BooleanQuery(true);
             foreach (Query key in uniques)

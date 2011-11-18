@@ -16,9 +16,9 @@
  */
 
 using System;
+using Lucene.Net.Search;
 using Lucene.Net.Support;
 using NumericUtils = Lucene.Net.Util.NumericUtils;
-using NumericRangeQuery = Lucene.Net.Search.NumericRangeQuery;
 using PrefixQuery = Lucene.Net.Search.PrefixQuery;
 using TermRangeQuery = Lucene.Net.Search.TermRangeQuery;
 // for javadoc
@@ -51,7 +51,7 @@ namespace Lucene.Net.Documents
 	/// For indexing a <see cref="DateTime" />, convert it to unix timestamp as
 	/// <c>long</c> and
 	/// index this as a numeric value with <see cref="NumericField" />
-	/// and use <see cref="NumericRangeQuery" /> to query it.
+	/// and use <see cref="NumericRangeQuery{T}" /> to query it.
 	/// 
 	/// </summary>
 	/// <deprecated> If you build a new index, use <see cref="DateTools" /> or 

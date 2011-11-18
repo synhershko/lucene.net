@@ -27,14 +27,14 @@ namespace Lucene.Net.Search
 	/// 
 	/// <p/>This query matches the documents looking for terms that fall into the
 	/// supplied range according to <see cref="String.CompareTo(String)" />. It is not intended
-	/// for numerical ranges, use <see cref="NumericRangeQuery" /> instead.
+	/// for numerical ranges, use <see cref="NumericRangeQuery{T}" /> instead.
 	/// 
 	/// <p/>This query is hardwired to <see cref="MultiTermQuery.CONSTANT_SCORE_AUTO_REWRITE_DEFAULT" />.
 	/// If you want to change this, use <see cref="TermRangeQuery" /> instead.
 	/// 
 	/// </summary>
 	/// <deprecated> Use <see cref="TermRangeQuery" /> for term ranges or
-	/// <see cref="NumericRangeQuery" /> for numeric ranges instead.
+	/// <see cref="NumericRangeQuery{T}" /> for numeric ranges instead.
 	/// This class will be removed in Lucene 3.0.
 	/// </deprecated>
 	/// <version>  $Id: ConstantScoreRangeQuery.java 797694 2009-07-25 00:03:33Z mikemccand $

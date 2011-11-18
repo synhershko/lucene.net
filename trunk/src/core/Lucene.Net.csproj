@@ -678,12 +678,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Search\QueryWrapperFilter.cs" />
-    <Compile Include="Search\RangeFilter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\RangeQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Search\ReqExclScorer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -717,12 +711,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Search\Sort.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\SortComparator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\SortComparatorSource.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Search\SortField.cs">
@@ -970,7 +958,6 @@
     <None Include="Lucene.Net.Search.RemoteSearchable.config" />
     <None Include="Lucene.Net.Search.TestSort.config" />
     <None Include="Lucene.Net.snk" />
-    <None Include="QueryParser\QueryParser.jj" />
     <Content Include="Analysis\Package.html" />
     <Content Include="Analysis\Standard\Package.html" />
     <Content Include="Analysis\Standard\READ_BEFORE_REGENERATING.txt" />
@@ -988,6 +975,7 @@
     <Content Include="Search\Spans\Package.html" />
     <Content Include="Store\Package.html" />
     <Content Include="Util\Package.html" />
+    <None Include="QueryParser\QueryParser.jj" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

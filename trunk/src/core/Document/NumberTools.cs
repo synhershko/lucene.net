@@ -16,9 +16,8 @@
  */
 
 using System;
-
+using Lucene.Net.Search;
 using NumericUtils = Lucene.Net.Util.NumericUtils;
-using NumericRangeQuery = Lucene.Net.Search.NumericRangeQuery;
 
 namespace Lucene.Net.Documents
 {
@@ -42,7 +41,7 @@ namespace Lucene.Net.Documents
 	/// provides a sortable binary representation (prefix encoded) of numeric
 	/// values.
 	/// To index and efficiently query numeric values use <see cref="NumericField" />
-	/// and <see cref="NumericRangeQuery" />.
+	/// and <see cref="NumericRangeQuery{T}" />.
 	/// This class is included for use with existing
 	/// indices and will be removed in a future release (possibly Lucene 4.0).
 	/// </deprecated>

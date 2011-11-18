@@ -35,7 +35,7 @@ namespace Lucene.Net.Search
 	/// as building a <see cref="TermRangeFilter" /> if using a <see cref="NewStringRange" />. However, if the range never changes it
     /// is slower (around 2x as slow) than building a CachingWrapperFilter on top of a single <see cref="TermRangeFilter" />.
 	/// 
-	/// For numeric data types, this filter may be significantly faster than <see cref="NumericRangeFilter" />.
+	/// For numeric data types, this filter may be significantly faster than <see cref="NumericRangeFilter{T}" />.
 	/// Furthermore, it does not need the numeric values encoded by <see cref="NumericField" />. But
 	/// it has the problem that it only works with exact one value/document (see below).
 	/// 

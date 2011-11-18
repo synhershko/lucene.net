@@ -180,8 +180,8 @@ search\TestMultiTermConstantScore.java - DONE
 search\TestMultiThreadTermVectors.java - Text files are different
 search\TestMultiValuedNumericRangeQuery.java - Text files are different
 search\TestNot.java - DONE
-search\TestNumericRangeQuery32.java - Text files are different
-search\TestNumericRangeQuery64.java - Text files are different
+search\TestNumericRangeQuery32.java - DONE
+search\TestNumericRangeQuery64.java - DONE
 search\TestParallelMultiSearcher.java - Text files are different
 search\TestPhrasePrefixQuery.java - Text files are different
 search\TestPhraseQuery.java - DONE

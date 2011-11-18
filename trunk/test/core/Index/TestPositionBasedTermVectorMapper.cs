@@ -84,17 +84,17 @@ namespace Lucene.Net.Index
 			var map = mapper.GetFieldToTerms();
 			Assert.IsTrue(map != null, "map is null and it shouldn't be");
 			Assert.IsTrue(map.Count == 1, "map Size: " + map.Count + " is not: " + 1);
-			System.Collections.IDictionary positions = (System.Collections.IDictionary) map["test"];
-			Assert.IsTrue(positions != null, "thePositions is null and it shouldn't be");
-			
-			Assert.IsTrue(positions.Count == numPositions, "thePositions Size: " + positions.Count + " is not: " + numPositions);
+			var positions = map["test"];
+			Assert.IsNotNull(positions, "thePositions is null and it shouldn't be");
+
+            Assert.AreEqual(numPositions, positions.Count, "thePositions Size: " + positions.Count + " is not: " + numPositions);
 			System.Collections.BitArray bits = new System.Collections.BitArray((numPositions % 64 == 0?numPositions / 64:numPositions / 64 + 1) * 64);
-			for (System.Collections.IEnumerator iterator = positions.GetEnumerator(); iterator.MoveNext(); )
+			for (var iterator = positions.GetEnumerator(); iterator.MoveNext(); )
 			{
-				System.Collections.DictionaryEntry entry = (System.Collections.DictionaryEntry) iterator.Current;
-				PositionBasedTermVectorMapper.TVPositionInfo info = (PositionBasedTermVectorMapper.TVPositionInfo) entry.Value;
+				var entry = iterator.Current;
+				PositionBasedTermVectorMapper.TVPositionInfo info = entry.Value;
 				Assert.IsTrue(info != null, "info is null and it shouldn't be");
-				int pos = ((System.Int32) entry.Key);
+				int pos = (int)entry.Key;
 				bits.Set(pos, true);
 				Assert.IsTrue(info.Position == pos, info.Position + " does not equal: " + pos);
 				Assert.IsTrue(info.Offsets != null, "info.getOffsets() is null and it shouldn't be");

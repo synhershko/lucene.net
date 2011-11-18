@@ -16,6 +16,7 @@
  */
 
 using System;
+using System.Linq;
 using Lucene.Net.Util;
 using IndexReader = Lucene.Net.Index.IndexReader;
 
@@ -154,7 +155,7 @@ namespace Lucene.Net.Search.Spans
 			// TODO: Remove warning after API has been finalized
 			public override System.Collections.Generic.ICollection<byte[]> GetPayload()
 			{
-				return spans.GetPayload();
+				return spans.GetPayload().ToArray();
 			}
 			
 			// TODO: Remove warning after API has been finalized

@@ -40,7 +40,7 @@ namespace Lucene.Net.Search.Payloads
 	/// <see cref="Lucene.Net.Index.Term" /> occurs.
 	/// <p/>
 	/// In order to take advantage of this, you must override
-	/// <see cref="Lucene.Net.Search.Similarity.ScorePayload(String, byte[],int,int)" />
+    /// <see cref="Lucene.Net.Search.Similarity.ScorePayload(int, String, int, int, byte[],int,int)" />
 	/// which returns 1 by default.
 	/// <p/>
 	/// Payload scores are aggregated using a pluggable <see cref="PayloadFunction" />.

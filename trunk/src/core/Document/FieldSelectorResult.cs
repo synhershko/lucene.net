@@ -24,6 +24,10 @@ namespace Lucene.Net.Documents
 	/// <summary>Provides information about what should be done with this Field</summary>
     public enum FieldSelectorResult
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        INVALID, // TODO: This is kinda a kludgy workaround for the fact enums can't be null 
 
         /// <summary> Load this <see cref="Field" /> every time the <see cref="Document" /> is loaded, reading in the data as it is encountered.
         /// <see cref="Document.GetField(String)" /> and <see cref="Document.GetFieldable(String)" /> should not return null.

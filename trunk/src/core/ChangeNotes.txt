@@ -43,18 +43,17 @@ TODO: MMapDirectory.java -> ThreadInterruptedException
 TODO: NIOFSDirectory.java
 TODO: RAMDirectory.java
 
-Util, Store (All files touched - Any that are present in 3.0.3 still need to be added)
-TODO: BooleanClause.java - Can't override tostring on Enum.  Leave type-safe or override with extension method?
+TODO: BooleanClause.java - Can't override ToString on Enum or replace with Extension Method.  Leave type-safe, override with extension method, or create static class?
 TODO: FieldValueHitQueue.Entry had to be made public for accessibility.  Look further into that.
 TODO: FuzzyQuery - uses java.util.PriorityQueue<T>, which .net does not have.  Revisit later.
-TODO: ParallelReader - extra data types, TreeMap<Tk,Tv>
+TODO: ParallelReader - extra data types, using SortedDictionary in place of TreeMap.  Confirm compatibility.
 
-TODO: SegmentInfos inherites from Vector<E>, which is threadsafe.  Closest equivelant is SynchronizedCollection<T> in .NET, but it's in a System.ServiceModel, and I can't be sure it's worth a dependency on that entire assembly for the one class.  Thread safety can probably be achieved in a different way.
+TODO: SegmentInfos inherites from java.util.Vector<E>, which is threadsafe.  Closest equivelant is SynchronizedCollection<T> in .NET, but it's in a System.ServiceModel, and I can't be sure it's worth a dependency on that entire assembly for the one class.  Thread safety can probably be achieved in a different way.
 
 TODO: ThreadInterruptedException.java - This shouldn't be necessary.  Lucene is using it because it is unchecked.  C# has no checked expcetions
 TODO: FSDirectory.java - ThreadInterruptedException
 TODO: ConcurrentMergeScheduler - ThreadInterruptedException
 
 CHANGED: FieldCacheRangeFilter - Expects nullable primitives for the anonymous range filters<T> -> replaced with Nulable<T>
-CONFIRM: IndexWriter.java - ReaderPool.Close/Commit/Get lock/sync changes - may be wrong - ThreadInterruptedException(ie)
+CONFIRM: IndexWriter.java - ReaderPool.Close/Commit/Get lock/sync changes - may be wrong, probably are ok - ThreadInterruptedException(ie)
 CONFIRM: Java LinkedList behavior compared to C#.  Used extensively in Attributes, filters and the like

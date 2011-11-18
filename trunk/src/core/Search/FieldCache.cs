@@ -592,48 +592,6 @@ namespace Lucene.Net.Search
 		/// <throws>  IOException  If any error occurs. </throws>
 		StringIndex GetStringIndex(IndexReader reader, System.String field);
 		
-		/// <summary>Checks the internal cache for an appropriate entry, and if
-		/// none is found reads <c>field</c> to see if it contains integers, longs, floats
-		/// or strings, and then calls one of the other methods in this class to get the
-		/// values.  For string values, a StringIndex is returned.  After
-		/// calling this method, there is an entry in the cache for both
-		/// type <c>AUTO</c> and the actual found type.
-		/// </summary>
-		/// <param name="reader"> Used to get field values.
-		/// </param>
-		/// <param name="field">  Which field contains the values.
-		/// </param>
-		/// <returns> int[], long[], float[] or StringIndex.
-		/// </returns>
-		/// <throws>  IOException  If any error occurs. </throws>
-		/// <deprecated> Please specify the exact type, instead.
-		/// Especially, guessing does <b>not</b> work with the new
-		/// <see cref="NumericField" /> type.
-		/// </deprecated>
-        [Obsolete("Please specify the exact type, instead. Especially, guessing does not work with the new NumericField type.")]
-		System.Object GetAuto(IndexReader reader, System.String field);
-		
-		/// <summary>Checks the internal cache for an appropriate entry, and if none
-		/// is found reads the terms out of <c>field</c> and calls the given SortComparator
-		/// to get the sort values.  A hit in the cache will happen if <c>reader</c>,
-		/// <c>field</c>, and <c>comparator</c> are the same (using <c>equals()</c>)
-		/// as a previous call to this method.
-		/// </summary>
-		/// <param name="reader"> Used to get field values.
-		/// </param>
-		/// <param name="field">  Which field contains the values.
-		/// </param>
-		/// <param name="comparator">Used to convert terms into something to sort by.
-		/// </param>
-		/// <returns> Array of sort objects, one for each document.
-		/// </returns>
-		/// <throws>  IOException  If any error occurs. </throws>
-		/// <deprecated> Please implement <see cref="FieldComparatorSource" />
-		/// directly, instead.
-		/// </deprecated>
-        [Obsolete("Please implement FieldComparatorSource directly, instead.")]
-		System.IComparable[] GetCustom(IndexReader reader, System.String field, SortComparator comparator);
-		
 		/// <summary> EXPERT: Generates an array of CacheEntry objects representing all items 
 		/// currently in the FieldCache.
 		/// <p/>

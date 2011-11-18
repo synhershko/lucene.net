@@ -121,5 +121,5 @@ namespace Lucene.Net.QueryParsers
 		/// </summary>
 		void  Done();
 	}
-	/* JavaCC - OriginalChecksum=a83909a2403f969f94d18375f9f143e4 (do not edit this line) */
+    /* JavaCC - OriginalChecksum=32a89423891f765dde472f7ef0e3ef7b (do not edit this line) */
 }

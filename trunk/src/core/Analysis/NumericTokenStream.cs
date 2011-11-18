@@ -16,15 +16,10 @@
  */
 
 using System;
-
+using Lucene.Net.Search;
 using AttributeSource = Lucene.Net.Util.AttributeSource;
 using NumericUtils = Lucene.Net.Util.NumericUtils;
 using NumericField = Lucene.Net.Documents.NumericField;
-// for javadocs
-using NumericRangeQuery = Lucene.Net.Search.NumericRangeQuery;
-using NumericRangeFilter = Lucene.Net.Search.NumericRangeFilter;
-using SortField = Lucene.Net.Search.SortField;
-using FieldCache = Lucene.Net.Search.FieldCache;
 // javadocs
 using TermAttribute = Lucene.Net.Analysis.Tokenattributes.TermAttribute;
 using TypeAttribute = Lucene.Net.Analysis.Tokenattributes.TypeAttribute;
@@ -34,8 +29,8 @@ namespace Lucene.Net.Analysis
 {
 	
 	/// <summary> <b>Expert:</b> This class provides a <see cref="TokenStream" />
-	/// for indexing numeric values that can be used by <see cref="NumericRangeQuery" />
-	/// or <see cref="NumericRangeFilter" />.
+	/// for indexing numeric values that can be used by <see cref="NumericRangeQuery{T}" />
+    /// or <see cref="NumericRangeFilter{T}" />.
 	/// 
 	/// <p/>Note that for simple usage, <see cref="NumericField" /> is
 	/// recommended.  <see cref="NumericField" /> disables norms and
@@ -81,7 +76,7 @@ namespace Lucene.Net.Analysis
 	/// than one numeric field, use a separate <c>NumericTokenStream</c>
 	/// instance for each.<p/>
 	/// 
-	/// <p/>See <see cref="NumericRangeQuery" /> for more details on the
+    /// <p/>See <see cref="NumericRangeQuery{T}" /> for more details on the
 	/// <a href="../search/NumericRangeQuery.html#precisionStepDesc"><c>precisionStep</c></a>
 	/// parameter as well as how numeric fields work under the hood.<p/>
 	/// 

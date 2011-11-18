@@ -40,13 +40,13 @@ namespace Lucene.Net.Search.Payloads
 	/// <see cref="Lucene.Net.Search.Spans.TermSpans" /> occurs.
 	/// <p/>
 	/// In order to take advantage of this, you must override
-	/// <see cref="Lucene.Net.Search.Similarity.ScorePayload(String, byte[],int,int)" />
+	/// <see cref="Lucene.Net.Search.Similarity.ScorePayload" />
 	/// which returns 1 by default.
 	/// <p/>
 	/// Payload scores are aggregated using a pluggable <see cref="PayloadFunction" />.
 	/// 
 	/// </summary>
-	/// <seealso cref="Lucene.Net.Search.Similarity.ScorePayload(String, byte[], int,int)">
+	/// <seealso cref="Lucene.Net.Search.Similarity.ScorePayload">
 	/// </seealso>
 	[Serializable]
 	public class PayloadNearQuery:SpanNearQuery, System.ICloneable
@@ -76,8 +76,7 @@ namespace Lucene.Net.Search.Payloads
 			
 			for (int i = 0; i < sz; i++)
 			{
-				SpanQuery clause = (SpanQuery) clauses[i];
-				newClauses[i] = (SpanQuery) clause.Clone();
+				newClauses[i] = clauses[i];
 			}
 			PayloadNearQuery boostingNearQuery = new PayloadNearQuery(newClauses, slop, inOrder);
 			boostingNearQuery.SetBoost(GetBoost());
@@ -88,10 +87,10 @@ namespace Lucene.Net.Search.Payloads
 		{
 			System.Text.StringBuilder buffer = new System.Text.StringBuilder();
 			buffer.Append("payloadNear([");
-			System.Collections.IEnumerator i = clauses.GetEnumerator();
+			var i = clauses.GetEnumerator();
 			while (i.MoveNext())
 			{
-				SpanQuery clause = (SpanQuery) i.Current;
+				SpanQuery clause = i.Current;
 				buffer.Append(clause.ToString(field));
 				if (i.MoveNext())
 				{
@@ -164,12 +163,7 @@ namespace Lucene.Net.Search.Payloads
 			{
 				InitBlock(enclosingInstance);
 			}
-			
-			public virtual Scorer Scorer(IndexReader reader)
-			{
-				return new PayloadNearSpanScorer(enclosingInstance, query.GetSpans(reader), this, similarity, reader.Norms(query.GetField()));
-			}
-			
+
 			public override Scorer Scorer(IndexReader reader, bool scoreDocsInOrder, bool topScorer)
 			{
 				return new PayloadNearSpanScorer(enclosingInstance, query.GetSpans(reader), this, similarity, reader.Norms(query.GetField()));

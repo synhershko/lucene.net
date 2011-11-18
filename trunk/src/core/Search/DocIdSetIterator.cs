@@ -43,9 +43,7 @@ namespace Lucene.Net.Search
 	    /// <item>Otherwise it should return the doc ID it is currently on.</item>
 	    /// </list>
 	    /// <p/>
-	    /// <b>NOTE:</b> in 3.0, this method will become abstract.
 	    /// </summary>
-	    /// <since>2.9</since>
 	    public abstract int DocID();
 
 	    /// <summary> Advances to the next document in the set and returns the doc it is
@@ -56,8 +54,6 @@ namespace Lucene.Net.Search
 	    /// method, as it may result in unpredicted behavior.
 	    /// 
 	    /// </summary>
-	    /// <since> 2.9
-	    /// </since>
 	    public abstract int NextDoc();
 
 	    /// <summary> Advances to the first beyond the current whose document number is greater

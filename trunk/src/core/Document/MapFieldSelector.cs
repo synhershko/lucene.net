@@ -61,8 +61,8 @@ namespace Lucene.Net.Documents
 		/// </returns>
 		public virtual FieldSelectorResult Accept(System.String field)
 		{
-			FieldSelectorResult selection = fieldSelections[field];
-			return selection != null?selection:FieldSelectorResult.NO_LOAD;
+		    FieldSelectorResult selection = fieldSelections[field];
+            return selection != FieldSelectorResult.INVALID ? selection : FieldSelectorResult.NO_LOAD; // TODO: See FieldSelectorResult
 		}
 	}
 }
