@@ -52,10 +52,7 @@ namespace Lucene.Net.Search
 				InitBlock(enclosingInstance);
 			}
 			private int doc = - 1;
-			public override Explanation Explain(int doc)
-			{
-				return null;
-			}
+
 			public override float Score()
 			{
 				return 0;

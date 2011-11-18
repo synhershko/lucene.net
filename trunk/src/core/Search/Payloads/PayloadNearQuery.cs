@@ -265,7 +265,7 @@ namespace Lucene.Net.Search.Payloads
 				return base.Score() * Enclosing_Instance.function.DocScore(doc, Enclosing_Instance.fieldName, payloadsSeen, payloadScore);
 			}
 			
-			public override Explanation Explain(int doc)
+			protected internal override Explanation Explain(int doc)
 			{
 				Explanation result = new Explanation();
 				Explanation nonPayloadExpl = base.Explain(doc);

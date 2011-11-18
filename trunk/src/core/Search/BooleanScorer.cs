@@ -339,11 +339,6 @@ namespace Lucene.Net.Search
 		{
 			return doc;
 		}
-		
-		public override Explanation Explain(int doc)
-		{
-			throw new System.NotSupportedException();
-		}
 
 		public override int NextDoc()
 		{

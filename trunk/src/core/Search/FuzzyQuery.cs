@@ -16,6 +16,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Lucene.Net.Support;
 using Lucene.Net.Util;
 using IndexReader = Lucene.Net.Index.IndexReader;
@@ -139,39 +141,39 @@ namespace Lucene.Net.Search
 				return new TermQuery(term);
 			}
 
+		    int maxSize = BooleanQuery.GetMaxClauseCount();
+
+            // TODO: Java uses a PriorityQueue.  Using Linq, we can emulate it, 
+            //       however it's considerable slower than the java counterpart.
+            //       this should be a temporary thing, fixed before release
+            SortedList<ScoreTerm, ScoreTerm> stQueue = new SortedList<ScoreTerm, ScoreTerm>();
 			FilteredTermEnum enumerator = GetEnum(reader);
-			int maxClauseCount = BooleanQuery.GetMaxClauseCount();
-			ScoreTermQueue stQueue = new ScoreTermQueue(maxClauseCount);
-			ScoreTerm reusableST = null;
 			
 			try
 			{
+                ScoreTerm st = new ScoreTerm();
 				do 
 				{
-					float score = 0.0f;
 					Term t = enumerator.Term();
-					if (t != null)
-					{
-						score = enumerator.Difference();
-						if (reusableST == null)
-						{
-							reusableST = new ScoreTerm(t, score);
-						}
-						else if (score >= reusableST.score)
-						{
-							// reusableST holds the last "rejected" entry, so, if
-							// this new score is not better than that, there's no
-							// need to try inserting it
-							reusableST.score = score;
-							reusableST.term = t;
-						}
-						else
-						{
-							continue;
-						}
-						
-						reusableST = (ScoreTerm) stQueue.InsertWithOverflow(reusableST);
-					}
+                    if (t == null) break;
+				    float score = enumerator.Difference();
+                    //ignore uncompetetive hits
+                    if (stQueue.Count >= maxSize && score <= stQueue.Keys.First().score)
+                        continue;
+                    // add new entry in PQ
+				    st.term = t;
+				    st.score = score;
+				    stQueue.Add(st, st);
+                    // possibly drop entries from queue
+                    if (stQueue.Count > maxSize)
+                    {
+                        st = stQueue.Keys.First();
+                        stQueue.Remove(st);
+                    }
+                    else
+                    {
+                        st = new ScoreTerm();
+                    }
 				}
 				while (enumerator.Next());
 			}
@@ -181,10 +183,8 @@ namespace Lucene.Net.Search
 			}
 			
 			BooleanQuery query = new BooleanQuery(true);
-			int size = stQueue.Size();
-			for (int i = 0; i < size; i++)
+			foreach(ScoreTerm st in stQueue.Keys)
 			{
-				ScoreTerm st = (ScoreTerm) stQueue.Pop();
 				TermQuery tq = new TermQuery(st.term); // found a match
 				tq.SetBoost(GetBoost() * st.score); // set the boost
 				query.Add(tq, BooleanClause.Occur.SHOULD); // add to query
@@ -208,36 +208,22 @@ namespace Lucene.Net.Search
 			return buffer.ToString();
 		}
 		
-		protected internal class ScoreTerm
+		protected internal class ScoreTerm : IComparable<ScoreTerm>
 		{
 			public Term term;
 			public float score;
-			
-			public ScoreTerm(Term term, float score)
-			{
-				this.term = term;
-				this.score = score;
-			}
-		}
-		
-		protected internal class ScoreTermQueue:PriorityQueue<ScoreTerm>
-		{
-			
-			public ScoreTermQueue(int size)
-			{
-				Initialize(size);
-			}
-			
-			/* (non-Javadoc)
-			* <see cref="Lucene.Net.Util.PriorityQueue.lessThan(java.lang.Object, java.lang.Object)"/>
-			*/
-            public override bool LessThan(ScoreTerm termA, ScoreTerm termB)
-			{
-				if (termA.score == termB.score)
-					return termA.term.CompareTo(termB.term) > 0;
-				else
-					return termA.score < termB.score;
-			}
+
+		    public int CompareTo(ScoreTerm other)
+		    {
+                if (Comparer<float>.Default.Compare(this.score, other.score) == 0)
+                {
+                    return other.term.CompareTo(this.term);
+                }
+                else
+                {
+                    return Comparer<float>.Default.Compare(this.score, other.score);
+                }
+		    }
 		}
 		
 		public override int GetHashCode()

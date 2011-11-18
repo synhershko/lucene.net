@@ -32,10 +32,12 @@ namespace Lucene.Net.Support
         private void Clean()
         {
             if (_hm.Count == 0) return;
-            while (_hm.Keys.Where(x => x != null).Any(x => !x.IsAlive))
+            var newHm = new HashMap<WeakKey<TKey>, TValue>();
+            foreach (var entry in _hm.Where(x => x.Key != null && !x.Key.IsAlive))
             {
-                _hm.Remove(_hm.Keys.Where(x => x != null && !x.IsAlive).First());
+                newHm.Add(entry.Key, entry.Value);
             }
+            _hm = newHm;
         }
 
         private void CleanIfNeeded()
@@ -243,15 +245,18 @@ namespace Lucene.Net.Support
             {
                 if (!reference.IsAlive || obj == null) return false;
 
-                if (GetHashCode() != obj.GetHashCode()) return false;
+                if (ReferenceEquals(this, obj))
+                {
+                    return true;
+                }
 
                 if (obj is WeakKey<T>)
                 {
                     var other = (WeakKey<T>)obj;
-                    return other.IsAlive && ReferenceEquals(reference.Target, other.Target);
+                    return reference.Target.Equals(other.Target);
                 }
 
-                return reference.Target.Equals(obj);
+                return false;
             }
 
             public T Target

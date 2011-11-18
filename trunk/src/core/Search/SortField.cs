@@ -31,14 +31,8 @@ namespace Lucene.Net.Search
 	/// field.  Fields must be indexed in order to sort by them.
 	/// 
 	/// <p/>Created: Feb 11, 2004 1:25:29 PM
-	/// 
 	/// </summary>
-	/// <since>   lucene 1.4
-	/// </since>
-	/// <version>  $Id: SortField.java 801344 2009-08-05 18:05:06Z yonik $
-	/// </version>
-	/// <seealso cref="Sort">
-	/// </seealso>
+	/// <seealso cref="Sort"></seealso>
 	[Serializable]
 	public class SortField
 	{

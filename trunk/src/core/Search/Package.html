@@ -25,60 +25,60 @@ Code to search indices.
 <h2>Table Of Contents</h2>
 <p>
     <ol>
-        <li><a href = "#search">Search Basics</a></li>
-        <li><a href = "#query">The Query Classes</a></li>
-        <li><a href = "#scoring">Changing the Scoring</a></li>
+        <li><a href="#search">Search Basics</a></li>
+        <li><a href="#query">The Query Classes</a></li>
+        <li><a href="#scoring">Changing the Scoring</a></li>
     </ol>
 </p>
-<a name = "search"></a>
+<a name="search"></a>
 <h2>Search</h2>
 <p>
 Search over indices.
 
 Applications usually call {@link
-Lucene.Net.Search.Searcher#search(Query)} or {@link
-Lucene.Net.Search.Searcher#search(Query,Filter)}.
+org.apache.lucene.search.Searcher#search(Query,int)} or {@link
+org.apache.lucene.search.Searcher#search(Query,Filter,int)}.
 
     <!-- FILL IN MORE HERE -->   
 </p>
-<a name = "query"></a>
+<a name="query"></a>
 <h2>Query Classes</h2>
 <h4>
-    <a href = "TermQuery.html">TermQuery</a>
+    <a href="TermQuery.html">TermQuery</a>
 </h4>
 
 <p>Of the various implementations of
-    <a href = "Query.html">Query</a>, the
-    <a href = "TermQuery.html">TermQuery</a>
+    <a href="Query.html">Query</a>, the
+    <a href="TermQuery.html">TermQuery</a>
     is the easiest to understand and the most often used in applications. A <a
         href="TermQuery.html">TermQuery</a> matches all the documents that contain the
     specified
-    <a href = "index/Term.html">Term</a>,
+    <a href="../index/Term.html">Term</a>,
     which is a word that occurs in a certain
-    <a href = "document/Field.html">Field</a>.
-    Thus, a <a href = "TermQuery.html">TermQuery</a> identifies and scores all
-    <a href = "document/Document.html">Document</a>s that have a <a
+    <a href="../document/Field.html">Field</a>.
+    Thus, a <a href="TermQuery.html">TermQuery</a> identifies and scores all
+    <a href="../document/Document.html">Document</a>s that have a <a
         href="../document/Field.html">Field</a> with the specified string in it.
     Constructing a <a
         href="TermQuery.html">TermQuery</a>
     is as simple as:
     <pre>
         TermQuery tq = new TermQuery(new Term("fieldName", "term"));
-    </pre>In this example, the <a href = "Query.html">Query</a> identifies all <a
+    </pre>In this example, the <a href="Query.html">Query</a> identifies all <a
         href="../document/Document.html">Document</a>s that have the <a
         href="../document/Field.html">Field</a> named <tt>"fieldName"</tt>
     containing the word <tt>"term"</tt>.
 </p>
 <h4>
-    <a href = "BooleanQuery.html">BooleanQuery</a>
+    <a href="BooleanQuery.html">BooleanQuery</a>
 </h4>
 
 <p>Things start to get interesting when one combines multiple
-    <a href = "TermQuery.html">TermQuery</a> instances into a <a
+    <a href="TermQuery.html">TermQuery</a> instances into a <a
         href="BooleanQuery.html">BooleanQuery</a>.
-    A <a href = "BooleanQuery.html">BooleanQuery</a> contains multiple
-    <a href = "BooleanClause.html">BooleanClause</a>s,
-    where each clause contains a sub-query (<a href = "Query.html">Query</a>
+    A <a href="BooleanQuery.html">BooleanQuery</a> contains multiple
+    <a href="BooleanClause.html">BooleanClause</a>s,
+    where each clause contains a sub-query (<a href="Query.html">Query</a>
     instance) and an operator (from <a
         href="BooleanClause.Occur.html">BooleanClause.Occur</a>)
     describing how that sub-query is combined with the other clauses:
@@ -98,17 +98,17 @@ Lucene.Net.Search.Searcher#search(Query,Filter)}.
             any such clauses.</p></li>
     </ol>
     Boolean queries are constructed by adding two or more
-    <a href = "BooleanClause.html">BooleanClause</a>
-    instances. If too many clauses are added, a <a href = "BooleanQuery.TooManyClauses.html">TooManyClauses</a>
+    <a href="BooleanClause.html">BooleanClause</a>
+    instances. If too many clauses are added, a <a href="BooleanQuery.TooManyClauses.html">TooManyClauses</a>
     exception will be thrown during searching. This most often occurs
-    when a <a href = "Query.html">Query</a>
-    is rewritten into a <a href = "BooleanQuery.html">BooleanQuery</a> with many
-    <a href = "TermQuery.html">TermQuery</a> clauses,
-    for example by <a href = "WildcardQuery.html">WildcardQuery</a>.
+    when a <a href="Query.html">Query</a>
+    is rewritten into a <a href="BooleanQuery.html">BooleanQuery</a> with many
+    <a href="TermQuery.html">TermQuery</a> clauses,
+    for example by <a href="WildcardQuery.html">WildcardQuery</a>.
     The default setting for the maximum number
     of clauses 1024, but this can be changed via the
-    static method <a href = "BooleanQuery.html#setMaxClauseCount(int)">setMaxClauseCount</a>
-    in <a href = "BooleanQuery.html">BooleanQuery</a>.
+    static method <a href="BooleanQuery.html#setMaxClauseCount(int)">setMaxClauseCount</a>
+    in <a href="BooleanQuery.html">BooleanQuery</a>.
 </p>
 
 <h4>Phrases</h4>
@@ -117,39 +117,39 @@ Lucene.Net.Search.Searcher#search(Query,Filter)}.
     is handled two different ways:
     <ol>
         <li>
-            <p><a href = "PhraseQuery.html">PhraseQuery</a>
+            <p><a href="PhraseQuery.html">PhraseQuery</a>
                 &mdash; Matches a sequence of
-                <a href = "index/Term.html">Terms</a>.
-                <a href = "PhraseQuery.html">PhraseQuery</a> uses a slop factor to determine
+                <a href="../index/Term.html">Terms</a>.
+                <a href="PhraseQuery.html">PhraseQuery</a> uses a slop factor to determine
                 how many positions may occur between any two terms in the phrase and still be considered a match.</p>
         </li>
         <li>
-            <p><a href = "spans/SpanNearQuery.html">SpanNearQuery</a>
+            <p><a href="spans/SpanNearQuery.html">SpanNearQuery</a>
                 &mdash; Matches a sequence of other
-                <a href = "spans/SpanQuery.html">SpanQuery</a>
-                instances. <a href = "spans/SpanNearQuery.html">SpanNearQuery</a> allows for
+                <a href="spans/SpanQuery.html">SpanQuery</a>
+                instances. <a href="spans/SpanNearQuery.html">SpanNearQuery</a> allows for
                 much more
                 complicated phrase queries since it is constructed from other <a
                     href="spans/SpanQuery.html">SpanQuery</a>
-                instances, instead of only <a href = "TermQuery.html">TermQuery</a>
+                instances, instead of only <a href="TermQuery.html">TermQuery</a>
                 instances.</p>
         </li>
     </ol>
 </p>
 
 <h4>
-    <a href = "TermRangeQuery.html">TermRangeQuery</a>
+    <a href="TermRangeQuery.html">TermRangeQuery</a>
 </h4>
 
 <p>The
-    <a href = "TermRangeQuery.html">TermRangeQuery</a>
+    <a href="TermRangeQuery.html">TermRangeQuery</a>
     matches all documents that occur in the
     exclusive range of a lower
-    <a href = "index/Term.html">Term</a>
+    <a href="../index/Term.html">Term</a>
     and an upper
-    <a href = "index/Term.html">Term</a>.
+    <a href="../index/Term.html">Term</a>.
     according to {@link java.lang.String#compareTo(String)}. It is not intended
-    for numerical ranges, use <a href = "NumericRangeQuery.html">NumericRangeQuery</a> instead.
+    for numerical ranges, use <a href="NumericRangeQuery.html">NumericRangeQuery</a> instead.
 
     For example, one could find all documents
     that have terms beginning with the letters <tt>a</tt> through <tt>c</tt>. This type of <a
@@ -159,53 +159,53 @@ Lucene.Net.Search.Searcher#search(Query,Filter)}.
 </p>
 
 <h4>
-    <a href = "NumericRangeQuery.html">NumericRangeQuery</a>
+    <a href="NumericRangeQuery.html">NumericRangeQuery</a>
 </h4>
 
 <p>The
-    <a href = "NumericRangeQuery.html">NumericRangeQuery</a>
+    <a href="NumericRangeQuery.html">NumericRangeQuery</a>
     matches all documents that occur in a numeric range.
     For NumericRangeQuery to work, you must index the values
-    using a special <a href = "document/NumericField.html">
+    using a special <a href="../document/NumericField.html">
     NumericField</a>.
 </p>
 
 <h4>
-    <a href = "PrefixQuery.html">PrefixQuery</a>,
-    <a href = "WildcardQuery.html">WildcardQuery</a>
+    <a href="PrefixQuery.html">PrefixQuery</a>,
+    <a href="WildcardQuery.html">WildcardQuery</a>
 </h4>
 
 <p>While the
-    <a href = "PrefixQuery.html">PrefixQuery</a>
+    <a href="PrefixQuery.html">PrefixQuery</a>
     has a different implementation, it is essentially a special case of the
-    <a href = "WildcardQuery.html">WildcardQuery</a>.
-    The <a href = "PrefixQuery.html">PrefixQuery</a> allows an application
+    <a href="WildcardQuery.html">WildcardQuery</a>.
+    The <a href="PrefixQuery.html">PrefixQuery</a> allows an application
     to identify all documents with terms that begin with a certain string. The <a
         href="WildcardQuery.html">WildcardQuery</a> generalizes this by allowing
     for the use of <tt>*</tt> (matches 0 or more characters) and <tt>?</tt> (matches exactly one character) wildcards.
-    Note that the <a href = "WildcardQuery.html">WildcardQuery</a> can be quite slow. Also
+    Note that the <a href="WildcardQuery.html">WildcardQuery</a> can be quite slow. Also
     note that
-    <a href = "WildcardQuery.html">WildcardQuery</a> should
+    <a href="WildcardQuery.html">WildcardQuery</a> should
     not start with <tt>*</tt> and <tt>?</tt>, as these are extremely slow. 
 	To remove this protection and allow a wildcard at the beginning of a term, see method
-	<a href = "queryParser/QueryParser.html#setAllowLeadingWildcard(boolean)">setAllowLeadingWildcard</a> in 
-	<a href = "queryParser/QueryParser.html">QueryParser</a>.
+	<a href="../queryParser/QueryParser.html#setAllowLeadingWildcard(boolean)">setAllowLeadingWildcard</a> in 
+	<a href="../queryParser/QueryParser.html">QueryParser</a>.
 </p>
 <h4>
-    <a href = "FuzzyQuery.html">FuzzyQuery</a>
+    <a href="FuzzyQuery.html">FuzzyQuery</a>
 </h4>
 
 <p>A
-    <a href = "FuzzyQuery.html">FuzzyQuery</a>
+    <a href="FuzzyQuery.html">FuzzyQuery</a>
     matches documents that contain terms similar to the specified term. Similarity is
     determined using
-    <a href = "http://en.wikipedia.org//wiki/Levenshtein">Levenshtein (edit) distance</a>.
+    <a href="http://en.wikipedia.org/wiki/Levenshtein">Levenshtein (edit) distance</a>.
     This type of query can be useful when accounting for spelling variations in the collection.
 </p>
-<a name = "changingSimilarity"></a>
+<a name="changingSimilarity"></a>
 <h2>Changing Similarity</h2>
 
-<p>Chances are <a href = "DefaultSimilarity.html">DefaultSimilarity</a> is sufficient for all
+<p>Chances are <a href="DefaultSimilarity.html">DefaultSimilarity</a> is sufficient for all
     your searching needs.
     However, in some applications it may be necessary to customize your <a
         href="Similarity.html">Similarity</a> implementation. For instance, some
@@ -213,19 +213,19 @@ Lucene.Net.Search.Searcher#search(Query,Filter)}.
     distinguish between shorter and longer documents (see <a
         href="http://www.gossamer-threads.com/lists/lucene/java-user/38967#38967">a "fair" similarity</a>).</p>
 
-<p>To change <a href = "Similarity.html">Similarity</a>, one must do so for both indexing and
+<p>To change <a href="Similarity.html">Similarity</a>, one must do so for both indexing and
     searching, and the changes must happen before
     either of these actions take place. Although in theory there is nothing stopping you from changing mid-stream, it
     just isn't well-defined what is going to happen.
 </p>
 
-<p>To make this change, implement your own <a href = "Similarity.html">Similarity</a> (likely
+<p>To make this change, implement your own <a href="Similarity.html">Similarity</a> (likely
     you'll want to simply subclass
-    <a href = "DefaultSimilarity.html">DefaultSimilarity</a>) and then use the new
+    <a href="DefaultSimilarity.html">DefaultSimilarity</a>) and then use the new
     class by calling
-    <a href = "index/IndexWriter.html#setSimilarity(Lucene.Net.Search.Similarity)">IndexWriter.setSimilarity</a>
+    <a href="../index/IndexWriter.html#setSimilarity(org.apache.lucene.search.Similarity)">IndexWriter.setSimilarity</a>
     before indexing and
-    <a href = "Searcher.html#setSimilarity(Lucene.Net.Search.Similarity)">Searcher.setSimilarity</a>
+    <a href="Searcher.html#setSimilarity(org.apache.lucene.search.Similarity)">Searcher.setSimilarity</a>
     before searching.
 </p>
 
@@ -234,7 +234,7 @@ Lucene.Net.Search.Searcher#search(Query,Filter)}.
         href="http://www.nabble.com/Overriding-Similarity-tf2128934.html">Overriding Similarity</a>.
     In summary, here are a few use cases:
     <ol>
-        <li><p><a href = "api/org/apache/lucene/misc/SweetSpotSimilarity.html">SweetSpotSimilarity</a> &mdash; <a
+        <li><p><a href="api/org/apache/lucene/misc/SweetSpotSimilarity.html">SweetSpotSimilarity</a> &mdash; <a
                 href="api/org/apache/lucene/misc/SweetSpotSimilarity.html">SweetSpotSimilarity</a> gives small increases
             as the frequency increases a small amount
             and then greater increases when you hit the "sweet spot", i.e. where you think the frequency of terms is
@@ -245,10 +245,10 @@ Lucene.Net.Search.Searcher#search(Query,Filter)}.
         <li><p>Changing Length Normalization &mdash; By overriding <a
                 href="Similarity.html#lengthNorm(java.lang.String,%20int)">lengthNorm</a>,
             it is possible to discount how the length of a field contributes
-            to a score. In <a href = "DefaultSimilarity.html">DefaultSimilarity</a>,
+            to a score. In <a href="DefaultSimilarity.html">DefaultSimilarity</a>,
             lengthNorm = 1 / (numTerms in field)^0.5, but if one changes this to be
             1 / (numTerms in field), all fields will be treated
-            <a href = "http://www.gossamer-threads.com//lists/lucene/java-user/38967#38967">"fairly"</a>.</p></li>
+            <a href="http://www.gossamer-threads.com/lists/lucene/java-user/38967#38967">"fairly"</a>.</p></li>
     </ol>
     In general, Chris Hostetter sums it up best in saying (from <a
         href="http://www.gossamer-threads.com/lists/lucene/java-user/39125#39125">the Lucene users's mailing list</a>):
@@ -257,7 +257,7 @@ Lucene.Net.Search.Searcher#search(Query,Filter)}.
         it's "text" is a situation where it *might* make sense to to override your
         Similarity method.</blockquote>
 </p>
-<a name = "scoring"></a>
+<a name="scoring"></a>
 <h2>Changing Scoring &mdash; Expert Level</h2>
 
 <p>Changing scoring is an expert level task, so tread carefully and be prepared to share your code if
@@ -269,73 +269,73 @@ Lucene.Net.Search.Searcher#search(Query,Filter)}.
     <span >three main classes</span>:
     <ol>
         <li>
-            <a href = "Query.html">Query</a> &mdash; The abstract object representation of the
+            <a href="Query.html">Query</a> &mdash; The abstract object representation of the
             user's information need.</li>
         <li>
-            <a href = "Weight.html">Weight</a> &mdash; The internal interface representation of
+            <a href="Weight.html">Weight</a> &mdash; The internal interface representation of
             the user's Query, so that Query objects may be reused.</li>
         <li>
-            <a href = "Scorer.html">Scorer</a> &mdash; An abstract class containing common
+            <a href="Scorer.html">Scorer</a> &mdash; An abstract class containing common
             functionality for scoring. Provides both scoring and explanation capabilities.</li>
     </ol>
     Details on each of these classes, and their children, can be found in the subsections below.
 </p>
 <h4>The Query Class</h4>
     <p>In some sense, the
-        <a href = "Query.html">Query</a>
+        <a href="Query.html">Query</a>
         class is where it all begins. Without a Query, there would be
         nothing to score. Furthermore, the Query class is the catalyst for the other scoring classes as it
         is often responsible
         for creating them or coordinating the functionality between them. The
-        <a href = "Query.html">Query</a> class has several methods that are important for
+        <a href="Query.html">Query</a> class has several methods that are important for
         derived classes:
         <ol>
             <li>createWeight(Searcher searcher) &mdash; A
-                <a href = "Weight.html">Weight</a> is the internal representation of the
+                <a href="Weight.html">Weight</a> is the internal representation of the
                 Query, so each Query implementation must
                 provide an implementation of Weight. See the subsection on <a
                     href="#The Weight Interface">The Weight Interface</a> below for details on implementing the Weight
                 interface.</li>
             <li>rewrite(IndexReader reader) &mdash; Rewrites queries into primitive queries. Primitive queries are:
-                <a href = "TermQuery.html">TermQuery</a>,
-                <a href = "BooleanQuery.html">BooleanQuery</a>, <span
+                <a href="TermQuery.html">TermQuery</a>,
+                <a href="BooleanQuery.html">BooleanQuery</a>, <span
                     >and other queries that implement Query.html#createWeight(Searcher searcher)</span></li>
         </ol>
     </p>
 <h4>The Weight Interface</h4>
     <p>The
-        <a href = "Weight.html">Weight</a>
+        <a href="Weight.html">Weight</a>
         interface provides an internal representation of the Query so that it can be reused. Any
-        <a href = "Searcher.html">Searcher</a>
+        <a href="Searcher.html">Searcher</a>
         dependent state should be stored in the Weight implementation,
         not in the Query class. The interface defines six methods that must be implemented:
         <ol>
             <li>
-                <a href = "Weight.html#getQuery()">Weight#getQuery()</a> &mdash; Pointer to the
+                <a href="Weight.html#getQuery()">Weight#getQuery()</a> &mdash; Pointer to the
                 Query that this Weight represents.</li>
             <li>
-                <a href = "Weight.html#getValue()">Weight#getValue()</a> &mdash; The weight for
+                <a href="Weight.html#getValue()">Weight#getValue()</a> &mdash; The weight for
                 this Query. For example, the TermQuery.TermWeight value is
                 equal to the idf^2 * boost * queryNorm <!-- DOUBLE CHECK THIS --></li>
             <li>
-                <a href = "Weight.html#sumOfSquaredWeights()">
+                <a href="Weight.html#sumOfSquaredWeights()">
                     Weight#sumOfSquaredWeights()</a> &mdash; The sum of squared weights. For TermQuery, this is (idf *
                 boost)^2</li>
             <li>
-                <a href = "Weight.html#normalize(float)">
+                <a href="Weight.html#normalize(float)">
                     Weight#normalize(float)</a> &mdash; Determine the query normalization factor. The query normalization may
                 allow for comparing scores between queries.</li>
             <li>
-                <a href = "Weight.html#scorer(Lucene.Net.Index.IndexReader, boolean, boolean)">
+                <a href="Weight.html#scorer(org.apache.lucene.index.IndexReader, boolean, boolean)">
                     Weight#scorer(IndexReader, boolean, boolean)</a> &mdash; Construct a new
-                <a href = "Scorer.html">Scorer</a>
+                <a href="Scorer.html">Scorer</a>
                 for this Weight. See
-                <a href = "#The Scorer Class">The Scorer Class</a>
+                <a href="#The Scorer Class">The Scorer Class</a>
                 below for help defining a Scorer. As the name implies, the
                 Scorer is responsible for doing the actual scoring of documents given the Query.
             </li>
             <li>
-                <a href = "Weight.html#explain(Lucene.Net.Search.Searcher, Lucene.Net.Index.IndexReader, int)">
+                <a href="Weight.html#explain(org.apache.lucene.search.Searcher, org.apache.lucene.index.IndexReader, int)">
                     Weight#explain(Searcher, IndexReader, int)</a> &mdash; Provide a means for explaining why a given document was
                 scored
                 the way it was.</li>
@@ -343,34 +343,34 @@ Lucene.Net.Search.Searcher#search(Query,Filter)}.
     </p>
 <h4>The Scorer Class</h4>
     <p>The
-        <a href = "Scorer.html">Scorer</a>
+        <a href="Scorer.html">Scorer</a>
         abstract class provides common scoring functionality for all Scorer implementations and
         is the heart of the Lucene scoring process. The Scorer defines the following abstract (they are not
         yet abstract, but will be in Lucene 3.0 and should be considered as such now) methods which
-        must be implemented (some of them inherited from <a href = "DocIdSetIterator.html">DocIdSetIterator</a> ):
+        must be implemented (some of them inherited from <a href="DocIdSetIterator.html">DocIdSetIterator</a> ):
         <ol>
             <li>
-                <a href = "DocIdSetIterator.html#nextDoc()">DocIdSetIterator#nextDoc()</a> &mdash; Advances to the next
+                <a href="DocIdSetIterator.html#nextDoc()">DocIdSetIterator#nextDoc()</a> &mdash; Advances to the next
                 document that matches this Query, returning true if and only
                 if there is another document that matches.</li>
             <li>
-                <a href = "DocIdSetIterator.html#docID()">DocIdSetIterator#docID()</a> &mdash; Returns the id of the
-                <a href = "document/Document.html">Document</a>
+                <a href="DocIdSetIterator.html#docID()">DocIdSetIterator#docID()</a> &mdash; Returns the id of the
+                <a href="../document/Document.html">Document</a>
                 that contains the match. It is not valid until next() has been called at least once.
             </li>
             <li>
-                <a href = "Scorer.html#score(Lucene.Net.Search.Collector)">Scorer#score(Collector)</a> &mdash;
+                <a href="Scorer.html#score(org.apache.lucene.search.Collector)">Scorer#score(Collector)</a> &mdash;
                 Scores and collects all matching documents using the given Collector.
             </li>
             <li>
-                <a href = "Scorer.html#score()">Scorer#score()</a> &mdash; Return the score of the
+                <a href="Scorer.html#score()">Scorer#score()</a> &mdash; Return the score of the
                 current document. This value can be determined in any
                 appropriate way for an application. For instance, the
-                <a href = "http://svn.apache.org//viewvc/lucene/java/trunk/src/java/org/apache/lucene/search/TermScorer.java?view=log">TermScorer</a>
+                <a href="http://svn.apache.org/viewvc/lucene/java/trunk/src/java/org/apache/lucene/search/TermScorer.java?view=log">TermScorer</a>
                 returns the tf * Weight.getValue() * fieldNorm.
             </li>
             <li>
-                <a href = "DocIdSetIterator.html#advance(int)">DocIdSetIterator#advance(int)</a> &mdash; Skip ahead in
+                <a href="DocIdSetIterator.html#advance(int)">DocIdSetIterator#advance(int)</a> &mdash; Skip ahead in
                 the document matches to the document whose id is greater than
                 or equal to the passed in value. In many instances, advance can be
                 implemented more efficiently than simply looping through all the matching documents until

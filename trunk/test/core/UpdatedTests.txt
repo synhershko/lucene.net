@@ -201,7 +201,7 @@ search\TestSimpleExplanations.java - DONE
 search\TestSimpleExplanationsOfNonMatches.java - Text files are different
 search\TestSloppyPhraseQuery.java - Text files are different
 search\TestSort.java - DONE
-search\TestSpanQueryFilter.java - Text files are different
+search\TestSpanQueryFilter.java - DONE
 search\TestStressSort.java - REMOVED
 search\TestTermRangeFilter.java - DONE
 search\TestTermRangeQuery.java - DONE

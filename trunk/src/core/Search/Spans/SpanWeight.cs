@@ -107,7 +107,7 @@ namespace Lucene.Net.Search.Spans
 			ComplexExplanation fieldExpl = new ComplexExplanation();
 			fieldExpl.SetDescription("fieldWeight(" + field + ":" + query.ToString(field) + " in " + doc + "), product of:");
 			
-			Explanation tfExpl = Scorer(reader, true, false).Explain(doc);
+			Explanation tfExpl = ((SpanScorer)Scorer(reader, true, false)).Explain(doc);
 			fieldExpl.AddDetail(tfExpl);
 			fieldExpl.AddDetail(idfExpl);
 			

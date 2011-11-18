@@ -85,8 +85,7 @@ namespace Lucene.Net.Search
 					}
 					catch (System.Threading.ThreadInterruptedException ie)
 					{
-						ThreadClass.Current().Interrupt();
-						throw new System.SystemException(ie.Message, ie);
+					    throw;
 					}
 				}
 			}

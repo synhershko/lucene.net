@@ -24,7 +24,6 @@ using Weight = Lucene.Net.Search.Weight;
 
 namespace Lucene.Net.Search.Spans
 {
-	
 	/// <summary> Public for extension only.</summary>
 	public class SpanScorer:Scorer
 	{
@@ -115,7 +114,7 @@ namespace Lucene.Net.Search.Spans
         /// This method is no longer an official member of <see cref="Scorer"/>
         /// but it is needed by SpanWeight to build an explanation.
         /// </summary>
-		public override Explanation Explain(int doc)
+		protected internal virtual Explanation Explain(int doc)
 		{
 			Explanation tfExplanation = new Explanation();
 			

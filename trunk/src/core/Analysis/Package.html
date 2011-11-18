@@ -20,7 +20,7 @@
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 <body>
-<p>API and code to convert text into indexable/searchable tokens.  Covers {@link Lucene.Net.Analysis.Analyzer} and related classes.</p>
+<p>API and code to convert text into indexable/searchable tokens.  Covers {@link org.apache.lucene.analysis.Analyzer} and related classes.</p>
 <h2>Parsing? Tokenization? Analysis!</h2>
 <p>
 Lucene, indexing and search library, accepts only plain text input.
@@ -42,20 +42,20 @@ and proximity searches (though sentence identification is not provided by Lucene
 In some cases simply breaking the input text into tokens is not enough &ndash; a deeper <i>Analysis</i> may be needed.
 There are many post tokenization steps that can be done, including (but not limited to):
 <ul>
-  <li><a href = "http://en.wikipedia.org//wiki/Stemming">Stemming</a> &ndash; 
+  <li><a href="http://en.wikipedia.org/wiki/Stemming">Stemming</a> &ndash; 
       Replacing of words by their stems. 
       For instance with English stemming "bikes" is replaced by "bike"; 
       now query "bike" can find both documents containing "bike" and those containing "bikes".
   </li>
-  <li><a href = "http://en.wikipedia.org//wiki/Stop_words">Stop Words Filtering</a> &ndash; 
+  <li><a href="http://en.wikipedia.org/wiki/Stop_words">Stop Words Filtering</a> &ndash; 
       Common words like "the", "and" and "a" rarely add any value to a search.
       Removing them shrinks the index size and increases performance.
       It may also reduce some "noise" and actually improve search quality.
   </li>
-  <li><a href = "http://en.wikipedia.org//wiki/Text_normalization">Text Normalization</a> &ndash; 
+  <li><a href="http://en.wikipedia.org/wiki/Text_normalization">Text Normalization</a> &ndash; 
       Stripping accents and other character markings can make for better searching.
   </li>
-  <li><a href = "http://en.wikipedia.org//wiki/Synonym">Synonym Expansion</a> &ndash; 
+  <li><a href="http://en.wikipedia.org/wiki/Synonym">Synonym Expansion</a> &ndash; 
       Adding in synonyms at the same token position as the current word can mean better 
       matching when users search with words in the synonym set.
   </li>
@@ -66,12 +66,12 @@ There are many post tokenization steps that can be done, including (but not limi
   The analysis package provides the mechanism to convert Strings and Readers into tokens that can be indexed by Lucene.  There
   are three main classes in the package from which all analysis processes are derived.  These are:
   <ul>
-    <li>{@link Lucene.Net.Analysis.Analyzer} &ndash; An Analyzer is responsible for building a {@link Lucene.Net.Analysis.TokenStream} which can be consumed
+    <li>{@link org.apache.lucene.analysis.Analyzer} &ndash; An Analyzer is responsible for building a {@link org.apache.lucene.analysis.TokenStream} which can be consumed
     by the indexing and searching processes.  See below for more information on implementing your own Analyzer.</li>
-    <li>{@link Lucene.Net.Analysis.Tokenizer} &ndash; A Tokenizer is a {@link Lucene.Net.Analysis.TokenStream} and is responsible for breaking
+    <li>{@link org.apache.lucene.analysis.Tokenizer} &ndash; A Tokenizer is a {@link org.apache.lucene.analysis.TokenStream} and is responsible for breaking
     up incoming text into tokens. In most cases, an Analyzer will use a Tokenizer as the first step in
     the analysis process.</li>
-    <li>{@link Lucene.Net.Analysis.TokenFilter} &ndash; A TokenFilter is also a {@link Lucene.Net.Analysis.TokenStream} and is responsible
+    <li>{@link org.apache.lucene.analysis.TokenFilter} &ndash; A TokenFilter is also a {@link org.apache.lucene.analysis.TokenStream} and is responsible
     for modifying tokens that have been created by the Tokenizer.  Common modifications performed by a
     TokenFilter are: deletion, stemming, synonym injection, and down casing.  Not all Analyzers require TokenFilters</li>
   </ul>
@@ -79,57 +79,57 @@ There are many post tokenization steps that can be done, including (but not limi
 </p>
 <h2>Hints, Tips and Traps</h2>
 <p>
-   The synergy between {@link Lucene.Net.Analysis.Analyzer} and {@link Lucene.Net.Analysis.Tokenizer}
+   The synergy between {@link org.apache.lucene.analysis.Analyzer} and {@link org.apache.lucene.analysis.Tokenizer}
    is sometimes confusing. To ease on this confusion, some clarifications:
    <ul>
-      <li>The {@link Lucene.Net.Analysis.Analyzer} is responsible for the entire task of 
-          <u>creating</u> tokens out of the input text, while the {@link Lucene.Net.Analysis.Tokenizer}
+      <li>The {@link org.apache.lucene.analysis.Analyzer} is responsible for the entire task of 
+          <u>creating</u> tokens out of the input text, while the {@link org.apache.lucene.analysis.Tokenizer}
           is only responsible for <u>breaking</u> the input text into tokens. Very likely, tokens created 
-          by the {@link Lucene.Net.Analysis.Tokenizer} would be modified or even omitted 
-          by the {@link Lucene.Net.Analysis.Analyzer} (via one or more
-          {@link Lucene.Net.Analysis.TokenFilter}s) before being returned.
+          by the {@link org.apache.lucene.analysis.Tokenizer} would be modified or even omitted 
+          by the {@link org.apache.lucene.analysis.Analyzer} (via one or more
+          {@link org.apache.lucene.analysis.TokenFilter}s) before being returned.
        </li>
-       <li>{@link Lucene.Net.Analysis.Tokenizer} is a {@link Lucene.Net.Analysis.TokenStream}, 
-           but {@link Lucene.Net.Analysis.Analyzer} is not.
+       <li>{@link org.apache.lucene.analysis.Tokenizer} is a {@link org.apache.lucene.analysis.TokenStream}, 
+           but {@link org.apache.lucene.analysis.Analyzer} is not.
        </li>
-       <li>{@link Lucene.Net.Analysis.Analyzer} is "field aware", but 
-           {@link Lucene.Net.Analysis.Tokenizer} is not.
+       <li>{@link org.apache.lucene.analysis.Analyzer} is "field aware", but 
+           {@link org.apache.lucene.analysis.Tokenizer} is not.
        </li>
    </ul>
 </p>
 <p>
   Lucene Java provides a number of analysis capabilities, the most commonly used one being the {@link
-  Lucene.Net.Analysis.Standard.StandardAnalyzer}.  Many applications will have a long and industrious life with nothing more
+  org.apache.lucene.analysis.standard.StandardAnalyzer}.  Many applications will have a long and industrious life with nothing more
   than the StandardAnalyzer.  However, there are a few other classes/packages that are worth mentioning:
   <ol>
-    <li>{@link Lucene.Net.Analysis.PerFieldAnalyzerWrapper} &ndash; Most Analyzers perform the same operation on all
-      {@link Lucene.Net.Documents.Field}s.  The PerFieldAnalyzerWrapper can be used to associate a different Analyzer with different
-      {@link Lucene.Net.Documents.Field}s.</li>
+    <li>{@link org.apache.lucene.analysis.PerFieldAnalyzerWrapper} &ndash; Most Analyzers perform the same operation on all
+      {@link org.apache.lucene.document.Field}s.  The PerFieldAnalyzerWrapper can be used to associate a different Analyzer with different
+      {@link org.apache.lucene.document.Field}s.</li>
     <li>The contrib/analyzers library located at the root of the Lucene distribution has a number of different Analyzer implementations to solve a variety
     of different problems related to searching.  Many of the Analyzers are designed to analyze non-English languages.</li>
     <li>The contrib/snowball library 
         located at the root of the Lucene distribution has Analyzer and TokenFilter 
         implementations for a variety of Snowball stemmers.  
-        See <a href = "http://snowball.tartarus.org">http://snowball.tartarus.org</a> 
+        See <a href="http://snowball.tartarus.org">http://snowball.tartarus.org</a> 
         for more information on Snowball stemmers.</li>
     <li>There are a variety of Tokenizer and TokenFilter implementations in this package.  Take a look around, chances are someone has implemented what you need.</li>
   </ol>
 </p>
 <p>
   Analysis is one of the main causes of performance degradation during indexing.  Simply put, the more you analyze the slower the indexing (in most cases).
-  Perhaps your application would be just fine using the simple {@link Lucene.Net.Analysis.WhitespaceTokenizer} combined with a
-  {@link Lucene.Net.Analysis.StopFilter}. The contrib/benchmark library can be useful for testing out the speed of the analysis process.
+  Perhaps your application would be just fine using the simple {@link org.apache.lucene.analysis.WhitespaceTokenizer} combined with a
+  {@link org.apache.lucene.analysis.StopFilter}. The contrib/benchmark library can be useful for testing out the speed of the analysis process.
 </p>
 <h2>Invoking the Analyzer</h2>
 <p>
   Applications usually do not invoke analysis &ndash; Lucene does it for them:
   <ul>
     <li>At indexing, as a consequence of 
-        {@link Lucene.Net.Index.IndexWriter#addDocument(Lucene.Net.Documents.Document) addDocument(doc)},
+        {@link org.apache.lucene.index.IndexWriter#addDocument(org.apache.lucene.document.Document) addDocument(doc)},
         the Analyzer in effect for indexing is invoked for each indexed field of the added document.
     </li>
     <li>At search, as a consequence of
-        {@link Lucene.Net.QueryParsers.QueryParser#parse(java.lang.String) QueryParser.parse(queryText)},
+        {@link org.apache.lucene.queryParser.QueryParser#parse(java.lang.String) QueryParser.parse(queryText)},
         the QueryParser may invoke the Analyzer in effect.
         Note that for some queries analysis does not take place, e.g. wildcard queries.
     </li>
@@ -140,7 +140,6 @@ There are many post tokenization steps that can be done, including (but not limi
       TokenStream ts = analyzer.tokenStream("myfield",new StringReader("some text goes here"));
       while (ts.incrementToken()) {
         System.out.println("token: "+ts));
-        t = ts.next();
       }
   </PRE>
 </p>
@@ -150,7 +149,7 @@ There are many post tokenization steps that can be done, including (but not limi
   for search quality, and can also affect indexing and search performance.
   The "correct" analyzer differs between applications.
   Lucene java's wiki page 
-  <a href = "http://wiki.apache.org//lucene-java/AnalysisParalysis">AnalysisParalysis</a> 
+  <a href="http://wiki.apache.org/lucene-java/AnalysisParalysis">AnalysisParalysis</a> 
   provides some data on "analyzing your analyzer".
   Here are some rules of thumb:
   <ol>
@@ -178,11 +177,11 @@ the source code of any one of the many samples located in this package.
 </p>
 <h3>Field Section Boundaries</h3>
 <p>
-  When {@link Lucene.Net.Documents.Document#add(Lucene.Net.Documents.Fieldable) document.add(field)}
+  When {@link org.apache.lucene.document.Document#add(org.apache.lucene.document.Fieldable) document.add(field)}
   is called multiple times for the same field name, we could say that each such call creates a new 
   section for that field in that document. 
   In fact, a separate call to 
-  {@link Lucene.Net.Analysis.Analyzer#tokenStream(java.lang.String, java.io.Reader) tokenStream(field,reader)}
+  {@link org.apache.lucene.analysis.Analyzer#tokenStream(java.lang.String, java.io.Reader) tokenStream(field,reader)}
   would take place for each of these so called "sections".
   However, the default Analyzer behavior is to treat all these sections as one large section. 
   This allows phrase search and proximity search to seamlessly cross 
@@ -196,7 +195,7 @@ the source code of any one of the many samples located in this package.
   Then, a phrase search for "ends starts" would find that document.
   Where desired, this behavior can be modified by introducing a "position gap" between consecutive field "sections", 
   simply by overriding 
-  {@link Lucene.Net.Analysis.Analyzer#getPositionIncrementGap(java.lang.String) Analyzer.getPositionIncrementGap(fieldName)}:
+  {@link org.apache.lucene.analysis.Analyzer#getPositionIncrementGap(java.lang.String) Analyzer.getPositionIncrementGap(fieldName)}:
   <PRE>
       Analyzer myAnalyzer = new StandardAnalyzer() {
          public int getPositionIncrementGap(String fieldName) {
@@ -208,7 +207,7 @@ the source code of any one of the many samples located in this package.
 <h3>Token Position Increments</h3>
 <p>
    By default, all tokens created by Analyzers and Tokenizers have a 
-   {@link Lucene.Net.Analysis.Tokenattributes.PositionIncrementAttribute#getPositionIncrement() position increment} of one.
+   {@link org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute#getPositionIncrement() position increment} of one.
    This means that the position stored for that token in the index would be one more than
    that of the previous token.
    Recall that phrase and proximity searches rely on position info.
@@ -224,14 +223,14 @@ the source code of any one of the many samples located in this package.
    If this behavior does not fit the application needs,
    a modified analyzer can be used, that would increment further the positions of
    tokens following a removed stop word, using
-   {@link Lucene.Net.Analysis.Tokenattributes.PositionIncrementAttribute#setPositionIncrement(int)}.
+   {@link org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute#setPositionIncrement(int)}.
    This can be done with something like:
    <PRE>
       public TokenStream tokenStream(final String fieldName, Reader reader) {
         final TokenStream ts = someAnalyzer.tokenStream(fieldName, reader);
         TokenStream res = new TokenStream() {
-          TermAttribute termAtt = (TermAttribute) addAttribute(TermAttribute.class);
-          PositionIncrementAttribute posIncrAtt = (PositionIncrementAttribute) addAttribute(PositionIncrementAttribute.class);
+          TermAttribute termAtt = addAttribute(TermAttribute.class);
+          PositionIncrementAttribute posIncrAtt = addAttribute(PositionIncrementAttribute.class);
         
           public boolean incrementToken() throws IOException {
             int extraIncrement = 0;
@@ -281,22 +280,22 @@ A fully customizable indexer means that users will be able to store custom data 
 is necessary that can transport custom types of data from the documents to the indexer.
 </p>
 <h3>Attribute and AttributeSource</h3> 
-Lucene 2.9 therefore introduces a new pair of classes called {@link Lucene.Net.Util.Attribute} and
-{@link Lucene.Net.Util.AttributeSource}. An Attribute serves as a
-particular piece of information about a text token. For example, {@link Lucene.Net.Analysis.Tokenattributes.TermAttribute}
- contains the term text of a token, and {@link Lucene.Net.Analysis.Tokenattributes.OffsetAttribute} contains the start and end character offsets of a token.
+Lucene 2.9 therefore introduces a new pair of classes called {@link org.apache.lucene.util.Attribute} and
+{@link org.apache.lucene.util.AttributeSource}. An Attribute serves as a
+particular piece of information about a text token. For example, {@link org.apache.lucene.analysis.tokenattributes.TermAttribute}
+ contains the term text of a token, and {@link org.apache.lucene.analysis.tokenattributes.OffsetAttribute} contains the start and end character offsets of a token.
 An AttributeSource is a collection of Attributes with a restriction: there may be only one instance of each attribute type. TokenStream now extends AttributeSource, which
 means that one can add Attributes to a TokenStream. Since TokenFilter extends TokenStream, all filters are also
 AttributeSources.
 <p>
 	Lucene now provides six Attributes out of the box, which replace the variables the Token class has:
 	<ul>
-	  <li>{@link Lucene.Net.Analysis.Tokenattributes.TermAttribute}<p>The term text of a token.</p></li>
-  	  <li>{@link Lucene.Net.Analysis.Tokenattributes.OffsetAttribute}<p>The start and end offset of token in characters.</p></li>
-	  <li>{@link Lucene.Net.Analysis.Tokenattributes.PositionIncrementAttribute}<p>See above for detailed information about position increment.</p></li>
-	  <li>{@link Lucene.Net.Analysis.Tokenattributes.PayloadAttribute}<p>The payload that a Token can optionally have.</p></li>
-	  <li>{@link Lucene.Net.Analysis.Tokenattributes.TypeAttribute}<p>The type of the token. Default is 'word'.</p></li>
-	  <li>{@link Lucene.Net.Analysis.Tokenattributes.FlagsAttribute}<p>Optional flags a token can have.</p></li>
+	  <li>{@link org.apache.lucene.analysis.tokenattributes.TermAttribute}<p>The term text of a token.</p></li>
+  	  <li>{@link org.apache.lucene.analysis.tokenattributes.OffsetAttribute}<p>The start and end offset of token in characters.</p></li>
+	  <li>{@link org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute}<p>See above for detailed information about position increment.</p></li>
+	  <li>{@link org.apache.lucene.analysis.tokenattributes.PayloadAttribute}<p>The payload that a Token can optionally have.</p></li>
+	  <li>{@link org.apache.lucene.analysis.tokenattributes.TypeAttribute}<p>The type of the token. Default is 'word'.</p></li>
+	  <li>{@link org.apache.lucene.analysis.tokenattributes.FlagsAttribute}<p>Optional flags a token can have.</p></li>
 	</ul>
 </p>
 <h3>Using the new TokenStream API</h3>
@@ -319,7 +318,7 @@ the Attribute instances.
 <li>
 For performance reasons a TokenStream/-Filter should add/get Attributes during instantiation; i.e., create an attribute in the
 constructor and store references to it in an instance variable.  Using an instance variable instead of calling addAttribute()/getAttribute() 
-in incrementToken() will avoid expensive casting and attribute lookups for every token in the document.
+in incrementToken() will avoid attribute lookups for every token in the document.
 </li>
 <br>
 <li>
@@ -356,7 +355,7 @@ public class MyAnalyzer extends Analyzer {
     TokenStream stream = analyzer.tokenStream("field", new StringReader(text));
     
     // get the TermAttribute from the TokenStream
-    TermAttribute termAtt = (TermAttribute) stream.addAttribute(TermAttribute.class);
+    TermAttribute termAtt = stream.addAttribute(TermAttribute.class);
 
     stream.reset();
     
@@ -421,7 +420,7 @@ public final class LengthFilter extends TokenFilter {
     super(in);
     this.min = min;
     this.max = max;
-    termAtt = (TermAttribute) addAttribute(TermAttribute.class);
+    termAtt = addAttribute(TermAttribute.class);
   }
   
   /**
@@ -448,7 +447,7 @@ Remember that there can only be a single instance of TermAttribute in the chain,
 <code>addAttribute()</code> call in LengthFilter returns the TermAttribute that the WhitespaceTokenizer already added. The tokens
 are retrieved from the input stream in the <code>incrementToken()</code> method. By looking at the term text
 in the TermAttribute the length of the term can be determined and too short or too long tokens are skipped. 
-Note how <code>incrementToken()</code> can efficiently access the instance variable; no attribute lookup or downcasting
+Note how <code>incrementToken()</code> can efficiently access the instance variable; no attribute lookup
 is neccessary. The same is true for the consumer, which can simply use local references to the Attributes.
 
 <h4>Adding a custom Attribute</h4>
@@ -470,11 +469,11 @@ Now we also need to write the implementing class. The name of that class is impo
 checks if there is a class with the name of the Attribute with the postfix 'Impl'. In this example, we would
 consequently call the implementing class <code>PartOfSpeechAttributeImpl</code>. <br/>
 This should be the usual behavior. However, there is also an expert-API that allows changing these naming conventions:
-{@link Lucene.Net.Util.AttributeSource.AttributeFactory}. The factory accepts an Attribute interface as argument
+{@link org.apache.lucene.util.AttributeSource.AttributeFactory}. The factory accepts an Attribute interface as argument
 and returns an actual instance. You can implement your own factory if you need to change the default behavior. <br/><br/>
 
 Now here is the actual class that implements our new Attribute. Notice that the class has to extend
-{@link Lucene.Net.Util.AttributeImpl}:
+{@link org.apache.lucene.util.AttributeImpl}:
 
 <pre>
 public final class PartOfSpeechAttributeImpl extends AttributeImpl 
@@ -526,8 +525,8 @@ that tags every word with a leading upper-case letter as a 'Noun' and all other 
     
     protected PartOfSpeechTaggingFilter(TokenStream input) {
       super(input);
-      posAtt = (PartOfSpeechAttribute) addAttribute(PartOfSpeechAttribute.class);
-      termAtt = (TermAttribute) addAttribute(TermAttribute.class);
+      posAtt = addAttribute(PartOfSpeechAttribute.class);
+      termAtt = addAttribute(TermAttribute.class);
     }
     
     public boolean incrementToken() throws IOException {
@@ -579,10 +578,10 @@ to make use of the new PartOfSpeechAttribute and print it out:
     TokenStream stream = analyzer.tokenStream("field", new StringReader(text));
     
     // get the TermAttribute from the TokenStream
-    TermAttribute termAtt = (TermAttribute) stream.addAttribute(TermAttribute.class);
+    TermAttribute termAtt = stream.addAttribute(TermAttribute.class);
     
     // get the PartOfSpeechAttribute from the TokenStream
-    PartOfSpeechAttribute posAtt = (PartOfSpeechAttribute) stream.addAttribute(PartOfSpeechAttribute.class);
+    PartOfSpeechAttribute posAtt = stream.addAttribute(PartOfSpeechAttribute.class);
     
     stream.reset();
 

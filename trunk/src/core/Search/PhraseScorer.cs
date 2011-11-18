@@ -149,10 +149,11 @@ namespace Lucene.Net.Search
 			}
 			return first.doc;
 		}
-		
+
         /// <summary>
-        /// phrase frequency in current doc as computed by phraseFreq().
+        /// Phrase frequency in current doc as computed by PhraseFreq()
         /// </summary>
+        /// <returns></returns>
         public float CurrentFreq()
         {
             return freq;
@@ -213,18 +214,6 @@ namespace Lucene.Net.Search
 			last = first;
 			first = first.next;
 			last.next = null;
-		}
-		
-		public override Explanation Explain(int doc)
-		{
-			Explanation tfExplanation = new Explanation();
-			
-			int d = Advance(doc);
-			float phraseFreq = (d == doc)?freq:0.0f;
-			tfExplanation.SetValue(GetSimilarity().Tf(phraseFreq));
-			tfExplanation.SetDescription("tf(phraseFreq=" + phraseFreq + ")");
-			
-			return tfExplanation;
 		}
 		
 		public override System.String ToString()

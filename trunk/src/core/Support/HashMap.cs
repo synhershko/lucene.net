@@ -34,7 +34,7 @@ namespace Lucene.Net.Support
     [Serializable]
     public class HashMap<TKey, TValue> : IDictionary<TKey, TValue>
     {
-        internal EqualityComparer<TKey> _comparer;
+        internal IEqualityComparer<TKey> _comparer;
         internal Dictionary<TKey, TValue> _dict;
 
         // Indicates if a null key has been assigned, used for iteration
@@ -48,10 +48,22 @@ namespace Lucene.Net.Support
             : this(0)
         { }
 
-        public HashMap(int initialCapacity)
+        public HashMap(IEqualityComparer<TKey> comparer)
+            : this(0, comparer)
         {
-            _dict = new Dictionary<TKey, TValue>(initialCapacity);
-            _comparer = EqualityComparer<TKey>.Default;
+            
+        }
+
+        public HashMap(int initialCapacity)
+            : this(initialCapacity, EqualityComparer<TKey>.Default)
+        {
+            
+        }
+
+        public HashMap(int initialCapacity, IEqualityComparer<TKey> comparer)
+        {
+            _comparer = comparer;
+            _dict = new Dictionary<TKey, TValue>(initialCapacity, _comparer);
             _hasNullValue = false;
 
             if (typeof(TKey).IsValueType)
