@@ -7,9 +7,6 @@ store\IndexOutput.java - PORTED * See IDisposable
 store\LockStressTest.java - Text files are different
 store\MMapDirectory.java - Text files are different - PORT ISSUES
 store\NIOFSDirectory.java - Text files are different - PORT ISSUES
-
-
-lucene\util
-	DummyConcurrentLock.java - New in 3.x
-	NamedThreadFactory.java - New in 3.x
-	ThreadInterruptedException.java - new in 3.x (NOT NEEDED IN .NET?)
+util\DummyConcurrentLock.java - New in 3.x
+util\NamedThreadFactory.java - New in 3.x
+util\ThreadInterruptedException.java - new in 3.x (NOT NEEDED IN .NET?)

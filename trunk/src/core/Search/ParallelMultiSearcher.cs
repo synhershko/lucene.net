@@ -98,6 +98,7 @@ namespace Lucene.Net.Search
                 tasks[i] = Task.Factory.StartNew(() => searchable.DocFreq(term));
             }
 
+	        Task.WaitAll(tasks);
 	        return tasks.Sum(task => task.Result);
 	    }
 		
@@ -122,6 +123,7 @@ namespace Lucene.Net.Search
 
 		    int totalHits = 0;
 		    float maxScore = float.NegativeInfinity;
+		    Task.WaitAll(tasks);
             foreach(TopDocs topDocs in tasks.Select(x => x.Result))
             {
                 totalHits += topDocs.totalHits;
@@ -158,6 +160,7 @@ namespace Lucene.Net.Search
 
 		    int totalHits = 0;
 		    float maxScore = float.NegativeInfinity;
+            Task.WaitAll(tasks);
             foreach (TopFieldDocs topFieldDocs in tasks.Select(x => x.Result))
             {
                 totalHits += topFieldDocs.totalHits;

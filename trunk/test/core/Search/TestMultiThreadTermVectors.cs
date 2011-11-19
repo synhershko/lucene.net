@@ -30,10 +30,6 @@ using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
 
 namespace Lucene.Net.Search
 {
-	
-	/// <summary> </summary>
-	/// <version>  $rcs = ' $Id: TestMultiThreadTermVectors.java 759556 2009-03-28 19:10:55Z mikemccand $ ' ;
-	/// </version>
     [TestFixture]
 	public class TestMultiThreadTermVectors:LuceneTestCase
 	{
@@ -66,7 +62,7 @@ namespace Lucene.Net.Search
 			
 			try
 			{
-				reader = IndexReader.Open(directory);
+			    reader = IndexReader.Open(directory, true);
 				for (int i = 1; i <= numThreads; i++)
 					TestTermPositionVectors(reader, i);
 			}

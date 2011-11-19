@@ -98,7 +98,7 @@ namespace Lucene.Net.Messages
 			return str;
 		}
 		
-		public static System.String GetLocalizedMessage(System.String key, System.Object[] args)
+		public static System.String GetLocalizedMessage(System.String key, params System.Object[] args)
 		{
 			return GetLocalizedMessage(key, System.Threading.Thread.CurrentThread.CurrentCulture, args);
 		}

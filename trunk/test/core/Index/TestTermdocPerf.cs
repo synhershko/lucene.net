@@ -130,8 +130,8 @@ namespace Lucene.Net.Index
 			AddDocs(dir, ndocs, "foo", "val", maxTF, percentDocs);
 			long end = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond);
 			System.Console.Out.WriteLine("milliseconds for creation of " + ndocs + " docs = " + (end - start));
-			
-			IndexReader reader = IndexReader.Open(dir);
+
+		    IndexReader reader = IndexReader.Open(dir, true);
 			TermEnum tenum = reader.Terms(new Term("foo", "val"));
 			TermDocs tdocs = reader.TermDocs();
 			

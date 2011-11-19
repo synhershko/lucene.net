@@ -164,7 +164,7 @@ namespace Lucene.Net.Index
 			}
 			
 			writer.Close();
-			IndexReader reader = IndexReader.Open(directory);
+		    IndexReader reader = IndexReader.Open(directory, true);
 			TermPositions tp = reader.TermPositions();
 			tp.Seek(new Term(this.field, "b"));
 			for (int i = 0; i < 10; i++)

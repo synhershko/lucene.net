@@ -30,12 +30,8 @@ using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
 namespace Lucene.Net.Search
 {
 	
-	/// <summary>Document boost unit test.
-	/// 
-	/// 
-	/// </summary>
-	/// <version>  $Revision: 787772 $
-	/// </version>
+	/// <summary>Document boost unit test.</summary>
+	/// <version>$Revision: 832972 $</version>
     [TestFixture]
 	public class TestSetNorm:LuceneTestCase
 	{

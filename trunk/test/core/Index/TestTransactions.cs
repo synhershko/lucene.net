@@ -225,8 +225,8 @@ namespace Lucene.Net.Index
 				IndexReader r1, r2;
 				lock (lock_Renamed)
 				{
-					r1 = IndexReader.Open(dir1);
-					r2 = IndexReader.Open(dir2);
+					r1 = IndexReader.Open(dir1, true);
+				    r2 = IndexReader.Open(dir2, true);
 				}
 				if (r1.NumDocs() != r2.NumDocs())
 					throw new System.SystemException("doc counts differ: r1=" + r1.NumDocs() + " r2=" + r2.NumDocs());

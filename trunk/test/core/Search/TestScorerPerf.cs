@@ -387,84 +387,84 @@ namespace Lucene.Net.Search
 			DoNestedConjunctions(10000, 3, 3);
 			s.Close();
 		}
-		
-		/// <summary> 
-		/// int bigIter=10;
-		/// public void testConjunctionPerf() throws Exception {
-		/// r = newRandom();
-		/// createDummySearcher();
-		/// validate=false;
-		/// sets=randBitSets(32,1000000);
-		/// for (int i=0; i<bigIter; i++) {
-		/// long start = System.currentTimeMillis();
-		/// doConjunctions(500,6);
-		/// long end = System.currentTimeMillis();
-		/// System.out.println("milliseconds="+(end-start));
-		/// }
-		/// s.close();
-		/// }
-		/// public void testNestedConjunctionPerf() throws Exception {
-		/// r = newRandom();
-		/// createDummySearcher();
-		/// validate=false;
-		/// sets=randBitSets(32,1000000);
-		/// for (int i=0; i<bigIter; i++) {
-		/// long start = System.currentTimeMillis();
-		/// doNestedConjunctions(500,3,3);
-		/// long end = System.currentTimeMillis();
-		/// System.out.println("milliseconds="+(end-start));
-		/// }
-		/// s.close();
-		/// }
-		/// public void testConjunctionTerms() throws Exception {
-		/// r = newRandom();
-		/// validate=false;
-		/// RAMDirectory dir = new RAMDirectory();
-		/// System.out.println("Creating index");
-		/// createRandomTerms(100000,25,.5, dir);
-		/// s = new IndexSearcher(dir);
-		/// System.out.println("Starting performance test");
-		/// for (int i=0; i<bigIter; i++) {
-		/// long start = System.currentTimeMillis();
-		/// doTermConjunctions(s,25,5,1000);
-		/// long end = System.currentTimeMillis();
-		/// System.out.println("milliseconds="+(end-start));
-		/// }
-		/// s.close();
-		/// }
-		/// public void testNestedConjunctionTerms() throws Exception {
-		/// r = newRandom();
-		/// validate=false;    
-		/// RAMDirectory dir = new RAMDirectory();
-		/// System.out.println("Creating index");
-		/// createRandomTerms(100000,25,.2, dir);
-		/// s = new IndexSearcher(dir);
-		/// System.out.println("Starting performance test");
-		/// for (int i=0; i<bigIter; i++) {
-		/// long start = System.currentTimeMillis();
-		/// doNestedTermConjunctions(s,25,3,3,200);
-		/// long end = System.currentTimeMillis();
-		/// System.out.println("milliseconds="+(end-start));
-		/// }
-		/// s.close();
-		/// }
-		/// public void testSloppyPhrasePerf() throws Exception {
-		/// r = newRandom();
-		/// validate=false;    
-		/// RAMDirectory dir = new RAMDirectory();
-		/// System.out.println("Creating index");
-		/// createRandomTerms(100000,25,2,dir);
-		/// s = new IndexSearcher(dir);
-		/// System.out.println("Starting performance test");
-		/// for (int i=0; i<bigIter; i++) {
-		/// long start = System.currentTimeMillis();
-		/// doSloppyPhrase(s,25,2,1000);
-		/// long end = System.currentTimeMillis();
-		/// System.out.println("milliseconds="+(end-start));
-		/// }
-		/// s.close();
-		/// }
-		/// *
-		/// </summary>
+
+        // <summary> 
+        // int bigIter=10;
+        // public void testConjunctionPerf() throws Exception {
+        // r = newRandom();
+        // createDummySearcher();
+        // validate=false;
+        // sets=randBitSets(32,1000000);
+        // for (int i=0; i<bigIter; i++) {
+        // long start = System.currentTimeMillis();
+        // doConjunctions(500,6);
+        // long end = System.currentTimeMillis();
+        // System.out.println("milliseconds="+(end-start));
+        // }
+        // s.close();
+        // }
+        // public void testNestedConjunctionPerf() throws Exception {
+        // r = newRandom();
+        // createDummySearcher();
+        // validate=false;
+        // sets=randBitSets(32,1000000);
+        // for (int i=0; i<bigIter; i++) {
+        // long start = System.currentTimeMillis();
+        // doNestedConjunctions(500,3,3);
+        // long end = System.currentTimeMillis();
+        // System.out.println("milliseconds="+(end-start));
+        // }
+        // s.close();
+        // }
+        // public void testConjunctionTerms() throws Exception {
+        // r = newRandom();
+        // validate=false;
+        // RAMDirectory dir = new RAMDirectory();
+        // System.out.println("Creating index");
+        // createRandomTerms(100000,25,.5, dir);
+        // s = new IndexSearcher(dir, true);
+        // System.out.println("Starting performance test");
+        // for (int i=0; i<bigIter; i++) {
+        // long start = System.currentTimeMillis();
+        // doTermConjunctions(s,25,5,1000);
+        // long end = System.currentTimeMillis();
+        // System.out.println("milliseconds="+(end-start));
+        // }
+        // s.close();
+        // }
+        // public void testNestedConjunctionTerms() throws Exception {
+        // r = newRandom();
+        // validate=false;    
+        // RAMDirectory dir = new RAMDirectory();
+        // System.out.println("Creating index");
+        // createRandomTerms(100000,25,.2, dir);
+        // s = new IndexSearcher(dir, true);
+        // System.out.println("Starting performance test");
+        // for (int i=0; i<bigIter; i++) {
+        // long start = System.currentTimeMillis();
+        // doNestedTermConjunctions(s,25,3,3,200);
+        // long end = System.currentTimeMillis();
+        // System.out.println("milliseconds="+(end-start));
+        // }
+        // s.close();
+        // }
+        // public void testSloppyPhrasePerf() throws Exception {
+        // r = newRandom();
+        // validate=false;    
+        // RAMDirectory dir = new RAMDirectory();
+        // System.out.println("Creating index");
+        // createRandomTerms(100000,25,2,dir);
+        // s = new IndexSearcher(dir, true);
+        // System.out.println("Starting performance test");
+        // for (int i=0; i<bigIter; i++) {
+        // long start = System.currentTimeMillis();
+        // doSloppyPhrase(s,25,2,1000);
+        // long end = System.currentTimeMillis();
+        // System.out.println("milliseconds="+(end-start));
+        // }
+        // s.close();
+        // }
+        // *
+        // </summary>
 	}
 }

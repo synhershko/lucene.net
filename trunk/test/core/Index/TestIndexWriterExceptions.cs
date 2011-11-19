@@ -232,7 +232,7 @@ namespace Lucene.Net.Index
 			}
 			
 			// Confirm that when doc hits exception partway through tokenization, it's deleted:
-			IndexReader r2 = IndexReader.Open(dir);
+			IndexReader r2 = IndexReader.Open(dir, true);
 			int count = r2.DocFreq(new Term("content4", "aaa"));
 			int count2 = r2.DocFreq(new Term("content4", "ddd"));
 			Assert.AreEqual(count, count2);
@@ -289,7 +289,7 @@ namespace Lucene.Net.Index
 			}
 			
 			// Confirm that when doc hits exception partway through tokenization, it's deleted:
-			IndexReader r2 = IndexReader.Open(dir);
+		    IndexReader r2 = IndexReader.Open(dir, true);
 			int count = r2.DocFreq(new Term("content4", "aaa"));
 			int count2 = r2.DocFreq(new Term("content4", "ddd"));
 			Assert.AreEqual(count, count2);

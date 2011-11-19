@@ -72,7 +72,7 @@ namespace Lucene.Net.Search
 			newq.Add(query, BooleanClause.Occur.SHOULD);
 			newq.Add(GetElevatedQuery(new System.String[]{"id", "a", "id", "x"}), BooleanClause.Occur.SHOULD);
 			
-			Sort sort = new Sort(new SortField[]{new SortField("id", new ElevationComparatorSource(priority), false), new SortField(null, SortField.SCORE, reversed)});
+			Sort sort = new Sort(new SortField("id", new ElevationComparatorSource(priority), false), new SortField(null, SortField.SCORE, reversed));
 			
 			TopFieldCollector topCollector = TopFieldCollector.create(sort, 50, false, true, true, true);
 			searcher.Search(newq, null, topCollector);

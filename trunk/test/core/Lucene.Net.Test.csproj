@@ -406,6 +406,7 @@
     <Compile Include="Search\TestSimilarity.cs" />
     <Compile Include="Search\TestSimpleExplanations.cs" />
     <Compile Include="Search\TestSimpleExplanationsOfNonMatches.cs" />
+    <Compile Include="Search\TestSloppyPhraseQuery.cs" />
     <Compile Include="Search\TestSort.cs" />
     <Compile Include="Search\TestSpanQueryFilter.cs" />
     <Compile Include="Search\TestTermRangeFilter.cs" />
