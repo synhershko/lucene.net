@@ -35,7 +35,7 @@ namespace Lucene.Net.Index
 	/// (subject to change suddenly in the next release)<p/>
 	/// </summary>
 	[Serializable]
-	public sealed class SegmentInfos : List<SegmentInfo>, ICloneable/*ConcurrentBag<SegmentInfo> is thread-safety a requirement of SegmentInfos?*/
+	public sealed class SegmentInfos : List<SegmentInfo>, ICloneable
 	{
 		private class AnonymousClassFindSegmentsFile:FindSegmentsFile
 		{

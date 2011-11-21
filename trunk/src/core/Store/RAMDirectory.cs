@@ -252,15 +252,15 @@ namespace Lucene.Net.Store
             Close();
         }
 
-        public HashMap<string, RAMFile> fileMap_ForNUnit
-        {
-            get { return fileMap; }
-        }
+        //public HashMap<string, RAMFile> fileMap_ForNUnit
+        //{
+        //    get { return fileMap; }
+        //}
 
-        public long sizeInBytes_ForNUnitTest
-        {
-            get { return sizeInBytes; }
-            set { sizeInBytes = value; }
-        }
+        //public long sizeInBytes_ForNUnitTest
+        //{
+        //    get { return sizeInBytes; }
+        //    set { sizeInBytes = value; }
+        //}
 	}
 }

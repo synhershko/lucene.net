@@ -1,36 +1,16 @@
-﻿TODO: make sure namespaces match Lucene's.  (defaults to Analyzers instead of Analysis)
+﻿All files have been ported except for those listed below.
+
+TODO: make sure namespaces match Lucene's.  (defaults to Analyzers instead of Analysis)
 TODO: Fix method naming
 TODO: Convert all javaDoc Comments to C# XML
 TODO: Normalize Line Endings
-TODO: Fix sb.ToString().Substring t-> sb.ToString(int, int)
-TODO: RussianStemFilter.SetStemmer()
+TODO: RussianStemFilter.SetStemmer() - I may be missing something, but All methods in java are private, so they can't be
+                                       overridden...so you can't subclass its behavior, so what's the point?  It's commented out
+TODO: Using Regex to determine UnicodeBlocks (CJKTokenizer as an example of this) 
+      probably slower than implementing our own UnicodeBlock class, which should
+      be fairly easy.
 
-analysis\ar\
-analysis\ar\ArabicAnalyzer.java - PORTED
-analysis\ar\ArabicLetterTokenizer.java - PORTED
-analysis\ar\ArabicNormalizationFilter.java - PORTED
-analysis\ar\ArabicNormalizer.java - PORTED
-analysis\ar\ArabicStemFilter.java - PORTED
-analysis\ar\ArabicStemmer.java - IDENTICAL
-analysis\ar\package.html - IDENTICAL
-
-analysis\br\
-analysis\br\BrazilianAnalyzer.java - PORTED
-analysis\br\BrazilianStemFilter.java - PORTED
-analysis\br\BrazilianStemmer.java - IDENTICAL
-analysis\br\package.html - IDENTICAL
-
-analysis\cjk\
-analysis\cjk\CJKAnalyzer.java - PORTED
-analysis\cjk\CJKTokenizer.java - PORTED 
-analysis\cjk\package.html - IDENTICAL
-
-analysis\cn\
-analysis\cn\ChineseAnalyzer.java - PORTED
-analysis\cn\ChineseFilter.java - PORTED
-analysis\cn\ChineseTokenizer.java - PORTED
-analysis\cn\package.html - IDENTICAL
-
+TODO: The following Hypenation classes use SAX XML parsing, no FCL .NET equiv
 analysis\compound\hyphenation\
 analysis\compound\hyphenation\ByteVector.java - ADDED
 analysis\compound\hyphenation\CharVector.java - ADDED
@@ -39,117 +19,11 @@ analysis\compound\hyphenation\hyphenation.dtd - IDENTICAL
 analysis\compound\hyphenation\Hyphenation.java - Text files are different
 analysis\compound\hyphenation\HyphenationException.java - Text files are different
 analysis\compound\hyphenation\HyphenationTree.java - Text files are different
-analysis\compound\hyphenation\package.html - Text files are different
 analysis\compound\hyphenation\PatternConsumer.java - Text files are different
 analysis\compound\hyphenation\PatternParser.java - Text files are different
 analysis\compound\hyphenation\TernaryTree.java - Text files are different
 
 analysis\compound\
-analysis\compound\CompoundWordTokenFilterBase.java - PORTED
-analysis\compound\DictionaryCompoundWordTokenFilter.java - PORTED
 analysis\compound\HyphenationCompoundWordTokenFilter.java - Text files are different
-analysis\compound\package.html - IDENTICAL
 
-analysis\cz\
-analysis\cz\CzechAnalyzer.java - PORTED
-analysis\cz\package.html - IDENTICAL
-
-analysis\de\
-analysis\de\GermanAnalyzer.java - PORTED
-analysis\de\GermanStemFilter.java - PORTED
-analysis\de\GermanStemmer.java - PORTED
-analysis\de\package.html - IDENTICAL
-
-analysis\el\
-analysis\el\GreekAnalyzer.java - PORTED
-analysis\el\GreekCharsets.java - REMOVED IN 3.x
-analysis\el\GreekLowerCaseFilter.java - PORTED
-analysis\el\package.html - IDENTICAL
-
-analysis\fa\
-analysis\fa\package.html - IDENTICAL
-analysis\fa\PersianAnalyzer.java - PORTED
-analysis\fa\PersianNormalizationFilter.java - PORTED
-analysis\fa\PersianNormalizer.java - PORTED
-
-analysis\fr\
-analysis\fr\ElisionFilter.java - PORTED
-analysis\fr\analysis\fr\FrenchAnalyzer.java - PORTED
-analysis\fr\FrenchStemFilter.java - PORTED
-analysis\fr\FrenchStemmer.java - PORTED
-analysis\fr\package.html - IDENTICAL
-
-analysis\miscellaneous\
-analysis\miscellaneous\EmptyTokenStream.java - PORTED
-analysis\miscellaneous\package.html - IDENTICAL
-analysis\miscellaneous\PatternAnalyzer.java - PORTED
-analysis\miscellaneous\PrefixAndSuffixAwareTokenFilter.java - PORTED
-analysis\miscellaneous\PrefixAwareTokenFilter.java - PORTED
-analysis\miscellaneous\SingleTokenTokenStream.java - PORTED
-
-analysis\ngram\
-analysis\ngram\EdgeNGramTokenFilter.java - PORTED
-analysis\ngram\EdgeNGramTokenizer.java - PORTED
-analysis\ngram\NGramTokenFilter.java - PORTED
-analysis\ngram\NGramTokenizer.java - PORTED
-analysis\ngram\package.html - IDENTICAL
-
-analysis\nl\
-analysis\nl\DutchAnalyzer.java - PORTED
-analysis\nl\DutchStemFilter.java - PORTED
-analysis\nl\DutchStemmer.java - PORTED
-analysis\nl\package.html - IDENTICAL
-analysis\nl\WordlistLoader.java - REMOVED IN 3.x
-
-analysis\payloads\
-analysis\payloads\AbstractEncoder.java - PORTED
-analysis\payloads\DelimitedPayloadTokenFilter.java -  PORTED
-analysis\payloads\FloatEncoder.java -  PORTED
-analysis\payloads\IdentityEncoder.java -  PORTED
-analysis\payloads\IntegerEncoder.java -  PORTED
-analysis\payloads\NumericPayloadTokenFilter.java - PORTED
-analysis\payloads\package.html -  Text file is missing
-analysis\payloads\PayloadEncoder.java - PORTED
-analysis\payloads\PayloadHelper.java - IDENTICAL
-analysis\payloads\TokenOffsetPayloadTokenFilter.java - PORTED
-analysis\payloads\TypeAsPayloadTokenFilter.java - PORTED
-
-analysis\position\
-analysis\position\package.html - IDENTICAL
-analysis\position\PositionFilter.java - PORTED
-
-analysis\query\
-analysis\query\package.html - IDENTICAL
-analysis\query\QueryAutoStopWordAnalyzer.java - PORTED
-
-analysis\reverse\
-analysis\reverse\package.html - IDENTICAL
-analysis\reverse\ReverseStringFilter.java - PORTED
-
-analysis\ru\
-analysis\ru\package.html - IDENTICAL
-analysis\ru\RussianAnalyzer.java - PORTED
-analysis\ru\RussianCharsets.java - REMOVED IN 3.x
-analysis\ru\RussianLetterTokenizer.java - PORTED
-analysis\ru\RussianLowerCaseFilter.java - PORTED
-analysis\ru\RussianStemFilter.java - PORTED
-analysis\ru\RussianStemmer.java - PORTED
-
-analysis\shingle\
-analysis\shingle\package.html - IDENTICAL
-analysis\shingle\ShingleAnalyzerWrapper.java - PORTED
-analysis\shingle\ShingleFilter.java - PORTED
-analysis\shingle\ShingleMatrixFilter.java - PORTED
-analysis\sinks\
-analysis\sinks\DateRecognizerSinkFilter.java - PORTED
-analysis\sinks\DateRecognizerSinkTokenizer.java - REMOVED IN 3.x
-analysis\sinks\package.html - IDENTICAL
-analysis\sinks\TokenRangeSinkFilter.java - PORTED
-analysis\sinks\TokenRangeSinkTokenizer.java - REMOVED IN 3.x
-analysis\sinks\TokenTypeSinkFilter.java - PORTED
-analysis\sinks\TokenTypeSinkTokenizer.java - REMOVED IN 3.x
-
-analysis\th\
-analysis\th\package.html - IDENTICAL
-analysis\th\ThaiAnalyzer.java - PORTED
 analysis\th\ThaiWordFilter.java - PORTED WITH ISSUES - No BreakIterator.  Won't compile; commented out

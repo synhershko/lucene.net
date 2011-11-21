@@ -161,7 +161,7 @@ namespace Lucene.Net.Util
 			if (size < maxSize)
 			{
 				Add(element);
-				return default(T); // TODO: java returns null, C# can't, TestPriorityQueue relies on a nullable int - cc
+				return default(T);
 			}
 			else if (size > 0 && !LessThan(element, heap[1]))
 			{
