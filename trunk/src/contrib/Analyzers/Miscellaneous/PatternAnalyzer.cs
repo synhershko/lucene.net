@@ -39,14 +39,14 @@ namespace Lucene.Net.Analyzers.Miscellaneous
      * </pre>
      *
      */
-    public class RegexAnalyzer : Analyzer
+    public class PatternAnalyzer : Analyzer
     {
 
         /** <code>"\\W+"</code>; Divides text at non-letters (NOT char.IsLetter(c)) */
-        public static readonly Regex NON_WORD_Regex = new Regex("\\W+", RegexOptions.Compiled);
+        public static readonly Regex NON_WORD_PATTERN = new Regex("\\W+", RegexOptions.Compiled);
 
         /** <code>"\\s+"</code>; Divides text at whitespaces (char.IsWhitespace(c)) */
-        public static readonly Regex WHITESPACE_Regex = new Regex("\\s+", RegexOptions.Compiled);
+        public static readonly Regex WHITESPACE_PATTERN = new Regex("\\s+", RegexOptions.Compiled);
 
         private static readonly CharArraySet EXTENDED_ENGLISH_STOP_WORDS =
           CharArraySet.UnmodifiableSet(new CharArraySet(new[]{
@@ -97,8 +97,8 @@ namespace Lucene.Net.Analyzers.Miscellaneous
          * A lower-casing word analyzer with English stop words (can be shared
          * freely across threads without harm); global per class loader.
          */
-        public static readonly RegexAnalyzer DEFAULT_ANALYZER = new RegexAnalyzer(
-          Version.LUCENE_CURRENT, NON_WORD_Regex, true, StopAnalyzer.ENGLISH_STOP_WORDS_SET);
+        public static readonly PatternAnalyzer DEFAULT_ANALYZER = new PatternAnalyzer(
+          Version.LUCENE_CURRENT, NON_WORD_PATTERN, true, StopAnalyzer.ENGLISH_STOP_WORDS_SET);
 
         /**
          * A lower-casing word analyzer with <b>extended </b> English stop words
@@ -107,8 +107,8 @@ namespace Lucene.Net.Analyzers.Miscellaneous
          * http://thomas.loc.gov/home/stopwords.html, see
          * http://thomas.loc.gov/home/all.about.inquery.html
          */
-        public static readonly RegexAnalyzer EXTENDED_ANALYZER = new RegexAnalyzer(
-          Version.LUCENE_CURRENT, NON_WORD_Regex, true, EXTENDED_ENGLISH_STOP_WORDS);
+        public static readonly PatternAnalyzer EXTENDED_ANALYZER = new PatternAnalyzer(
+          Version.LUCENE_CURRENT, NON_WORD_PATTERN, true, EXTENDED_ENGLISH_STOP_WORDS);
 
         private readonly Regex Regex;
         private readonly bool toLowerCase;
@@ -135,13 +135,13 @@ namespace Lucene.Net.Analyzers.Miscellaneous
          *            or <a href="http://www.unine.ch/info/clef/">other stop words
          *            lists </a>.
          */
-        public RegexAnalyzer(Version matchVersion, Regex Regex, bool toLowerCase, ISet<string> stopWords)
+        public PatternAnalyzer(Version matchVersion, Regex Regex, bool toLowerCase, ISet<string> stopWords)
         {
             if (Regex == null)
                 throw new ArgumentException("Regex must not be null");
 
-            if (EqRegex(NON_WORD_Regex, Regex)) Regex = NON_WORD_Regex;
-            else if (EqRegex(WHITESPACE_Regex, Regex)) Regex = WHITESPACE_Regex;
+            if (EqRegex(NON_WORD_PATTERN, Regex)) Regex = NON_WORD_PATTERN;
+            else if (EqRegex(WHITESPACE_PATTERN, Regex)) Regex = WHITESPACE_PATTERN;
 
             if (stopWords != null && stopWords.Count == 0) stopWords = null;
 
@@ -169,11 +169,11 @@ namespace Lucene.Net.Analyzers.Miscellaneous
                 throw new ArgumentException("text must not be null");
 
             TokenStream stream;
-            if (Regex == NON_WORD_Regex)
+            if (Regex == NON_WORD_PATTERN)
             { // fast path
                 stream = new FastStringTokenizer(text, true, toLowerCase, stopWords);
             }
-            else if (Regex == WHITESPACE_Regex)
+            else if (Regex == WHITESPACE_PATTERN)
             { // fast path
                 stream = new FastStringTokenizer(text, false, toLowerCase, stopWords);
             }
@@ -228,9 +228,9 @@ namespace Lucene.Net.Analyzers.Miscellaneous
             if (this == DEFAULT_ANALYZER && other == EXTENDED_ANALYZER) return false;
             if (other == DEFAULT_ANALYZER && this == EXTENDED_ANALYZER) return false;
 
-            if (other is RegexAnalyzer)
+            if (other is PatternAnalyzer)
             {
-                RegexAnalyzer p2 = (RegexAnalyzer)other;
+                PatternAnalyzer p2 = (PatternAnalyzer)other;
                 return
                   toLowerCase == p2.toLowerCase &&
                   EqRegex(Regex, p2.Regex) &&
@@ -285,7 +285,7 @@ namespace Lucene.Net.Analyzers.Miscellaneous
 
                 len = 0;
                 int n;
-                while ((n = input.Read(buffer, 0, buffer.Length)) >= 0)
+                while ((n = input.Read(buffer, 0, buffer.Length)) != 0)
                 {
                     if (len + n > output.Length)
                     { // grow capacity
@@ -351,6 +351,7 @@ namespace Lucene.Net.Analyzers.Miscellaneous
                     {
                         end = matcher.Index;
                         pos = matcher.Index + matcher.Length;
+                        matcher = matcher.NextMatch();
                     }
                     else
                     {
@@ -360,14 +361,13 @@ namespace Lucene.Net.Analyzers.Miscellaneous
 
                     if (start != end)
                     { // non-empty match (header/trailer)
-                        String text = str.Substring(start, end);
+                        String text = str.Substring(start, end - start);
                         if (toLowerCase) text = text.ToLower(locale);
                         termAtt.SetTermBuffer(text);
                         offsetAtt.SetOffset(start, end);
                         return true;
                     }
-                    if (!isMatch) return false;
-                    matcher = matcher.NextMatch();
+                    return false;
                 }
             }
 
@@ -437,7 +437,7 @@ namespace Lucene.Net.Analyzers.Miscellaneous
                             i++;
                         }
 
-                        text = s.Substring(start, i);
+                        text = s.Substring(start, i - start);
                         if (toLowerCase) text = text.ToLower(locale);
                         //          if (toLowerCase) {            
                         ////            use next line once JDK 1.5 String.toLowerCase() performance regression is fixed
@@ -489,12 +489,12 @@ namespace Lucene.Net.Analyzers.Miscellaneous
          * A StringReader that exposes it's contained string for fast direct access.
          * Might make sense to generalize this to CharSequence and make it public?
          */
-        sealed class FastStringReader : StringReader
+        internal sealed class FastStringReader : StringReader
         {
 
             private readonly string s;
 
-            FastStringReader(string s)
+            protected internal FastStringReader(string s)
                 : base(s)
             {
                 this.s = s;

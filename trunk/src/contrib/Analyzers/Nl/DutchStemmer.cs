@@ -97,7 +97,7 @@ namespace Lucene.Net.Analysis.Nl
                     isValidEnEnding(sb, index - 1)
                 )
                 {
-                    sb.Remove(index, index + end.Length);
+                    sb.Remove(index, end.Length);
                     unDouble(sb, index);
                     return true;
                 }
@@ -117,8 +117,9 @@ namespace Lucene.Net.Analysis.Nl
 
             if (s.EndsWith("heden"))
             {
-                sb.Remove(_R1, LengthR1 + _R1);
-                sb.Insert(_R1, sb.ToString(_R1, LengthR1 + _R1).Replace("heden", "heid"));
+                var toReplace = sb.ToString(_R1, LengthR1).Replace("heden", "heid");
+                sb.Remove(_R1, LengthR1);
+                sb.Insert(_R1, toReplace);
                 return;
             }
 
@@ -130,14 +131,14 @@ namespace Lucene.Net.Analysis.Nl
                 isValidSEnding(sb, index - 1)
             )
             {
-                sb.Remove(index, index + 2);
+                sb.Remove(index, 2);
                 return;
             }
             if (s.EndsWith("s") &&
                 (index = s.Length - 1) >= _R1 &&
                 isValidSEnding(sb, index - 1))
             {
-                sb.Remove(index, index + 1);
+                sb.Remove(index, 1);
             }
         }
 
@@ -158,7 +159,7 @@ namespace Lucene.Net.Analysis.Nl
                 s.EndsWith("e") &&
                 !isVowel(sb[index - 1]))
             {
-                sb.Remove(index, index + 1);
+                sb.Remove(index, 1);
                 unDouble(sb);
                 _removedE = true;
             }
@@ -177,7 +178,7 @@ namespace Lucene.Net.Analysis.Nl
             int index = s.Length - 4;
             if (s.EndsWith("heid") && index >= _R2 && sb[index - 1] != 'c')
             {
-                sb.Remove(index, index + 4); //remove heid
+                sb.Remove(index, 4); //remove heid
                 enEnding(sb);
             }
         }
@@ -206,14 +207,14 @@ namespace Lucene.Net.Analysis.Nl
             if ((s.EndsWith("end") || s.EndsWith("ing")) &&
                 (index = s.Length - 3) >= _R2)
             {
-                sb.Remove(index, index + 3);
+                sb.Remove(index, 3);
                 if (sb[index - 2] == 'i' &&
                     sb[index - 1] == 'g')
                 {
                     if (sb[index - 3] != 'e' & index - 2 >= _R2)
                     {
                         index -= 2;
-                        sb.Remove(index, index + 2);
+                        sb.Remove(index, 2);
                     }
                 }
                 else
@@ -227,14 +228,14 @@ namespace Lucene.Net.Analysis.Nl
             )
             {
                 if (sb[index - 1] != 'e')
-                    sb.Remove(index, index + 2);
+                    sb.Remove(index, 2);
                 return;
             }
             if (s.EndsWith("lijk") &&
                 (index = s.Length - 4) >= _R2
             )
             {
-                sb.Remove(index, index + 4);
+                sb.Remove(index, 4);
                 step2(sb);
                 return;
             }
@@ -242,7 +243,7 @@ namespace Lucene.Net.Analysis.Nl
                 (index = s.Length - 4) >= _R2
             )
             {
-                sb.Remove(index, index + 4);
+                sb.Remove(index, 4);
                 return;
             }
             if (s.EndsWith("bar") &&
@@ -250,7 +251,7 @@ namespace Lucene.Net.Analysis.Nl
             )
             {
                 if (_removedE)
-                    sb.Remove(index, index + 3);
+                    sb.Remove(index, 3);
                 return;
             }
         }
@@ -265,7 +266,7 @@ namespace Lucene.Net.Analysis.Nl
         {
             if (sb.Length < 4)
                 return;
-            String end = sb.ToString(sb.Length - 4, sb.Length);
+            String end = sb.ToString(sb.Length - 4, 4);
             char c = end[0];
             char v1 = end[1];
             char v2 = end[2];
@@ -277,7 +278,7 @@ namespace Lucene.Net.Analysis.Nl
                 !isVowel(d) &&
                 !isVowel(c))
             {
-                sb.Remove(sb.Length - 2, sb.Length - 1);
+                sb.Remove(sb.Length - 2, 1);
             }
         }
 
@@ -377,7 +378,7 @@ namespace Lucene.Net.Analysis.Nl
             String s = sb.ToString(0, endIndex);
             if (s.EndsWith("kk") || s.EndsWith("tt") || s.EndsWith("dd") || s.EndsWith("nn") || s.EndsWith("mm") || s.EndsWith("ff"))
             {
-                sb.Remove(endIndex - 1, endIndex);
+                sb.Remove(endIndex - 1, 1);
             }
         }
 
@@ -431,7 +432,7 @@ namespace Lucene.Net.Analysis.Nl
         private void reStoreYandI(StringBuilder sb)
         {
             String tmp = sb.ToString();
-            sb.Remove(0, sb.Length);
+            sb.Clear();
             sb.Insert(0, tmp.Replace("I", "i").Replace("Y", "y"));
         }
 

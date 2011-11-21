@@ -52,32 +52,32 @@ namespace Lucene.Net.Analysis.CJK
         /// <summary>
         /// Word token type
         /// </summary>
-        private static int WORD_TYPE = 0;
+        internal static readonly int WORD_TYPE = 0;
 
         /// <summary>
         /// Single byte token type
         /// </summary>
-        private static int SINGLE_TOKEN_TYPE = 1;
+        internal static readonly int SINGLE_TOKEN_TYPE = 1;
 
         /// <summary>
         /// Double byte token type
         /// </summary>
-        private static int DOUBLE_TOKEN_TYPE = 2;
+        internal static readonly int DOUBLE_TOKEN_TYPE = 2;
 
         /// <summary>
         /// Names for token types
         /// </summary>
-        private static String[] TOKEN_TYPE_NAMES = {"word", "single", "double"};
+        internal static readonly String[] TOKEN_TYPE_NAMES = { "word", "single", "double" };
 
         /// <summary>
         /// Max word length
         /// </summary>
-        private static int MAX_WORD_LEN = 255;
+        internal static readonly int MAX_WORD_LEN = 255;
 
         /// <summary>
         /// buffer size
         /// </summary>
-        private static int IO_BUFFER_SIZE = 256;
+        internal static readonly int IO_BUFFER_SIZE = 256;
 
         //~ Instance fields --------------------------------------------------------
 
@@ -200,7 +200,7 @@ namespace Lucene.Net.Analysis.CJK
                         bufferIndex = 0;
                     }
 
-                    if (dataLen == -1)
+                    if (dataLen == 0) // input.Read returns 0 when its empty, not -1, as in java
                     {
                         if (length > 0)
                         {
@@ -282,7 +282,7 @@ namespace Lucene.Net.Analysis.CJK
                             }
 
                             // store the LowerCase(c) in the buffer
-                            buffer[length++] = char.ToLowerInvariant(c); // TODO: is java invariant?  If not, this should be ToLower()
+                            buffer[length++] = char.ToLower(c); // TODO: is java invariant?  If not, this should be ToLower()
                             tokenType = SINGLE_TOKEN_TYPE;
 
                             // break the procedure if buffer overflowed!
@@ -364,7 +364,7 @@ namespace Lucene.Net.Analysis.CJK
                     typeAtt.SetType(TOKEN_TYPE_NAMES[tokenType]);
                     return true;
                 }
-                else if (dataLen == -1)
+                else if (dataLen == 0)
                 {
                     offset--;
                     return false;

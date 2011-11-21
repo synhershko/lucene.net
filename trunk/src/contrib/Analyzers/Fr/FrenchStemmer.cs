@@ -101,7 +101,7 @@ public class FrenchStemmer {
 		term = term.ToLower();
 
 		// Reset the StringBuilder.
-		sb.Remove( 0, sb.Length );
+		sb.Length =  0;
 		sb.Insert( 0, term );
 
 		// reset the bools
@@ -147,7 +147,7 @@ public class FrenchStemmer {
 		R1 = RetrieveR( sb );
 		if ( R1 != null )
 		{
-			tb.Remove( 0, tb.Length );
+			tb.Length =  0;
 			tb.Insert( 0, R1 );
 			R2 = RetrieveR( tb );
 		}
@@ -279,7 +279,7 @@ public class FrenchStemmer {
 				char b = sb[ sb.Length -2];
 				if (b != 'a' && b != 'i' && b != 'o' && b != 'u' && b != 'è' && b != 's')
 				{
-					sb.Remove( sb.Length - 1, sb.Length);
+					sb.Length = sb.Length - 1;
 					SetStrings();
 				}
 			}
@@ -302,7 +302,7 @@ public class FrenchStemmer {
 		{
 			if (R0.EndsWith("enn") || R0.EndsWith("onn") || R0.EndsWith("ett") || R0.EndsWith("ell") || R0.EndsWith("eill"))
 			{
-				sb.Remove( sb.Length - 1, sb.Length );
+				sb.Length =  sb.Length - 1;
 				SetStrings();
 			}
 		}
@@ -364,7 +364,7 @@ public class FrenchStemmer {
 				{
 					if (from!=null && from.EndsWith( prefix + search[i] ))
 					{
-						sb.Remove( sb.Length - search[i].Length, sb.Length);
+						sb.Length =  sb.Length - search[i].Length;
 						found = true;
 						SetStrings();
 						break;
@@ -396,7 +396,7 @@ public class FrenchStemmer {
 						bool test = IsVowel(sb[sb.Length -(search[i].Length+1)]);
 						if (test == vowel)
 						{
-							sb.Remove( sb.Length - search[i].Length, sb.Length);
+							sb.Length =  sb.Length - search[i].Length;
 							modified = true;
 							found = true;
 							SetStrings();
@@ -423,14 +423,14 @@ public class FrenchStemmer {
 			for (int i = 0; i < search.Length; i++) {
 				if ( source.EndsWith( prefix + search[i] ))
 				{
-					sb.Remove( sb.Length - (prefix.Length + search[i].Length), sb.Length );
+					sb.Length =  sb.Length - (prefix.Length + search[i].Length);
 					modified = true;
 					SetStrings();
 					break;
 				}
 				else if ( without && source.EndsWith( search[i] ))
 				{
-					sb.Remove( sb.Length - search[i].Length, sb.Length );
+					sb.Length =  sb.Length - search[i].Length;
 					modified = true;
 					SetStrings();
 					break;
@@ -455,14 +455,14 @@ public class FrenchStemmer {
 			for (int i = 0; i < search.Length; i++) {
 				if ( source.EndsWith( prefix + search[i] ))
 				{
-					sb.Remove( sb.Length - (prefix.Length + search[i].Length), sb.Length );
+					sb.Length =  sb.Length - (prefix.Length + search[i].Length);
 					modified = true;
 					SetStrings();
 					break;
 				}
 				else if ( from!=null && from.EndsWith( prefix + search[i] ))
 				{
-				    sb.Remove(sb.Length - (prefix.Length + search[i].Length), sb.Length);
+				    sb.Length = sb.Length - (prefix.Length + search[i].Length);
 					sb.Insert(sb.Length - (prefix.Length + search[i].Length), replace );
 					modified = true;
 					SetStrings();
@@ -470,7 +470,7 @@ public class FrenchStemmer {
 				}
 				else if ( without && source.EndsWith( search[i] ))
 				{
-					sb.Remove( sb.Length - search[i].Length, sb.Length );
+					sb.Length =  sb.Length - search[i].Length;
 					modified = true;
 					SetStrings();
 					break;
@@ -493,7 +493,7 @@ public class FrenchStemmer {
 			for (int i = 0; i < search.Length; i++) {
 				if ( source.EndsWith( search[i] ))
 				{
-				    sb.Remove(sb.Length - search[i].Length, sb.Length);
+				    sb.Length = sb.Length - search[i].Length;
 				    sb.Insert(sb.Length - search[i].Length, replace );  // replacement for java's replace
 					modified = true;
 					found = true;
@@ -517,7 +517,7 @@ public class FrenchStemmer {
 			for (int i = 0; i < suffix.Length; i++) {
 				if (source.EndsWith( suffix[i] ))
 				{
-					sb.Remove( sb.Length - suffix[i].Length, sb.Length);
+					sb.Length = sb.Length - suffix[i].Length;
 					modified = true;
 					SetStrings();
 					break;
@@ -587,7 +587,7 @@ public class FrenchStemmer {
 				}
 			}
 			if (consonne > -1 && (consonne+1) < len)
-				return buffer.ToString().Substring( consonne+1, len );
+                return buffer.ToString(consonne + 1, len - (consonne+1));
 			else
 				return null;
 		}
@@ -608,7 +608,7 @@ public class FrenchStemmer {
 		if ( buffer.Length > 3)
 		{
 			if ( IsVowel(buffer[ 0 ] ) && IsVowel(buffer[ 1 ] )) {
-				return buffer.ToString().Substring(3,len);
+                return buffer.ToString(3, len - 3);
 			}
 			else
 			{
@@ -621,7 +621,7 @@ public class FrenchStemmer {
 					}
 				}
 				if ( pos+1 < len )
-					return buffer.ToString().Substring(pos+1, len );
+                    return buffer.ToString(pos + 1, len - (pos+1));
 				else
 					return null;
 			}

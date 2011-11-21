@@ -133,7 +133,7 @@ namespace Lucene.Net.Analysis.Cn
                     bufferIndex = 0;
                 }
 
-                if (dataLen == -1)
+                if (dataLen == 0)
                 {
                     offset--;
                     return Flush();

@@ -172,7 +172,7 @@ namespace Lucene.Net.Analysis.Nl
          * @param exclusionlist
          * @deprecated use {@link #DutchAnalyzer(Version, Set, Set)} instead
          */
-        public void setStemExclusionTable(params string[] exclusionlist)
+        public void SetStemExclusionTable(params string[] exclusionlist)
         {
             excltable = StopFilter.MakeStopSet(exclusionlist);
             SetPreviousTokenStream(null); // force a new stemmer to be created
@@ -182,7 +182,7 @@ namespace Lucene.Net.Analysis.Nl
          * Builds an exclusionlist from a Hashtable.
          * @deprecated use {@link #DutchAnalyzer(Version, Set, Set)} instead
          */
-        public void setStemExclusionTable(HashSet<string> exclusionlist)
+        public void SetStemExclusionTable(HashSet<string> exclusionlist)
         {
             excltable = exclusionlist;
             SetPreviousTokenStream(null); // force a new stemmer to be created
@@ -192,7 +192,7 @@ namespace Lucene.Net.Analysis.Nl
          * Builds an exclusionlist from the words contained in the given file.
          * @deprecated use {@link #DutchAnalyzer(Version, Set, Set)} instead
          */
-        public void setStemExclusionTable(FileInfo exclusionlist)
+        public void SetStemExclusionTable(FileInfo exclusionlist)
         {
             try
             {
@@ -211,7 +211,7 @@ namespace Lucene.Net.Analysis.Nl
          * This is a textfile that contains per line
          * <tt>word<b>\t</b>stem</tt>, i.e: two tab seperated words
          */
-        public void setStemDictionary(FileInfo stemdictFile)
+        public void SetStemDictionary(FileInfo stemdictFile)
         {
             try
             {

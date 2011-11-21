@@ -164,7 +164,7 @@ namespace Lucene.Net.Analysis.BR
          * @deprecated use {@link #BrazilianAnalyzer(Version, Set, Set)} instead
          */
 
-        public void setStemExclusionTable(params string[] exclusionlist)
+        public void SetStemExclusionTable(params string[] exclusionlist)
         {
             excltable = StopFilter.MakeStopSet(exclusionlist);
             SetPreviousTokenStream(null); // force a new stemmer to be created
@@ -175,7 +175,7 @@ namespace Lucene.Net.Analysis.BR
          * @deprecated use {@link #BrazilianAnalyzer(Version, Set, Set)} instead
          */
 
-        public void setStemExclusionTable(IDictionary<string, string> exclusionlist)
+        public void SetStemExclusionTable(IDictionary<string, string> exclusionlist)
         {
             excltable = new HashSet<string>(exclusionlist.Keys);
             SetPreviousTokenStream(null); // force a new stemmer to be created
@@ -186,7 +186,7 @@ namespace Lucene.Net.Analysis.BR
          * @deprecated use {@link #BrazilianAnalyzer(Version, Set, Set)} instead
          */
 
-        public void setStemExclusionTable(FileInfo exclusionlist)
+        public void SetStemExclusionTable(FileInfo exclusionlist)
         {
             excltable = WordlistLoader.GetWordSet(exclusionlist);
             SetPreviousTokenStream(null); // force a new stemmer to be created
