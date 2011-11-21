@@ -31,7 +31,8 @@ namespace Lucene.Net.Util
 	/// </summary>
 	// TODO: T needs to be able to return null.  Behavior might be unexpected otherwise, since it returns default(T)
     //       I only see a non-nullable type used in PriorityQueue in the tests.  may be possible to re-write tests to
-    //       use an IComparable class, and this can be changed back to constraining on class, to return null
+    //       use an IComparable class, and this can be changed back to constraining on class, to return null, or should
+    //       we leave as is?
 	public abstract class PriorityQueue<T> //where T : class
 	{
 		private int size;

@@ -16,6 +16,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using Lucene.Net.Util;
 
 namespace Lucene.Net.Index
@@ -29,7 +30,7 @@ namespace Lucene.Net.Index
 	{
 		private sealed class TermPositionsQueue : PriorityQueue<TermPositions>
 		{
-			internal TermPositionsQueue(System.Collections.Generic.IList<TermPositions> termPositions)
+			internal TermPositionsQueue(LinkedList<TermPositions> termPositions)
 			{
 				Initialize(termPositions.Count);
 				
@@ -114,13 +115,10 @@ namespace Lucene.Net.Index
 		/// </exception>
 		public MultipleTermPositions(IndexReader indexReader, Term[] terms)
 		{
-            // TODO: Java implementation uses a LinkedList, which has different performance costs
-            //       for methods, particularly inserts.  If inserts are done, it may be beneficial
-            //       from a performance point of view to implement Java's version of LinkedList<T>
-			var termPositions = new System.Collections.Generic.List<TermPositions>();
+			var termPositions = new System.Collections.Generic.LinkedList<TermPositions>();
 			
 			for (int i = 0; i < terms.Length; i++)
-				termPositions.Add(indexReader.TermPositions(terms[i]));
+				termPositions.AddLast(indexReader.TermPositions(terms[i]));
 			
 			_termPositionsQueue = new TermPositionsQueue(termPositions);
 			_posList = new IntQueue();

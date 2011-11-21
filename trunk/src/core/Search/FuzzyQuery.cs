@@ -116,7 +116,6 @@ namespace Lucene.Net.Search
 			return prefixLength;
 		}
 		
-        // TODO: Why is this public?  Java has this protected (C# protected internal is closer to it than public)
 		public /*protected internal*/ override FilteredTermEnum GetEnum(IndexReader reader)
 		{
 			return new FuzzyTermEnum(reader, GetTerm(), minimumSimilarity, prefixLength);

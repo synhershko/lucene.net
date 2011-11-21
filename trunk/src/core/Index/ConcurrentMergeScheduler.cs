@@ -192,7 +192,7 @@ namespace Lucene.Net.Index
 		
 		public override void  Merge(IndexWriter writer)
 		{
-			// TODO: .NET doesn't support this - Look into it
+			// TODO: .NET doesn't support this
 			// assert !Thread.holdsLock(writer);
 			
 			this.writer = writer;

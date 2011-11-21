@@ -23,7 +23,6 @@ using Lucene.Net.Util;
 using IndexReader = Lucene.Net.Index.IndexReader;
 using Term = Lucene.Net.Index.Term;
 
-//TODO: This is an experimental change to ParallelMultiSearcher, attempting to use the TPL
 namespace Lucene.Net.Search
 {
 	/// <summary>Implements parallel search over a set of <c>Searchables</c>.

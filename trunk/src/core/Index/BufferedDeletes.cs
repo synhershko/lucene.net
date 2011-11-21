@@ -45,7 +45,7 @@ namespace Lucene.Net.Index
             this.doTermSort = doTermSort;
             if (doTermSort)
             {
-                //TODO: This isn't quite the same as a TreeMap
+                //TODO: Used in place of TreeMap
                 terms = new SortedDictionary<Term, Num>();
             }
             else

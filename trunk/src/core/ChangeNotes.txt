@@ -64,6 +64,17 @@ Constants.cs - LUCENE_MAIN_VERSION, and static constructor differs quite a bit f
 ParallelMultiSearcher -> Successfully ported, but in Java the threads are named, in .NET, I ported it without named threads 
                          (also without NamedThreadFactory from java's util)
 
+FieldSelectorResult -> uses kludgy workaround due to Enums not being able to be null.  It's only used in the MapFieldSelector class, when
+                       deciding to include a field or not.
+
+ConcurrentMergeScheduler/IndexWriter -> Tries to assert the current thread holds a lock.  This isn't possible in .NET
+
+SegmentInfos.cs -> 3 places need to return a readonly HashMap.
+
+
+There are a good amount of methods that have been changed from protected internal to public, seemingly for use with NUnit.  I've added Lucene.Net.Test
+as a friend assembly that can access internals.  We can change these accessibility modifiers back to how they are in java, and still have it be testable.
+We can also get rid of the properties and such that are "fields_forNUnit" or like it.  It just doesn't look good.
 
 TODO: NamedThreadFactory.java - Is this needed?  What is it for, just for debugging?
 TODO: DummyConcurrentLock.java - Not Needed?

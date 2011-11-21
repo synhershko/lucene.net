@@ -282,7 +282,7 @@ namespace Lucene.Net.Analysis.CJK
                             }
 
                             // store the LowerCase(c) in the buffer
-                            buffer[length++] = char.ToLower(c); // TODO: is java invariant?  If not, this should be ToLower()
+                            buffer[length++] = char.ToLower(c); // TODO: is java invariant?  If so, this should be ToLowerInvariant()
                             tokenType = SINGLE_TOKEN_TYPE;
 
                             // break the procedure if buffer overflowed!
