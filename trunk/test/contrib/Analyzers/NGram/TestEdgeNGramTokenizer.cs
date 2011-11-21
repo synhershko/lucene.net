@@ -48,7 +48,7 @@ namespace Lucene.Net.Analysis.NGram
             bool gotException = false;
             try
             {
-                new EdgeNGramTokenizer(input, EdgeNGramTokenizer.Side.FRONT, 0, 0);
+                new EdgeNGramTokenizer(input, Side.FRONT, 0, 0);
             }
             catch (System.ArgumentException e)
             {
@@ -63,7 +63,7 @@ namespace Lucene.Net.Analysis.NGram
             bool gotException = false;
             try
             {
-                new EdgeNGramTokenizer(input, EdgeNGramTokenizer.Side.FRONT, 2, 1);
+                new EdgeNGramTokenizer(input, Side.FRONT, 2, 1);
             }
             catch (System.ArgumentException e)
             {
@@ -78,7 +78,7 @@ namespace Lucene.Net.Analysis.NGram
             bool gotException = false;
             try
             {
-                new EdgeNGramTokenizer(input, EdgeNGramTokenizer.Side.FRONT, -1, 2);
+                new EdgeNGramTokenizer(input, Side.FRONT, -1, 2);
             }
             catch (System.ArgumentException e)
             {
@@ -90,42 +90,42 @@ namespace Lucene.Net.Analysis.NGram
         [Test]
         public void TestFrontUnigram()
         {
-            EdgeNGramTokenizer tokenizer = new EdgeNGramTokenizer(input, EdgeNGramTokenizer.Side.FRONT, 1, 1);
+            EdgeNGramTokenizer tokenizer = new EdgeNGramTokenizer(input, Side.FRONT, 1, 1);
             AssertTokenStreamContents(tokenizer, new String[] { "a" }, new int[] { 0 }, new int[] { 1 }, 5 /* abcde */);
         }
 
         [Test]
         public void TestBackUnigram()
         {
-            EdgeNGramTokenizer tokenizer = new EdgeNGramTokenizer(input, EdgeNGramTokenizer.Side.BACK, 1, 1);
+            EdgeNGramTokenizer tokenizer = new EdgeNGramTokenizer(input, Side.BACK, 1, 1);
             AssertTokenStreamContents(tokenizer, new String[] { "e" }, new int[] { 4 }, new int[] { 5 }, 5 /* abcde */);
         }
 
         [Test]
         public void TestOversizedNgrams()
         {
-            EdgeNGramTokenizer tokenizer = new EdgeNGramTokenizer(input, EdgeNGramTokenizer.Side.FRONT, 6, 6);
+            EdgeNGramTokenizer tokenizer = new EdgeNGramTokenizer(input, Side.FRONT, 6, 6);
             AssertTokenStreamContents(tokenizer, new String[0], new int[0], new int[0], 5 /* abcde */);
         }
 
         [Test]
         public void TestFrontRangeOfNgrams()
         {
-            EdgeNGramTokenizer tokenizer = new EdgeNGramTokenizer(input, EdgeNGramTokenizer.Side.FRONT, 1, 3);
+            EdgeNGramTokenizer tokenizer = new EdgeNGramTokenizer(input, Side.FRONT, 1, 3);
             AssertTokenStreamContents(tokenizer, new String[] { "a", "ab", "abc" }, new int[] { 0, 0, 0 }, new int[] { 1, 2, 3 }, 5 /* abcde */);
         }
 
         [Test]
         public void TestBackRangeOfNgrams()
         {
-            EdgeNGramTokenizer tokenizer = new EdgeNGramTokenizer(input, EdgeNGramTokenizer.Side.BACK, 1, 3);
+            EdgeNGramTokenizer tokenizer = new EdgeNGramTokenizer(input, Side.BACK, 1, 3);
             AssertTokenStreamContents(tokenizer, new String[] { "e", "de", "cde" }, new int[] { 4, 3, 2 }, new int[] { 5, 5, 5 }, 5 /* abcde */);
         }
 
         [Test]
         public void TestReset()
         {
-            EdgeNGramTokenizer tokenizer = new EdgeNGramTokenizer(input, EdgeNGramTokenizer.Side.FRONT, 1, 3);
+            EdgeNGramTokenizer tokenizer = new EdgeNGramTokenizer(input, Side.FRONT, 1, 3);
             AssertTokenStreamContents(tokenizer, new String[] { "a", "ab", "abc" }, new int[] { 0, 0, 0 }, new int[] { 1, 2, 3 }, 5 /* abcde */);
             tokenizer.Reset(new StringReader("abcde"));
             AssertTokenStreamContents(tokenizer, new String[] { "a", "ab", "abc" }, new int[] { 0, 0, 0 }, new int[] { 1, 2, 3 }, 5 /* abcde */);
