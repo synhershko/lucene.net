@@ -182,7 +182,7 @@ namespace Lucene.Net.Analysis
 			/// <summary> Called by <see cref="SinkTokenStream.Reset()" />. This method does nothing by default
 			/// and can optionally be overridden.
 			/// </summary>
-			public void  Reset()
+			public virtual void Reset()
 			{
 				// nothing to do; can be overridden
 			}
