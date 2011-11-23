@@ -182,7 +182,7 @@ namespace Lucene.Net.Support
             return _dict.ContainsKey(key);
         }
 
-        public void Add(TKey key, TValue value)
+        public virtual void Add(TKey key, TValue value)
         {
             if (!_isValueType && _comparer.Equals(key, default(TKey)))
             {
