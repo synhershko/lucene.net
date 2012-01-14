@@ -99,8 +99,9 @@ namespace Lucene.Net.Util
 		// So they are private, final and read-only from the outside (read-only iterators)
 		private GeneralKeyedCollection<Type, AttributeImplItem> attributes;
 		private GeneralKeyedCollection<Type, AttributeImplItem> attributeImpls;
-		
-		private AttributeFactory factory;
+
+	    private State[] currentState = null;
+	    private AttributeFactory factory;
 		
 		/// <summary> An AttributeSource using the default attribute factory <see cref="AttributeSource.AttributeFactory.DEFAULT_ATTRIBUTE_FACTORY" />.</summary>
 		public AttributeSource():this(AttributeFactory.DEFAULT_ATTRIBUTE_FACTORY)
@@ -116,15 +117,17 @@ namespace Lucene.Net.Util
 			}
 			this.attributes = input.attributes;
 			this.attributeImpls = input.attributeImpls;
+		    this.currentState = input.currentState;
 			this.factory = input.factory;
 		}
 		
 		/// <summary> An AttributeSource using the supplied <see cref="AttributeFactory" /> for creating new <see cref="Attribute" /> instances.</summary>
 		public AttributeSource(AttributeFactory factory)
 		{
-            this.attributes = new GeneralKeyedCollection<Type, AttributeImplItem>(delegate(AttributeImplItem att) { return att.Key; });
-            this.attributeImpls = new GeneralKeyedCollection<Type, AttributeImplItem>(delegate(AttributeImplItem att) { return att.Key; });
-			this.factory = factory;
+            this.attributes = new GeneralKeyedCollection<Type, AttributeImplItem>(att => att.Key);
+            this.attributeImpls = new GeneralKeyedCollection<Type, AttributeImplItem>(att => att.Key);
+            this.currentState = new State[1];
+            this.factory = factory;
 		}
 		
 		/// <summary> returns the used AttributeFactory.</summary>
@@ -140,7 +143,7 @@ namespace Lucene.Net.Util
 		/// Note that this return value is different from Java in that it enumerates over the values
 		/// and not the keys
 		/// </summary>
-		public virtual System.Collections.Generic.IEnumerable<Type> GetAttributeClassesIterator()
+		public virtual IEnumerable<Type> GetAttributeClassesIterator()
 		{
             foreach (AttributeImplItem item in this.attributes)
             {
@@ -153,22 +156,78 @@ namespace Lucene.Net.Util
 		/// if one instance implements more than one Attribute interface.
 		/// Signature for Java 1.5: <c>public Iterator&lt;AttributeImpl&gt; getAttributeImplsIterator()</c>
 		/// </summary>
-		public virtual System.Collections.Generic.IEnumerable<AttributeImpl> GetAttributeImplsIterator()
+		public virtual IEnumerable<AttributeImpl> GetAttributeImplsIterator()
 		{
-			if (HasAttributes())
-			{
-				if (currentState == null)
-				{
-					ComputeCurrentState();
-				}
-                while (currentState != null)
+		    var initState = GetCurrentState();
+            if (initState != null)
+            {
+                return new AnonymousEnumerable(initState);
+            }
+            
+            return new List<AttributeImpl>();
+        }
+
+        class AnonymousEnumerable : IEnumerable<AttributeImpl>
+        {
+            State state;
+            public AnonymousEnumerable(State state)
+            {
+                this.state = state;
+            }
+            public IEnumerator<AttributeImpl> GetEnumerator()
+            {
+                return new AnonymousEnumerator(state);
+            }
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+            {
+                return new AnonymousEnumerator(state);
+            }
+        }
+		
+        class AnonymousEnumerator : IEnumerator<AttributeImpl>
+        {
+            State state;
+            public AnonymousEnumerator(State state)
+            {
+                this.state = state;
+            }
+
+            AttributeImpl InternalCurrent
+            {
+                get
                 {
-                    AttributeImpl att = currentState.attribute;
-                    currentState = currentState.next;
-                    yield return att;
+                    if (state == null)
+                        throw new KeyNotFoundException();
+
+                    AttributeImpl att = state.attribute;
+                    state = state.next;
+                    return att;
                 }
-			}
-		}
+            }
+ 
+            public AttributeImpl Current
+            {
+                get { return InternalCurrent; }
+            }
+
+            public void Dispose()
+            {}
+
+            object System.Collections.IEnumerator.Current
+            {
+                get { return InternalCurrent; }
+            }
+
+            public bool MoveNext()
+            {
+                return state != null;
+            }
+
+            public void Reset()
+            {
+                
+            }
+        }
 
 	    /// <summary>a cache that stores all interfaces for known implementation classes for performance (slow reflection) </summary>
 	    private static readonly WeakDictionary<Type, System.Collections.Generic.LinkedList<WeakReference>>
@@ -227,7 +286,7 @@ namespace Lucene.Net.Util
 				if (!attributes.ContainsKey(curInterface))
 				{
 					// invalidate state to force recomputation in captureState()
-					this.currentState = null;
+					this.currentState[0] = null;
                     attributes.Add(new AttributeImplItem(curInterface, att));
                     if (!attributeImpls.ContainsKey(clazz))
                     {
@@ -326,39 +385,38 @@ namespace Lucene.Net.Util
 			}
 		}
 		
-		private State currentState = null;
-		
-		private void  ComputeCurrentState()
+		private State GetCurrentState()
 		{
-			currentState = new State();
-			State c = currentState;
-            System.Collections.Generic.IEnumerator<AttributeImplItem> it = attributeImpls.GetEnumerator();
-			if (it.MoveNext())
-				c.attribute = it.Current.Value;
-			while (it.MoveNext())
-			{
-				c.next = new State();
-				c = c.next;
-				c.attribute = it.Current.Value;
-			}
+		    var s = currentState[0];
+            if (s != null || !HasAttributes())
+            {
+                return s;
+            }
+
+		    var c = s = currentState[0] = new State();
+		    var it = attributeImpls.Values().GetEnumerator();
+		    it.MoveNext();
+		    c.attribute = it.Current.Value;
+
+            while (it.MoveNext())
+            {
+                c.next = new State();
+                c = c.next;
+                c.attribute = it.Current.Value;
+            }
+
+		    return s;
 		}
-		
+
 		/// <summary> Resets all Attributes in this AttributeSource by calling
 		/// <see cref="AttributeImpl.Clear()" /> on each Attribute implementation.
 		/// </summary>
 		public virtual void  ClearAttributes()
 		{
-			if (HasAttributes())
-			{
-				if (currentState == null)
-				{
-					ComputeCurrentState();
-				}
-				for (State state = currentState; state != null; state = state.next)
-				{
-					state.attribute.Clear();
-				}
-			}
+            for (var state = GetCurrentState(); state != null;  state = state.next)
+            {
+                state.attribute.Clear();
+            }
 		}
 		
 		/// <summary> Captures the state of all Attributes. The return value can be passed to
@@ -366,16 +424,8 @@ namespace Lucene.Net.Util
 		/// </summary>
 		public virtual State CaptureState()
 		{
-			if (!HasAttributes())
-			{
-				return null;
-			}
-			
-			if (currentState == null)
-			{
-				ComputeCurrentState();
-			}
-			return (State) this.currentState.Clone();
+		    var state = this.GetCurrentState();
+		    return (state == null) ? null : (State) state.Clone();
 		}
 		
 		/// <summary> Restores this state by copying the values of all attribute implementations
@@ -411,20 +461,14 @@ namespace Lucene.Net.Util
 		
 		public override int GetHashCode()
 		{
-			int code = 0;
-			if (HasAttributes())
-			{
-				if (currentState == null)
-				{
-					ComputeCurrentState();
-				}
-				for (State state = currentState; state != null; state = state.next)
-				{
-					code = code * 31 + state.attribute.GetHashCode();
-				}
-			}
-			
-			return code;
+			var code = 0;
+
+            for (var state = GetCurrentState(); state != null; state = state.next)
+            {
+                code = code*31 + state.attribute.GetHashCode();
+            }
+
+            return code;
 		}
 		
 		public  override bool Equals(System.Object obj)
@@ -451,17 +495,9 @@ namespace Lucene.Net.Util
 					}
 					
 					// it is only equal if all attribute impls are the same in the same order
-					if (this.currentState == null)
-					{
-						this.ComputeCurrentState();
-					}
-					State thisState = this.currentState;
-					if (other.currentState == null)
-					{
-						other.ComputeCurrentState();
-					}
-					State otherState = other.currentState;
-					while (thisState != null && otherState != null)
+				    var thisState = this.GetCurrentState();
+				    var otherState = other.GetCurrentState();
+                    while (thisState != null && otherState != null)
 					{
 						if (otherState.attribute.GetType() != thisState.attribute.GetType() || !otherState.attribute.Equals(thisState.attribute))
 						{
@@ -487,13 +523,13 @@ namespace Lucene.Net.Util
 			
 			if (HasAttributes())
 			{
-				if (currentState == null)
+				if (currentState[0] == null)
 				{
-					ComputeCurrentState();
+					currentState[0] = GetCurrentState();
 				}
-				for (State state = currentState; state != null; state = state.next)
+				for (var state = currentState[0]; state != null; state = state.next)
 				{
-					if (state != currentState)
+					if (state != currentState[0])
 						sb.Append(',');
 					sb.Append(state.attribute.ToString());
 				}
@@ -507,24 +543,24 @@ namespace Lucene.Net.Util
 		/// </summary>
 		public virtual AttributeSource CloneAttributes()
 		{
-			AttributeSource clone = new AttributeSource(this.factory);
+			var clone = new AttributeSource(this.factory);
 			
 			// first clone the impls
 			if (HasAttributes())
 			{
-				if (currentState == null)
-				{
-					ComputeCurrentState();
-				}
-				for (State state = currentState; state != null; state = state.next)
-				{
-					AttributeImpl impl = (AttributeImpl) state.attribute.Clone();
-                    clone.attributeImpls.Add(new AttributeImplItem(impl.GetType(), impl));
-				}
+                for (var state = GetCurrentState(); state != null; state = state.next)
+                {
+                    var impl = (AttributeImpl) state.attribute.Clone();
+
+                    if (!clone.attributeImpls.ContainsKey(impl.GetType()))
+                    {
+                        clone.attributeImpls.Add(new AttributeImplItem(impl.GetType(), impl));
+                    }
+                }
 			}
 			
 			// now the interfaces
-            foreach (AttributeImplItem att in this.attributes)
+            foreach (var att in this.attributes)
 			{
                 clone.attributes.Add(new AttributeImplItem(att.Key, clone.attributeImpls[att.Value.GetType()].Value));
 			}
