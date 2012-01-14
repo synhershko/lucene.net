@@ -22,6 +22,7 @@ namespace Lucene.Net.Spatial.Tier.Projectors
 	public class CartesianTierPlotter
 	{
 		public const String DefaltFieldPrefix = "_tier_";
+        public static double EARTH_CIRC_MILES = 28892.0d;
 
 		private readonly int _tierLevel;
 		private int _tierLength;
@@ -71,20 +72,16 @@ namespace Lucene.Net.Spatial.Tier.Projectors
 		/// <returns></returns>
 		public double GetTierBoxId(double latitude, double longitude)
 		{
-			double[] coords = _projector.Coords(latitude, longitude);
+			var coords = _projector.Coords(latitude, longitude);
+            var ranges = _projector.Range();
 
-			double id = GetBoxId(coords[0]) + (GetBoxId(coords[1]) / TierVerticalPosDivider);
-			return id;
+            double id = GetBoxCoord(coords[0], ranges[0]) + (GetBoxCoord(coords[1], ranges[1]) / TierVerticalPosDivider);
+            return id;
 		}
 
-		private double GetBoxId(double coord)
+		private double GetBoxCoord(double coord, double range)
 		{
-			return Math.Floor(coord / (Idd / _tierLength));
-		}
-
-		private double GetBoxId(double coord, int tierLen)
-		{
-			return Math.Floor(coord / (Idd / tierLen));
+			return Math.Floor(coord * (_tierLength/range));
 		}
 
 		/// <summary>
@@ -114,19 +111,12 @@ namespace Lucene.Net.Spatial.Tier.Projectors
 		/// Distances less than a mile return 15, finer granularity is
 		/// in accurate
 		/// </summary>
-		/// <param name="miles">The miles.</param>
+		/// <param name="range">The range.</param>
 		/// <returns></returns>
-		public int BestFit(double miles)
+		public int BestFit(double range)
 		{
-
-			//28,892 a rough circumference of the earth
-			const int circ = 28892;
-
-			double r = miles / 2.0;
-
-			double corner = r - Math.Sqrt(Math.Pow(r, 2) / 2.0d);
-			double times = circ / corner;
-			int bestFit = (int)Math.Ceiling(Log2(times)) + 1;
+            var times = EARTH_CIRC_MILES / (2.0d * range);
+		    var bestFit = (int) Math.Ceiling(Math.Log(times, 2));
 
 			if (bestFit > 15)
 			{
