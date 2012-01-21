@@ -108,6 +108,17 @@ namespace Lucene.Net.Analysis.Snowball
             Assert.AreEqual(new Payload(new byte[] { 0, 1, 2, 3 }), payloadAtt.GetPayload());
         }
 
+        [Test(Description = "LUCENENET-54")]
+        public void TestJiraLuceneNet54()
+        {
+            var analyzer = new SnowballAnalyzer(Lucene.Net.Util.Version.LUCENE_CURRENT, "Finnish");
+            var input = new StringReader("terve");
+            var tokenStream = analyzer.TokenStream("fieldName", input);
+            var termAttr = tokenStream.AddAttribute<TermAttribute>();
+            Assert.That(tokenStream.IncrementToken(), Is.True);
+            Assert.That(termAttr.Term(), Is.EqualTo("terv"));
+        }
+
         private sealed class TestTokenStream : TokenStream
         {
             private TermAttribute termAtt;

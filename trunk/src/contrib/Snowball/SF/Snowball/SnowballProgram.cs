@@ -481,7 +481,7 @@ namespace SF.Snowball
 			int len = ket - bra;
 			//// s.Replace(s.ToString(0, s.Length - 0), current.ToString(bra, ket), 0, s.Length - 0);
 			s.Remove(0, s.Length);
-            s.Append(current.ToString(bra, ket));
+            s.Append(current.ToString(bra, len));
 			return s;
 		}
 		
