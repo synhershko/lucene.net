@@ -932,23 +932,9 @@
     <None Include="Lucene.Net.Search.RemoteSearchable.config" />
     <None Include="Lucene.Net.Search.TestSort.config" />
     <None Include="Lucene.Net.snk" />
-    <Content Include="Analysis\Package.html" />
-    <Content Include="Analysis\Standard\Package.html" />
     <Content Include="Analysis\Standard\READ_BEFORE_REGENERATING.txt" />
     <Content Include="ChangeNotes.txt" />
-    <Content Include="Document\Package.html" />
     <Content Include="FileDiffs.txt" />
-    <Content Include="Index\Package.html" />
-    <Content Include="Messages\Package.html" />
-    <Content Include="Overview.html" />
-    <Content Include="Package.html" />
-    <Content Include="QueryParser\Package.html" />
-    <Content Include="Search\Function\Package.html" />
-    <Content Include="Search\Package.html" />
-    <Content Include="Search\Payloads\Package.html" />
-    <Content Include="Search\Spans\Package.html" />
-    <Content Include="Store\Package.html" />
-    <Content Include="Util\Package.html" />
     <None Include="QueryParser\QueryParser.jj" />
   </ItemGroup>
   <ItemGroup>
