@@ -71,11 +71,13 @@ namespace Lucene.Net.Search.Vectorhighlight
     }
 }
 
-namespace System.Runtime.CompilerServices
-{
-    [AttributeUsage(AttributeTargets.Method)]
-    public sealed class ExtensionAttribute : Attribute
-    {
-        public ExtensionAttribute() { }
-    }
-}
+// LUCENENET-464 - This looks like it's here for .NET 2.0 compatability.  I believe
+//                 official support for that has been dropped. - cc
+//namespace System.Runtime.CompilerServices
+//{
+//    [AttributeUsage(AttributeTargets.Method)]
+//    public sealed class ExtensionAttribute : Attribute
+//    {
+//        public ExtensionAttribute() { }
+//    }
+//}
