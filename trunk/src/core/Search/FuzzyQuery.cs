@@ -47,7 +47,7 @@ namespace Lucene.Net.Search
 		private int prefixLength;
 		private bool termLongEnough = false;
 		
-		new protected internal Term term;
+		protected internal Term term;
 		
 		/// <summary> Create a new FuzzyQuery that will match terms with a similarity 
 		/// of at least <c>minimumSimilarity</c> to <c>term</c>.

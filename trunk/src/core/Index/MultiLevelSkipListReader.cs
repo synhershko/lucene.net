@@ -265,11 +265,13 @@ namespace Lucene.Net.Index
 		
 		
 		/// <summary>used to buffer the top skip levels </summary>
-		private sealed class SkipBuffer:IndexInput
+		private sealed class SkipBuffer : IndexInput
 		{
 			private byte[] data;
 			private long pointer;
 			private int pos;
+
+		    private bool isDisposed;
 			
 			internal SkipBuffer(IndexInput input, int length)
 			{
@@ -277,11 +279,17 @@ namespace Lucene.Net.Index
 				pointer = input.GetFilePointer();
 				input.ReadBytes(data, 0, length);
 			}
-			
-			public override void  Close()
-			{
-				data = null;
-			}
+
+            protected override void Dispose(bool disposing)
+            {
+                if (isDisposed) return;
+                if (disposing)
+                {
+                    data = null;
+                }
+
+                isDisposed = true;
+            }
 			
 			public override long GetFilePointer()
 			{

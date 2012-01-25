@@ -1282,18 +1282,18 @@ namespace Lucene.Net.QueryParsers
 			int ret = CONJ_NONE;
 			switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 			{
-				case Lucene.Net.QueryParsers.QueryParserConstants.AND: 
-				case Lucene.Net.QueryParsers.QueryParserConstants.OR: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.AndToken: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.OrToken: 
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.AND: 
-							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.AND);
+						case Lucene.Net.QueryParsers.QueryParserConstants.AndToken: 
+							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.AndToken);
 							ret = CONJ_AND;
 							break;
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.OR: 
-							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.OR);
+						case Lucene.Net.QueryParsers.QueryParserConstants.OrToken: 
+							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.OrToken);
 							ret = CONJ_OR;
 							break;
 						
@@ -1324,24 +1324,24 @@ namespace Lucene.Net.QueryParsers
 			switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 			{
 				
-				case Lucene.Net.QueryParsers.QueryParserConstants.NOT: 
-				case Lucene.Net.QueryParsers.QueryParserConstants.PLUS: 
-				case Lucene.Net.QueryParsers.QueryParserConstants.MINUS: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.NotToken: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.PlusToken: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.MinusToken: 
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.PLUS: 
-							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.PLUS);
+						case Lucene.Net.QueryParsers.QueryParserConstants.PlusToken: 
+							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.PlusToken);
 							ret = MOD_REQ;
 							break;
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.MINUS: 
-							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.MINUS);
+						case Lucene.Net.QueryParsers.QueryParserConstants.MinusToken: 
+							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.MinusToken);
 							ret = MOD_NOT;
 							break;
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.NOT: 
-							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.NOT);
+						case Lucene.Net.QueryParsers.QueryParserConstants.NotToken: 
+							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.NotToken);
 							ret = MOD_NOT;
 							break;
 						
@@ -1394,20 +1394,20 @@ namespace Lucene.Net.QueryParsers
 				switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 				{
 					
-					case Lucene.Net.QueryParsers.QueryParserConstants.AND: 
-					case Lucene.Net.QueryParsers.QueryParserConstants.OR: 
-					case Lucene.Net.QueryParsers.QueryParserConstants.NOT: 
-					case Lucene.Net.QueryParsers.QueryParserConstants.PLUS: 
-					case Lucene.Net.QueryParsers.QueryParserConstants.MINUS: 
-					case Lucene.Net.QueryParsers.QueryParserConstants.LPAREN: 
-					case Lucene.Net.QueryParsers.QueryParserConstants.STAR: 
-					case Lucene.Net.QueryParsers.QueryParserConstants.QUOTED: 
-					case Lucene.Net.QueryParsers.QueryParserConstants.TERM: 
-					case Lucene.Net.QueryParsers.QueryParserConstants.PREFIXTERM: 
-					case Lucene.Net.QueryParsers.QueryParserConstants.WILDTERM: 
-					case Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_START: 
-					case Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_START: 
-					case Lucene.Net.QueryParsers.QueryParserConstants.NUMBER: 
+					case Lucene.Net.QueryParsers.QueryParserConstants.AndToken: 
+					case Lucene.Net.QueryParsers.QueryParserConstants.OrToken: 
+					case Lucene.Net.QueryParsers.QueryParserConstants.NotToken: 
+					case Lucene.Net.QueryParsers.QueryParserConstants.PlusToken: 
+					case Lucene.Net.QueryParsers.QueryParserConstants.MinusToken: 
+					case Lucene.Net.QueryParsers.QueryParserConstants.LParanToken: 
+					case Lucene.Net.QueryParsers.QueryParserConstants.StarToken: 
+					case Lucene.Net.QueryParsers.QueryParserConstants.QuotedToken: 
+					case Lucene.Net.QueryParsers.QueryParserConstants.TermToken: 
+					case Lucene.Net.QueryParsers.QueryParserConstants.PrefixTermToken: 
+					case Lucene.Net.QueryParsers.QueryParserConstants.WildTermToken: 
+					case Lucene.Net.QueryParsers.QueryParserConstants.RangeInStartToken: 
+					case Lucene.Net.QueryParsers.QueryParserConstants.RangeExStartToken: 
+					case Lucene.Net.QueryParsers.QueryParserConstants.NumberToken: 
 						;
 						break;
 					
@@ -1448,15 +1448,15 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 				switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 				{
 					
-					case Lucene.Net.QueryParsers.QueryParserConstants.TERM: 
-						fieldToken = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.TERM);
-						Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.COLON);
+					case Lucene.Net.QueryParsers.QueryParserConstants.TermToken: 
+						fieldToken = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.TermToken);
+						Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.ColonToken);
 						field = DiscardEscapeChar(fieldToken.image);
 						break;
 					
-					case Lucene.Net.QueryParsers.QueryParserConstants.STAR: 
-						Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.STAR);
-						Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.COLON);
+					case Lucene.Net.QueryParsers.QueryParserConstants.StarToken: 
+						Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.StarToken);
+						Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.ColonToken);
 						field = "*";
 						break;
 					
@@ -1474,27 +1474,27 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 			switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 			{
 				
-				case Lucene.Net.QueryParsers.QueryParserConstants.STAR: 
-				case Lucene.Net.QueryParsers.QueryParserConstants.QUOTED: 
-				case Lucene.Net.QueryParsers.QueryParserConstants.TERM: 
-				case Lucene.Net.QueryParsers.QueryParserConstants.PREFIXTERM: 
-				case Lucene.Net.QueryParsers.QueryParserConstants.WILDTERM: 
-				case Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_START: 
-				case Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_START: 
-				case Lucene.Net.QueryParsers.QueryParserConstants.NUMBER: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.StarToken: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.QuotedToken: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.TermToken: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.PrefixTermToken: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.WildTermToken: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.RangeInStartToken: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.RangeExStartToken: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.NumberToken: 
 					q = Term(field);
 					break;
 				
-				case Lucene.Net.QueryParsers.QueryParserConstants.LPAREN: 
-					Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.LPAREN);
+				case Lucene.Net.QueryParsers.QueryParserConstants.LParanToken: 
+					Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.LParanToken);
 					q = Query(field);
-					Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RPAREN);
+					Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RParenToken);
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.CARAT: 
-							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.CARAT);
-							boost = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.NUMBER);
+						case Lucene.Net.QueryParsers.QueryParserConstants.CaratToken: 
+							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.CaratToken);
+							boost = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.NumberToken);
 							break;
 						
 						default: 
@@ -1540,35 +1540,35 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 			switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 			{
 				
-				case Lucene.Net.QueryParsers.QueryParserConstants.STAR: 
-				case Lucene.Net.QueryParsers.QueryParserConstants.TERM: 
-				case Lucene.Net.QueryParsers.QueryParserConstants.PREFIXTERM: 
-				case Lucene.Net.QueryParsers.QueryParserConstants.WILDTERM: 
-				case Lucene.Net.QueryParsers.QueryParserConstants.NUMBER: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.StarToken: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.TermToken: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.PrefixTermToken: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.WildTermToken: 
+				case Lucene.Net.QueryParsers.QueryParserConstants.NumberToken: 
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.TERM: 
-							term = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.TERM);
+						case Lucene.Net.QueryParsers.QueryParserConstants.TermToken: 
+							term = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.TermToken);
 							break;
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.STAR: 
-							term = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.STAR);
+						case Lucene.Net.QueryParsers.QueryParserConstants.StarToken: 
+							term = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.StarToken);
 							wildcard = true;
 							break;
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.PREFIXTERM: 
-							term = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.PREFIXTERM);
+						case Lucene.Net.QueryParsers.QueryParserConstants.PrefixTermToken: 
+							term = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.PrefixTermToken);
 							prefix = true;
 							break;
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.WILDTERM: 
-							term = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.WILDTERM);
+						case Lucene.Net.QueryParsers.QueryParserConstants.WildTermToken: 
+							term = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.WildTermToken);
 							wildcard = true;
 							break;
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.NUMBER: 
-							term = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.NUMBER);
+						case Lucene.Net.QueryParsers.QueryParserConstants.NumberToken: 
+							term = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.NumberToken);
 							break;
 						
 						default: 
@@ -1580,8 +1580,8 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.FUZZY_SLOP: 
-							fuzzySlop = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.FUZZY_SLOP);
+						case Lucene.Net.QueryParsers.QueryParserConstants.FuzzySlopToken: 
+							fuzzySlop = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.FuzzySlopToken);
 							fuzzy = true;
 							break;
 						
@@ -1594,14 +1594,14 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.CARAT: 
-							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.CARAT);
-							boost = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.NUMBER);
+						case Lucene.Net.QueryParsers.QueryParserConstants.CaratToken: 
+							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.CaratToken);
+							boost = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.NumberToken);
 							switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 							{
 								
-								case Lucene.Net.QueryParsers.QueryParserConstants.FUZZY_SLOP: 
-									fuzzySlop = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.FUZZY_SLOP);
+								case Lucene.Net.QueryParsers.QueryParserConstants.FuzzySlopToken: 
+									fuzzySlop = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.FuzzySlopToken);
 									fuzzy = true;
 									break;
 								
@@ -1653,17 +1653,17 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 					}
 					break;
 				
-				case Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_START: 
-					Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_START);
+				case Lucene.Net.QueryParsers.QueryParserConstants.RangeInStartToken: 
+					Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RangeInStartToken);
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_GOOP: 
-							goop1 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_GOOP);
+						case Lucene.Net.QueryParsers.QueryParserConstants.RangeInGoopToken: 
+							goop1 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RangeInGoopToken);
 							break;
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_QUOTED: 
-							goop1 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_QUOTED);
+						case Lucene.Net.QueryParsers.QueryParserConstants.RangeInQuotedToken: 
+							goop1 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RangeInQuotedToken);
 							break;
 						
 						default: 
@@ -1675,8 +1675,8 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_TO: 
-							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_TO);
+						case Lucene.Net.QueryParsers.QueryParserConstants.RangeInToToken: 
+							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RangeInToToken);
 							break;
 						
 						default: 
@@ -1688,12 +1688,12 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_GOOP: 
-							goop2 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_GOOP);
+						case Lucene.Net.QueryParsers.QueryParserConstants.RangeInGoopToken: 
+							goop2 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RangeInGoopToken);
 							break;
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_QUOTED: 
-							goop2 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_QUOTED);
+						case Lucene.Net.QueryParsers.QueryParserConstants.RangeInQuotedToken: 
+							goop2 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RangeInQuotedToken);
 							break;
 						
 						default: 
@@ -1702,13 +1702,13 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 							throw new ParseException();
 						
 					}
-					Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_END);
+					Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RangeInEndToken);
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.CARAT: 
-							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.CARAT);
-							boost = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.NUMBER);
+						case Lucene.Net.QueryParsers.QueryParserConstants.CaratToken: 
+							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.CaratToken);
+							boost = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.NumberToken);
 							break;
 						
 						default: 
@@ -1717,28 +1717,28 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 							break;
 						
 					}
-					if (goop1.kind == Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_QUOTED)
+					if (goop1.kind == Lucene.Net.QueryParsers.QueryParserConstants.RangeInQuotedToken)
 					{
 						goop1.image = goop1.image.Substring(1, (goop1.image.Length - 1) - (1));
 					}
-					if (goop2.kind == Lucene.Net.QueryParsers.QueryParserConstants.RANGEIN_QUOTED)
+					if (goop2.kind == Lucene.Net.QueryParsers.QueryParserConstants.RangeInQuotedToken)
 					{
 						goop2.image = goop2.image.Substring(1, (goop2.image.Length - 1) - (1));
 					}
 					q = GetRangeQuery(field, DiscardEscapeChar(goop1.image), DiscardEscapeChar(goop2.image), true);
 					break;
 				
-				case Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_START: 
-					Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_START);
+				case Lucene.Net.QueryParsers.QueryParserConstants.RangeExStartToken: 
+					Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RangeExStartToken);
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_GOOP: 
-							goop1 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_GOOP);
+						case Lucene.Net.QueryParsers.QueryParserConstants.RangeExGoopToken: 
+							goop1 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RangeExGoopToken);
 							break;
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_QUOTED: 
-							goop1 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_QUOTED);
+						case Lucene.Net.QueryParsers.QueryParserConstants.RangeExQuotedToken: 
+							goop1 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RangeExQuotedToken);
 							break;
 						
 						default: 
@@ -1750,8 +1750,8 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_TO: 
-							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_TO);
+						case Lucene.Net.QueryParsers.QueryParserConstants.RangeExToToken: 
+							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RangeExToToken);
 							break;
 						
 						default: 
@@ -1763,12 +1763,12 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_GOOP: 
-							goop2 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_GOOP);
+						case Lucene.Net.QueryParsers.QueryParserConstants.RangeExGoopToken: 
+							goop2 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RangeExGoopToken);
 							break;
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_QUOTED: 
-							goop2 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_QUOTED);
+						case Lucene.Net.QueryParsers.QueryParserConstants.RangeExQuotedToken: 
+							goop2 = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RangeExQuotedToken);
 							break;
 						
 						default: 
@@ -1777,13 +1777,13 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 							throw new ParseException();
 						
 					}
-					Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_END);
+					Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.RangeExEndToken);
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.CARAT: 
-							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.CARAT);
-							boost = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.NUMBER);
+						case Lucene.Net.QueryParsers.QueryParserConstants.CaratToken: 
+							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.CaratToken);
+							boost = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.NumberToken);
 							break;
 						
 						default: 
@@ -1792,11 +1792,11 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 							break;
 						
 					}
-					if (goop1.kind == Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_QUOTED)
+					if (goop1.kind == Lucene.Net.QueryParsers.QueryParserConstants.RangeExQuotedToken)
 					{
 						goop1.image = goop1.image.Substring(1, (goop1.image.Length - 1) - (1));
 					}
-					if (goop2.kind == Lucene.Net.QueryParsers.QueryParserConstants.RANGEEX_QUOTED)
+					if (goop2.kind == Lucene.Net.QueryParsers.QueryParserConstants.RangeExQuotedToken)
 					{
 						goop2.image = goop2.image.Substring(1, (goop2.image.Length - 1) - (1));
 					}
@@ -1804,13 +1804,13 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 					q = GetRangeQuery(field, DiscardEscapeChar(goop1.image), DiscardEscapeChar(goop2.image), false);
 					break;
 				
-				case Lucene.Net.QueryParsers.QueryParserConstants.QUOTED: 
-					term = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.QUOTED);
+				case Lucene.Net.QueryParsers.QueryParserConstants.QuotedToken: 
+					term = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.QuotedToken);
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.FUZZY_SLOP: 
-							fuzzySlop = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.FUZZY_SLOP);
+						case Lucene.Net.QueryParsers.QueryParserConstants.FuzzySlopToken: 
+							fuzzySlop = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.FuzzySlopToken);
 							break;
 						
 						default: 
@@ -1822,9 +1822,9 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 					switch ((jj_ntk == - 1)?Jj_ntk():jj_ntk)
 					{
 						
-						case Lucene.Net.QueryParsers.QueryParserConstants.CARAT: 
-							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.CARAT);
-							boost = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.NUMBER);
+						case Lucene.Net.QueryParsers.QueryParserConstants.CaratToken: 
+							Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.CaratToken);
+							boost = Jj_consume_token(Lucene.Net.QueryParsers.QueryParserConstants.NumberToken);
 							break;
 						
 						default: 
@@ -1900,9 +1900,9 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 		
 		private bool Jj_3R_2()
 		{
-			if (Jj_scan_token(Lucene.Net.QueryParsers.QueryParserConstants.TERM))
+			if (Jj_scan_token(Lucene.Net.QueryParsers.QueryParserConstants.TermToken))
 				return true;
-			if (Jj_scan_token(Lucene.Net.QueryParsers.QueryParserConstants.COLON))
+			if (Jj_scan_token(Lucene.Net.QueryParsers.QueryParserConstants.ColonToken))
 				return true;
 			return false;
 		}
@@ -1922,9 +1922,9 @@ label_1_brk: ;  // {{Aroush-2.9}} this lable maybe misplaced
 		
 		private bool Jj_3R_3()
 		{
-			if (Jj_scan_token(Lucene.Net.QueryParsers.QueryParserConstants.STAR))
+			if (Jj_scan_token(Lucene.Net.QueryParsers.QueryParserConstants.StarToken))
 				return true;
-			if (Jj_scan_token(Lucene.Net.QueryParsers.QueryParserConstants.COLON))
+			if (Jj_scan_token(Lucene.Net.QueryParsers.QueryParserConstants.ColonToken))
 				return true;
 			return false;
 		}

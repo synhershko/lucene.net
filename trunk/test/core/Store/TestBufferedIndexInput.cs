@@ -271,10 +271,11 @@ namespace Lucene.Net.Store
 			{
 				this.pos = pos;
 			}
-			
-			public override void  Close()
-			{
-			}
+
+            protected override void Dispose(bool disposing)
+            {
+                // Do nothing
+            }
 			
 			public override long Length()
 			{
@@ -342,6 +343,7 @@ namespace Lucene.Net.Store
 			internal System.Random rand;
 			
 			private Directory dir;
+		    private bool isDisposed;
 			
 			public MockFSDirectory(System.IO.DirectoryInfo path, System.Random rand)
 			{
@@ -382,18 +384,21 @@ namespace Lucene.Net.Store
 			{
 				return dir.CreateOutput(name);
 			}
-			
-			public override void  Close()
-			{
-				dir.Close();
-			}
 
-            /// <summary>
-            /// .NET
-            /// </summary>
-            public override void Dispose()
+            protected override void Dispose(bool disposing)
             {
-                Close();
+                if (isDisposed) return;
+
+                if (disposing)
+                {
+                    if (dir != null)
+                    {
+                        dir.Close();
+                    }
+                }
+
+                dir = null;
+                isDisposed = true;
             }
 			
 			public override void  DeleteFile(System.String name)

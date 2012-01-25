@@ -276,7 +276,7 @@ namespace Lucene.Net.Store
                 {
                     if (existing != null)
                     {
-                        sizeInBytes -= existing.sizeInBytes_ForNUnit;
+                        _sizeInBytes -= existing.sizeInBytes_ForNUnit;
                         existing.directory_ForNUnit = null;
                     }
 
@@ -340,7 +340,7 @@ namespace Lucene.Net.Store
             }
         }
 
-        public override void Close()
+        protected override void Dispose(bool disposing)
         {
             lock (this)
             {
@@ -356,6 +356,8 @@ namespace Lucene.Net.Store
                     throw new System.SystemException("MockRAMDirectory: cannot close: there are still open files: " + openFiles);
                 }
             }
+
+            base.Dispose(disposing);
         }
 
         /**

@@ -301,47 +301,47 @@ namespace Lucene.Net.Search
 			
 			// test extremes, bounded on both ends
 
-            int numHits = search.Search(q, new TermRangeFilter("rand", minRP, maxRP, T, T, c), 1000).totalHits;
+            int numHits = search.Search(q, new TermRangeFilter("rand", minRP, maxRP, T, T, c), 1000).TotalHits;
 			Assert.AreEqual(numDocs, numHits, "find all");
 
-            numHits = search.Search(q, new TermRangeFilter("rand", minRP, maxRP, T, F, c), 1000).totalHits;
+            numHits = search.Search(q, new TermRangeFilter("rand", minRP, maxRP, T, F, c), 1000).TotalHits;
 			Assert.AreEqual(numDocs - 1, numHits, "all but biggest");
 
-            numHits = search.Search(q, new TermRangeFilter("rand", minRP, maxRP, F, T, c), 1000).totalHits;
+            numHits = search.Search(q, new TermRangeFilter("rand", minRP, maxRP, F, T, c), 1000).TotalHits;
 			Assert.AreEqual(numDocs - 1, numHits, "all but smallest");
 
-            numHits = search.Search(q, new TermRangeFilter("rand", minRP, maxRP, F, F, c), 1000).totalHits;
+            numHits = search.Search(q, new TermRangeFilter("rand", minRP, maxRP, F, F, c), 1000).TotalHits;
 			Assert.AreEqual(numDocs - 2, numHits, "all but extremes");
 			
 			// unbounded
 
-            numHits = search.Search(q, new TermRangeFilter("rand", minRP, null, T, F, c), 1000).totalHits;
+            numHits = search.Search(q, new TermRangeFilter("rand", minRP, null, T, F, c), 1000).TotalHits;
 			Assert.AreEqual(numDocs, numHits, "smallest and up");
 
-            numHits = search.Search(q, new TermRangeFilter("rand", null, maxRP, F, T, c), 1000).totalHits;
+            numHits = search.Search(q, new TermRangeFilter("rand", null, maxRP, F, T, c), 1000).TotalHits;
 			Assert.AreEqual(numDocs, numHits, "biggest and down");
 
-            numHits = search.Search(q, new TermRangeFilter("rand", minRP, null, F, F, c), 1000).totalHits;
+            numHits = search.Search(q, new TermRangeFilter("rand", minRP, null, F, F, c), 1000).TotalHits;
 			Assert.AreEqual(numDocs - 1, numHits, "not smallest, but up");
 
-            numHits = search.Search(q, new TermRangeFilter("rand", null, maxRP, F, F, c), 1000).totalHits;
+            numHits = search.Search(q, new TermRangeFilter("rand", null, maxRP, F, F, c), 1000).TotalHits;
 			Assert.AreEqual(numDocs - 1, numHits, "not biggest, but down");
 			
 			// very small sets
 
-            numHits = search.Search(q, new TermRangeFilter("rand", minRP, minRP, F, F, c), 1000).totalHits;
+            numHits = search.Search(q, new TermRangeFilter("rand", minRP, minRP, F, F, c), 1000).TotalHits;
 			Assert.AreEqual(0, numHits, "min,min,F,F");
-            numHits = search.Search(q, new TermRangeFilter("rand", maxRP, maxRP, F, F, c), 1000).totalHits;
+            numHits = search.Search(q, new TermRangeFilter("rand", maxRP, maxRP, F, F, c), 1000).TotalHits;
 			Assert.AreEqual(0, numHits, "max,max,F,F");
 
-            numHits = search.Search(q, new TermRangeFilter("rand", minRP, minRP, T, T, c), 1000).totalHits;
+            numHits = search.Search(q, new TermRangeFilter("rand", minRP, minRP, T, T, c), 1000).TotalHits;
 			Assert.AreEqual(1, numHits, "min,min,T,T");
-            numHits = search.Search(q, new TermRangeFilter("rand", null, minRP, F, T, c), 1000).totalHits;
+            numHits = search.Search(q, new TermRangeFilter("rand", null, minRP, F, T, c), 1000).TotalHits;
 			Assert.AreEqual(1, numHits, "nul,min,F,T");
 
-            numHits = search.Search(q, new TermRangeFilter("rand", maxRP, maxRP, T, T, c), 1000).totalHits;
+            numHits = search.Search(q, new TermRangeFilter("rand", maxRP, maxRP, T, T, c), 1000).TotalHits;
 			Assert.AreEqual(1, numHits, "max,max,T,T");
-            numHits = search.Search(q, new TermRangeFilter("rand", maxRP, null, T, F, c), 1000).totalHits;
+            numHits = search.Search(q, new TermRangeFilter("rand", maxRP, null, T, F, c), 1000).TotalHits;
 			Assert.AreEqual(1, numHits, "max,nul,T,T");
 		}
 		

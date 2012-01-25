@@ -41,13 +41,13 @@ namespace Lucene.Net.Store
 				Refill();
 			return buffer[bufferPosition++];
 		}
-		
-		public BufferedIndexInput()
+
+	    protected BufferedIndexInput()
 		{
 		}
 		
 		/// <summary>Inits BufferedIndexInput with a specific bufferSize </summary>
-		public BufferedIndexInput(int bufferSize)
+		protected BufferedIndexInput(int bufferSize)
 		{
 			CheckBufferSize(bufferSize);
 			this.bufferSize = bufferSize;

@@ -574,23 +574,23 @@ namespace Lucene.Net.Search
     Query q = new TermQuery(new Term("body","body"));
 
     FieldCacheRangeFilter<sbyte?> fcrf;
-    result = Search.Search(q, fcrf = FieldCacheRangeFilter.NewByteRange("id", -20, 20, T, T), 100).scoreDocs;
+    result = Search.Search(q, fcrf = FieldCacheRangeFilter.NewByteRange("id", -20, 20, T, T), 100).ScoreDocs;
     Assert.False(fcrf.GetDocIdSet(reader.GetSequentialSubReaders()[0]).IsCacheable(), "DocIdSet must be not cacheable");
     Assert.AreEqual(40, result.Length, "find all");
 
-    result = Search.Search(q, fcrf = FieldCacheRangeFilter.NewByteRange("id", 0, 20, T, T), 100).scoreDocs;
+    result = Search.Search(q, fcrf = FieldCacheRangeFilter.NewByteRange("id", 0, 20, T, T), 100).ScoreDocs;
     Assert.False(fcrf.GetDocIdSet(reader.GetSequentialSubReaders()[0]).IsCacheable(), "DocIdSet must be not cacheable");
     Assert.AreEqual( 20, result.Length, "find all");
 
-            result = Search.Search(q, fcrf = FieldCacheRangeFilter.NewByteRange("id", -20, 0, T, T), 100).scoreDocs;
+            result = Search.Search(q, fcrf = FieldCacheRangeFilter.NewByteRange("id", -20, 0, T, T), 100).ScoreDocs;
     Assert.False(fcrf.GetDocIdSet(reader.GetSequentialSubReaders()[0]).IsCacheable(), "DocIdSet must be not cacheable");
     Assert.AreEqual( 20, result.Length, "find all");
 
-    result = Search.Search(q, fcrf = FieldCacheRangeFilter.NewByteRange("id", 10, 20, T, T), 100).scoreDocs;
+    result = Search.Search(q, fcrf = FieldCacheRangeFilter.NewByteRange("id", 10, 20, T, T), 100).ScoreDocs;
     Assert.True(fcrf.GetDocIdSet(reader.GetSequentialSubReaders()[0]).IsCacheable(), "DocIdSet must be not cacheable");
     Assert.AreEqual( 11, result.Length, "find all");
 
-    result = Search.Search(q, fcrf = FieldCacheRangeFilter.NewByteRange("id", -20, -10, T, T), 100).scoreDocs;
+    result = Search.Search(q, fcrf = FieldCacheRangeFilter.NewByteRange("id", -20, -10, T, T), 100).ScoreDocs;
     Assert.True(fcrf.GetDocIdSet(reader.GetSequentialSubReaders()[0]).IsCacheable(), "DocIdSet must be not cacheable");
     Assert.AreEqual( 11, result.Length, "find all");
   }

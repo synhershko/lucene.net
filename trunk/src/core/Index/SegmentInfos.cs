@@ -583,8 +583,8 @@ namespace Lucene.Net.Index
 		{
 			
 			internal Directory directory;
-			
-			public FindSegmentsFile(Directory directory)
+
+		    protected FindSegmentsFile(Directory directory)
 			{
 				this.directory = directory;
 			}

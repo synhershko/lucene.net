@@ -7,15 +7,15 @@ namespace Lucene.Net.Support
     /// </summary>
     public class CloseableThreadLocalProfiler
     {
-        public static bool _EnableCloseableThreadLocalProfiler = false;
+        private static bool _enableCloseableThreadLocalProfiler = false;
         public static System.Collections.Generic.List<WeakReference> Instances = new System.Collections.Generic.List<WeakReference>();
 
         public static bool EnableCloseableThreadLocalProfiler
         {
-            get { return _EnableCloseableThreadLocalProfiler; }
+            get { return _enableCloseableThreadLocalProfiler; }
             set
             {
-                _EnableCloseableThreadLocalProfiler = value;
+                _enableCloseableThreadLocalProfiler = value;
                 lock (Instances)
                     Instances.Clear();
             }

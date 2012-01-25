@@ -169,10 +169,11 @@ namespace Lucene.Net.Index
 		{
 			throw new System.SystemException("not implemented");
 		}
-		public override void  Close()
-		{
-			throw new System.SystemException("not implemented");
-		}
+
+        protected override void Dispose(bool disposing)
+        {
+            // Do nothing...
+        }
 		
 		override public System.Object Clone()
 		{

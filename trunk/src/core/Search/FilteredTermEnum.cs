@@ -34,8 +34,8 @@ namespace Lucene.Net.Search
 		
 		/// <summary>the delegate enum - to set this member use <see cref="SetEnum" /> </summary>
 		protected internal TermEnum actualEnum = null;
-		
-		public FilteredTermEnum()
+
+	    protected FilteredTermEnum()
 		{
 		}
 		

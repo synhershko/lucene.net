@@ -148,14 +148,18 @@ namespace Lucene.Net.Analysis
 		}
 		
 		/// <summary>Releases resources associated with this stream. </summary>
-		public virtual void  Close()
+		[Obsolete("Use Dispose() instead")]
+		public void  Close()
 		{
             Dispose();
 		}
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            
+            Dispose(true);
         }
+
+	    protected virtual void Dispose(bool disposing)
+	    { }
 	}
 }

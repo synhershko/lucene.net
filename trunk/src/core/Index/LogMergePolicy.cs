@@ -78,8 +78,8 @@ namespace Lucene.Net.Index
 		
 		private bool useCompoundFile = true;
 		private bool useCompoundDocStore = true;
-		
-		public LogMergePolicy(IndexWriter writer):base(writer)
+
+	    protected LogMergePolicy(IndexWriter writer):base(writer)
 		{
 		}
 		

@@ -640,11 +640,12 @@ namespace Lucene.Net.Index
 				payloadAtt.SetPayload(new Payload(payload));
 				return true;
 			}
-			
-			public override void  Close()
-			{
-				pool.Release(payload);
-			}
+
+            protected override void Dispose(bool disposing)
+            {
+                pool.Release(payload);
+                base.Dispose(disposing);
+            }
 		}
 		
 		internal class ByteArrayPool

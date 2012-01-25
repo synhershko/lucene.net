@@ -28,7 +28,6 @@ namespace Lucene.Net.Analysis
 	/// </summary>
 	public class MappingCharFilter : BaseCharFilter
 	{
-		
 		private NormalizeCharMap normMap;
 		private System.Collections.Generic.LinkedList<char> buffer;
 		private System.String replacement;

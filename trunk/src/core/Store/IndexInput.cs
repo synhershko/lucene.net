@@ -26,7 +26,7 @@ namespace Lucene.Net.Store
 	/// </summary>
 	/// <seealso cref="Directory">
 	/// </seealso>
-	public abstract class IndexInput : System.ICloneable/*, IDisposable*/
+	public abstract class IndexInput : System.ICloneable, IDisposable
 	{
 		private bool preUTF8Strings; // true if we are reading old (modified UTF8) string format
 		
@@ -218,9 +218,19 @@ namespace Lucene.Net.Store
 			}
 		}
 		
-		
-		/// <summary>Closes the stream to futher operations. </summary>
-		public abstract void  Close();
+		[Obsolete("Use Dispose() instead.")]
+		public void Close()
+		{
+		    Dispose();
+		}
+
+        /// <summary>Closes the stream to futher operations. </summary>
+	    public void Dispose()
+        {
+            Dispose(true);
+        }
+
+	    protected abstract void Dispose(bool disposing);
 		
 		/// <summary>Returns the current position in this file, where the next read will
 		/// occur.

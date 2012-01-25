@@ -34,6 +34,8 @@ namespace Lucene.Net.Analysis
 	{
 		/// <summary>The text source for this Tokenizer. </summary>
 		protected internal System.IO.TextReader input;
+
+	    private bool isDisposed;
 		
 		/// <summary>Construct a tokenizer with null input. </summary>
 		protected internal Tokenizer()
@@ -68,17 +70,23 @@ namespace Lucene.Net.Analysis
 			this.input = CharReader.Get(input);
 		}
 		
-		/// <summary>By default, closes the input Reader. </summary>
-		public override void  Close()
-		{
-            if (input != null) {
-                input.Close();
-                // LUCENE-2387: don't hold onto Reader after close, so
-                // GC can reclaim
-                input = null;
+        protected override void Dispose(bool disposing)
+        {
+            if (isDisposed) return;
+
+            if (disposing)
+            {
+                if (input != null)
+                {
+                    input.Close();
+                }
             }
 
-		}
+            // LUCENE-2387: don't hold onto Reader after close, so
+            // GC can reclaim
+            input = null;
+            isDisposed = true;
+        }
   
 		/// <summary>Return the corrected offset. If <see cref="input" /> is a <see cref="CharStream" /> subclass
 		/// this method calls <see cref="CharStream.CorrectOffset" />, else returns <c>currentOff</c>.

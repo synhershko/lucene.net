@@ -38,6 +38,7 @@ namespace Lucene.Net.Store
 		private Directory primaryDir;
 		private System.Collections.Generic.HashSet<string> primaryExtensions;
 		private bool doClose;
+	    private bool isDisposed;
 		
 		public FileSwitchDirectory(System.Collections.Generic.HashSet<string> primaryExtensions,
                                     Directory primaryDir, 
@@ -62,29 +63,33 @@ namespace Lucene.Net.Store
 		{
 			return secondaryDir;
 		}
-		
-		public override void  Close()
-		{
-			if (doClose)
-			{
-				try
-				{
-					secondaryDir.Close();
-				}
-				finally
-				{
-					primaryDir.Close();
-				}
-				doClose = false;
-			}
-		}
 
-        /// <summary>
-        /// .NET
-        /// </summary>
-        public override void Dispose()
+	    protected override void Dispose(bool disposing)
         {
-            Close();
+            if (isDisposed) return;
+
+            if (doClose)
+            {
+                try
+                {
+                    if (secondaryDir != null)
+                    {
+                        secondaryDir.Close();
+                    }
+                }
+                finally
+                {
+                    if (primaryDir != null)
+                    {
+                        primaryDir.Close();
+                    }
+                }
+                doClose = false;
+            }
+
+            secondaryDir = null;
+            primaryDir = null;
+            isDisposed = true;
         }
 		
 		public override System.String[] ListAll()

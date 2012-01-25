@@ -27,7 +27,7 @@ namespace Lucene.Net.Store
 	/// read from the same file.  It's usually better to use
 	/// <see cref="NIOFSDirectory" /> or <see cref="MMapDirectory" /> instead. 
 	/// </summary>
-	public class SimpleFSDirectory:FSDirectory
+	public class SimpleFSDirectory : FSDirectory
 	{
         /// <summary>Create a new SimpleFSDirectory for the named location.
         /// 
@@ -82,7 +82,7 @@ namespace Lucene.Net.Store
 		    throw e;
 		}
 		
-		protected internal class SimpleFSIndexInput:BufferedIndexInput, System.ICloneable
+		protected internal class SimpleFSIndexInput : BufferedIndexInput
 		{
 			// TODO: This is a bad way to handle memory and disposing
 			protected internal class Descriptor : System.IO.BinaryReader
@@ -123,6 +123,7 @@ namespace Lucene.Net.Store
 			
 			protected internal Descriptor file;
 			internal bool isClone;
+		    private bool isDisposed;
 			//  LUCENE-1566 - maximum read length on a 32bit JVM to prevent incorrect OOM 
 			protected internal int chunkSize;
 
@@ -179,15 +180,24 @@ namespace Lucene.Net.Store
 					}
 				}
 			}
-			
-			public override void  Close()
-			{
-				// only close the file if this is not a clone
-				if (!isClone)
-					file.Close();
-			}
-			
-			public override void  SeekInternal(long position)
+
+            protected override void Dispose(bool disposing)
+            {
+                if (isDisposed) return;
+                if (disposing)
+                {
+                    // only close the file if this is not a clone
+                    if (!isClone && file != null)
+                    {
+                        file.Close();
+                        file = null;
+                    }
+                }
+
+                isDisposed = true;
+            }
+
+		    public override void  SeekInternal(long position)
 			{
 			}
 			

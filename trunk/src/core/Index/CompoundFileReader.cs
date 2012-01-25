@@ -42,7 +42,8 @@ namespace Lucene.Net.Index
 			internal long offset;
 			internal long length;
 		}
-		
+
+	    private bool isDisposed;
 		
 		// Base info
 		private Directory directory;
@@ -119,26 +120,28 @@ namespace Lucene.Net.Index
 		{
 			return fileName;
 		}
-		
-		public override void  Close()
-		{
-			lock (this)
-			{
-				if (stream == null)
-					throw new System.IO.IOException("Already closed");
-				
-				entries.Clear();
-				stream.Close();
-				stream = null;
-			}
-		}
 
-        /// <summary>
-        /// .NET
-        /// </summary>
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            Close();
+            lock (this)
+            {
+                if (isDisposed) return;
+                if (disposing)
+                {
+                    if (entries != null)
+                    {
+                        entries.Clear();
+                    }
+                    if (stream != null)
+                    {
+                        stream.Close();
+                    }
+                }
+
+                entries = null;
+                stream = null;
+                isDisposed = true;
+            }
         }
 		
 		public override IndexInput OpenInput(System.String id)
@@ -232,12 +235,13 @@ namespace Lucene.Net.Index
 		/// this helps with testing since JUnit test cases in a different class
 		/// can then access package fields of this class.
 		/// </summary>
-		public /*internal*/ sealed class CSIndexInput:BufferedIndexInput, System.ICloneable
+		public /*internal*/ sealed class CSIndexInput : BufferedIndexInput
 		{
-			
 			internal IndexInput base_Renamed;
 			internal long fileOffset;
 			internal long length;
+
+		    private bool isDisposed;
 			
 			internal CSIndexInput(IndexInput base_Renamed, long fileOffset, long length):this(base_Renamed, fileOffset, length, BufferedIndexInput.BUFFER_SIZE)
 			{
@@ -285,12 +289,21 @@ namespace Lucene.Net.Index
 			public override void  SeekInternal(long pos)
 			{
 			}
-			
-			/// <summary>Closes the stream to further operations. </summary>
-			public override void  Close()
-			{
-				base_Renamed.Close();
-			}
+
+            protected override void Dispose(bool disposing)
+            {
+                if (isDisposed) return;
+
+                if (disposing)
+                {
+                    if (base_Renamed != null)
+                    {
+                        base_Renamed.Close();
+                    }
+                }
+                
+                isDisposed = true;
+            }
 			
 			public override long Length()
 			{

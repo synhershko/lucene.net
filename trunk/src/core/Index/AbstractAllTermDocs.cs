@@ -110,6 +110,11 @@ namespace Lucene.Net.Index
 
         public void Dispose()
         {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
             
         }
 

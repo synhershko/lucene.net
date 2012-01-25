@@ -238,8 +238,8 @@ namespace Lucene.Net.Index
 		}
 		
 		protected internal IndexWriter writer;
-		
-		public MergePolicy(IndexWriter writer)
+
+	    protected MergePolicy(IndexWriter writer)
 		{
 			this.writer = writer;
 		}

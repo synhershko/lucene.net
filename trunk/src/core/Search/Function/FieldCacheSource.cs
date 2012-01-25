@@ -52,7 +52,7 @@ namespace Lucene.Net.Search.Function
 		private System.String field;
 		
 		/// <summary> Create a cached field source for the input field.  </summary>
-		public FieldCacheSource(System.String field)
+		protected FieldCacheSource(System.String field)
 		{
 			this.field = field;
 		}

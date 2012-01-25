@@ -35,13 +35,13 @@ namespace Lucene.Net.Analysis
         private int[] diffs;
         private int size = 0;
 
-        public BaseCharFilter(CharStream @in) : base(@in)
+        protected BaseCharFilter(CharStream @in) : base(@in)
         {
         }
 
         /** Retrieve the corrected offset. */
         //@Override
-        public override int Correct(int currentOff)
+        protected internal override int Correct(int currentOff)
         {
             if (offsets == null || currentOff < offsets[0])
             {

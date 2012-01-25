@@ -210,7 +210,7 @@ namespace Lucene.Net.Store
 			return maxBBuf;
 		}
 		
-		private class MMapIndexInput:IndexInput, System.ICloneable
+		private class MMapIndexInput : IndexInput
 		{
 			private void  InitBlock(MMapDirectory enclosingInstance)
 			{
@@ -228,7 +228,8 @@ namespace Lucene.Net.Store
 			
 			private System.IO.MemoryStream buffer;
 			private long length;
-			private bool isClone = false;
+			private bool isClone;
+		    private bool isDisposed;
 			
 			internal MMapIndexInput(MMapDirectory enclosingInstance, System.IO.FileStream raf)
 			{
@@ -289,19 +290,26 @@ namespace Lucene.Net.Store
 				return clone;
 			}
 			
-			public override void  Close()
+			protected override void Dispose(bool isDisposing)
 			{
-				if (isClone || buffer == null)
-					return ;
-				// unmap the buffer (if enabled) and at least unset it for GC
-				try
-				{
-					Enclosing_Instance.CleanMapping(buffer);
-				}
-				finally
-				{
-					buffer = null;
-				}
+                if (isDisposed) return;
+
+                if (isDisposing)
+                {
+                    if (isClone || buffer == null)
+                        return;
+                    // unmap the buffer (if enabled) and at least unset it for GC
+                    try
+                    {
+                        Enclosing_Instance.CleanMapping(buffer);
+                    }
+                    finally
+                    {
+                        buffer = null;
+                    }
+                }
+
+			    isDisposed = true;
 			}
 		}
 		
@@ -328,6 +336,8 @@ namespace Lucene.Net.Store
 			private int[] bufSizes; // keep here, ByteBuffer.size() method is optional
 			
 			private long length;
+
+		    private bool isDisposed;
 			
 			private int curBufIndex;
 			private int maxBufSize;
@@ -450,31 +460,33 @@ namespace Lucene.Net.Store
 				}
 				return clone;
 			}
-			
-			public override void  Close()
-			{
-				if (isClone || buffers == null)
-					return ;
-				try
-				{
-					for (int bufNr = 0; bufNr < buffers.Length; bufNr++)
-					{
-						// unmap the buffer (if enabled) and at least unset it for GC
-						try
-						{
-							Enclosing_Instance.CleanMapping(buffers[bufNr]);
-						}
-						finally
-						{
-							buffers[bufNr] = null;
-						}
-					}
-				}
-				finally
-				{
-					buffers = null;
-				}
-			}
+
+            protected override void Dispose(bool disposing)
+            {
+                if (isDisposed) return;
+                if (isClone || buffers == null)
+                    return;
+                try
+                {
+                    for (int bufNr = 0; bufNr < buffers.Length; bufNr++)
+                    {
+                        // unmap the buffer (if enabled) and at least unset it for GC
+                        try
+                        {
+                            Enclosing_Instance.CleanMapping(buffers[bufNr]);
+                        }
+                        finally
+                        {
+                            buffers[bufNr] = null;
+                        }
+                    }
+                }
+                finally
+                {
+                    buffers = null;
+                }
+                isDisposed = true;
+            }
 		}
 		
 		/// <summary>Creates an IndexInput for the file with the given name. </summary>

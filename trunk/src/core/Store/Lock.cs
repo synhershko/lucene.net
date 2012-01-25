@@ -132,7 +132,7 @@ namespace Lucene.Net.Store
 			
 			
 			/// <summary>Constructs an executor that will grab the named lock. </summary>
-			public With(Lock lock_Renamed, long lockWaitTimeout)
+			protected With(Lock lock_Renamed, long lockWaitTimeout)
 			{
 				this.lock_Renamed = lock_Renamed;
 				this.lockWaitTimeout = lockWaitTimeout;

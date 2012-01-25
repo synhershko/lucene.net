@@ -51,7 +51,7 @@ namespace Lucene.Net.Search
 		/// <summary>Cache cleaning frequency </summary>
 		protected internal long cleanSleepTime;
 		/// <summary>Cache cleaner that runs in a separate thread </summary>
-		protected internal FilterCleaner filterCleaner;
+		protected internal FilterCleaner _filterCleaner;
 		
 		public static FilterManager GetInstance()
 		{
@@ -72,8 +72,8 @@ namespace Lucene.Net.Search
 			cacheCleanSize = DEFAULT_CACHE_CLEAN_SIZE; // Let the cache get to 100 items
 			cleanSleepTime = DEFAULT_CACHE_SLEEP_TIME; // 10 minutes between cleanings
 			
-			filterCleaner = new FilterCleaner(this);
-			ThreadClass fcThread = new ThreadClass(new System.Threading.ThreadStart(filterCleaner.Run));
+			_filterCleaner = new FilterCleaner(this);
+			ThreadClass fcThread = new ThreadClass(new System.Threading.ThreadStart(_filterCleaner.Run));
 			// setto be a Daemon so it doesn't have to be stopped
 			fcThread.IsBackground = true;
 			fcThread.Start();

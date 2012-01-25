@@ -43,7 +43,7 @@ namespace Lucene.Net.Search
 	{
 		private bool termContainsWildcard;
 	    private bool termIsPrefix;
-		new protected internal Term term;
+		protected internal Term term;
 		
 		public WildcardQuery(Term term)
 		{ 

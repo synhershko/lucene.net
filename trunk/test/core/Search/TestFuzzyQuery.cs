@@ -85,7 +85,7 @@ namespace Lucene.Net.Search
 
             // test scoring
             query = new FuzzyQuery(new Term("field", "bbbbb"), FuzzyQuery.defaultMinSimilarity, 0);
-            hits = searcher.Search(query, null, 1000).scoreDocs;
+            hits = searcher.Search(query, null, 1000).ScoreDocs;
             Assert.AreEqual(3, hits.Length, "3 documents should match");
             List<String> order = new List<string>(new[] {"bbbbb", "abbbb", "aabbb"});
             for (int i = 0; i < hits.Length; i++)
@@ -102,7 +102,7 @@ namespace Lucene.Net.Search
                 BooleanQuery.SetMaxClauseCount(2);
                 // This query would normally return 3 documents, because 3 terms match (see above):
                 query = new FuzzyQuery(new Term("field", "bbbbb"), FuzzyQuery.defaultMinSimilarity, 0);
-                hits = searcher.Search(query, null, 1000).scoreDocs;
+                hits = searcher.Search(query, null, 1000).ScoreDocs;
                 Assert.AreEqual(2, hits.Length, "only 2 documents should match");
                 order = new List<string>(new[] {"bbbbb", "abbbb"});
                 for (int i = 0; i < hits.Length; i++)

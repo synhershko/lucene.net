@@ -23,7 +23,7 @@ namespace Lucene.Net.Store
 	/// <summary> A memory-resident <see cref="IndexInput" /> implementation.
 	/// 
 	/// </summary>
-	public class RAMInputStream : IndexInput, System.ICloneable
+	public class RAMInputStream : IndexInput
 	{
 		internal static readonly int BUFFER_SIZE;
 		
@@ -51,18 +51,11 @@ namespace Lucene.Net.Store
 			currentBufferIndex = - 1;
 			currentBuffer = null;
 		}
-
-        // TODO: revisit Close() for 3.0
-        //public override void Dispose()
-        //{
-        //    // nothing to do here
-        //}
-
-		public override void  Close()
-		{
-			//Dispose();
-            // nothing to do here
-		}
+        
+        protected override void Dispose(bool disposing)
+        {
+            // do nothing
+        }
 		
 		public override long Length()
 		{

@@ -33,7 +33,7 @@ namespace Lucene.Net.Search
 	/// </summary>
 	public abstract class Searcher : System.MarshalByRefObject, Searchable, System.IDisposable
 	{
-		public Searcher()
+	    protected Searcher()
 		{
 			InitBlock();
 		}

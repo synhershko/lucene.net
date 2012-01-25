@@ -293,7 +293,7 @@ namespace Lucene.Net.Analysis.CJK
                         }
                         else if (length > 0)
                         {
-                            if (preIsTokened == true)
+                            if (preIsTokened)
                             {
                                 length = 0;
                                 preIsTokened = false;

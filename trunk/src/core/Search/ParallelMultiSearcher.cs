@@ -125,7 +125,7 @@ namespace Lucene.Net.Search
 		    Task.WaitAll(tasks);
             foreach(TopDocs topDocs in tasks.Select(x => x.Result))
             {
-                totalHits += topDocs.totalHits;
+                totalHits += topDocs.TotalHits;
                 maxScore = Math.Max(maxScore, topDocs.GetMaxScore());
             }
 
@@ -162,7 +162,7 @@ namespace Lucene.Net.Search
             Task.WaitAll(tasks);
             foreach (TopFieldDocs topFieldDocs in tasks.Select(x => x.Result))
             {
-                totalHits += topFieldDocs.totalHits;
+                totalHits += topFieldDocs.TotalHits;
                 maxScore = Math.Max(maxScore, topFieldDocs.GetMaxScore());
             }
             ScoreDoc[] scoreDocs = new ScoreDoc[hq.Size()];

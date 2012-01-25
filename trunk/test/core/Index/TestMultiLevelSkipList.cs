@@ -146,6 +146,7 @@ namespace Lucene.Net.Index
 				
 			}
 			private IndexInput input;
+		    private bool isDisposed;
 			
 			internal CountingStream(TestMultiLevelSkipList enclosingInstance, IndexInput input)
 			{
@@ -164,11 +165,17 @@ namespace Lucene.Net.Index
 				Enclosing_Instance.counter += len;
 				this.input.ReadBytes(b, offset, len);
 			}
-			
-			public override void  Close()
-			{
-				this.input.Close();
-			}
+
+            protected override void Dispose(bool disposing)
+            {
+                if (isDisposed) return;
+
+                if (disposing)
+                {
+                    this.input.Close();
+                }
+                isDisposed = true;
+            }
 			
 			public override long GetFilePointer()
 			{

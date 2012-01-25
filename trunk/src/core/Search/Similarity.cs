@@ -291,7 +291,7 @@ namespace Lucene.Net.Search
 	[Serializable]
 	public abstract class Similarity
 	{
-		public Similarity()
+	    protected Similarity()
 		{
 			InitBlock();
 		}

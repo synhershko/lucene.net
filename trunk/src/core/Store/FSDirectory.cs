@@ -449,22 +449,13 @@ namespace Lucene.Net.Store
 			
 			return buf.ToString();
 		}
-		
-		/// <summary>Closes the store to future operations. </summary>
-		public override void  Close()
-		{
-			lock (this)
-			{
-			    isOpen = false;
-			}
-		}
 
-        /// <summary>
-        /// .NET
-        /// </summary>
-        public override void Dispose()
+	    protected override void Dispose(bool disposing)
         {
-            Close();
+            lock (this)
+            {
+                isOpen = false;
+            }
         }
 
         // Java Lucene implements GetFile() which returns a FileInfo.

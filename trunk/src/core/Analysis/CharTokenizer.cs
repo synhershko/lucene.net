@@ -27,19 +27,19 @@ namespace Lucene.Net.Analysis
 	/// <summary>An abstract base class for simple, character-oriented tokenizers.</summary>
 	public abstract class CharTokenizer:Tokenizer
 	{
-		public CharTokenizer(System.IO.TextReader input):base(input)
+	    protected CharTokenizer(System.IO.TextReader input):base(input)
 		{
 			offsetAtt = AddAttribute<OffsetAttribute>();
             termAtt = AddAttribute<TermAttribute>();
 		}
-		
-		public CharTokenizer(AttributeSource source, System.IO.TextReader input):base(source, input)
+
+	    protected CharTokenizer(AttributeSource source, System.IO.TextReader input):base(source, input)
 		{
             offsetAtt = AddAttribute<OffsetAttribute>();
             termAtt = AddAttribute<TermAttribute>();
 		}
-		
-		public CharTokenizer(AttributeFactory factory, System.IO.TextReader input):base(factory, input)
+
+	    protected CharTokenizer(AttributeFactory factory, System.IO.TextReader input):base(factory, input)
 		{
             offsetAtt = AddAttribute<OffsetAttribute>();
             termAtt = AddAttribute<TermAttribute>();

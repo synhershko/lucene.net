@@ -33,7 +33,7 @@ namespace Lucene.Net.Search
 		/// <summary> Constructor.</summary>
 		/// <param name="innerIter">Underlying DocIdSetIterator.
 		/// </param>
-		public FilteredDocIdSetIterator(DocIdSetIterator innerIter)
+		protected FilteredDocIdSetIterator(DocIdSetIterator innerIter)
 		{
 			if (innerIter == null)
 			{

@@ -384,7 +384,7 @@ namespace Lucene.Net.Search
 		/// <summary> Constructs a query matching terms that cannot be represented with a single
 		/// Term.
 		/// </summary>
-		public MultiTermQuery()
+		protected MultiTermQuery()
 		{
 		}
 		

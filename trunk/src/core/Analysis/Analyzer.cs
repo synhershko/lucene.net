@@ -50,6 +50,7 @@ namespace Lucene.Net.Analysis
 		}
 		
 		private CloseableThreadLocal<Object> tokenStreams = new CloseableThreadLocal<Object>();
+	    private bool isDisposed;
 		
 		/// <summary>Used by Analyzers that implement reusableTokenStream
 		/// to retrieve previously saved TokenStreams for re-use
@@ -175,20 +176,29 @@ namespace Lucene.Net.Analysis
 		}
 		
 		/// <summary>Frees persistent resources used by this Analyzer </summary>
-		public virtual void  Close()
+		public void  Close()
 		{
 		    Dispose();
 		}
 
-        // TODO: The whole Close calling Dispose thing isn't a good idea
-        //       We should convert all Close methods to Dispose; .net friendly
         public virtual void Dispose()
         {
-            if (tokenStreams != null)
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (isDisposed) return;
+
+            if (disposing)
             {
-                tokenStreams.Close();
-                tokenStreams = null;
+                if (tokenStreams != null)
+                {
+                    tokenStreams.Close();
+                    tokenStreams = null;
+                }
             }
+            isDisposed = true;
         }
 	}
 }

@@ -119,12 +119,21 @@ namespace Lucene.Net.Store
 			}
 		}
 		
-		/// <summary>Closes the store. </summary>
-		public abstract void  Close();
+		[Obsolete("Use Dispose() instead")]
+		public void Close()
+		{
+		    Dispose();
+		}
 
-        public abstract void Dispose();
-		
-		/// <summary> Set the LockFactory that this Directory instance should
+        /// <summary>Closes the store. </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+	    protected abstract void Dispose(bool disposing);
+
+	    /// <summary> Set the LockFactory that this Directory instance should
 		/// use for its locking implementation.  Each * instance of
 		/// LockFactory should only be used for one directory (ie,
 		/// do not share a single instance across multiple

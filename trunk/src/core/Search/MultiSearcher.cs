@@ -394,7 +394,7 @@ namespace Lucene.Net.Search
 	        (theLock, searchable, weight, filter, nDocs, hq, i, starts) =>
 	            {
 	                TopDocs docs = searchable.Search(weight, filter, nDocs);
-	                ScoreDoc[] scoreDocs = docs.scoreDocs;
+	                ScoreDoc[] scoreDocs = docs.ScoreDocs;
                     for(int j = 0; j < scoreDocs.Length; j++) // merge scoreDocs into hq
                     {
                         ScoreDoc scoreDoc = scoreDocs[j];
@@ -421,9 +421,9 @@ namespace Lucene.Net.Search
                                                         if (docs.fields[j].GetType() == SortField.DOC)
                                                         {
                                                             // iterate over the score docs and change their fields value
-                                                            for (int j2 = 0; j2 < docs.scoreDocs.Length; j2++)
+                                                            for (int j2 = 0; j2 < docs.ScoreDocs.Length; j2++)
                                                             {
-                                                                FieldDoc fd = (FieldDoc) docs.scoreDocs[j2];
+                                                                FieldDoc fd = (FieldDoc) docs.ScoreDocs[j2];
                                                                 fd.fields[j] = (int)fd.fields[j] + starts[i];
                                                             }
                                                             break;
@@ -435,7 +435,7 @@ namespace Lucene.Net.Search
                                                         hq.SetFields(docs.fields);
                                                     }
 
-	                                                ScoreDoc[] scoreDocs = docs.scoreDocs;
+	                                                ScoreDoc[] scoreDocs = docs.ScoreDocs;
                                                     for (int j = 0; j < scoreDocs.Length; j++) // merge scoreDocs into hq
                                                     {
                                                         FieldDoc fieldDoc = (FieldDoc) scoreDocs[j];

@@ -32,7 +32,7 @@ namespace Lucene.Net.Store
 		private const long serialVersionUID = 1L;
 
         internal protected HashMap<string, RAMFile> fileMap = new HashMap<string, RAMFile>();
-		internal protected long sizeInBytes = 0;
+		internal protected long _sizeInBytes = 0;
 		
 		// *****
 		// Lock acquisition sequence:  RAMDirectory, then RAMFile
@@ -182,7 +182,7 @@ namespace Lucene.Net.Store
 			lock (this)
 			{
 				EnsureOpen();
-				return sizeInBytes;
+				return _sizeInBytes;
 			}
 		}
 		
@@ -198,7 +198,7 @@ namespace Lucene.Net.Store
 				{
 					fileMap.Remove(name);
 					file.directory = null;
-					sizeInBytes -= file.sizeInBytes; 
+					_sizeInBytes -= file.sizeInBytes; 
 				}
 				else
 					throw new System.IO.FileNotFoundException(name);
@@ -215,7 +215,7 @@ namespace Lucene.Net.Store
 				RAMFile existing = fileMap[name];
 				if (existing != null)
 				{
-					sizeInBytes -= existing.sizeInBytes;
+					_sizeInBytes -= existing.sizeInBytes;
 					existing.directory = null;
 				}
 				fileMap[name] = file;
@@ -236,20 +236,12 @@ namespace Lucene.Net.Store
 				throw new System.IO.FileNotFoundException(name);
 			return new RAMInputStream(file);
 		}
-		
-		/// <summary>Closes the store to future operations, releasing associated memory. </summary>
-		public override void  Close()
-		{
-			isOpen = false;
-			fileMap = null;
-		}
 
-        /// <summary>
-        /// .NET
-        /// </summary>
-        public override void Dispose()
+        /// <summary>Closes the store to future operations, releasing associated memory. </summary>
+        protected override void Dispose(bool disposing)
         {
-            Close();
+            isOpen = false;
+            fileMap = null;
         }
 
         //public HashMap<string, RAMFile> fileMap_ForNUnit

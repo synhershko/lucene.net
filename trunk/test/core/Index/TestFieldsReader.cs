@@ -356,7 +356,7 @@ namespace Lucene.Net.Index
 		
 		public class FaultyFSDirectory:Directory
 		{
-			
+		    private bool isDisposed;
 			internal FSDirectory fsDir;
 			public FaultyFSDirectory(System.IO.DirectoryInfo dir)
 			{
@@ -395,14 +395,21 @@ namespace Lucene.Net.Index
 			{
 				return fsDir.CreateOutput(name);
 			}
-			public override void  Close()
-			{
-				fsDir.Close();
-			}
 
-            public override void Dispose()
+            protected override void Dispose(bool disposing)
             {
-                this.Close();
+                if (isDisposed) return;
+
+                if (disposing)
+                {
+                    if (fsDir != null)
+                    {
+                        fsDir.Close();
+                    }
+                }
+
+                fsDir = null;
+                isDisposed = true;
             }
 		}
 		
@@ -410,6 +417,7 @@ namespace Lucene.Net.Index
 		{
 			internal IndexInput delegate_Renamed;
 			internal static bool doFail;
+		    private bool isDisposed;
 			internal int count;
 			internal FaultyIndexInput(IndexInput delegate_Renamed)
 			{
@@ -427,19 +435,33 @@ namespace Lucene.Net.Index
 				SimOutage();
 				delegate_Renamed.ReadBytes(b, offset, length);
 			}
+
 			public override void  SeekInternal(long pos)
 			{
 				//simOutage();
 				delegate_Renamed.Seek(pos);
 			}
+
 			public override long Length()
 			{
 				return delegate_Renamed.Length();
 			}
-			public override void  Close()
-			{
-				delegate_Renamed.Close();
-			}
+
+            protected override void Dispose(bool disposing)
+            {
+                if (isDisposed) return;
+                if (disposing)
+                {
+                    if (delegate_Renamed != null)
+                    {
+                        delegate_Renamed.Close();
+                    }
+                }
+
+                delegate_Renamed = null;
+                isDisposed = true;
+            }
+
 			public override System.Object Clone()
 			{
 				return new FaultyIndexInput((IndexInput) delegate_Renamed.Clone());
