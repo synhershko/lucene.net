@@ -109,6 +109,7 @@
     <DebugType>pdbonly</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <DebugSymbols>true</DebugSymbols>
+    <CodeAnalysisRuleSet>JustDesign.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>

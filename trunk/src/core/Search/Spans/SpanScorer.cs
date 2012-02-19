@@ -121,8 +121,8 @@ namespace Lucene.Net.Search.Spans
 			int expDoc = Advance(doc);
 			
 			float phraseFreq = (expDoc == doc)?freq:0.0f;
-			tfExplanation.SetValue(GetSimilarity().Tf(phraseFreq));
-			tfExplanation.SetDescription("tf(phraseFreq=" + phraseFreq + ")");
+			tfExplanation.Value = GetSimilarity().Tf(phraseFreq);
+			tfExplanation.Description = "tf(phraseFreq=" + phraseFreq + ")";
 			
 			return tfExplanation;
 		}

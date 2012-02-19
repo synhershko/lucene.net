@@ -81,9 +81,9 @@ namespace Lucene.Net.Search.Payloads
 				
 				for (int i = 0; i < queryClauses.Length; i++)
 				{
-					if (!queryClauses[i].IsProhibited())
+                    if (!queryClauses[i].Prohibited)
 					{
-						QueryToSpanQuery(queryClauses[i].GetQuery(), payloads);
+						QueryToSpanQuery(queryClauses[i].Query, payloads);
 					}
 				}
 			}

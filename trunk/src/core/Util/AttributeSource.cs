@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Lucene.Net.Support;
 using TokenStream = Lucene.Net.Analysis.TokenStream;
 
@@ -129,11 +130,18 @@ namespace Lucene.Net.Util
             this.currentState = new State[1];
             this.factory = factory;
 		}
-		
+
+        /// <summary> returns the used AttributeFactory.</summary>
+        public virtual AttributeFactory Factory
+	    {
+            get { return this.factory; }
+	    }
+
 		/// <summary> returns the used AttributeFactory.</summary>
+		[Obsolete("Use Factory property instead")]
 		public virtual AttributeFactory GetAttributeFactory()
 		{
-			return this.factory;
+		    return Factory;
 		}
 		
 		/// <summary>Returns a new iterator that iterates the attribute classes
@@ -143,91 +151,56 @@ namespace Lucene.Net.Util
 		/// Note that this return value is different from Java in that it enumerates over the values
 		/// and not the keys
 		/// </summary>
+		[Obsolete("Use AttributeClasses property instead")]
 		public virtual IEnumerable<Type> GetAttributeClassesIterator()
 		{
-            foreach (AttributeImplItem item in this.attributes)
-            {
-                yield return item.Key;
-            }
+		    return AttributeClasses;
 		}
+
+        /// <summary>Returns a new iterator that iterates the attribute classes
+        /// in the same order they were added in.
+        /// Signature for Java 1.5: <c>public Iterator&lt;Class&lt;? extends Attribute&gt;&gt; getAttributeClassesIterator()</c>
+        ///
+        /// Note that this return value is different from Java in that it enumerates over the values
+        /// and not the keys
+        /// </summary>
+	    public virtual IEnumerable<Type> AttributeClasses
+	    {
+	        get 
+            {
+	            return this.attributes.Select(item => item.Key);
+	        }
+	    }
 		
 		/// <summary>Returns a new iterator that iterates all unique Attribute implementations.
 		/// This iterator may contain less entries that <see cref="GetAttributeClassesIterator" />,
 		/// if one instance implements more than one Attribute interface.
 		/// Signature for Java 1.5: <c>public Iterator&lt;AttributeImpl&gt; getAttributeImplsIterator()</c>
 		/// </summary>
+		[Obsolete("Use AttributeImpls property instead")]
 		public virtual IEnumerable<AttributeImpl> GetAttributeImplsIterator()
 		{
-		    var initState = GetCurrentState();
-            if (initState != null)
-            {
-                return new AnonymousEnumerable(initState);
-            }
-            
-            return new List<AttributeImpl>();
-        }
+		    return AttributeImpls;
+		}
 
-        class AnonymousEnumerable : IEnumerable<AttributeImpl>
-        {
-            State state;
-            public AnonymousEnumerable(State state)
-            {
-                this.state = state;
-            }
-            public IEnumerator<AttributeImpl> GetEnumerator()
-            {
-                return new AnonymousEnumerator(state);
-            }
-            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-            {
-                return new AnonymousEnumerator(state);
-            }
-        }
-		
-        class AnonymousEnumerator : IEnumerator<AttributeImpl>
-        {
-            State state;
-            public AnonymousEnumerator(State state)
-            {
-                this.state = state;
-            }
-
-            AttributeImpl InternalCurrent
-            {
-                get
+        /// <summary>Returns a new iterator that iterates all unique Attribute implementations.
+        /// This iterator may contain less entries that <see cref="GetAttributeClassesIterator" />,
+        /// if one instance implements more than one Attribute interface.
+        /// Signature for Java 1.5: <c>public Iterator&lt;AttributeImpl&gt; getAttributeImplsIterator()</c>
+        /// </summary>
+	    public virtual IEnumerable<AttributeImpl> AttributeImpls
+	    {
+	        get
+	        {
+                var initState = GetCurrentState();
+                while (initState != null)
                 {
-                    if (state == null)
-                        throw new KeyNotFoundException();
-
-                    AttributeImpl att = state.attribute;
-                    state = state.next;
-                    return att;
+                    var att = initState.attribute;
+                    initState = initState.next;
+                    yield return att;
                 }
-            }
- 
-            public AttributeImpl Current
-            {
-                get { return InternalCurrent; }
-            }
-
-            public void Dispose()
-            {}
-
-            object System.Collections.IEnumerator.Current
-            {
-                get { return InternalCurrent; }
-            }
-
-            public bool MoveNext()
-            {
-                return state != null;
-            }
-
-            public void Reset()
-            {
-                
-            }
-        }
+	        }
+	    }
 
 	    /// <summary>a cache that stores all interfaces for known implementation classes for performance (slow reflection) </summary>
 	    private static readonly WeakDictionary<Type, System.Collections.Generic.LinkedList<WeakReference>>

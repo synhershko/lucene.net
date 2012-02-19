@@ -41,7 +41,7 @@ namespace Lucene.Net.Index
         protected internal IList<MergeThread> mergeThreads = new List<MergeThread>();
 		
 		// Max number of threads allowed to be merging at once
-		private int maxThreadCount = 1;
+		private int _maxThreadCount = 1;
 		
 		protected internal Directory dir;
 		
@@ -57,29 +57,45 @@ namespace Lucene.Net.Index
 				AddMyself();
 			}
 		}
-		
-		/// <summary>Sets the max # simultaneous threads that may be
-		/// running.  If a merge is necessary yet we already have
-		/// this many threads running, the incoming thread (that
-		/// is calling add/updateDocument) will block until
-		/// a merge thread has completed. 
-		/// </summary>
-		public virtual void  SetMaxThreadCount(int count)
-		{
-			if (count < 1)
-				throw new System.ArgumentException("count should be at least 1");
-			maxThreadCount = count;
-		}
-		
-		/// <summary>Get the max # simultaneous threads that may be</summary>
-		/// <seealso cref="SetMaxThreadCount">
-		/// </seealso>
-		public virtual int GetMaxThreadCount()
-		{
-			return maxThreadCount;
-		}
-		
-		/// <summary>Return the priority that merge threads run at.  By
+
+	    /// <summary>Gets or sets the max # simultaneous threads that may be
+	    /// running.  If a merge is necessary yet we already have
+	    /// this many threads running, the incoming thread (that
+	    /// is calling add/updateDocument) will block until
+	    /// a merge thread has completed. 
+	    /// </summary>
+	    public virtual int MaxThreadCount
+	    {
+	        set
+	        {
+	            if (value < 1)
+	                throw new System.ArgumentException("count should be at least 1");
+	            _maxThreadCount = value;
+	        }
+	        get { return _maxThreadCount; }
+        }
+        
+        /// <summary>Sets the max # simultaneous threads that may be
+        /// running.  If a merge is necessary yet we already have
+        /// this many threads running, the incoming thread (that
+        /// is calling add/updateDocument) will block until
+        /// a merge thread has completed. 
+        /// </summary>
+        [Obsolete("Use MaxThreadCount property instead.")]
+        public virtual void SetMaxThreadCount(int count)
+        {
+            MaxThreadCount = count;
+        }
+
+        /// <summary>Get the max # simultaneous threads that may be</summary>
+        /// <seealso cref="SetMaxThreadCount" />
+        [Obsolete("Use MaxThreadCount property instead.")]
+        public virtual int GetMaxThreadCount()
+        {
+            return MaxThreadCount;
+        }
+
+	    /// <summary>Return the priority that merge threads run at.  By
 		/// default the priority is 1 plus the priority of (ie,
 		/// slightly higher priority than) the first thread that
 		/// calls merge. 
@@ -243,7 +259,7 @@ namespace Lucene.Net.Index
 					lock (this)
 					{
 						MergeThread merger;
-						while (MergeThreadCount() >= maxThreadCount)
+						while (MergeThreadCount() >= _maxThreadCount)
 						{
 							if (Verbose())
 								Message("    too many merge threads running; stalling...");
@@ -264,7 +280,7 @@ namespace Lucene.Net.Index
 						if (Verbose())
 							Message("  consider merge " + merge.SegString(dir));
 
-					    System.Diagnostics.Debug.Assert(MergeThreadCount() < maxThreadCount);
+					    System.Diagnostics.Debug.Assert(MergeThreadCount() < _maxThreadCount);
 												
 						// OK to spawn a new merge thread to handle this
 						// merge:

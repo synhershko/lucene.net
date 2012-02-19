@@ -59,7 +59,7 @@ namespace Lucene.Net.Search
 			}
 		}
 		
-		private static int maxClauseCount = 1024;
+		private static int _maxClauses = 1024;
 		
 		/// <summary>Thrown when an attempt is made to add more than <see cref="GetMaxClauseCount()" />
 		/// clauses. This typically happens if
@@ -73,31 +73,50 @@ namespace Lucene.Net.Search
 			{
 				get
 				{
-					return "maxClauseCount is set to " + Lucene.Net.Search.BooleanQuery.maxClauseCount;
+					return "maxClauseCount is set to " + Lucene.Net.Search.BooleanQuery._maxClauses;
 				}
 				
 			}
 		}
-		
+        /// <summary>Gets or sets the maximum number of clauses permitted, 1024 by default.
+        /// <para>
+		/// Attempts to add more than the permitted number of clauses cause <see cref="TooManyClauses" />
+		/// to be thrown.
+        /// </para>
+		/// </summary>
+        public static int MaxClauses
+        {
+            get
+            {
+                return _maxClauses;
+            }
+
+            set
+            {
+                if (value < 1)
+                    throw new ArgumentException("maxClauseCount must be >= 1");
+                _maxClauses = value;
+            }
+        }
+
 		/// <summary>Return the maximum number of clauses permitted, 1024 by default.
 		/// Attempts to add more than the permitted number of clauses cause <see cref="TooManyClauses" />
 		/// to be thrown.
 		/// </summary>
-		/// <seealso cref="SetMaxClauseCount(int)">
-		/// </seealso>
+		/// <seealso cref="SetMaxClauseCount(int)" />
+		[Obsolete("Use MaxClauseCount property")]
 		public static int GetMaxClauseCount()
 		{
-			return maxClauseCount;
+            return MaxClauses;
 		}
 		
 		/// <summary> Set the maximum number of clauses permitted per BooleanQuery.
 		/// Default value is 1024.
-		/// </summary>
+        /// </summary>
+        [Obsolete("Use MaxClauseCount property")]
 		public static void  SetMaxClauseCount(int maxClauseCount)
 		{
-			if (maxClauseCount < 1)
-				throw new System.ArgumentException("maxClauseCount must be >= 1");
-			BooleanQuery.maxClauseCount = maxClauseCount;
+		    MaxClauses = maxClauseCount;
 		}
 		
 		private EquatableList<BooleanClause> clauses = new EquatableList<BooleanClause>();
@@ -145,37 +164,59 @@ namespace Lucene.Net.Search
 			}
 			return result;
 		}
-		
-		/// <summary> Specifies a minimum number of the optional BooleanClauses
-		/// which must be satisfied.
-		/// 
-		/// <p/>
-		/// By default no optional clauses are necessary for a match
-		/// (unless there are no required clauses).  If this method is used,
-		/// then the specified number of clauses is required.
-		/// <p/>
-		/// <p/>
-		/// Use of this method is totally independent of specifying that
-		/// any specific clauses are required (or prohibited).  This number will
-		/// only be compared against the number of matching optional clauses.
-		/// <p/>
-		/// </summary>
-		/// <param name="min">the number of optional clauses that must match</param>
-		public virtual void  SetMinimumNumberShouldMatch(int min)
-		{
-			this.minNrShouldMatch = min;
-		}
-		protected internal int minNrShouldMatch = 0;
-		
-		/// <summary> Gets the minimum number of the optional BooleanClauses
-		/// which must be satisifed.
-		/// </summary>
-		public virtual int GetMinimumNumberShouldMatch()
-		{
-			return minNrShouldMatch;
-		}
-		
-		/// <summary>Adds a clause to a boolean query.
+
+        protected internal int minNrShouldMatch = 0;
+
+	    /// <summary> Specifies a minimum number of the optional BooleanClauses
+	    /// which must be satisfied.
+	    /// <para>
+	    /// By default no optional clauses are necessary for a match
+	    /// (unless there are no required clauses).  If this method is used,
+	    /// then the specified number of clauses is required.
+	    /// </para>
+	    /// <para>
+	    /// Use of this method is totally independent of specifying that
+	    /// any specific clauses are required (or prohibited).  This number will
+	    /// only be compared against the number of matching optional clauses.
+	    /// </para>
+	    /// </summary>
+	    /// <value>the number of optional clauses that must match</value>
+	    public virtual int MinimumNumberShouldMatch
+	    {
+	        set { this.minNrShouldMatch = value; }
+	        get { return minNrShouldMatch; }
+	    }
+
+        /// <summary> Specifies a minimum number of the optional BooleanClauses
+        /// which must be satisfied.
+        /// <para>
+        /// By default no optional clauses are necessary for a match
+        /// (unless there are no required clauses).  If this method is used,
+        /// then the specified number of clauses is required.
+        /// </para>
+        /// <para>
+        /// Use of this method is totally independent of specifying that
+        /// any specific clauses are required (or prohibited).  This number will
+        /// only be compared against the number of matching optional clauses.
+        /// </para>
+        /// </summary>
+        /// <param name="min">the number of optional clauses that must match</param>
+        [Obsolete("Use MinimumNumberShouldMatch property instead")]
+        public virtual void SetMinimumNumberShouldMatch(int min)
+        {
+            MinimumNumberShouldMatch = min;
+        }
+
+        /// <summary> Gets the minimum number of the optional BooleanClauses
+        /// which must be satisifed.
+        /// </summary>
+        [Obsolete("Use MinimumNumberShouldMatch property instead")]
+        public virtual int GetMinimumNumberShouldMatch()
+        {
+            return MinimumNumberShouldMatch;
+        }
+
+	    /// <summary>Adds a clause to a boolean query.
 		/// 
 		/// </summary>
 		/// <throws>  TooManyClauses if the new number of clauses exceeds the maximum clause number </throws>
@@ -192,19 +233,34 @@ namespace Lucene.Net.Search
 		/// </seealso>
 		public virtual void  Add(BooleanClause clause)
 		{
-			if (clauses.Count >= maxClauseCount)
+			if (clauses.Count >= _maxClauses)
 				throw new TooManyClauses();
 			
 			clauses.Add(clause);
 		}
-		
+
 		/// <summary>Returns the set of clauses in this query. </summary>
 		public virtual BooleanClause[] GetClauses()
 		{
 			return clauses.ToArray();
 		}
-		
+
+        // TODO: Uncomment and mark GetClauses() obsolete when Clauses() method
+        //       is removed
+        ///// <summary>Returns the set of clauses in this query. </summary>
+        //public virtual BooleanClause[] Clauses
+        //{
+        //    get { return clauses.ToArray(); }
+        //}
+
+        /// <summary>Returns the list of clauses in this query. </summary>
+	    public virtual System.Collections.Generic.List<BooleanClause> ClauseList
+	    {
+            get { return clauses; }
+	    }
+
 		/// <summary>Returns the list of clauses in this query. </summary>
+		[Obsolete("Use ClauseList property instead")]
 		public virtual System.Collections.Generic.List<BooleanClause> Clauses()
 		{
 			return clauses;
@@ -251,7 +307,7 @@ namespace Lucene.Net.Search
                 weights = new System.Collections.Generic.List<Weight>(Enclosing_Instance.clauses.Count);
 				for (int i = 0; i < Enclosing_Instance.clauses.Count; i++)
 				{
-				    weights.Add(Enclosing_Instance.clauses[i].GetQuery().CreateWeight(searcher));
+				    weights.Add(Enclosing_Instance.clauses[i].Query.CreateWeight(searcher));
 				}
 			}
 			
@@ -271,7 +327,7 @@ namespace Lucene.Net.Search
 				{
 					// call sumOfSquaredWeights for all clauses in case of side effects
 					float s = weights[i].SumOfSquaredWeights(); // sum sub weights
-					if (!Enclosing_Instance.clauses[i].IsProhibited())
+                    if (!Enclosing_Instance.clauses[i].Prohibited)
 					// only add to sum for non-prohibited clauses
 						sum += s;
 				}
@@ -294,9 +350,9 @@ namespace Lucene.Net.Search
 			
 			public override Explanation Explain(IndexReader reader, int doc)
 			{
-				int minShouldMatch = Enclosing_Instance.GetMinimumNumberShouldMatch();
+				int minShouldMatch = Enclosing_Instance.MinimumNumberShouldMatch;
 				ComplexExplanation sumExpl = new ComplexExplanation();
-				sumExpl.SetDescription("sum of:");
+				sumExpl.Description = "sum of:";
 				int coord = 0;
 				int maxCoord = 0;
 				float sum = 0.0f;
@@ -313,19 +369,19 @@ namespace Lucene.Net.Search
 						continue;
 					}
 					Explanation e = w.Explain(reader, doc);
-					if (!c.IsProhibited())
+                    if (!c.Prohibited)
 						maxCoord++;
 					if (e.IsMatch())
 					{
-						if (!c.IsProhibited())
+                        if (!c.Prohibited)
 						{
 							sumExpl.AddDetail(e);
-							sum += e.GetValue();
+							sum += e.Value;
 							coord++;
 						}
 						else
 						{
-							Explanation r = new Explanation(0.0f, "match on prohibited clause (" + c.GetQuery().ToString() + ")");
+                            Explanation r = new Explanation(0.0f, "match on prohibited clause (" + c.Query.ToString() + ")");
 							r.AddDetail(e);
 							sumExpl.AddDetail(r);
 							fail = true;
@@ -333,9 +389,9 @@ namespace Lucene.Net.Search
 						if (c.GetOccur() == Occur.SHOULD)
 							shouldMatchCount++;
 					}
-					else if (c.IsRequired())
+                    else if (c.Required)
 					{
-						Explanation r = new Explanation(0.0f, "no match on required clause (" + c.GetQuery().ToString() + ")");
+                        Explanation r = new Explanation(0.0f, "no match on required clause (" + c.Query.ToString() + ")");
 						r.AddDetail(e);
 						sumExpl.AddDetail(r);
 						fail = true;
@@ -344,22 +400,22 @@ namespace Lucene.Net.Search
 				if (fail)
 				{
 					System.Boolean tempAux = false;
-					sumExpl.SetMatch(tempAux);
-					sumExpl.SetValue(0.0f);
-					sumExpl.SetDescription("Failure to meet condition(s) of required/prohibited clause(s)");
+					sumExpl.Match = tempAux;
+					sumExpl.Value = 0.0f;
+					sumExpl.Description = "Failure to meet condition(s) of required/prohibited clause(s)";
 					return sumExpl;
 				}
 				else if (shouldMatchCount < minShouldMatch)
 				{
 					System.Boolean tempAux2 = false;
-					sumExpl.SetMatch(tempAux2);
-					sumExpl.SetValue(0.0f);
-					sumExpl.SetDescription("Failure to match minimum number " + "of optional clauses: " + minShouldMatch);
+					sumExpl.Match = tempAux2;
+					sumExpl.Value = 0.0f;
+					sumExpl.Description = "Failure to match minimum number " + "of optional clauses: " + minShouldMatch;
 					return sumExpl;
 				}
 				
-				sumExpl.SetMatch(0 < coord?true:false);
-				sumExpl.SetValue(sum);
+				sumExpl.Match = 0 < coord?true:false;
+				sumExpl.Value = sum;
 				
 				float coordFactor = similarity.Coord(coord, maxCoord);
 				if (coordFactor == 1.0f)
@@ -389,16 +445,16 @@ namespace Lucene.Net.Search
 					Scorer subScorer = w.Scorer(reader, true, false);
 					if (subScorer == null)
 					{
-						if (c.IsRequired())
+                        if (c.Required)
 						{
 							return null;
 						}
 					}
-					else if (c.IsRequired())
+                    else if (c.Required)
 					{
 						required.Add(subScorer);
 					}
-					else if (c.IsProhibited())
+                    else if (c.Prohibited)
 					{
 						prohibited.Add(subScorer);
 					}
@@ -436,11 +492,11 @@ namespace Lucene.Net.Search
 				int numProhibited = 0;
 				foreach (BooleanClause c in Enclosing_Instance.clauses)
 				{
-					if (c.IsRequired())
+                    if (c.Required)
 					{
 						return false; // BS2 (in-order) will be used by scorer()
 					}
-					else if (c.IsProhibited())
+                    else if (c.Prohibited)
 					{
 						++numProhibited;
 					}
@@ -468,16 +524,16 @@ namespace Lucene.Net.Search
 			{
 				// optimize 1-clause queries
 				BooleanClause c = clauses[0];
-				if (!c.IsProhibited())
+                if (!c.Prohibited)
 				{
 					// just return clause
-					
-					Query query = c.GetQuery().Rewrite(reader); // rewrite first
+
+                    Query query = c.Query.Rewrite(reader); // rewrite first
 					
 					if (GetBoost() != 1.0f)
 					{
 						// incorporate boost
-						if (query == c.GetQuery())
+                        if (query == c.Query)
 						// if rewrite was no-op
 							query = (Query) query.Clone(); // then clone before boost
 						query.SetBoost(GetBoost() * query.GetBoost());
@@ -491,8 +547,8 @@ namespace Lucene.Net.Search
 			for (int i = 0; i < clauses.Count; i++)
 			{
 				BooleanClause c = clauses[i];
-				Query query = c.GetQuery().Rewrite(reader);
-				if (query != c.GetQuery())
+                Query query = c.Query.Rewrite(reader);
+                if (query != c.Query)
 				{
 					// clause rewrote: must clone
 					if (clone == null)
@@ -513,7 +569,7 @@ namespace Lucene.Net.Search
 		{
 			foreach(BooleanClause clause in clauses)
 			{
-				clause.GetQuery().ExtractTerms(terms);
+                clause.Query.ExtractTerms(terms);
 			}
 		}
 		
@@ -528,7 +584,7 @@ namespace Lucene.Net.Search
 		public override System.String ToString(System.String field)
 		{
 			System.Text.StringBuilder buffer = new System.Text.StringBuilder();
-			bool needParens = (GetBoost() != 1.0) || (GetMinimumNumberShouldMatch() > 0);
+			bool needParens = (GetBoost() != 1.0) || (MinimumNumberShouldMatch > 0);
 			if (needParens)
 			{
 				buffer.Append("(");
@@ -537,12 +593,12 @@ namespace Lucene.Net.Search
 			for (int i = 0; i < clauses.Count; i++)
 			{
 				BooleanClause c = clauses[i];
-				if (c.IsProhibited())
+                if (c.Prohibited)
 					buffer.Append("-");
-				else if (c.IsRequired())
+                else if (c.Required)
 					buffer.Append("+");
-				
-				Query subQuery = c.GetQuery();
+
+                Query subQuery = c.Query;
 				if (subQuery != null)
 				{
 					if (subQuery is BooleanQuery)
@@ -571,10 +627,10 @@ namespace Lucene.Net.Search
 				buffer.Append(")");
 			}
 			
-			if (GetMinimumNumberShouldMatch() > 0)
+			if (MinimumNumberShouldMatch > 0)
 			{
 				buffer.Append('~');
-				buffer.Append(GetMinimumNumberShouldMatch());
+				buffer.Append(MinimumNumberShouldMatch);
 			}
 			
 			if (GetBoost() != 1.0f)
@@ -593,14 +649,14 @@ namespace Lucene.Net.Search
             BooleanQuery other = (BooleanQuery)o;
             return (this.GetBoost() == other.GetBoost())
                     && this.clauses.Equals(other.clauses)
-                    && this.GetMinimumNumberShouldMatch() == other.GetMinimumNumberShouldMatch()
+                    && this.MinimumNumberShouldMatch == other.MinimumNumberShouldMatch
                     && this.disableCoord == other.disableCoord;
 		}
 		
 		/// <summary>Returns a hash code value for this object.</summary>
 		public override int GetHashCode()
 		{
-            return BitConverter.ToInt32(BitConverter.GetBytes(GetBoost()), 0) ^ clauses.GetHashCode() + GetMinimumNumberShouldMatch() + (disableCoord ? 17 : 0);
+            return BitConverter.ToInt32(BitConverter.GetBytes(GetBoost()), 0) ^ clauses.GetHashCode() + MinimumNumberShouldMatch + (disableCoord ? 17 : 0);
 		}
 
 	    IEnumerator IEnumerable.GetEnumerator()

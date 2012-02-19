@@ -82,14 +82,14 @@ namespace Lucene.Net.Search.Spans
 		{
 			
 			ComplexExplanation result = new ComplexExplanation();
-			result.SetDescription("weight(" + GetQuery() + " in " + doc + "), product of:");
+			result.Description = "weight(" + GetQuery() + " in " + doc + "), product of:";
 			System.String field = ((SpanQuery) GetQuery()).GetField();
 			
 			Explanation idfExpl = new Explanation(idf, "idf(" + field + ": " + idfExp.Explain() + ")");
 			
 			// explain query weight
 			Explanation queryExpl = new Explanation();
-			queryExpl.SetDescription("queryWeight(" + GetQuery() + "), product of:");
+			queryExpl.Description = "queryWeight(" + GetQuery() + "), product of:";
 			
 			Explanation boostExpl = new Explanation(GetQuery().GetBoost(), "boost");
 			if (GetQuery().GetBoost() != 1.0f)
@@ -99,13 +99,13 @@ namespace Lucene.Net.Search.Spans
 			Explanation queryNormExpl = new Explanation(queryNorm, "queryNorm");
 			queryExpl.AddDetail(queryNormExpl);
 			
-			queryExpl.SetValue(boostExpl.GetValue() * idfExpl.GetValue() * queryNormExpl.GetValue());
+			queryExpl.Value = boostExpl.Value * idfExpl.Value * queryNormExpl.Value;
 			
 			result.AddDetail(queryExpl);
 			
 			// explain field weight
 			ComplexExplanation fieldExpl = new ComplexExplanation();
-			fieldExpl.SetDescription("fieldWeight(" + field + ":" + query.ToString(field) + " in " + doc + "), product of:");
+			fieldExpl.Description = "fieldWeight(" + field + ":" + query.ToString(field) + " in " + doc + "), product of:";
 			
 			Explanation tfExpl = ((SpanScorer)Scorer(reader, true, false)).Explain(doc);
 			fieldExpl.AddDetail(tfExpl);
@@ -114,21 +114,21 @@ namespace Lucene.Net.Search.Spans
 			Explanation fieldNormExpl = new Explanation();
 			byte[] fieldNorms = reader.Norms(field);
 			float fieldNorm = fieldNorms != null?Similarity.DecodeNorm(fieldNorms[doc]):1.0f;
-			fieldNormExpl.SetValue(fieldNorm);
-			fieldNormExpl.SetDescription("fieldNorm(field=" + field + ", doc=" + doc + ")");
+			fieldNormExpl.Value = fieldNorm;
+			fieldNormExpl.Description = "fieldNorm(field=" + field + ", doc=" + doc + ")";
 			fieldExpl.AddDetail(fieldNormExpl);
 			
-			fieldExpl.SetMatch(tfExpl.IsMatch());
-			fieldExpl.SetValue(tfExpl.GetValue() * idfExpl.GetValue() * fieldNormExpl.GetValue());
+			fieldExpl.Match = tfExpl.IsMatch();
+			fieldExpl.Value = tfExpl.Value * idfExpl.Value * fieldNormExpl.Value;
 			
 			result.AddDetail(fieldExpl);
-			System.Boolean? tempAux = fieldExpl.GetMatch();
-			result.SetMatch(tempAux);
+			System.Boolean? tempAux = fieldExpl.Match;
+			result.Match = tempAux;
 			
 			// combine them
-			result.SetValue(queryExpl.GetValue() * fieldExpl.GetValue());
+			result.Value = queryExpl.Value * fieldExpl.Value;
 			
-			if (queryExpl.GetValue() == 1.0f)
+			if (queryExpl.Value == 1.0f)
 				return fieldExpl;
 			
 			return result;

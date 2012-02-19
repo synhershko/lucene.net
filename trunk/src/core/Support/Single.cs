@@ -26,7 +26,7 @@ namespace Lucene.Net.Support
             }
             catch (System.FormatException fex)
             {
-                throw fex;
+                throw;
             }
         }
 
@@ -47,7 +47,7 @@ namespace Lucene.Net.Support
             }
             catch (System.FormatException fex)
             {
-                throw fex;
+                throw;
             }
         }
 
@@ -68,7 +68,7 @@ namespace Lucene.Net.Support
             }
             catch (System.FormatException fex)
             {
-                throw fex;
+                throw;
             }
         }
 
@@ -88,7 +88,7 @@ namespace Lucene.Net.Support
             }
             catch (System.FormatException fex)
             {
-                throw fex;
+                throw;
             }
         }
 

@@ -196,20 +196,20 @@ namespace Lucene.Net.Search
 					return weights[0].Explain(reader, doc);
 				ComplexExplanation result = new ComplexExplanation();
 				float max = 0.0f, sum = 0.0f;
-				result.SetDescription(Enclosing_Instance.tieBreakerMultiplier == 0.0f?"max of:":"max plus " + Enclosing_Instance.tieBreakerMultiplier + " times others of:");
+				result.Description = Enclosing_Instance.tieBreakerMultiplier == 0.0f?"max of:":"max plus " + Enclosing_Instance.tieBreakerMultiplier + " times others of:";
 				foreach(Weight wt in weights)
 				{
 					Explanation e = wt.Explain(reader, doc);
 					if (e.IsMatch())
 					{
 						System.Boolean tempAux = true;
-						result.SetMatch(tempAux);
+						result.Match = tempAux;
 						result.AddDetail(e);
-						sum += e.GetValue();
-						max = System.Math.Max(max, e.GetValue());
+						sum += e.Value;
+						max = System.Math.Max(max, e.Value);
 					}
 				}
-				result.SetValue(max + (sum - max) * Enclosing_Instance.tieBreakerMultiplier);
+				result.Value = max + (sum - max) * Enclosing_Instance.tieBreakerMultiplier;
 				return result;
 			}
 		} // end of DisjunctionMaxWeight inner class

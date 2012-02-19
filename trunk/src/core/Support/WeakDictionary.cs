@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Lucene.Net.Support
 {
-    public class WeakDictionary<TKey, TValue> : IDictionary<TKey, TValue>
+    public sealed class WeakDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
         private HashMap<WeakKey<TKey>, TValue> _hm;
         private int _gcCollections = 0;

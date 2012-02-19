@@ -156,7 +156,7 @@ namespace Lucene.Net.Search
 				{
 					for (int j = 0; j < clauses.Length; j++)
 					{
-					    uniques.Add(clauses[j].GetQuery());
+                        uniques.Add(clauses[j].Query);
 					}
 				}
 				else

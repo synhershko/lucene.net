@@ -72,10 +72,18 @@ namespace Lucene.Net.Analysis
                 return currentOff + diffs[mid];
         }
 
+        protected int LastCumulativeDiff
+        {
+            get
+            {
+                return offsets == null ? 0 : diffs[size - 1];
+            }
+        }
+
+        [Obsolete("Use LastCumulativeDiff property instead")]
         protected int GetLastCumulativeDiff()
         {
-            return offsets == null ?
-              0 : diffs[size - 1];
+            return LastCumulativeDiff;
         }
 
         protected void AddOffCorrectMap(int off, int cumulativeDiff)

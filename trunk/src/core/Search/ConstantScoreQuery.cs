@@ -115,19 +115,19 @@ namespace Lucene.Net.Search
 				
 				if (exists)
 				{
-					result.SetDescription("ConstantScoreQuery(" + Enclosing_Instance.filter + "), product of:");
-					result.SetValue(queryWeight);
+					result.Description = "ConstantScoreQuery(" + Enclosing_Instance.filter + "), product of:";
+					result.Value = queryWeight;
 					System.Boolean tempAux = true;
-					result.SetMatch(tempAux);
+					result.Match = tempAux;
 					result.AddDetail(new Explanation(Enclosing_Instance.GetBoost(), "boost"));
 					result.AddDetail(new Explanation(queryNorm, "queryNorm"));
 				}
 				else
 				{
-					result.SetDescription("ConstantScoreQuery(" + Enclosing_Instance.filter + ") doesn't match id " + doc);
-					result.SetValue(0);
+					result.Description = "ConstantScoreQuery(" + Enclosing_Instance.filter + ") doesn't match id " + doc;
+					result.Value = 0;
 					System.Boolean tempAux2 = false;
-					result.SetMatch(tempAux2);
+					result.Match = tempAux2;
 				}
 				return result;
 			}

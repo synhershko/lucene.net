@@ -39,7 +39,6 @@ namespace Lucene.Net.QueryParsers
 	
 	public interface CharStream
 	{
-		
 		/// <summary> Returns the next character from the selected input.  The method
 		/// of selecting the input is the responsibility of the class
 		/// implementing this interface.  Can throw any java.io.IOException.

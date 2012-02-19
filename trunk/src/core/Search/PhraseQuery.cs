@@ -204,7 +204,7 @@ namespace Lucene.Net.Search
 			{
 				
 				Explanation result = new Explanation();
-				result.SetDescription("weight(" + GetQuery() + " in " + doc + "), product of:");
+				result.Description = "weight(" + GetQuery() + " in " + doc + "), product of:";
 				
 				System.Text.StringBuilder docFreqs = new System.Text.StringBuilder();
 				System.Text.StringBuilder query = new System.Text.StringBuilder();
@@ -227,7 +227,7 @@ namespace Lucene.Net.Search
 				
 				// explain query weight
 				Explanation queryExpl = new Explanation();
-				queryExpl.SetDescription("queryWeight(" + GetQuery() + "), product of:");
+				queryExpl.Description = "queryWeight(" + GetQuery() + "), product of:";
 				
 				Explanation boostExpl = new Explanation(Enclosing_Instance.GetBoost(), "boost");
 				if (Enclosing_Instance.GetBoost() != 1.0f)
@@ -237,13 +237,13 @@ namespace Lucene.Net.Search
 				Explanation queryNormExpl = new Explanation(queryNorm, "queryNorm");
 				queryExpl.AddDetail(queryNormExpl);
 				
-				queryExpl.SetValue(boostExpl.GetValue() * idfExpl.GetValue() * queryNormExpl.GetValue());
+				queryExpl.Value = boostExpl.Value * idfExpl.Value * queryNormExpl.Value;
 				
 				result.AddDetail(queryExpl);
 				
 				// explain field weight
 				Explanation fieldExpl = new Explanation();
-				fieldExpl.SetDescription("fieldWeight(" + Enclosing_Instance.field + ":" + query + " in " + doc + "), product of:");
+				fieldExpl.Description = "fieldWeight(" + Enclosing_Instance.field + ":" + query + " in " + doc + "), product of:";
 				
 				PhraseScorer scorer = (PhraseScorer)Scorer(reader, true, false);
 				if (scorer == null)
@@ -253,8 +253,8 @@ namespace Lucene.Net.Search
                 Explanation tfExplanation = new Explanation();
                 int d = scorer.Advance(doc);
                 float phraseFreq = (d == doc) ? scorer.CurrentFreq() : 0.0f;
-                tfExplanation.SetValue(similarity.Tf(phraseFreq));
-                tfExplanation.SetDescription("tf(phraseFreq=" + phraseFreq + ")");
+                tfExplanation.Value = similarity.Tf(phraseFreq);
+                tfExplanation.Description = "tf(phraseFreq=" + phraseFreq + ")";
 
                 fieldExpl.AddDetail(tfExplanation);
 				fieldExpl.AddDetail(idfExpl);
@@ -262,18 +262,18 @@ namespace Lucene.Net.Search
 				Explanation fieldNormExpl = new Explanation();
 				byte[] fieldNorms = reader.Norms(Enclosing_Instance.field);
 				float fieldNorm = fieldNorms != null?Similarity.DecodeNorm(fieldNorms[doc]):1.0f;
-				fieldNormExpl.SetValue(fieldNorm);
-				fieldNormExpl.SetDescription("fieldNorm(field=" + Enclosing_Instance.field + ", doc=" + doc + ")");
+				fieldNormExpl.Value = fieldNorm;
+				fieldNormExpl.Description = "fieldNorm(field=" + Enclosing_Instance.field + ", doc=" + doc + ")";
 				fieldExpl.AddDetail(fieldNormExpl);
 
-                fieldExpl.SetValue(tfExplanation.GetValue() * idfExpl.GetValue() * fieldNormExpl.GetValue());
+                fieldExpl.Value = tfExplanation.Value * idfExpl.Value * fieldNormExpl.Value;
 				
 				result.AddDetail(fieldExpl);
 				
 				// combine them
-				result.SetValue(queryExpl.GetValue() * fieldExpl.GetValue());
+				result.Value = queryExpl.Value * fieldExpl.Value;
 				
-				if (queryExpl.GetValue() == 1.0f)
+				if (queryExpl.Value == 1.0f)
 					return fieldExpl;
 				
 				return result;

@@ -333,7 +333,7 @@ namespace Lucene.Net.Index
 				
 				if (format <= FORMAT_CHECKSUM)
 				{
-					long checksumNow = input.GetChecksum();
+					long checksumNow = input.Checksum;
 					long checksumThen = input.ReadLong();
 					if (checksumNow != checksumThen)
 						throw new CorruptIndexException("checksum mismatch in segments file");

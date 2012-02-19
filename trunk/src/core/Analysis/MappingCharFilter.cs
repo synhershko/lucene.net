@@ -70,7 +70,7 @@ namespace Lucene.Net.Analysis
 				charPointer = 0;
 				if (result.diff != 0)
 				{
-					int prevCumulativeDiff = GetLastCumulativeDiff();
+					int prevCumulativeDiff = LastCumulativeDiff;
 					if (result.diff < 0)
 					{
 						for (int i = 0; i < - result.diff; i++)

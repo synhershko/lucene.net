@@ -19,7 +19,6 @@ using System;
 
 using TokenStream = Lucene.Net.Analysis.TokenStream;
 using IndexWriter = Lucene.Net.Index.IndexWriter;
-using Parameter = Lucene.Net.Util.Parameter;
 using StringHelper = Lucene.Net.Util.StringHelper;
 
 namespace Lucene.Net.Documents

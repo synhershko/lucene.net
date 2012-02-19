@@ -208,13 +208,13 @@ namespace Lucene.Net.Search.Payloads
 					result.AddDetail(payloadBoost);
 					
 					float payloadScore = GetPayloadScore();
-					payloadBoost.SetValue(payloadScore);
+					payloadBoost.Value = payloadScore;
 					// GSI: I suppose we could toString the payload, but I don't think that
 					// would be a good idea
-					payloadBoost.SetDescription("scorePayload(...)");
-					result.SetValue(nonPayloadExpl.GetValue() * payloadScore);
-					result.SetDescription("btq, product of:");
-					result.SetMatch(nonPayloadExpl.GetValue() == 0?false:true); // LUCENE-1303
+					payloadBoost.Description = "scorePayload(...)";
+					result.Value = nonPayloadExpl.Value * payloadScore;
+					result.Description = "btq, product of:";
+					result.Match = nonPayloadExpl.Value == 0?false:true; // LUCENE-1303
 					return result;
 				}
 			}

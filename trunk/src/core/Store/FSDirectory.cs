@@ -418,37 +418,40 @@ namespace Lucene.Net.Store
 		
 		/// <summary> So we can do some byte-to-hexchar conversion below</summary>
 		private static readonly char[] HEX_DIGITS = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-		
-		
-		public override System.String GetLockID()
-		{
-			EnsureOpen();
-			System.String dirName; // name to be hashed
-			try
-			{
-				dirName = directory.FullName;
-			}
-			catch (System.IO.IOException e)
-			{
-				throw new System.SystemException(e.ToString(), e);
-			}
-			
-			byte[] digest;
-			lock (DIGESTER)
-			{
-				digest = DIGESTER.ComputeHash(System.Text.Encoding.UTF8.GetBytes(dirName));
-			}
-			System.Text.StringBuilder buf = new System.Text.StringBuilder();
-			buf.Append("lucene-");
-			for (int i = 0; i < digest.Length; i++)
-			{
-				int b = digest[i];
-				buf.Append(HEX_DIGITS[(b >> 4) & 0xf]);
-				buf.Append(HEX_DIGITS[b & 0xf]);
-			}
-			
-			return buf.ToString();
-		}
+
+
+	    public override string LockId
+	    {
+	        get
+	        {
+	            EnsureOpen();
+	            System.String dirName; // name to be hashed
+	            try
+	            {
+	                dirName = directory.FullName;
+	            }
+	            catch (System.IO.IOException e)
+	            {
+	                throw new System.SystemException(e.ToString(), e);
+	            }
+
+	            byte[] digest;
+	            lock (DIGESTER)
+	            {
+	                digest = DIGESTER.ComputeHash(System.Text.Encoding.UTF8.GetBytes(dirName));
+	            }
+	            System.Text.StringBuilder buf = new System.Text.StringBuilder();
+	            buf.Append("lucene-");
+	            for (int i = 0; i < digest.Length; i++)
+	            {
+	                int b = digest[i];
+	                buf.Append(HEX_DIGITS[(b >> 4) & 0xf]);
+	                buf.Append(HEX_DIGITS[b & 0xf]);
+	            }
+
+	            return buf.ToString();
+	        }
+	    }
 
 	    protected override void Dispose(bool disposing)
         {

@@ -49,14 +49,19 @@ namespace Lucene.Net.Store
 			main.ReadBytes(b, offset, len);
 			digest.Update(b, offset, len);
 		}
-		
-		
-		public virtual long GetChecksum()
-		{
-			return digest.GetValue();
-		}
 
-        protected override void Dispose(bool disposing)
+	    public virtual long Checksum
+	    {
+	        get { return digest.Value; }
+	    }
+
+        [Obsolete("Use Checksum property instead")]
+        public virtual long GetChecksum()
+        {
+            return Checksum;
+        }
+
+	    protected override void Dispose(bool disposing)
         {
             if (isDisposed) return;
 

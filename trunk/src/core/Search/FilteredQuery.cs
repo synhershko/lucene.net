@@ -147,7 +147,7 @@ namespace Lucene.Net.Search
 				if (Enclosing_Instance.GetBoost() != 1)
 				{
 					Explanation preBoost = inner;
-					inner = new Explanation(inner.GetValue() * Enclosing_Instance.GetBoost(), "product of:");
+					inner = new Explanation(inner.Value * Enclosing_Instance.GetBoost(), "product of:");
 					inner.AddDetail(new Explanation(Enclosing_Instance.GetBoost(), "boost"));
 					inner.AddDetail(preBoost);
 				}

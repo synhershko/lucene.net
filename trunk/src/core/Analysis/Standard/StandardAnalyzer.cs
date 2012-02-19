@@ -70,7 +70,7 @@ namespace Lucene.Net.Analysis.Standard
 		public StandardAnalyzer(Version matchVersion, ISet<string> stopWords)
 		{
 			stopSet = stopWords;
-            SetOverridesTokenStreamMethod(typeof(StandardAnalyzer));
+            SetOverridesTokenStreamMethod<StandardAnalyzer>();
             enableStopPositionIncrements = StopFilter.GetEnablePositionIncrementsVersionDefault(matchVersion);
             replaceInvalidAcronym = matchVersion.OnOrAfter(Version.LUCENE_24);
             this.matchVersion = matchVersion;

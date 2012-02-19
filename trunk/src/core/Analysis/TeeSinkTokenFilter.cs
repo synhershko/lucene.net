@@ -106,12 +106,12 @@ namespace Lucene.Net.Analysis
 		public void  AddSinkTokenStream(SinkTokenStream sink)
 		{
 			// check that sink has correct factory
-			if (!this.GetAttributeFactory().Equals(sink.GetAttributeFactory()))
+			if (!this.Factory.Equals(sink.Factory))
 			{
 				throw new System.ArgumentException("The supplied sink is not compatible to this tee");
 			}
 			// add eventually missing attribute impls to the existing sink
-            foreach (AttributeImpl impl in this.CloneAttributes().GetAttributeImplsIterator())
+            foreach (AttributeImpl impl in this.CloneAttributes().AttributeImpls)
             {
                 sink.AddAttributeImpl(impl);
             }

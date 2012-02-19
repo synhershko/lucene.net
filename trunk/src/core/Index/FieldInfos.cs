@@ -94,15 +94,15 @@ namespace Lucene.Net.Index
 						}
 						catch (System.Exception t)
 						{
-							// Ignore any new exception & throw original IOE
-							throw ioe;
+                            // Ignore any new exception & throw original IOE
+                            throw ioe;
 						}
 					}
 					else
 					{
 						// The IOException cannot be caused by
 						// LUCENE-1623, so re-throw it
-						throw ioe;
+						throw;
 					}
 				}
 			}

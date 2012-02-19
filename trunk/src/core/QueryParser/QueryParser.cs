@@ -501,7 +501,7 @@ namespace Lucene.Net.QueryParsers
 			if (clauses.Count > 0 && conj == CONJ_AND)
 			{
 				BooleanClause c = clauses[clauses.Count - 1];
-				if (!c.IsProhibited())
+                if (!c.Prohibited)
 					c.SetOccur(BooleanClause.Occur.MUST);
 			}
 			
@@ -512,7 +512,7 @@ namespace Lucene.Net.QueryParsers
 				// notice if the input is a OR b, first term is parsed as required; without
 				// this modification a OR b would parsed as +a OR b
 				BooleanClause c = clauses[clauses.Count - 1];
-				if (!c.IsProhibited())
+                if (!c.Prohibited)
 					c.SetOccur(BooleanClause.Occur.SHOULD);
 			}
 			

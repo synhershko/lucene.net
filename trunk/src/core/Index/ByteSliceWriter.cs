@@ -82,13 +82,19 @@ namespace Lucene.Net.Index
 				System.Diagnostics.Debug.Assert(upto != slice.Length);
 			}
 		}
-		
-		public int GetAddress()
-		{
-			return upto + (offset0 & DocumentsWriter.BYTE_BLOCK_NOT_MASK);
-		}
-		
-		public void  WriteVInt(int i)
+
+	    public int Address
+	    {
+	        get { return upto + (offset0 & DocumentsWriter.BYTE_BLOCK_NOT_MASK); }
+	    }
+
+        [Obsolete("Use Address property instead.")]
+        public int GetAddress()
+        {
+            return Address;
+        }
+
+	    public void  WriteVInt(int i)
 		{
 			while ((i & ~ 0x7F) != 0)
 			{

@@ -146,7 +146,7 @@ namespace Lucene.Net.Store
 		{
 		    System.Diagnostics.Debug.Assert(lockFactory != null);
 			this.lockFactory = lockFactory;
-			lockFactory.SetLockPrefix(this.GetLockID());
+			lockFactory.SetLockPrefix(this.LockId);
 		}
 		
 		/// <summary> Get the LockFactory that this Directory instance is
@@ -158,20 +158,33 @@ namespace Lucene.Net.Store
 		{
 			return this.lockFactory;
 		}
-		
-		/// <summary> Return a string identifier that uniquely differentiates
-		/// this Directory instance from other Directory instances.
-		/// This ID should be the same if two Directory instances
-		/// (even in different JVMs and/or on different machines)
-		/// are considered "the same index".  This is how locking
-		/// "scopes" to the right index.
-		/// </summary>
-		public virtual System.String GetLockID()
-		{
-			return this.ToString();
-		}
 
-        public override string ToString()
+	    /// <summary> Return a string identifier that uniquely differentiates
+	    /// this Directory instance from other Directory instances.
+	    /// This ID should be the same if two Directory instances
+	    /// (even in different JVMs and/or on different machines)
+	    /// are considered "the same index".  This is how locking
+	    /// "scopes" to the right index.
+	    /// </summary>
+	    public virtual string LockId
+	    {
+	        get { return ToString(); }
+	    }
+
+        /// <summary> Return a string identifier that uniquely differentiates
+        /// this Directory instance from other Directory instances.
+        /// This ID should be the same if two Directory instances
+        /// (even in different JVMs and/or on different machines)
+        /// are considered "the same index".  This is how locking
+        /// "scopes" to the right index.
+        /// </summary>
+        [Obsolete("Use LockId property instead.")]
+        public virtual System.String GetLockID()
+        {
+            return ToString();
+        }
+
+	    public override string ToString()
         {
             return base.ToString() + " lockFactory=" + GetLockFactory();
         }

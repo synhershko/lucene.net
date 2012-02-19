@@ -289,9 +289,9 @@ namespace Lucene.Net.Search.Function
 			float valSrcScore = 1;
 			for (int i = 0; i < valSrcExpls.Length; i++)
 			{
-				valSrcScore *= valSrcExpls[i].GetValue();
+				valSrcScore *= valSrcExpls[i].Value;
 			}
-			Explanation exp = new Explanation(valSrcScore * subQueryExpl.GetValue(), "custom score: product of:");
+			Explanation exp = new Explanation(valSrcScore * subQueryExpl.Value, "custom score: product of:");
 			exp.AddDetail(subQueryExpl);
 			for (int i = 0; i < valSrcExpls.Length; i++)
 			{
@@ -312,9 +312,9 @@ namespace Lucene.Net.Search.Function
 			float valSrcScore = 1;
 			if (valSrcExpl != null)
 			{
-				valSrcScore *= valSrcExpl.GetValue();
+				valSrcScore *= valSrcExpl.Value;
 			}
-			Explanation exp = new Explanation(valSrcScore * subQueryExpl.GetValue(), "custom score: product of:");
+			Explanation exp = new Explanation(valSrcScore * subQueryExpl.Value, "custom score: product of:");
 			exp.AddDetail(subQueryExpl);
 			exp.AddDetail(valSrcExpl);
 			return exp;
@@ -445,7 +445,7 @@ namespace Lucene.Net.Search.Function
                     valSrcExpls[i] = valSrcWeights[i].Explain(reader, doc);
 				}
                 Explanation customExp = Enclosing_Instance.GetCustomScoreProvider(reader).CustomExplain(doc, subQueryExpl, valSrcExpls);
-				float sc = GetValue() * customExp.GetValue();
+				float sc = GetValue() * customExp.Value;
 				Explanation res = new ComplexExplanation(true, sc, Enclosing_Instance.ToString() + ", product of:");
 				res.AddDetail(customExp);
 				res.AddDetail(new Explanation(GetValue(), "queryBoost")); // actually using the q boost as q weight (== weight value)

@@ -110,18 +110,30 @@ namespace Lucene.Net.Index
 				}
 			}
 		}
-		
-		public virtual Directory GetDirectory()
-		{
-			return directory;
-		}
-		
-		public virtual System.String GetName()
-		{
-			return fileName;
-		}
 
-        protected override void Dispose(bool disposing)
+	    public virtual Directory Directory
+	    {
+	        get { return directory; }
+	    }
+
+        [Obsolete("Use Directory property instead.")]
+        public virtual Directory GetDirectory()
+        {
+            return Directory;
+        }
+
+	    public virtual string Name
+	    {
+	        get { return fileName; }
+	    }
+
+        [Obsolete("Use Name property instead.")]
+        public virtual System.String GetName()
+        {
+            return fileName;
+        }
+
+	    protected override void Dispose(bool disposing)
         {
             lock (this)
             {

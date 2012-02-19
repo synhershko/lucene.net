@@ -273,10 +273,10 @@ namespace Lucene.Net.Search.Payloads
 				Explanation payloadBoost = new Explanation();
 				result.AddDetail(payloadBoost);
 				float avgPayloadScore = (payloadsSeen > 0?(payloadScore / payloadsSeen):1);
-				payloadBoost.SetValue(avgPayloadScore);
-				payloadBoost.SetDescription("scorePayload(...)");
-				result.SetValue(nonPayloadExpl.GetValue() * avgPayloadScore);
-				result.SetDescription("bnq, product of:");
+				payloadBoost.Value = avgPayloadScore;
+				payloadBoost.Description = "scorePayload(...)";
+				result.Value = nonPayloadExpl.Value * avgPayloadScore;
+				result.Description = "bnq, product of:";
 				return result;
 			}
 		}

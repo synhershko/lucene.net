@@ -76,7 +76,7 @@ namespace Lucene.Net.Analysis
 				foreach(var entry in fieldAnalyzers)
 					analyzerMap[entry.Key] = entry.Value;
 			}
-			SetOverridesTokenStreamMethod(typeof(PerFieldAnalyzerWrapper));
+            SetOverridesTokenStreamMethod<PerFieldAnalyzerWrapper>();
 		}
 		
 		

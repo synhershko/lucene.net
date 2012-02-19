@@ -192,7 +192,7 @@ namespace Lucene.Net.Index
                         {
                             if (SegmentInfos.GenerationFromSegmentsFileName(fileName) <= currentGen)
                             {
-                                throw e;
+                                throw;
                             }
                             else
                             {

@@ -51,51 +51,50 @@ namespace Lucene.Net.Analysis
 		
 		private CloseableThreadLocal<Object> tokenStreams = new CloseableThreadLocal<Object>();
 	    private bool isDisposed;
-		
+
+        /// <summary>Used by Analyzers that implement reusableTokenStream
+        /// to save a TokenStream for later re-use by the same
+        /// thread. 
+        /// </summary>
+	    protected internal virtual object PreviousTokenStream
+	    {
+	        get
+            {
+                if (tokenStreams == null)
+                {
+                    throw new AlreadyClosedException("this Analyzer is closed");
+                }
+                return tokenStreams.Get();
+	        }
+
+            set
+            {
+                if (tokenStreams == null)
+                {
+                    throw new AlreadyClosedException("this Analyzer is closed");
+                }
+                tokenStreams.Set(value);
+            }
+	    }
+
 		/// <summary>Used by Analyzers that implement reusableTokenStream
 		/// to retrieve previously saved TokenStreams for re-use
 		/// by the same thread. 
-		/// </summary>
+        /// </summary>
+        [Obsolete("Use PreviousTokenStream property instead")]
 		protected internal virtual System.Object GetPreviousTokenStream()
 		{
-			try
-			{
-				return tokenStreams.Get();
-			}
-			catch (System.NullReferenceException npe)
-			{
-				if (tokenStreams == null)
-				{
-					throw new AlreadyClosedException("this Analyzer is closed");
-				}
-				else
-				{
-					throw npe;
-				}
-			}
+		    return PreviousTokenStream;
 		}
 		
 		/// <summary>Used by Analyzers that implement reusableTokenStream
 		/// to save a TokenStream for later re-use by the same
 		/// thread. 
 		/// </summary>
+		[Obsolete("Use PreviousTokenStream property instead")]
 		protected internal virtual void  SetPreviousTokenStream(System.Object obj)
 		{
-			try
-			{
-				tokenStreams.Set(obj);
-			}
-			catch (System.NullReferenceException npe)
-			{
-				if (tokenStreams == null)
-				{
-					throw new AlreadyClosedException("this Analyzer is closed");
-				}
-				else
-				{
-					throw npe;
-				}
-			}
+		    PreviousTokenStream = obj;
 		}
 		
         [Obsolete()]
@@ -112,26 +111,18 @@ namespace Lucene.Net.Analysis
         /// still be thrown, if the method doesn't exist.
 		/// </summary>
         [Obsolete("This is only present to preserve back-compat of classes that subclass a core analyzer and override tokenStream but not reusableTokenStream ")]
-		protected internal virtual void  SetOverridesTokenStreamMethod(System.Type baseClass)
+		protected internal virtual void SetOverridesTokenStreamMethod<TClass>()
+            where TClass : Analyzer
 		{
-            // Unfortunately, this is not a compile-time check, like it would be in Java
-            // TODO: There's probably a better way to emulate java's compile-time behavior
-            if (!typeof(Analyzer).IsAssignableFrom(baseClass))
+            try
             {
-                overridesTokenStreamMethod = false;
+                System.Reflection.MethodInfo m = this.GetType().GetMethod("TokenStream", new[] { typeof(string), typeof(System.IO.TextReader) });
+                overridesTokenStreamMethod = m.DeclaringType != typeof(TClass);
             }
-            else
+            catch (System.MethodAccessException nsme)
             {
-                try
-                {
-                    System.Reflection.MethodInfo m = this.GetType().GetMethod("TokenStream", new[] { typeof(string), typeof(System.IO.TextReader) });
-                    overridesTokenStreamMethod = m.DeclaringType != baseClass;
-                }
-                catch (System.MethodAccessException nsme)
-                {
-                    // can't happen, as baseClass is subclass of Analyzer
-                    overridesTokenStreamMethod = false;
-                }
+                // can't happen, as baseClass is subclass of Analyzer
+                overridesTokenStreamMethod = false;
             }
 		}
 		
