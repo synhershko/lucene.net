@@ -28,7 +28,7 @@ using RAMOutputStream = Lucene.Net.Store.RAMOutputStream;
 namespace Lucene.Net.Index
 {
 	
-	sealed class FieldsWriter
+	sealed class FieldsWriter : IDisposable
 	{
 		internal const byte FIELD_IS_TOKENIZED = (0x1);
 		internal const byte FIELD_IS_BINARY = (0x2);
@@ -75,7 +75,7 @@ namespace Lucene.Net.Index
 				{
 					try
 					{
-						Close();
+						Dispose();
 					}
 					catch (System.Exception t)
 					{
@@ -106,7 +106,7 @@ namespace Lucene.Net.Index
 				{
 					try
 					{
-						Close();
+						Dispose();
 					}
 					catch (System.IO.IOException ioe)
 					{
@@ -169,11 +169,11 @@ namespace Lucene.Net.Index
 			fieldsStream.Flush();
 		}
 		
-		internal void  Close()
+		public void Dispose()
 		{
+            // Move to protected method if class becomes unsealed
 			if (doClose)
 			{
-				
 				try
 				{
 					if (fieldsStream != null)
@@ -208,7 +208,7 @@ namespace Lucene.Net.Index
 					{
 						// Ignore so we throw only first IOException hit
 					}
-					throw ioe;
+					throw;
 				}
 				finally
 				{

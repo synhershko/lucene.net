@@ -360,6 +360,11 @@ namespace Lucene.Net.QueryParsers
 				{
 					return false;
 				}
+
+			    protected override void Dispose(bool disposing)
+			    {
+			        // Do nothing
+			    }
 			}
 		}
 	}

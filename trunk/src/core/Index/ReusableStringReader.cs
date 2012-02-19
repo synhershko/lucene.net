@@ -36,10 +36,12 @@ namespace Lucene.Net.Index
             left = s.Length;
             this.upto = 0;
         }
+
         public int Read(char[] c)
         {
             return Read(c, 0, c.Length);
         }
+
         public override int Read(System.Char[] c, int off, int len)
         {
             if (left > len)
@@ -64,10 +66,12 @@ namespace Lucene.Net.Index
                 return r;
             }
         }
+
+        [Obsolete("Use Dispose() instead")]
         public override void Close()
         {
+            Dispose();
         }
-
 
         public override int Read()
         {

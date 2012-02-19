@@ -21,7 +21,7 @@ namespace Lucene.Net.Store
 {
 	
 	/// <summary>Base implementation class for buffered <see cref="IndexInput" />. </summary>
-	public abstract class BufferedIndexInput:IndexInput, System.ICloneable
+	public abstract class BufferedIndexInput : IndexInput, System.ICloneable
 	{
 		
 		/// <summary>Default buffer size </summary>

@@ -43,10 +43,11 @@ namespace Lucene.Net.Search
 	/// use your own (non-Lucene) objects instead.<p/>
 	/// </summary>
     [Serializable]
-	public class IndexSearcher:Searcher
+	public class IndexSearcher : Searcher
 	{
 		internal IndexReader reader;
 		private bool closeReader;
+	    private bool isDisposed;
 
         // NOTE: these members might change in incompatible ways
         // in the next release
@@ -78,8 +79,15 @@ namespace Lucene.Net.Search
 		public IndexSearcher(Directory path, bool readOnly):this(IndexReader.Open(path, readOnly), true)
 		{
 		}
-		
-		/// <summary>Creates a searcher searching the provided index. </summary>
+
+        /// <summary>Creates a searcher searching the provided index
+        /// <para>
+        /// Note that the underlying IndexReader is not closed, if
+        /// IndexSearcher was constructed with IndexSearcher(IndexReader r).
+        /// If the IndexReader was supplied implicitly by specifying a directory, then
+        /// the IndexReader gets closed.
+        /// </para>
+        /// </summary>
 		public IndexSearcher(IndexReader r):this(r, false)
 		{
 		}
@@ -128,23 +136,17 @@ namespace Lucene.Net.Search
 			return reader;
 		}
 		
-		/// <summary> Note that the underlying IndexReader is not closed, if
-		/// IndexSearcher was constructed with IndexSearcher(IndexReader r).
-		/// If the IndexReader was supplied implicitly by specifying a directory, then
-		/// the IndexReader gets closed.
-		/// </summary>
-		public override void  Close()
-		{
-			if (closeReader)
-				reader.Close();
-		}
-
-        /// <summary>
-        /// .NET
-        /// </summary>
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            Close();
+            if (isDisposed) return;
+
+            if (disposing)
+            {
+                if (closeReader)
+                    reader.Close();
+            }
+
+            isDisposed = true;
         }
 		
 		// inherit javadoc

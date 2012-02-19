@@ -1124,29 +1124,35 @@ namespace Lucene.Net.Index
 		/// <summary>Implements commit.</summary>
 	    protected internal abstract void DoCommit(System.Collections.Generic.IDictionary<string, string> commitUserData);
 
-		/// <summary> Closes files associated with this index.
-		/// Also saves any new deletions to disk.
-		/// No other methods should be called after this has been called.
-		/// </summary>
-		/// <throws>  IOException if there is a low-level IO error </throws>
-		public void  Close()
+        [Obsolete("Use Dispose() instead")]
+		public void Close()
 		{
-			lock (this)
-			{
-				if (!closed)
-				{
-					DecRef();
-					closed = true;
-				}
-			}
+		    Dispose();
 		}
 
-        /// <summary>
-        /// .NET
+        /// <summary> Closes files associated with this index.
+        /// Also saves any new deletions to disk.
+        /// No other methods should be called after this has been called.
         /// </summary>
+        /// <throws>  IOException if there is a low-level IO error </throws>
         public void Dispose()
         {
-            Close();
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                lock (this)
+                {
+                    if (!closed)
+                    {
+                        DecRef();
+                        closed = true;
+                    }
+                }
+            }
         }
 		
 		/// <summary>Implements close. </summary>

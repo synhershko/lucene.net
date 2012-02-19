@@ -69,13 +69,13 @@ namespace Lucene.Net.Util.Cache
 				}
 			}
 			
-			public override void  Close()
-			{
-				lock (mutex)
-				{
-					cache.Close();
-				}
-			}
+            protected override void Dispose(bool disposing)
+            {
+                lock (mutex)
+                {
+                    cache.Close();
+                }
+            }
 			
 			internal override Cache<TKey,TValue> GetSynchronizedCache()
 			{
@@ -113,15 +113,17 @@ namespace Lucene.Net.Util.Cache
 		public abstract bool ContainsKey(System.Object key);
 
 	    /// <summary> Closes the cache.</summary>
-	    public abstract void Close();
-
-	    #region Implementation of IDisposable
+	    [Obsolete("Use Dispose() instead")]
+	    public void Close()
+	    {
+	        Dispose();
+	    }
 
 	    public void Dispose()
 	    {
-	        throw new NotImplementedException();
+	        Dispose(true);
 	    }
 
-	    #endregion
+	    protected abstract void Dispose(bool disposing);
 	}
 }

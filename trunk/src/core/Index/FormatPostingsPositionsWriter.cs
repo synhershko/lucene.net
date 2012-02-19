@@ -25,7 +25,6 @@ namespace Lucene.Net.Index
 	
 	sealed class FormatPostingsPositionsWriter:FormatPostingsPositionsConsumer
 	{
-		
 		internal FormatPostingsDocsWriter parent;
 		internal IndexOutput out_Renamed;
 		
@@ -92,10 +91,11 @@ namespace Lucene.Net.Index
 			lastPayloadLength = - 1;
 		}
 		
-		internal void  Close()
-		{
-			if (out_Renamed != null)
-				out_Renamed.Close();
-		}
+        public void Dispose()
+        {
+            // Move to protected method if class becomes unsealed
+            if (out_Renamed != null)
+                out_Renamed.Close();
+        }
 	}
 }

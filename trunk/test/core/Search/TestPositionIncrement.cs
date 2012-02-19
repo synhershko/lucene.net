@@ -88,7 +88,12 @@ namespace Lucene.Net.Search
 				internal PositionIncrementAttribute posIncrAtt;
 				internal TermAttribute termAtt;
 				internal OffsetAttribute offsetAtt;
-				
+
+                protected override void Dispose(bool disposing)
+                {
+                    // do nothing
+                }
+
 				public override bool IncrementToken()
 				{
 					if (i == TOKENS.Length)

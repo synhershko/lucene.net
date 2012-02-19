@@ -222,11 +222,11 @@ namespace Lucene.Net.Index
 		/// Should not be called before merge().
 		/// </summary>
 		/// <throws>  IOException </throws>
-		public /*internal*/ void  CloseReaders()
+		internal void  CloseReaders()
 		{
 			foreach(IndexReader reader in readers)
 			{
-				reader.Close();
+				reader.Dispose();
 			}
 		}
 
@@ -421,7 +421,7 @@ namespace Lucene.Net.Index
 				}
 				finally
 				{
-					fieldsWriter.Close();
+					fieldsWriter.Dispose();
 				}
 				
 				System.String fileName = segment + "." + IndexFileNames.FIELDS_INDEX_EXTENSION;
@@ -572,7 +572,7 @@ namespace Lucene.Net.Index
 			}
 			finally
 			{
-				termVectorsWriter.Close();
+				termVectorsWriter.Dispose();
 			}
 			
 			System.String fileName = segment + "." + IndexFileNames.VECTORS_INDEX_EXTENSION;
@@ -690,7 +690,7 @@ namespace Lucene.Net.Index
 			{
 				consumer.Finish();
 				if (queue != null)
-					queue.Close();
+					queue.Dispose();
 			}
 		}
 		
@@ -725,7 +725,7 @@ namespace Lucene.Net.Index
 					queue.Add(smi);
 				// initialize queue
 				else
-					smi.Close();
+					smi.Dispose();
 			}
 			
 			SegmentMergeInfo[] match = new SegmentMergeInfo[readers.Count];
@@ -767,7 +767,7 @@ namespace Lucene.Net.Index
 						queue.Add(smi);
 					// restore queue
 					else
-						smi.Close(); // done with a segment
+						smi.Dispose(); // done with a segment
 				}
 			}
 		}

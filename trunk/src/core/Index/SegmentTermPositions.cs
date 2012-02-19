@@ -21,8 +21,7 @@ using IndexInput = Lucene.Net.Store.IndexInput;
 
 namespace Lucene.Net.Index
 {
-	
-	public sealed class SegmentTermPositions:SegmentTermDocs, TermPositions
+	internal sealed class SegmentTermPositions : SegmentTermDocs, TermPositions
 	{
 		private IndexInput proxStream;
 		private int proxCount;
@@ -56,14 +55,9 @@ namespace Lucene.Net.Index
 			needToLoadPayload = false;
 		}
 		
-		public override void  Close()
-		{
-            Dispose();
-		}
-
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            base.Dispose();
+            base.Dispose(disposing);
             if (proxStream != null)
                 proxStream.Close();
         }

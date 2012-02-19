@@ -113,10 +113,7 @@ namespace Lucene.Net.Index
             Dispose(true);
         }
 
-        protected virtual void Dispose(bool disposing)
-        {
-            
-        }
+        protected abstract void Dispose(bool disposing);
 
         public abstract bool IsDeleted(int doc);
     }

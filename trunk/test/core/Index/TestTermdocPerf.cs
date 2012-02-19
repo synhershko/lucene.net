@@ -57,6 +57,11 @@ namespace Lucene.Net.Index
 			}
 			return false;
 		}
+
+	    protected override void Dispose(bool disposing)
+	    {
+	        // Do Nothing
+	    }
 	}
 	
 	

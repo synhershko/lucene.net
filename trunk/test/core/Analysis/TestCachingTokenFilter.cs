@@ -76,6 +76,11 @@ namespace Lucene.Net.Analysis
 					return true;
 				}
 			}
+
+		    protected override void Dispose(bool disposing)
+		    {
+		        // Do Nothing
+		    }
 		}
 		private System.String[] tokens = new System.String[]{"term1", "term2", "term3", "term2"};
 		

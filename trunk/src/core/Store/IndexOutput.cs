@@ -29,7 +29,7 @@ namespace Lucene.Net.Store
 	/// </seealso>
 	/// <seealso cref="IndexInput">
 	/// </seealso>
-    public abstract class IndexOutput /*: IDisposable*/
+    public abstract class IndexOutput : IDisposable
 	{
 		/// <summary>Writes a single byte.</summary>
 		/// <seealso cref="IndexInput.ReadByte()">
@@ -216,9 +216,21 @@ namespace Lucene.Net.Store
 		
 		/// <summary>Forces any buffered output to be written. </summary>
 		public abstract void  Flush();
-		
-		/// <summary>Closes this stream to further operations. </summary>
-		public abstract void  Close();
+
+        /// <summary>Closes this stream to further operations. </summary>
+        [Obsolete("Use Dispose() instead.")]
+        public void Close()
+        {
+            Dispose();
+        }
+
+        /// <summary>Closes this stream to further operations. </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+	    protected abstract void Dispose(bool disposing);
 		
 		/// <summary>Returns the current position in this file, where the next write will
 		/// occur.

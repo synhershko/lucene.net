@@ -60,7 +60,7 @@ namespace Lucene.Net.Index
     /// directly with no retry logic.</para>
     /// </summary>
 	
-	public sealed class IndexFileDeleter
+	public sealed class IndexFileDeleter : IDisposable
 	{
 		
 		//// Files that we tried to delete but failed (likely
@@ -381,8 +381,9 @@ namespace Lucene.Net.Index
 			Refresh(null);
 		}
 		
-		public void  Close()
+		public void Dispose()
 		{
+            // Move to protected method if class becomes unsealed
 			// DecRef old files from the last checkpoint, if any:
 			int size = lastFiles.Count;
 			if (size > 0)

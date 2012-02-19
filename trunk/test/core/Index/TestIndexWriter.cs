@@ -382,6 +382,11 @@ namespace Lucene.Net.Index
                 first = false;
                 return true;
             }
+
+            protected override void Dispose(bool disposing)
+            {
+                // Do nothing
+            }
         }
         private class AnonymousClassIndexWriter : IndexWriter
         {
@@ -2283,10 +2288,11 @@ namespace Lucene.Net.Index
                     }
                 }
             }
-
-            public override /*virtual*/ void Close()
+            protected override void Dispose(bool disposing)
             {
+                // Do nothing
             }
+            
         }
 
         // LUCENE-1013
@@ -3977,7 +3983,11 @@ namespace Lucene.Net.Index
                 {
                     System.Diagnostics.StackFrame sf = trace.GetFrame(i);
                     string className = sf.GetMethod().DeclaringType.Namespace + "." + sf.GetMethod().DeclaringType.Name;
-                    if ("Lucene.Net.Index.SegmentInfos".Equals(className) && "PrepareCommit".Equals(sf.GetMethod().Name))
+                    // NOTE: Added "Write" to the method name comparisons for TestExceptionDuringCommit to pass.
+                    // In release mode, the JITer inlines PrepareCommit, and it wasn't getting caught by this check.
+                    // Write seems to get the expected behavior, though. The other alternative, to disable inlining
+                    // on that function, which would be specifically for testing only; hurting release performance - cc
+                    if ("Lucene.Net.Index.SegmentInfos".Equals(className) && ("Write".Equals(sf.GetMethod().Name) || "PrepareCommit".Equals(sf.GetMethod().Name)))
                         isCommit = true;
                     if ("Lucene.Net.Store.MockRAMDirectory".Equals(className) && "DeleteFile".Equals(sf.GetMethod().Name))
                         isDelete = true;
@@ -4001,11 +4011,7 @@ namespace Lucene.Net.Index
             }
         }
 
-        // LUCENE-1214
-#if GALLIO
-        [Ignore]
-        // TODO: figure out why this fails with nunit & gallio in release mode
-#endif 
+        // LUCENE-1214 
         [Test]
         public virtual void TestExceptionsDuringCommit()
         {

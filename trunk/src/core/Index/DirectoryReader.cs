@@ -964,7 +964,7 @@ namespace Lucene.Net.Index
                 // Have the deleter remove any now unreferenced
                 // files due to this commit:
                 deleter.Checkpoint(segmentInfos, true);
-                deleter.Close();
+                deleter.Dispose();
 
                 maxIndexVersion = segmentInfos.GetVersion();
                 
@@ -1243,7 +1243,7 @@ namespace Lucene.Net.Index
                         queue.Add(smi);
                     // initialize queue
                     else
-                        smi.Close();
+                        smi.Dispose();
                 }
                 
                 if (t != null && queue.Size() > 0)
@@ -1262,7 +1262,7 @@ namespace Lucene.Net.Index
                     if (smi.Next())
                         queue.Add(smi);
                     else
-                        smi.Close(); // done with segment
+                        smi.Dispose(); // done with segment
                 }
                 
                 int numMatchingSegments = 0;
@@ -1301,14 +1301,12 @@ namespace Lucene.Net.Index
                 return docFreq;
             }
             
-            public override void  Close()
+            protected override void Dispose(bool disposing)
             {
-                Dispose();
-            }
-
-            public override void Dispose()
-            {
-                queue.Close();
+                if (disposing)
+                {
+                    queue.Dispose();
+                }
             }
         }
         
@@ -1503,10 +1501,18 @@ namespace Lucene.Net.Index
 
             public virtual void Dispose()
             {
-                for (int i = 0; i < readerTermDocs.Length; i++)
+                Dispose(true);
+            }
+
+            protected virtual void Dispose(bool disposing)
+            {
+                if (disposing)
                 {
-                    if (readerTermDocs[i] != null)
-                        readerTermDocs[i].Close();
+                    for (int i = 0; i < readerTermDocs.Length; i++)
+                    {
+                        if (readerTermDocs[i] != null)
+                            readerTermDocs[i].Close();
+                    }
                 }
             }
         }

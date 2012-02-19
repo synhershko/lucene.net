@@ -157,7 +157,7 @@ namespace Lucene.Net.Search
         where T : struct, IComparable<T> // best equiv constraint for java's number class
 	{
 		
-		protected internal NumericRangeQuery(System.String field, int precisionStep, int valSize, T? min, T? max, bool minInclusive, bool maxInclusive)
+		internal NumericRangeQuery(System.String field, int precisionStep, int valSize, T? min, T? max, bool minInclusive, bool maxInclusive)
 		{
 			System.Diagnostics.Debug.Assert((valSize == 32 || valSize == 64));
 			if (precisionStep < 1)
@@ -376,6 +376,8 @@ namespace Lucene.Net.Search
 		    private Term termTemplate;
 			private System.String currentUpperBound = null;
 
+		    private bool isDisposed;
+
             internal NumericRangeTermEnum(NumericRangeQuery<T> enclosingInstance, IndexReader reader)
 			{
 				InitBlock(enclosingInstance);
@@ -561,18 +563,16 @@ namespace Lucene.Net.Search
 			}
 
 		    /// <summary>Closes the enumeration to further activity, freeing resources.  </summary>
-			//@Override
-			public override void  Close()
-			{
-			    Dispose();	
-			}
+            protected override void Dispose(bool disposing)
+            {
+                if (isDisposed) return;
 
-		    public override void Dispose()
-		    {
                 rangeBounds.Clear();
                 currentUpperBound = null;
-                base.Dispose();
-		    }
+
+		        isDisposed = true;
+                base.Dispose(disposing);
+            }
 		}
 	}
 

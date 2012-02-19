@@ -66,10 +66,5 @@ namespace Lucene.Net.Search
                 return false;
             }
         }
-
-        public override void Dispose()
-        {
-            
-        }
     }
 }

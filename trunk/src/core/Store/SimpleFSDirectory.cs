@@ -92,6 +92,8 @@ namespace Lucene.Net.Store
 				protected internal volatile bool isOpen;
 				internal long position;
 				internal long length;
+
+			    private bool isDisposed;
 				
 				public Descriptor(/*FSIndexInput enclosingInstance,*/ System.IO.FileInfo file, System.IO.FileAccess mode) 
 					: base(new System.IO.FileStream(file.FullName, System.IO.FileMode.Open, mode, System.IO.FileShare.ReadWrite))
@@ -99,21 +101,28 @@ namespace Lucene.Net.Store
 					isOpen = true;
 					length = file.Length;
 				}
-				
-				public override void  Close()
-				{
-					if (isOpen)
-					{
-						isOpen = false;
-                        base.Close();
-					}
-				}
+
+                protected override void Dispose(bool disposing)
+                {
+                    if (isDisposed) return;
+
+                    if (disposing)
+                    {
+                        if (isOpen)
+                        {
+                            isOpen = false;
+                        }
+                    }
+
+                    isDisposed = true;
+                    base.Dispose(disposing);
+                }
 			
 				~Descriptor()
 				{
 					try
 					{
-						Close();
+						Dispose(false);
 					}
 					finally
 					{
@@ -234,6 +243,8 @@ namespace Lucene.Net.Store
 			// remember if the file is open, so that we don't try to close it
 			// more than once
 			private volatile bool isOpen;
+
+		    private bool isDisposed;
 			
 			public SimpleFSIndexOutput(System.IO.FileInfo path)
 			{
@@ -257,36 +268,37 @@ namespace Lucene.Net.Store
                 // Can there be a indexing-performance problem?
                 file.Flush();
 			}
-			public override void  Close()
-			{
-				// only close the file if it has not been closed yet
-				if (isOpen)
-				{
-					bool success = false;
-					try
-					{
-						base.Close();
-						success = true;
-					}
-					finally
-					{
-						isOpen = false;
-						if (!success)
-						{
-							try
-							{
-								file.Close();
-							}
-							catch (System.Exception t)
-							{
-								// Suppress so we don't mask original exception
-							}
-						}
-						else
-							file.Close();
-					}
-				}
-			}
+
+            protected override void Dispose(bool disposing)
+            {
+                // only close the file if it has not been closed yet
+                if (isOpen)
+                {
+                    bool success = false;
+                    try
+                    {
+                        base.Dispose(disposing);
+                        success = true;
+                    }
+                    finally
+                    {
+                        isOpen = false;
+                        if (!success)
+                        {
+                            try
+                            {
+                                file.Dispose();
+                            }
+                            catch (System.Exception t)
+                            {
+                                // Suppress so we don't mask original exception
+                            }
+                        }
+                        else
+                            file.Dispose();
+                    }
+                }
+            }
 			
 			/// <summary>Random-access methods </summary>
 			public override void  Seek(long pos)

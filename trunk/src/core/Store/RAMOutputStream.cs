@@ -31,7 +31,9 @@ namespace Lucene.Net.Store
 		
 		private byte[] currentBuffer;
 		private int currentBufferIndex;
-		
+
+	    private bool isDisposed;
+
 		private int bufferPosition;
 		private long bufferStart;
 		private int bufferLength;
@@ -84,10 +86,17 @@ namespace Lucene.Net.Store
 			file.SetLength(0);
 		}
 		
-		public override void  Close()
-		{
-			Flush();
-		}
+        protected override void Dispose(bool disposing)
+        {
+            if (isDisposed) return;
+
+            if (disposing)
+            {
+                Flush();
+            }
+
+            isDisposed = true;
+        }
 		
 		public override void  Seek(long pos)
 		{

@@ -47,18 +47,10 @@ namespace Lucene.Net.Search
 			{
 				throw new System.NotSupportedException(Lucene.Net.Search.JustCompileSearch.UNSUPPORTED_MSG);
 			}
-			
-			public override void  Close()
-			{
-				throw new System.NotSupportedException(Lucene.Net.Search.JustCompileSearch.UNSUPPORTED_MSG);
-			}
 
-            /// <summary>
-            /// .NET
-            /// </summary>
-            public override void Dispose()
+            protected override void Dispose(bool disposing)
             {
-                Close();
+                throw new System.NotSupportedException(Lucene.Net.Search.JustCompileSearch.UNSUPPORTED_MSG);
             }
 			
 			public override Document Doc(int i)

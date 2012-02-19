@@ -21,7 +21,7 @@ using Lucene.Net.Util;
 namespace Lucene.Net.Index
 {
 	
-	sealed class SegmentMergeQueue : PriorityQueue<SegmentMergeInfo>
+	sealed class SegmentMergeQueue : PriorityQueue<SegmentMergeInfo>, IDisposable
 	{
 		internal SegmentMergeQueue(int size)
 		{
@@ -36,11 +36,12 @@ namespace Lucene.Net.Index
 			else
 				return comparison < 0;
 		}
-		
-		internal void  Close()
-		{
-			while (Top() != null)
-				Pop().Close();
-		}
+
+	    public void Dispose()
+	    {
+            // Move to protected method if class becomes unsealed
+            while (Top() != null)
+                Pop().Dispose();
+	    }
 	}
 }

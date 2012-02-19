@@ -204,6 +204,11 @@ namespace Lucene.Net.Index
 					return true;
 				}
 			}
+
+		    protected override void Dispose(bool disposing)
+		    {
+		        // do nothing
+		    }
 		}
 		
 		private class MyAnalyzer:Analyzer

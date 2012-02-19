@@ -281,11 +281,19 @@ namespace Lucene.Net.Index
 		public abstract MergeSpecification FindMergesToExpungeDeletes(SegmentInfos segmentInfos);
 
         /// <summary> Release all resources for the policy.</summary>
-        [Obsolete("This method is being replaced by Dispose()")]
-		public abstract void  Close();
+        [Obsolete("Use Dispose() instead")]
+		public void Close()
+        {
+            Dispose();
+        }
 
         /// <summary> Release all resources for the policy.</summary>
-	    public abstract void Dispose();
+	    public void Dispose()
+	    {
+	        Dispose(true);
+	    }
+
+	    protected abstract void Dispose(bool disposing);
 		
 		/// <summary> Returns true if a newly flushed (not from merge)
 		/// segment should use the compound file format.

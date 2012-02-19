@@ -107,7 +107,8 @@ namespace Lucene.Net.Index
 		private int _freq;
 		private TermPositionsQueue _termPositionsQueue;
 		private IntQueue _posList;
-		
+
+	    private bool isDisposed;
 		/// <summary> Creates a new <c>MultipleTermPositions</c> instance.
 		/// 
 		/// </summary>
@@ -184,6 +185,7 @@ namespace Lucene.Net.Index
 			return _freq;
 		}
 		
+        [Obsolete("Use Dispose() instead")]
 		public void  Close()
 		{
 		    Dispose();
@@ -191,8 +193,20 @@ namespace Lucene.Net.Index
 
         public void Dispose()
         {
-            while (_termPositionsQueue.Size() > 0)
-                _termPositionsQueue.Pop().Close();
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (isDisposed) return;
+            
+            if (disposing)
+            {
+                while (_termPositionsQueue.Size() > 0)
+                    _termPositionsQueue.Pop().Close();
+            }
+
+            isDisposed = true;
         }
 		
 		/// <summary> Not implemented.</summary>

@@ -535,7 +535,7 @@ namespace Lucene.Net.Index
 			return fieldSet;
 		}
 		
-		private class ParallelTermEnum:TermEnum
+		private class ParallelTermEnum : TermEnum
 		{
 			private void  InitBlock(ParallelReader enclosingInstance)
 			{
@@ -553,6 +553,8 @@ namespace Lucene.Net.Index
 			private System.String field;
 			private IEnumerator<string> fieldIterator;
 			private TermEnum termEnum;
+
+		    private bool isDisposed;
 			
 			public ParallelTermEnum(ParallelReader enclosingInstance)
 			{
@@ -632,16 +634,18 @@ namespace Lucene.Net.Index
 				
 				return termEnum.DocFreq();
 			}
-			
-			public override void  Close()
-			{
-			    Dispose();
-			}
 
-            public override void Dispose()
+            protected override void Dispose(bool disposing)
             {
-                if (termEnum != null)
-                    termEnum.Close();
+                if (isDisposed) return;
+
+                if (disposing)
+                {
+                    if (termEnum != null)
+                        termEnum.Close();
+                }
+
+                isDisposed = true;
             }
 		}
 		
@@ -662,6 +666,8 @@ namespace Lucene.Net.Index
 				
 			}
 			protected internal TermDocs termDocs;
+
+		    private bool isDisposed;
 			
 			public ParallelTermDocs(ParallelReader enclosingInstance)
 			{
@@ -721,16 +727,29 @@ namespace Lucene.Net.Index
 				
 				return termDocs.SkipTo(target);
 			}
-			
-			public virtual void  Close()
-			{
-			    Dispose();
-			}
 
-            public virtual void Dispose()
+            [Obsolete("Use Dispose() instead")]
+            public virtual void Close()
             {
-                if (termDocs != null)
-                    termDocs.Close();
+                Dispose();
+            }
+
+		    public void Dispose()
+		    {
+		        Dispose(true);
+		    }
+
+            protected virtual void Dispose(bool disposing)
+            {
+                if (isDisposed) return;
+
+                if (disposing)
+                {
+                    if (termDocs != null)
+                        termDocs.Close();
+                }
+
+                isDisposed = true;
             }
 		}
 		

@@ -102,7 +102,7 @@ namespace Lucene.Net.Index
 				
 				if (fieldsWriter != null)
 				{
-					fieldsWriter.Close();
+					fieldsWriter.Dispose();
 					fieldsWriter = null;
 					lastDocID = 0;
 					System.Diagnostics.Debug.Assert(state.docStoreSegmentName != null);
@@ -152,7 +152,7 @@ namespace Lucene.Net.Index
 				{
 					try
 					{
-						fieldsWriter.Close();
+						fieldsWriter.Dispose();
 					}
 					catch (System.Exception t)
 					{

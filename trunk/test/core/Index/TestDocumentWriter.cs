@@ -197,6 +197,11 @@ namespace Lucene.Net.Index
 					return true;
 				}
 			}
+
+		    protected override void Dispose(bool disposing)
+		    {
+		        // Do Nothing
+		    }
 		}
 		private RAMDirectory dir;
 		

@@ -137,10 +137,13 @@ namespace Lucene.Net.Index
 			}
 		}
 		
-		public override void  Close()
-		{
-			closed = true;
-		}
+        protected override void Dispose(bool disposing)
+        {
+            //if (disposing)
+            //{
+                closed = true;
+            //}
+        }
 		
 		public virtual void  Sync()
 		{

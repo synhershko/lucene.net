@@ -173,8 +173,20 @@ namespace Lucene.Net.Search
 		}
 
 		public abstract void  Search(Weight weight, Filter filter, Collector results);
-		public abstract void  Close();
-        public abstract void Dispose();
+
+        [Obsolete("Use Dispose() instead")]
+		public void Close()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+	    protected abstract void Dispose(bool disposing);
+
 		public abstract int DocFreq(Term term);
 		public abstract int MaxDoc();
 		public abstract TopDocs Search(Weight weight, Filter filter, int n);

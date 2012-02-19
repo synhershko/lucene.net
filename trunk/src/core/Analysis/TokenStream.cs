@@ -159,7 +159,6 @@ namespace Lucene.Net.Analysis
             Dispose(true);
         }
 
-	    protected virtual void Dispose(bool disposing)
-	    { }
+	    protected abstract void Dispose(bool disposing);
 	}
 }

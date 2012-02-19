@@ -53,6 +53,7 @@ namespace Lucene.Net.Util
 
         private IDictionary<Thread, T> hardRefs = new HashMap<Thread, T>();
 
+        private bool isDisposed;
 
         public virtual T InitialValue()
         {
@@ -108,6 +109,7 @@ namespace Lucene.Net.Util
             }
         }
 
+        [Obsolete("Use Dispose() instead")]
         public virtual void Close()
         {
             Dispose();
@@ -115,17 +117,29 @@ namespace Lucene.Net.Util
 
         public void Dispose()
         {
-            // Clear the hard refs; then, the only remaining refs to
-            // all values we were storing are weak (unless somewhere
-            // else is still using them) and so GC may reclaim them:
-            hardRefs = null;
-            // Take care of the current thread right now; others will be
-            // taken care of via the WeakReferences.
-            if (t != null)
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (isDisposed) return;
+
+            if (disposing)
             {
-                t.Remove();
+                // Clear the hard refs; then, the only remaining refs to
+                // all values we were storing are weak (unless somewhere
+                // else is still using them) and so GC may reclaim them:
+                hardRefs = null;
+                // Take care of the current thread right now; others will be
+                // taken care of via the WeakReferences.
+                if (t != null)
+                {
+                    t.Remove();
+                }
+                t = null;
             }
-            t = null;
+
+            isDisposed = true;
         }
     }
 

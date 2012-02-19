@@ -23,7 +23,7 @@ using BitVector = Lucene.Net.Util.BitVector;
 namespace Lucene.Net.Index
 {
 	
-	public class SegmentTermDocs : TermDocs
+	internal class SegmentTermDocs : TermDocs
 	{
 		protected internal SegmentReader parent;
 		protected internal IndexInput freqStream;
@@ -45,6 +45,8 @@ namespace Lucene.Net.Index
 		
 		protected internal bool currentFieldStoresPayloads;
 		protected internal bool currentFieldOmitTermFreqAndPositions;
+
+	    private bool isDisposed;
 		
 		public /*protected internal*/ SegmentTermDocs(SegmentReader parent)
 		{
@@ -108,17 +110,27 @@ namespace Lucene.Net.Index
 				haveSkipped = false;
 			}
 		}
-		
-		public virtual void  Close()
-		{
-		    Dispose();
-		}
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            freqStream.Close();
+            Dispose(true);
+        }
+
+        [Obsolete("Use Dispose() instead")]
+        public void Close()
+        {
+            Dispose();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (isDisposed) return;
+
+            freqStream.Dispose();
             if (skipListReader != null)
-                skipListReader.Close();
+                skipListReader.Dispose();
+
+            isDisposed = true;
         }
 		
 		public int Doc()
@@ -266,7 +278,7 @@ namespace Lucene.Net.Index
 			return true;
 		}
 
-        public IndexInput freqStream_ForNUnit
+	    public IndexInput freqStream_ForNUnit
         {
             get { return freqStream; }
             set { freqStream = value; }

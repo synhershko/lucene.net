@@ -34,7 +34,7 @@ namespace Lucene.Net.Index
 	/// It uses &lt;segment&gt;.fdt and &lt;segment&gt;.fdx; files.
 	/// 
 	/// </summary>
-	public sealed class FieldsReader : System.ICloneable
+	public sealed class FieldsReader : ICloneable, IDisposable
 	{
 		private FieldInfos fieldInfos;
 		
@@ -159,7 +159,7 @@ namespace Lucene.Net.Index
 				// wait for a GC to do so.
 				if (!success)
 				{
-					Close();
+					Dispose();
 				}
 			}
 		}
@@ -178,33 +178,34 @@ namespace Lucene.Net.Index
 		/// 
 		/// </summary>
 		/// <throws>  IOException </throws>
-		public /*internal*/ void  Close()
-		{
-			if (!closed)
-			{
-				if (fieldsStream != null)
-				{
-					fieldsStream.Close();
-				}
-				if (isOriginal)
-				{
-					if (cloneableFieldsStream != null)
-					{
-						cloneableFieldsStream.Close();
-					}
-					if (cloneableIndexStream != null)
-					{
-						cloneableIndexStream.Close();
-					}
-				}
-				if (indexStream != null)
-				{
-					indexStream.Close();
-				}
-				fieldsStreamTL.Close();
-				closed = true;
-			}
-		}
+        public void Dispose()
+        {
+            // Move to protected method if class becomes unsealed
+            if (!closed)
+            {
+                if (fieldsStream != null)
+                {
+                    fieldsStream.Close();
+                }
+                if (isOriginal)
+                {
+                    if (cloneableFieldsStream != null)
+                    {
+                        cloneableFieldsStream.Close();
+                    }
+                    if (cloneableIndexStream != null)
+                    {
+                        cloneableIndexStream.Close();
+                    }
+                }
+                if (indexStream != null)
+                {
+                    indexStream.Close();
+                }
+                fieldsStreamTL.Close();
+                closed = true;
+            }
+        }
 		
 		public /*internal*/ int Size()
 		{

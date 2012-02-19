@@ -139,7 +139,7 @@ namespace Lucene.Net.Index
 			Assert.IsTrue(field.IsStorePositionWithTermVector() == false);
 			Assert.IsTrue(field.GetOmitNorms() == false);
 			Assert.IsTrue(field.GetOmitTermFreqAndPositions() == true);
-			reader.Close();
+			reader.Dispose();
 		}
 		
 		
@@ -217,7 +217,7 @@ namespace Lucene.Net.Index
 			Fieldable field = doc.GetFieldable(DocHelper.LAZY_FIELD_KEY);
 			Assert.IsTrue(field != null, "field is null and it shouldn't be");
 			Assert.IsTrue(field.IsLazy(), "field is not lazy and it should be");
-			reader.Close();
+            reader.Dispose();
 			try
 			{
 				field.StringValue();
@@ -305,7 +305,7 @@ namespace Lucene.Net.Index
 				Assert.IsTrue(value_Renamed != null, "value is null and it shouldn't be");
 				Assert.IsTrue(field != null, "field is null and it shouldn't be");
 				regularTime += (finish - start);
-				reader.Close();
+                reader.Dispose();
 				reader = null;
 				doc = null;
 				//Hmmm, are we still in cache???
@@ -320,7 +320,7 @@ namespace Lucene.Net.Index
 				finish = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond);
 				Assert.IsTrue(value_Renamed != null, "value is null and it shouldn't be");
 				lazyTime += (finish - start);
-				reader.Close();
+                reader.Dispose();
 			}
 			System.Console.Out.WriteLine("Average Non-lazy time (should be very close to zero): " + regularTime / length + " ms for " + length + " reads");
 			System.Console.Out.WriteLine("Average Lazy Time (should be greater than zero): " + lazyTime / length + " ms for " + length + " reads");
@@ -342,8 +342,8 @@ namespace Lucene.Net.Index
 			AssertSizeEquals(2 * DocHelper.FIELD_1_TEXT.Length, f1.GetBinaryValue());
 			Assert.AreEqual(DocHelper.FIELD_3_TEXT, f3.StringValue());
             AssertSizeEquals(DocHelper.LAZY_FIELD_BINARY_BYTES.Length, fb.GetBinaryValue());
-			
-			reader.Close();
+
+            reader.Dispose();
 		}
 		
 		private void  AssertSizeEquals(int size, byte[] sizebytes)

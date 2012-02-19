@@ -29,12 +29,14 @@ namespace Lucene.Net.Index
 	/// set.  
 	/// </summary>
 	
-	sealed class TermInfosReader
+	sealed class TermInfosReader : IDisposable
 	{
 		private Directory directory;
 		private System.String segment;
 		private FieldInfos fieldInfos;
-		
+
+        private bool isDisposed;
+
 		private CloseableThreadLocal<ThreadResources> threadResources = new CloseableThreadLocal<ThreadResources>();
 		private SegmentTermEnum origEnum;
 		private long size;
@@ -124,7 +126,7 @@ namespace Lucene.Net.Index
 				// wait for a GC to do so.
 				if (!success)
 				{
-					Close();
+					Dispose();
 				}
 			}
 		}
@@ -138,13 +140,18 @@ namespace Lucene.Net.Index
 		{
 			return origEnum.maxSkipLevels;
 		}
-		
-		internal void  Close()
-		{
-			if (origEnum != null)
-				origEnum.Close();
-			threadResources.Close();
-		}
+
+        public void Dispose()
+        {
+            if (isDisposed) return;
+
+            // Move to protected method if class becomes unsealed
+            if (origEnum != null)
+                origEnum.Dispose();
+            threadResources.Dispose();
+
+            isDisposed = true;
+        }
 		
 		/// <summary>Returns the number of term/value pairs in the set. </summary>
 		internal long Size()

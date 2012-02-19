@@ -59,7 +59,12 @@ namespace Lucene.Net.Index
 		{
 			minMergeSize = minMergeDocs;
 		}
-		
+
+        protected override void Dispose(bool disposing)
+        {
+            // Do nothing.
+        }
+
 		/// <summary>Get the minimum size for a segment to remain
 		/// un-merged.
 		/// </summary>

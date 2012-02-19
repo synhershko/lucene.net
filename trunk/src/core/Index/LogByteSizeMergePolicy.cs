@@ -47,6 +47,11 @@ namespace Lucene.Net.Index
 		{
 			return SizeBytes(info);
 		}
+
+        protected override void Dispose(bool disposing)
+        {
+            // Do nothing.
+        }
 		
 		/// <summary><p/>Determines the largest segment (measured by total
 		/// byte size of the segment's files, in MB) that may be

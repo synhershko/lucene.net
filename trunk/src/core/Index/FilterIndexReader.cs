@@ -74,13 +74,23 @@ namespace Lucene.Net.Index
 			{
 				return in_Renamed.SkipTo(i);
 			}
-			public virtual void  Close()
+
+			public void Close()
 			{
 				Dispose();
 			}
-            public virtual void Dispose()
+
+            public void Dispose()
             {
-                in_Renamed.Close();
+                Dispose(true);
+            }
+
+            protected virtual void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    in_Renamed.Close();
+                }
             }
 		}
 		
@@ -129,21 +139,23 @@ namespace Lucene.Net.Index
 			{
 				return in_Renamed.Next();
 			}
+
 			public override Term Term()
 			{
 				return in_Renamed.Term();
 			}
+
 			public override int DocFreq()
 			{
 				return in_Renamed.DocFreq();
 			}
-			public override void  Close()
-			{
-				Dispose();
-			}
-            public override void Dispose()
+
+            protected override void Dispose(bool disposing)
             {
-                in_Renamed.Close();
+                if (disposing)
+                {
+                    in_Renamed.Close();
+                }
             }
 		}
 		

@@ -265,14 +265,14 @@ namespace Lucene.Net.Index
 						// close everything, nothing is shared anymore with other readers
 						if (tis != null)
 						{
-							tis.Close();
+							tis.Dispose();
 							// null so if an app hangs on to us we still free most ram
 							tis = null;
 						}
 						
 						if (tisNoIndex != null)
 						{
-							tisNoIndex.Close();
+							tisNoIndex.Dispose();
 						}
 						
 						if (freqStream != null)
@@ -287,12 +287,12 @@ namespace Lucene.Net.Index
 						
 						if (termVectorsReaderOrig != null)
 						{
-							termVectorsReaderOrig.Close();
+							termVectorsReaderOrig.Dispose();
 						}
 						
 						if (fieldsReaderOrig != null)
 						{
-							fieldsReaderOrig.Close();
+                            fieldsReaderOrig.Dispose();
 						}
 						
 						if (cfsReader != null)
@@ -517,7 +517,7 @@ namespace Lucene.Net.Index
 					if (in_Renamed != Enclosing_Instance.singleNormStream)
 					{
 						// It's private to us -- just close it
-						in_Renamed.Close();
+						in_Renamed.Dispose();
 					}
 					else
 					{
@@ -525,7 +525,7 @@ namespace Lucene.Net.Index
 						// maybe close the shared norm stream
 						if (Enclosing_Instance.singleNormRef.DecRef() == 0)
 						{
-							Enclosing_Instance.singleNormStream.Close();
+							Enclosing_Instance.singleNormStream.Dispose();
 							Enclosing_Instance.singleNormStream = null;
 						}
 					}

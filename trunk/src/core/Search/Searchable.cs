@@ -41,7 +41,7 @@ namespace Lucene.Net.Search
 	/// expected to be implemented directly, it may be changed unexpectedly between
 	/// releases.
 	/// </summary>
-	public interface Searchable
+	public interface Searchable : IDisposable
 	{
 		/// <summary> Lower-level search API.
 		/// 

@@ -130,18 +130,11 @@ namespace Lucene.Net.Search
 				// Therefore we just return the unmodified query here
 				return query;
 			}
-			
-			public override void  Close()
-			{
-				throw new System.NotSupportedException();
-			}
 
-            /// <summary>
-            /// .NET
-            /// </summary>
-            public override void Dispose()
+            // TODO: This probably shouldn't throw an exception?
+            protected override void Dispose(bool disposing)
             {
-                Close();
+                throw new System.NotSupportedException();
             }
 			
 			public override Document Doc(int i)
@@ -178,6 +171,8 @@ namespace Lucene.Net.Search
 		private Searchable[] searchables;
 		private int[] starts;
 		private int maxDoc = 0;
+
+	    private bool isDisposed;
 		
 		/// <summary>Creates a searcher which searches <i>searchers</i>. </summary>
 		public MultiSearcher(params Searchable[] searchables)
@@ -203,20 +198,18 @@ namespace Lucene.Net.Search
 		{
 			return starts;
 		}
-		
-		// inherit javadoc
-		public override void  Close()
-		{
-			for (int i = 0; i < searchables.Length; i++)
-				searchables[i].Close();
-		}
 
-        /// <summary>
-        /// .NET
-        /// </summary>
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            Close();
+            if (isDisposed) return;
+
+            if (disposing)
+            {
+                for (int i = 0; i < searchables.Length; i++)
+                    searchables[i].Close();
+            }
+
+            isDisposed = true;
         }
 
 		public override int DocFreq(Term term)

@@ -49,17 +49,17 @@ namespace Lucene.Net.Util.Cache
 			map[key] = value_Renamed;
 		}
 		
-		public override void  Close()
-		{
-			// NOOP
-		}
-		
 		public override bool ContainsKey(System.Object key)
 		{
 			return map.ContainsKey((TKey)key);
 		}
-		
-		/// <summary> Returns a Set containing all keys in this cache.</summary>
+
+	    protected override void Dispose(bool disposing)
+	    {
+	        // do nothing
+	    }
+
+	    /// <summary> Returns a Set containing all keys in this cache.</summary>
 		public virtual System.Collections.Generic.HashSet<TKey> KeySet()
 		{
 			return new HashSet<TKey>(map.Keys);
@@ -70,10 +70,13 @@ namespace Lucene.Net.Util.Cache
 			return new SynchronizedSimpleMapCache(this);
 		}
 		
+        // Why does does this use both inheritance and composition?
 		private class SynchronizedSimpleMapCache : SimpleMapCache<TKey, TValue>
 		{
 			private System.Object mutex;
             private SimpleMapCache<TKey, TValue> cache;
+
+		    private bool isDisposed;
 
             internal SynchronizedSimpleMapCache(SimpleMapCache<TKey, TValue> cache)
 			{
@@ -105,11 +108,18 @@ namespace Lucene.Net.Util.Cache
 				}
 			}
 			
-			public override void  Close()
+			protected override void Dispose(bool disposing)
 			{
 				lock (mutex)
 				{
-					cache.Close();
+                    if (isDisposed) return;
+
+                    if (disposing)
+                    {
+                        cache.Dispose(disposing);
+                    }
+
+				    isDisposed = true;
 				}
 			}
 			

@@ -206,17 +206,6 @@ namespace Lucene.Net.Index
 			return calibrateSizeByDeletes;
 		}
 		
-        [Obsolete("This method is being replaced by Dispose()")]
-		public override void  Close()
-		{
-            Dispose();
-		}
-
-        public override void Dispose()
-        {
-            //wow do nothing!
-        }
-		
 		abstract protected internal long Size(SegmentInfo info);
 		
 		protected internal virtual long SizeDocs(SegmentInfo info)

@@ -402,7 +402,7 @@ namespace Lucene.Net.Index
 		/// has been called on this instance). 
 		/// </summary>
 		
-		internal class ReaderPool
+		internal class ReaderPool : IDisposable
 		{
 			public ReaderPool(IndexWriter enclosingInstance)
 			{
@@ -544,45 +544,54 @@ namespace Lucene.Net.Index
 					}
 				}
 			}
-			
-			/// <summary>Remove all our references to readers, and commits
-			/// any pending changes. 
-			/// </summary>
-			internal virtual void  Close()
-			{
-                // We invoke deleter.checkpoint below, so we must be
-                // sync'd on IW:
-                // TODO: assert Thread.holdsLock(IndexWriter.this);
-				lock (this)
-				{
-				    var toRemove = new List<SegmentInfo>();
-				    var iter = readerMap.GetEnumerator();
-					while (iter.MoveNext())
-					{
-					    KeyValuePair<SegmentInfo, SegmentReader> ent = iter.Current;
-						SegmentReader sr = ent.Value;
-						if (sr.hasChanges)
-						{
-							System.Diagnostics.Debug.Assert(InfoIsLive(sr.GetSegmentInfo()));
-							sr.DoCommit(null);
-                            // Must checkpoint w/ deleter, because this
-                            // segment reader will have created new _X_N.del
-                            // file.
-                            enclosingInstance.deleter.Checkpoint(enclosingInstance.segmentInfos, false);
-						}
 
-                        toRemove.Add(ent.Key); 
-						
-						// NOTE: it is allowed that this decRef does not
-						// actually close the SR; this can happen when a
-						// near real-time reader is kept open after the
-						// IndexWriter instance is closed
-						sr.DecRef();
-					}
-                    foreach (var key in toRemove)
-                        readerMap.Remove(key);
-				}
-			}
+            /// <summary>Remove all our references to readers, and commits
+            /// any pending changes. 
+            /// </summary>
+		    public void Dispose()
+		    {
+		        Dispose(true);
+		    }
+
+            protected void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    // We invoke deleter.checkpoint below, so we must be
+                    // sync'd on IW:
+                    // TODO: assert Thread.holdsLock(IndexWriter.this);
+                    // TODO: Should this class have bool _isDisposed?
+                    lock (this)
+                    {
+                        //var toRemove = new List<SegmentInfo>();
+                        foreach (var ent in readerMap)
+                        {
+                            SegmentReader sr = ent.Value;
+                            if (sr.hasChanges)
+                            {
+                                System.Diagnostics.Debug.Assert(InfoIsLive(sr.GetSegmentInfo()));
+                                sr.DoCommit(null);
+                                // Must checkpoint w/ deleter, because this
+                                // segment reader will have created new _X_N.del
+                                // file.
+                                enclosingInstance.deleter.Checkpoint(enclosingInstance.segmentInfos, false);
+                            }
+
+                            //toRemove.Add(ent.Key);
+
+                            // NOTE: it is allowed that this decRef does not
+                            // actually close the SR; this can happen when a
+                            // near real-time reader is kept open after the
+                            // IndexWriter instance is closed
+                            sr.DecRef();
+                        }
+
+                        //foreach (var key in toRemove)
+                        //    readerMap.Remove(key);
+                        readerMap.Clear();
+                    }
+                }
+            }
 			
 			/// <summary> Commit all segment reader in the pool.</summary>
 			/// <throws>  IOException </throws>
@@ -1851,17 +1860,102 @@ namespace Lucene.Net.Index
 		/// </summary>
 		/// <throws>  CorruptIndexException if the index is corrupt </throws>
 		/// <throws>  IOException if there is a low-level IO error </throws>
-		public virtual void  Close()
+		[Obsolete("Use Dispose() instead")]
+		public void Close()
 		{
-			Close(true);
+		    Dispose(true);
 		}
 
-        /// <summary>
-        /// .NET
+        /// <summary> Commits all changes to an index and closes all
+        /// associated files.  Note that this may be a costly
+        /// operation, so, try to re-use a single writer instead of
+        /// closing and opening a new one.  See <see cref="Commit()" /> for
+        /// caveats about write caching done by some IO devices.
+        /// 
+        /// <p/> If an Exception is hit during close, eg due to disk
+        /// full or some other reason, then both the on-disk index
+        /// and the internal state of the IndexWriter instance will
+        /// be consistent.  However, the close will not be complete
+        /// even though part of it (flushing buffered documents)
+        /// may have succeeded, so the write lock will still be
+        /// held.<p/>
+        /// 
+        /// <p/> If you can correct the underlying cause (eg free up
+        /// some disk space) then you can call close() again.
+        /// Failing that, if you want to force the write lock to be
+        /// released (dangerous, because you may then lose buffered
+        /// docs in the IndexWriter instance) then you can do
+        /// something like this:<p/>
+        /// 
+        /// <code>
+        /// try {
+        ///     writer.close();
+        /// } finally {
+        ///     if (IndexWriter.isLocked(directory)) {
+        ///         IndexWriter.unlock(directory);
+        ///     }
+        /// }
+        /// </code>
+        /// 
+        /// after which, you must be certain not to use the writer
+        /// instance anymore.<p/>
+        /// 
+        /// <p/><b>NOTE</b>: if this method hits an OutOfMemoryError
+        /// you should immediately close the writer, again.  See <a
+        /// href="#OOME">above</a> for details.<p/>
+        /// 
         /// </summary>
+        /// <throws>  CorruptIndexException if the index is corrupt </throws>
+        /// <throws>  IOException if there is a low-level IO error </throws>
         public virtual void Dispose()
         {
-            Close();
+            Dispose(true);
+        }
+
+        /// <summary> Closes the index with or without waiting for currently
+        /// running merges to finish.  This is only meaningful when
+        /// using a MergeScheduler that runs merges in background
+        /// threads.
+        /// 
+        /// <p/><b>NOTE</b>: if this method hits an OutOfMemoryError
+        /// you should immediately close the writer, again.  See <a
+        /// href="#OOME">above</a> for details.<p/>
+        /// 
+        /// <p/><b>NOTE</b>: it is dangerous to always call
+        /// close(false), especially when IndexWriter is not open
+        /// for very long, because this can result in "merge
+        /// starvation" whereby long merges will never have a
+        /// chance to finish.  This will cause too many segments in
+        /// your index over time.<p/>
+        /// 
+        /// </summary>
+        /// <param name="waitForMerges">if true, this call will block
+        /// until all merges complete; else, it will ask all
+        /// running merges to abort, wait until those merges have
+        /// finished (which should be at most a few seconds), and
+        /// then return.
+        /// </param>
+        public virtual void Dispose(bool waitForMerges)
+        {
+            Dispose(true, waitForMerges);
+        }
+
+        protected virtual void Dispose(bool disposing, bool waitForMerges)
+        {
+            if (disposing)
+            {
+                // Ensure that only one thread actually gets to do the closing:
+                if (ShouldClose())
+                {
+                    // If any methods have hit OutOfMemoryError, then abort
+                    // on close, in case the internal state of IndexWriter
+                    // or DocumentsWriter is corrupt
+                    if (hitOOM)
+                        RollbackInternal();
+                    else
+                        CloseInternal(waitForMerges);
+                }
+            }
         }
 		
 		/// <summary> Closes the index with or without waiting for currently
@@ -1887,20 +1981,10 @@ namespace Lucene.Net.Index
 		/// finished (which should be at most a few seconds), and
 		/// then return.
 		/// </param>
-		public virtual void  Close(bool waitForMerges)
+		[Obsolete("Use Dispose(bool) instead")]
+		public virtual void Close(bool waitForMerges)
 		{
-			
-			// Ensure that only one thread actually gets to do the closing:
-			if (ShouldClose())
-			{
-				// If any methods have hit OutOfMemoryError, then abort
-				// on close, in case the internal state of IndexWriter
-				// or DocumentsWriter is corrupt
-				if (hitOOM)
-					RollbackInternal();
-				else
-					CloseInternal(waitForMerges);
-			}
+		    Dispose(waitForMerges);
 		}
 		
 		// Returns true if this thread should attempt to close, or
@@ -1933,7 +2017,7 @@ namespace Lucene.Net.Index
 			}
 		}
 		
-		private void  CloseInternal(bool waitForMerges)
+		private void CloseInternal(bool waitForMerges)
 		{
 			
 			docWriter.PauseAllThreads();
@@ -1943,7 +2027,7 @@ namespace Lucene.Net.Index
 				if (infoStream != null)
 					Message("now flush at close");
 				
-				docWriter.Close();
+				docWriter.Dispose();
 				
 				// Only allow a new merge to be triggered if we are
 				// going to wait for merges:
@@ -1977,9 +2061,9 @@ namespace Lucene.Net.Index
 				
 				lock (this)
 				{
-					readerPool.Close();
+					readerPool.Dispose();
 					docWriter = null;
-					deleter.Close();
+					deleter.Dispose();
 				}
 				
 				if (writeLock != null)

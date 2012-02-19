@@ -34,10 +34,20 @@ namespace Lucene.Net.Index
 		
 		/// <summary>Returns the docFreq of the current Term in the enumeration.</summary>
 		public abstract int DocFreq();
-		
-		/// <summary>Closes the enumeration to further activity, freeing resources. </summary>
-		public abstract void  Close();
 
-	    public abstract void Dispose();
+        /// <summary>Closes the enumeration to further activity, freeing resources. </summary>
+        [Obsolete("Use Dispose() instead")]
+        public void Close()
+        {
+            Dispose();
+        }
+
+	    /// <summary>Closes the enumeration to further activity, freeing resources. </summary>
+	    public void Dispose()
+	    {
+	        Dispose(true);
+	    }
+
+	    protected abstract void Dispose(bool disposing);
 	}
 }

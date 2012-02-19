@@ -29,6 +29,8 @@ namespace Lucene.Net.Store
 	{
 		internal IndexOutput main;
 		internal IChecksum digest;
+
+	    private bool isDisposed;
 		
 		public ChecksumIndexOutput(IndexOutput main)
 		{
@@ -57,11 +59,18 @@ namespace Lucene.Net.Store
 		{
 			main.Flush();
 		}
-		
-		public override void  Close()
-		{
-			main.Close();
-		}
+
+        protected override void Dispose(bool disposing)
+        {
+            if (isDisposed) return;
+
+            if (disposing)
+            {
+                main.Close();
+            }
+
+            isDisposed = true;
+        }
 		
 		public override long GetFilePointer()
 		{

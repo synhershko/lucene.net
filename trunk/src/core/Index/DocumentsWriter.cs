@@ -100,7 +100,7 @@ namespace Lucene.Net.Index
 	/// or none") added to the index.
 	/// </summary>
 	
-	public sealed class DocumentsWriter
+	public sealed class DocumentsWriter : IDisposable
 	{
 		internal class AnonymousClassIndexingChain:IndexingChain
 		{
@@ -873,14 +873,15 @@ namespace Lucene.Net.Index
 			}
 		}
 		
-		internal void  Close()
-		{
-			lock (this)
-			{
-				closed = true;
-				System.Threading.Monitor.PulseAll(this);
-			}
-		}
+        public void Dispose()
+        {
+            // Move to protected method if class becomes unsealed
+            lock (this)
+            {
+                closed = true;
+                System.Threading.Monitor.PulseAll(this);
+            }
+        }
 		
 		internal void  InitSegmentName(bool onlyDocStore)
 		{

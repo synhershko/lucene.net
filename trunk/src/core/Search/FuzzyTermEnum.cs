@@ -39,6 +39,8 @@ namespace Lucene.Net.Search
 		
 		private float similarity;
 		private bool endEnum = false;
+
+	    private bool isDisposed;
 		
 		private Term searchTerm = null;
 		private System.String field;
@@ -297,13 +299,20 @@ namespace Lucene.Net.Search
 		{
 			return (int) ((1 - minimumSimilarity) * (System.Math.Min(text.Length, m) + prefix.Length));
 		}
-		
-		public override void  Close()
+
+		protected override void Dispose(bool disposing)
 		{
-		    p = null;
-		    d = null;
-		    searchTerm = null;
-			base.Close(); //call super.close() and let the garbage collector do its work.
+            if (isDisposed) return;
+
+            if (disposing)
+            {
+                p = null;
+                d = null;
+                searchTerm = null;
+            }
+
+		    isDisposed = true;
+            base.Dispose(disposing); //call super.close() and let the garbage collector do its work.
 		}
 	}
 }

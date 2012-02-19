@@ -644,7 +644,6 @@ namespace Lucene.Net.Index
             protected override void Dispose(bool disposing)
             {
                 pool.Release(payload);
-                base.Dispose(disposing);
             }
 		}
 		

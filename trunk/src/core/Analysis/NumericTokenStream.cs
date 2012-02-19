@@ -84,7 +84,7 @@ namespace Lucene.Net.Analysis
 	/// might change in incompatible ways in the next release.</font>
 	///   Since 2.9
 	/// </summary>
-	public sealed class NumericTokenStream:TokenStream
+	public sealed class NumericTokenStream : TokenStream
 	{
 		private void  InitBlock()
 		{
@@ -209,6 +209,11 @@ namespace Lucene.Net.Analysis
 				throw new System.SystemException("call set???Value() before usage");
 			shift = 0;
 		}
+
+        protected override void Dispose(bool disposing)
+        {
+            // Do nothing.
+        }
 		
 		// @Override
 		public override bool IncrementToken()

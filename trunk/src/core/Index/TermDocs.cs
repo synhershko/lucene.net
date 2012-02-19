@@ -78,6 +78,7 @@ namespace Lucene.Net.Index
 		/// </summary>
 		bool SkipTo(int target);
 		
+        // TODO: Determine which release this will be removed from
 		/// <summary>Frees associated resources. </summary>
 		[Obsolete("Use Dispose() instead")]
 		void  Close();

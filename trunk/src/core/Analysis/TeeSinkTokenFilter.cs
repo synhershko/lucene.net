@@ -188,13 +188,13 @@ namespace Lucene.Net.Analysis
 			}
 		}
 		
-		public sealed class SinkTokenStream:TokenStream
+		public sealed class SinkTokenStream : TokenStream
 		{
             private LinkedList<AttributeSource.State> cachedStates = new LinkedList<AttributeSource.State>();
 			private AttributeSource.State finalState;
 			private IEnumerator<AttributeSource.State> it = null;
 			private SinkFilter filter;
-			
+
 			internal SinkTokenStream(AttributeSource source, SinkFilter filter)
                 : base(source)
 			{
@@ -250,6 +250,11 @@ namespace Lucene.Net.Analysis
 			{
 				it = cachedStates.GetEnumerator();
 			}
+
+		    protected override void Dispose(bool disposing)
+		    {
+		        // Do nothing.
+		    }
 		}
 		
 		private static readonly SinkFilter ACCEPT_ALL_FILTER;

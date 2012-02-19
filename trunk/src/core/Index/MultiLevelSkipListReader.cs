@@ -31,7 +31,7 @@ namespace Lucene.Net.Index
 	/// Subclasses must implement the abstract method <see cref="ReadSkipData(int, IndexInput)" />
 	/// which defines the actual format of the skip data.
 	/// </summary>
-	abstract class MultiLevelSkipListReader
+	abstract class MultiLevelSkipListReader : IDisposable
 	{
 		// the maximum number of skip levels possible for this index
 		private int maxNumberOfSkipLevels;
@@ -50,6 +50,8 @@ namespace Lucene.Net.Index
 		
 		private int docCount;
 		private bool haveSkipped;
+
+	    private bool isDisposed;
 		
 		private IndexInput[] skipStream; // skipStream for each level
 		private long[] skipPointer; // the start pointer of each skip level
@@ -175,17 +177,29 @@ namespace Lucene.Net.Index
 				childPointer[level] = skipStream[level].ReadVLong() + skipPointer[level - 1];
 			}
 		}
-		
-		internal virtual void  Close()
-		{
-			for (int i = 1; i < skipStream.Length; i++)
-			{
-				if (skipStream[i] != null)
-				{
-					skipStream[i].Close();
-				}
-			}
-		}
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (isDisposed) return;
+
+            if (disposing)
+            {
+                for (int i = 1; i < skipStream.Length; i++)
+                {
+                    if (skipStream[i] != null)
+                    {
+                        skipStream[i].Close();
+                    }
+                }
+            }
+
+            isDisposed = true;
+        }
 		
 		/// <summary>initializes the reader </summary>
 		internal virtual void  Init(long skipPointer, int df)
