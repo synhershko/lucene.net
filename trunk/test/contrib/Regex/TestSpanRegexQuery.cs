@@ -48,7 +48,7 @@ namespace Contrib.Regex.Test
             SpanFirstQuery sfq = new SpanFirstQuery(srq, 1);
             // SpanNearQuery query = new SpanNearQuery(new SpanQuery[] {srq, stq}, 6,
             // true);
-            int numHits = searcher.Search(sfq, null, 1000).totalHits;
+            int numHits = searcher.Search(sfq, null, 1000).TotalHits;
             Assert.AreEqual(1, numHits);
         }
 
@@ -67,7 +67,7 @@ namespace Contrib.Regex.Test
             arrSearcher[0] = new IndexSearcher(indexStoreA, true);
             arrSearcher[1] = new IndexSearcher(indexStoreB, true);
             MultiSearcher searcher = new MultiSearcher(arrSearcher);
-            int numHits = searcher.Search(query, null, 1000).totalHits;
+            int numHits = searcher.Search(query, null, 1000).TotalHits;
             arrSearcher[0].Close();
             arrSearcher[1].Close();
 

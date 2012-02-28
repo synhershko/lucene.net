@@ -58,7 +58,7 @@ namespace Lucene.Net.Analyzers.Query
         {
             QueryParser qp = new QueryParser(Version.LUCENE_CURRENT, "repetitiveField", a);
             var q = qp.Parse(queryString);
-            return new IndexSearcher(reader).Search(q, null, 1000).totalHits;
+            return new IndexSearcher(reader).Search(q, null, 1000).TotalHits;
         }
 
         [Test]

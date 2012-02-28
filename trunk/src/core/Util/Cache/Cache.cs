@@ -73,7 +73,7 @@ namespace Lucene.Net.Util.Cache
             {
                 lock (mutex)
                 {
-                    cache.Close();
+                    cache.Dispose();
                 }
             }
 			

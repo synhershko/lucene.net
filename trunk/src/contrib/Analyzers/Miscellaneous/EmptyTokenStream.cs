@@ -29,5 +29,10 @@ namespace Lucene.Net.Analyzers.Miscellaneous
         {
             return false;
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            // Do nothing
+        }
     }
 }

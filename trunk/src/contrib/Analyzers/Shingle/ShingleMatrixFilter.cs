@@ -284,6 +284,11 @@ namespace Lucene.Net.Analyzers.Shingle
             _input.Reset();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            // Do nothing
+        }
+
         public override sealed bool IncrementToken()
         {
             if (Matrix == null)

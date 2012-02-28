@@ -119,7 +119,8 @@ namespace Lucene.Net.Util.Cache
                         cache.Dispose(disposing);
                     }
 
-				    isDisposed = true;
+                    isDisposed = true;
+                    base.Dispose(disposing);
 				}
 			}
 			

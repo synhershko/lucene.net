@@ -377,6 +377,11 @@ namespace Lucene.Net.Analyzers.Miscellaneous
                 int finalOffset = str.Length;
                 this.offsetAtt.SetOffset(finalOffset, finalOffset);
             }
+
+            protected override void Dispose(bool disposing)
+            {
+                // Do Nothing
+            }
         }
 
 
@@ -467,6 +472,11 @@ namespace Lucene.Net.Analyzers.Miscellaneous
                 // set final offset
                 int finalOffset = str.Length;
                 this.offsetAtt.SetOffset(finalOffset, finalOffset);
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                // Do Nothing
             }
 
             private bool IsTokenChar(char c, bool isLetter)

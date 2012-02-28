@@ -69,10 +69,9 @@ namespace Lucene.Net.Analyzers.Miscellaneous
             _suffix.Reset();
         }
 
-
-        public override void Close()
+        protected override void Dispose(bool disposing)
         {
-            _suffix.Close();
+            _suffix.Dispose();
         }
     }
 }

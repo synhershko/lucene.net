@@ -46,7 +46,7 @@ namespace Lucene.Net.Analysis.Snowball
         public SnowballAnalyzer(Version matchVersion, System.String name)
         {
             this.name = name;
-            SetOverridesTokenStreamMethod(typeof(SnowballAnalyzer));
+            SetOverridesTokenStreamMethod<SnowballAnalyzer>();
             this.matchVersion = matchVersion;
         }
 

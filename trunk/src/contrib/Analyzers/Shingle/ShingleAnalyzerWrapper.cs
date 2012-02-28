@@ -39,7 +39,7 @@ namespace Lucene.Net.Analyzers.Shingle
         public ShingleAnalyzerWrapper(Analyzer defaultAnalyzer)
         {
             this.defaultAnalyzer = defaultAnalyzer;
-            SetOverridesTokenStreamMethod(typeof(ShingleAnalyzerWrapper));
+            SetOverridesTokenStreamMethod<ShingleAnalyzerWrapper>();
         }
 
         public ShingleAnalyzerWrapper(Analyzer defaultAnalyzer, int maxShingleSize)
@@ -55,7 +55,7 @@ namespace Lucene.Net.Analyzers.Shingle
         public ShingleAnalyzerWrapper(Version matchVersion)
         {
             this.defaultAnalyzer = new StandardAnalyzer(matchVersion);
-            SetOverridesTokenStreamMethod(typeof(ShingleAnalyzerWrapper));
+            SetOverridesTokenStreamMethod<ShingleAnalyzerWrapper>();
         }
 
         /**

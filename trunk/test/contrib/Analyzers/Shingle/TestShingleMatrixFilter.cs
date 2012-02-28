@@ -573,6 +573,11 @@ namespace Lucene.Net.Analyzers.Shingle
             {
                 _iterator = null;
             }
+
+            protected override void Dispose(bool disposing)
+            {
+                // do nothing
+            }
         }
 
         #endregion

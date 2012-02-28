@@ -149,6 +149,11 @@ namespace Lucene.Net.Analysis.Snowball
                 flagsAtt.SetFlags(77);
                 return true;
             }
+
+            protected override void Dispose(bool disposing)
+            {
+                // do nothing
+            }
         }
     }
 }

@@ -243,7 +243,7 @@ namespace Lucene.Net.Index
 		/// <summary>Closes the enumeration to further activity, freeing resources. </summary>
         protected override void Dispose(bool disposing)
         {
-            input.Close();
+            input.Dispose();
         }
 	}
 }

@@ -40,7 +40,7 @@ public class QueryAutoStopWordAnalyzer : Analyzer {
   public QueryAutoStopWordAnalyzer(Version matchVersion, Analyzer _delegate) 
   {
     this._delegate = _delegate;
-    SetOverridesTokenStreamMethod(typeof(QueryAutoStopWordAnalyzer));
+    SetOverridesTokenStreamMethod<QueryAutoStopWordAnalyzer>();
     this.matchVersion = matchVersion;
   }
 

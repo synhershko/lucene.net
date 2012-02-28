@@ -59,7 +59,7 @@ namespace Lucene.Net.Index
         {
             base.Dispose(disposing);
             if (proxStream != null)
-                proxStream.Close();
+                proxStream.Dispose();
         }
 		
 		public int NextPosition()

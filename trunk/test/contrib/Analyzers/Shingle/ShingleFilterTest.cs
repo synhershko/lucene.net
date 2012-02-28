@@ -523,6 +523,11 @@ namespace Lucene.Net.Analyzers.Shingle
 
                 return true;
             }
+
+            protected override void Dispose(bool disposing)
+            {
+                // do nothing
+            }
         }
 
         #endregion

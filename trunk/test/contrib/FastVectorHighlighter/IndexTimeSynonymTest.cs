@@ -369,6 +369,11 @@ namespace Lucene.Net.Search.Vectorhighlight
                     parent.tokens[p++].CopyTo(this.reusableToken);
                     return true;
                 }
+
+                protected override void Dispose(bool disposing)
+                {
+                    // do nothing
+                }
             }
         }
     }

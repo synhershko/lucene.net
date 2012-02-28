@@ -21,7 +21,7 @@ namespace Lucene.Net.Analysis.Th
 
         public ThaiAnalyzer(Version matchVersion)
         {
-            SetOverridesTokenStreamMethod(typeof(ThaiAnalyzer));
+            SetOverridesTokenStreamMethod<ThaiAnalyzer>();
             this.matchVersion = matchVersion;
         }
 

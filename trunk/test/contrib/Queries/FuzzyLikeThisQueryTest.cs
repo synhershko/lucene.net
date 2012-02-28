@@ -78,7 +78,7 @@ namespace Lucene.Net.Search
             Assert.IsTrue(queryTerms.Contains(new Term("name", "smith")), "Should have variant smith");
             Assert.IsTrue(queryTerms.Contains(new Term("name", "smyth")), "Should have variant smyth");
             TopDocs topDocs = searcher.Search(flt, 1);
-            ScoreDoc[] sd = topDocs.scoreDocs;
+            ScoreDoc[] sd = topDocs.ScoreDocs;
             Assert.IsTrue((sd != null) && (sd.Length > 0), "score docs must match 1 doc");
             Document doc = searcher.Doc(sd[0].doc);
             Assert.AreEqual("2", doc.Get("id"), "Should match most similar not most rare variant");
@@ -96,7 +96,7 @@ namespace Lucene.Net.Search
             Assert.IsTrue(queryTerms.Contains(new Term("name", "jonathan")),"Should have variant jonathan");
             Assert.IsTrue(queryTerms.Contains(new Term("name", "smith")), "Should have variant smith");
             TopDocs topDocs = searcher.Search(flt, 1);
-            ScoreDoc[] sd = topDocs.scoreDocs;
+            ScoreDoc[] sd = topDocs.ScoreDocs;
             Assert.IsTrue((sd != null) && (sd.Length > 0), "score docs must match 1 doc");
             Document doc = searcher.Doc(sd[0].doc);
             Assert.AreEqual("2", doc.Get("id"), "Should match most similar when using 2 words");
@@ -113,7 +113,7 @@ namespace Lucene.Net.Search
             q.ExtractTerms(queryTerms);
             Assert.IsTrue(queryTerms.Contains(new Term("name", "smith")), "Should have variant smith");
             TopDocs topDocs = searcher.Search(flt, 1);
-            ScoreDoc[] sd = topDocs.scoreDocs;
+            ScoreDoc[] sd = topDocs.ScoreDocs;
             Assert.IsTrue((sd != null) && (sd.Length > 0), "score docs must match 1 doc");
             Document doc = searcher.Doc(sd[0].doc);
             Assert.AreEqual("2", doc.Get("id"), "Should match most similar when using 2 words");

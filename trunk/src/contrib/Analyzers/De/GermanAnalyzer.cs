@@ -127,7 +127,7 @@ namespace Lucene.Net.Analysis.De
         {
             stopSet = CharArraySet.UnmodifiableSet(CharArraySet.Copy(stopwords));
             exclusionSet = CharArraySet.UnmodifiableSet(CharArraySet.Copy(stemExclusionSet));
-            SetOverridesTokenStreamMethod(typeof(GermanAnalyzer));
+            SetOverridesTokenStreamMethod<GermanAnalyzer>();
             this.matchVersion = matchVersion;
         }
 

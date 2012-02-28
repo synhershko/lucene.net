@@ -43,6 +43,11 @@ namespace Lucene.Net.Analyzers.Position
             {
                 index = 0;
             }
+
+            protected override void Dispose(bool disposing)
+            {
+                // do nothing
+            }
         }
 
         public static readonly String[] TEST_TOKEN = new String[]

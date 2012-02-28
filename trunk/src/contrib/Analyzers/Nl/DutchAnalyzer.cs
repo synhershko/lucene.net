@@ -116,7 +116,7 @@ namespace Lucene.Net.Analysis.Nl
             stoptable = CharArraySet.UnmodifiableSet(CharArraySet.Copy(stopwords));
             excltable = CharArraySet.UnmodifiableSet(CharArraySet.Copy(stemExclusionTable));
             this.matchVersion = matchVersion;
-            SetOverridesTokenStreamMethod(typeof(DutchAnalyzer));
+            SetOverridesTokenStreamMethod<DutchAnalyzer>();
         }
 
         /**
@@ -153,7 +153,7 @@ namespace Lucene.Net.Analysis.Nl
         public DutchAnalyzer(Version matchVersion, FileInfo stopwords)
         {
             // this is completely broken!
-            SetOverridesTokenStreamMethod(typeof(DutchAnalyzer));
+            SetOverridesTokenStreamMethod<DutchAnalyzer>();
             try
             {
                 stoptable = WordlistLoader.GetWordSet(stopwords);

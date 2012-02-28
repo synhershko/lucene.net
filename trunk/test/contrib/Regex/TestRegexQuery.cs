@@ -76,7 +76,7 @@ namespace Lucene.Net.Search.Regex
             if (capability != null)
                 query.SetRegexImplementation(capability);
 
-            return searcher.Search(query, null, 1000).totalHits;
+            return searcher.Search(query, null, 1000).TotalHits;
         }
 
         private int SpanRegexQueryNrHits(String regex1, String regex2, int slop, bool ordered)
@@ -85,7 +85,7 @@ namespace Lucene.Net.Search.Regex
             SpanRegexQuery srq2 = new SpanRegexQuery(NewTerm(regex2));
             SpanNearQuery query = new SpanNearQuery(new SpanQuery[] { srq1, srq2 }, slop, ordered);
 
-            return searcher.Search(query, null, 1000).totalHits;
+            return searcher.Search(query, null, 1000).TotalHits;
         }
 
         [Test]

@@ -163,10 +163,10 @@ namespace Lucene.Net.Analyzers.Miscellaneous
             return suffixToken;
         }
 
-        public override void Close()
+        protected override void Dispose(bool disposing)
         {
-            Prefix.Close();
-            Suffix.Close();
+            Prefix.Dispose();
+            Suffix.Dispose();
         }
 
         public override void Reset()

@@ -62,6 +62,11 @@ namespace Lucene.Net.Analyzers.Miscellaneous
             _exhausted = false;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            // Do nothing
+        }
+
         public Token GetToken()
         {
             return (Token) _singleToken.Clone();
