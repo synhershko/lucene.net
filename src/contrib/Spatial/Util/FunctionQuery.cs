@@ -107,7 +107,7 @@ namespace Lucene.Net.Spatial.Util
 
 			public override Explanation Explain(IndexReader reader, int doc)
 			{
-				return Scorer(reader, true, true).Explain(doc);
+				return ((AllScorer)Scorer(reader, true, true)).Explain(doc);
 			}
 		}
 

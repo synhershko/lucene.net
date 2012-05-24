@@ -125,7 +125,7 @@ namespace Lucene.Net.Contrib.Spatial.Test
 			var args = new SpatialArgs(SpatialOperation.IsWithin, ctx.MakeCircle(lng, lat, radius));
 
 			var vs = strategy.MakeValueSource(args, fieldInfo);
-			var vals = vs.GetValues(_searcher.GetIndexReader());
+			var vals = vs.GetValues(_searcher.IndexReader);
 
 			args.SetDistPrecision(0.0);
 			var dq = strategy.MakeQuery(args, fieldInfo);
@@ -138,7 +138,7 @@ namespace Lucene.Net.Contrib.Spatial.Test
 			var expectedOrder = new[] {"a/2", "c/1", "b/3"};
 			for (int i = 0; i < hits.TotalHits; i++)
 			{
-				Assert.AreEqual(expectedOrder[i], _searcher.Doc(hits.ScoreDocs[i].doc).GetField("name").StringValue());
+				Assert.AreEqual(expectedOrder[i], _searcher.Doc(hits.ScoreDocs[i].Doc).GetField("name").StringValue);
 			}
 		}
 
