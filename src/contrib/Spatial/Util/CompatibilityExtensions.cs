@@ -27,12 +27,12 @@ namespace Lucene.Net.Spatial.Util
 {
 	public static class CompatibilityExtensions
 	{
-		public static void Append(this TermAttribute termAtt, string str)
+		public static void Append(this ITermAttribute termAtt, string str)
 		{
 			termAtt.SetTermBuffer(termAtt.Term() + str); // TODO: Not optimal, but works
 		}
 
-		public static void Append(this TermAttribute termAtt, char ch)
+		public static void Append(this ITermAttribute termAtt, char ch)
 		{
 			termAtt.SetTermBuffer(termAtt.Term() + new string(new[] { ch })); // TODO: Not optimal, but works
 		}

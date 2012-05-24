@@ -120,7 +120,7 @@ namespace Lucene.Net.Spatial.Prefix
 		/// </summary>
 		protected class CellTokenStream : TokenStream
 		{
-			private TermAttribute termAtt;
+			private ITermAttribute termAtt;
 			private readonly IEnumerator<Node> iter;
 
 			public CellTokenStream(IEnumerator<Node> tokens)
@@ -131,7 +131,7 @@ namespace Lucene.Net.Spatial.Prefix
 
 			private void Init()
 			{
-				termAtt = AddAttribute<TermAttribute>();
+				termAtt = AddAttribute<ITermAttribute>();
 			}
 
 			private string nextTokenStringNeedingLeaf;
