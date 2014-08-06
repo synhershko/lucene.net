@@ -1,6 +1,7 @@
 using Lucene.Net.Analysis.Tokenattributes;
 using System;
 using System.Diagnostics;
+using NUnit.Framework;
 
 namespace Lucene.Net.Analysis
 {
@@ -191,11 +192,11 @@ namespace Lucene.Net.Analysis
                     }
                     int correctedStartOffset = CorrectOffset(startOffset);
                     int correctedEndOffset = CorrectOffset(endOffset);
-                    Debug.Assert(correctedStartOffset >= 0);
-                    Debug.Assert(correctedEndOffset >= 0);
-                    Debug.Assert(correctedStartOffset >= LastOffset);
+                    Assert.True(correctedStartOffset >= 0);
+                    Assert.True(correctedEndOffset >= 0);
+                    Assert.True(correctedStartOffset >= LastOffset);
                     LastOffset = correctedStartOffset;
-                    Debug.Assert(correctedEndOffset >= correctedStartOffset);
+                    Assert.True(correctedEndOffset >= correctedStartOffset);
                     OffsetAtt.SetOffset(correctedStartOffset, correctedEndOffset);
                     if (state == -1 || RunAutomaton.IsAccept(state))
                     {
@@ -218,7 +219,7 @@ namespace Lucene.Net.Analysis
             }
             else
             {
-                Debug.Assert(!char.IsLowSurrogate((char)ch), "unpaired low surrogate: " + ch.ToString("x"));
+                Assert.True(!char.IsLowSurrogate((char)ch), "unpaired low surrogate: " + ch.ToString("x"));
                 Off++;
                 if (char.IsHighSurrogate((char)ch))
                 {
@@ -226,7 +227,7 @@ namespace Lucene.Net.Analysis
                     if (ch2 >= 0)
                     {
                         Off++;
-                        Debug.Assert(char.IsLowSurrogate((char)ch2), "unpaired high surrogate: " + ch.ToString("x") + ", followed by: " + ch2.ToString("x"));
+                        Assert.True(char.IsLowSurrogate((char)ch2), "unpaired high surrogate: " + ch.ToString("x") + ", followed by: " + ch2.ToString("x"));
                         return Character.ToCodePoint((char)ch, (char)ch2);
                     }
                     else
@@ -299,7 +300,7 @@ namespace Lucene.Net.Analysis
             state = RunAutomaton.InitialState;
             LastOffset = Off = 0;
             BufferedCodePoint = -1;
-            Debug.Assert(!EnableChecks_Renamed || StreamState != State.RESET, "double reset()");
+            Assert.True(!EnableChecks_Renamed || StreamState != State.RESET, "double reset()");
             StreamState = State.RESET;
         }
 
@@ -309,13 +310,13 @@ namespace Lucene.Net.Analysis
             // in some exceptional cases (e.g. TestIndexWriterExceptions) a test can prematurely close()
             // these tests should disable this check, by default we check the normal workflow.
             // TODO: investigate the CachingTokenFilter "double-close"... for now we ignore this
-            Debug.Assert(!EnableChecks_Renamed || StreamState == State.END || StreamState == State.CLOSE, "close() called in wrong state: " + StreamState);
+            Assert.True(!EnableChecks_Renamed || StreamState == State.END || StreamState == State.CLOSE, "close() called in wrong state: " + StreamState);
             StreamState = State.CLOSE;
         }
 
         internal bool SetReaderTestPoint()
         {
-            Debug.Assert(!EnableChecks_Renamed || StreamState == State.CLOSE, "setReader() called in wrong state: " + StreamState);
+            Assert.True(!EnableChecks_Renamed || StreamState == State.CLOSE, "setReader() called in wrong state: " + StreamState);
             StreamState = State.SETREADER;
             return true;
         }

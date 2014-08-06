@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using NUnit.Framework;
 
 namespace Lucene.Net.Analysis
 {
@@ -51,7 +52,7 @@ namespace Lucene.Net.Analysis
         {
             ExcAtChar = charUpto;
             // You should only call this on init!:
-            Debug.Assert(ReadSoFar == 0);
+            Assert.AreEqual(0, ReadSoFar);
         }
 
         public virtual void ThrowExcNext()
@@ -85,10 +86,10 @@ namespace Lucene.Net.Analysis
             if (ExcAtChar != -1)
             {
                 int left = ExcAtChar - ReadSoFar;
-                Debug.Assert(left != 0);
+                Assert.True(left != 0);
                 read = @in.Read(cbuf, off, Math.Min(realLen, left));
                 //Characters are left
-                Debug.Assert(read != 0);
+                Assert.True(read != 0);
                 ReadSoFar += read;
             }
             else
@@ -115,7 +116,7 @@ namespace Lucene.Net.Analysis
 
         public static bool IsMyEvilException(Exception t)
         {
-            return (t is Exception) && "fake exception now!".Equals(t.Message);
+            return (t != null) && "fake exception now!".Equals(t.Message);
         }
     }
 }
