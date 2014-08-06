@@ -1,6 +1,5 @@
-namespace org.apache.lucene
+namespace Lucene.Net.Tests
 {
-
     using NUnit.Framework;
     using System;
     /*
@@ -53,6 +52,7 @@ namespace org.apache.lucene
             }
         }
 
+        [Test]
         public virtual void TestTokenStreams()
         {
             new TestTokenStream1();

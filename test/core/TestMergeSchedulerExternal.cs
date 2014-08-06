@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using NUnit.Framework;
 
-namespace org.apache.lucene
+namespace Lucene.Net.Tests
 {
 
     /*
@@ -108,7 +108,8 @@ namespace org.apache.lucene
 		    }
         }
 
-        public virtual void TestSubclassConcurrentMergeScheduler()
+        [Test]
+        public void TestSubclassConcurrentMergeScheduler()
         {
             MockDirectoryWrapper dir = NewMockDirectory();
             dir.FailOn(new FailOnlyOnMerge());
@@ -156,7 +157,8 @@ namespace org.apache.lucene
 
         }
 
-        public virtual void TestCustomMergeScheduler()
+        [Test]
+        public void TestCustomMergeScheduler()
         {
             // we don't really need to execute anything, just to make sure the custom MS
             // compiles. But ensure that it can be used as well, e.g., no other hidden
@@ -173,7 +175,5 @@ namespace org.apache.lucene
             writer.Dispose();
             dir.Dispose();
         }
-
     }
-
 }
