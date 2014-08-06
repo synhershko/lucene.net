@@ -52,7 +52,7 @@ namespace Lucene.Net.Util
         /// </summary>
         public LineFileDocs(Random random, string path, bool useDocValues)
         {
-            this.Path = path;
+            this.Path = Paths.ResolveTestArtifactPath(path);
             this.UseDocValues = useDocValues;
             Open(random);
         }

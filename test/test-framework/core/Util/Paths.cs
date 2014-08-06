@@ -108,6 +108,23 @@ namespace Lucene.Net.Util
             }
         }
 
+        private const string TestArtifactsFolder = "test-files";
+
+        public static string ResolveTestArtifactPath(string fileName)
+        {
+            var rootPath = ProjectRootDirectory;
+            while (true)
+            {
+                var possiblePath = Path.Combine(rootPath, TestArtifactsFolder);
+                if (Directory.Exists(possiblePath)) return Path.Combine(possiblePath, fileName);
+                
+                var parent = Directory.GetParent(rootPath);
+                if (parent == parent.Root) break;
+                rootPath = parent.FullName;
+            }
+            throw new FileNotFoundException("Could not find the test-files folder");
+        }
+
         /// <summary>
         /// Gets the root directory for the project. e.g. if you were working on trunk
         /// it would be the trunk directory.
@@ -122,10 +139,10 @@ namespace Lucene.Net.Util
                     // where [Section] is either core, demo, or contrib, and [Build] is either Debug or Release.
                     string assemblyLocation = AssemblyDirectory;
                     int index = -1;
-                    if (assemblyLocation.IndexOf("build") > -1)
-                        index = assemblyLocation.IndexOf(Path.DirectorySeparatorChar + "build" + Path.DirectorySeparatorChar);
+                    if (assemblyLocation.IndexOf("build", StringComparison.InvariantCultureIgnoreCase) > -1)
+                        index = assemblyLocation.IndexOf(Path.DirectorySeparatorChar + "build" + Path.DirectorySeparatorChar, StringComparison.InvariantCultureIgnoreCase);
                     else
-                        index = assemblyLocation.IndexOf(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar);
+                        index = assemblyLocation.IndexOf(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar, StringComparison.InvariantCultureIgnoreCase);
 
                     int difference = assemblyLocation.Substring(index).Count(o => o == Path.DirectorySeparatorChar);
 
