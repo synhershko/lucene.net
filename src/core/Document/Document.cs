@@ -218,7 +218,7 @@ namespace Lucene.Net.Document
         /// <p>Note that fields which are <i>not</i> stored are
         /// <i>not</i> available in documents retrieved from the
         /// index, e.g. <seealso cref="IndexSearcher#doc(int)"/> or {@link
-        /// IndexReader#document(int)}.
+        /// IndexReader#document(int)}.</p>
         /// </summary>
         public List<IndexableField> Fields
         {

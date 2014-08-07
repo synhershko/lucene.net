@@ -232,7 +232,7 @@ namespace Lucene.Net.Analysis
                     }
                     else
                     {
-                        Debug.Assert(false, "stream ends with unpaired high surrogate: " + ch.ToString("x"));
+                        Assert.True(false, "stream ends with unpaired high surrogate: " + ch.ToString("x"));
                     }
                 }
                 return ch;
