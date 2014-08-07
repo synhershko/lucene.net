@@ -5,6 +5,10 @@ namespace Lucene.Net.Index
     using Lucene.Net.Randomized.Generators;
     using NUnit.Framework;
 
+    using ByteBlockPool = Lucene.Net.Util.ByteBlockPool;
+    using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
+    using RecyclingByteBlockAllocator = Lucene.Net.Util.RecyclingByteBlockAllocator;
+
     /// <summary>
     /// Licensed under the Apache License, Version 2.0 (the "License");
     /// you may not use this file except in compliance with the License.
@@ -18,11 +22,6 @@ namespace Lucene.Net.Index
     /// See the License for the specific language governing permissions and
     /// limitations under the License.
     /// </summary>
-
-    using ByteBlockPool = Lucene.Net.Util.ByteBlockPool;
-    using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
-    using RecyclingByteBlockAllocator = Lucene.Net.Util.RecyclingByteBlockAllocator;
-
     [TestFixture]
     public class TestByteSlices : LuceneTestCase
     {
