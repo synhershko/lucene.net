@@ -73,8 +73,10 @@ namespace Lucene.Net.Util
         }
 
         /// <summary>
-        /// Test length=0. </summary>
-        public virtual void TestNoBit()
+        /// Test length=0.
+        /// </summary>
+        [Test]
+        public void TestNoBit()
         {
             BitArray bs = new BitArray(1);
             T copy = CopyOf(bs, 0);
@@ -82,8 +84,10 @@ namespace Lucene.Net.Util
         }
 
         /// <summary>
-        /// Test length=1. </summary>
-        public virtual void Test1Bit()
+        /// Test length=1.
+        /// </summary>
+        [Test]
+        public void Test1Bit()
         {
             BitArray bs = new BitArray(1);
             if (Random().NextBoolean())
@@ -95,8 +99,10 @@ namespace Lucene.Net.Util
         }
 
         /// <summary>
-        /// Test length=2. </summary>
-        public virtual void Test2Bits()
+        /// Test length=2.
+        /// </summary>
+        [Test]
+        public void Test2Bits()
         {
             BitArray bs = new BitArray(2);
             if (Random().NextBoolean())
@@ -112,8 +118,10 @@ namespace Lucene.Net.Util
         }
 
         /// <summary>
-        /// Compare the content of the set against a <seealso cref="BitSet"/>. </summary>
-        public virtual void TestAgainstBitSet()
+        /// Compare the content of the set against a <seealso cref="BitSet"/>.
+        /// </summary>
+        [Test]
+        public void TestAgainstBitSet()
         {
             int numBits = TestUtil.NextInt(Random(), 100, 1 << 20);
             // test various random sets with various load factors
@@ -146,7 +154,8 @@ namespace Lucene.Net.Util
         }
 
         /// <summary>
-        /// Assert that the content of the <seealso cref="DocIdSet"/> is the same as the content of the <seealso cref="BitSet"/>. </summary>
+        /// Assert that the content of the <seealso cref="DocIdSet"/> is the same as the content of the <seealso cref="BitSet"/>.
+        /// </summary>
         public virtual void AssertEquals(int numBits, BitArray ds1, T ds2)
         {
             // nextDoc
