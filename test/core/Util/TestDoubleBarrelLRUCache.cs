@@ -1,7 +1,6 @@
 using Lucene.Net.Support;
 using NUnit.Framework;
 using System;
-using System.Diagnostics;
 
 namespace Lucene.Net.Util
 {
@@ -111,7 +110,7 @@ namespace Lucene.Net.Util
                         }
                         else
                         {
-                            Debug.Assert(obj == v);
+                            Assert.True(obj == v);
                             hit++;
                         }
                         if ((++count % 10000) == 0)
@@ -166,7 +165,7 @@ namespace Lucene.Net.Util
             for (int i = 0; i < NUM_THREADS; i++)
             {
                 threads[i].Join();
-                Debug.Assert(!threads[i].Failed);
+                Assert.False(threads[i].Failed);
             }
             //System.out.println("hits=" + totHit + " misses=" + totMiss);
         }
