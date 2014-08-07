@@ -42,7 +42,7 @@ namespace Lucene.Net.Util
 
         private readonly bool Stable;
 
-        public BaseSortTestCase(bool stable)
+        protected BaseSortTestCase(bool stable)
         {
             this.Stable = stable;
         }
@@ -64,10 +64,11 @@ namespace Lucene.Net.Util
             }
         }
 
+        [Test]
         public virtual void Test(Entry[] arr)
         {
             int o = Random().Next(1000);
-            Entry[] toSort = new Entry[o + arr.Length + Random().Next(3)];
+            var toSort = new Entry[o + arr.Length + Random().Next(3)];
             Array.Copy(arr, 0, toSort, o, arr.Length);
             Sorter sorter = NewSorter(toSort);
             sorter.Sort(o, o + arr.Length);
