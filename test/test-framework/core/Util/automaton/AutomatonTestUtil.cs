@@ -1,7 +1,7 @@
 using Lucene.Net.Support;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using NUnit.Framework;
 
 namespace Lucene.Net.Util.Automaton
 {
@@ -189,7 +189,7 @@ namespace Lucene.Net.Util.Automaton
                 }
             }
 
-            Debug.Assert(code >= t.Min && code <= t.Max && (code < UnicodeUtil.UNI_SUR_HIGH_START || code > UnicodeUtil.UNI_SUR_LOW_END), "code=" + code + " min=" + t.Min + " max=" + t.Max);
+            Assert.True(code >= t.Min && code <= t.Max && (code < UnicodeUtil.UNI_SUR_HIGH_START || code > UnicodeUtil.UNI_SUR_LOW_END), "code=" + code + " min=" + t.Min + " max=" + t.Max);
             return code;
         }
 
@@ -567,7 +567,7 @@ namespace Lucene.Net.Util.Automaton
         {
             int numStates = a.NumberOfStates;
             a.ClearNumberedStates(); // force recomputation of cached numbered states
-            Debug.Assert(numStates == a.NumberOfStates, "automaton has " + (numStates - a.NumberOfStates) + " detached states");
+            Assert.True(numStates == a.NumberOfStates, "automaton has " + (numStates - a.NumberOfStates) + " detached states");
         }
     }
 }
