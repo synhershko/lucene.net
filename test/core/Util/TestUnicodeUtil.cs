@@ -166,10 +166,9 @@ namespace Lucene.Net.Util
 
                 int charUpto = 0;
                 int intUpto = 0;
-                while (charUpto < s.Length)
+                for (var s1 = 0; s1 < s.Length; s1 += Char.IsSurrogatePair(s, s1) ? 2 : 1)
                 {
-                    //int cp = s.CodePointAt(charUpto);
-                    int cp = s[charUpto];
+                    var cp = Char.ConvertToUtf32(s, s1);
                     codePoints[intUpto++] = cp;
                     charUpto += Character.CharCount(cp);
                 }

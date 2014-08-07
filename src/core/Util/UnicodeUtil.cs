@@ -218,14 +218,14 @@ namespace Lucene.Net.Util
                 }
                 else if (code < 0x800)
                 {
-                    @out[upto++] = unchecked((sbyte)(0xC0 | (code >> 6)));
-                    @out[upto++] = unchecked((sbyte)(0x80 | (code & 0x3F)));
+                    @out[upto++] = (sbyte)(0xC0 | (code >> 6));
+                    @out[upto++] = (sbyte)(0x80 | (code & 0x3F));
                 }
                 else if (code < 0xD800 || code > 0xDFFF)
                 {
-                    @out[upto++] = unchecked((sbyte)(0xE0 | (code >> 12)));
-                    @out[upto++] = unchecked((sbyte)(0x80 | ((code >> 6) & 0x3F)));
-                    @out[upto++] = unchecked((sbyte)(0x80 | (code & 0x3F)));
+                    @out[upto++] = (sbyte)(0xE0 | (code >> 12));
+                    @out[upto++] = (sbyte)(0x80 | ((code >> 6) & 0x3F));
+                    @out[upto++] = (sbyte)(0x80 | (code & 0x3F));
                 }
                 else
                 {
@@ -239,10 +239,10 @@ namespace Lucene.Net.Util
                         {
                             utf32 = (code << 10) + utf32 + SURROGATE_OFFSET;
                             i++;
-                            @out[upto++] = unchecked((sbyte)(0xF0 | (utf32 >> 18)));
-                            @out[upto++] = unchecked((sbyte)(0x80 | ((utf32 >> 12) & 0x3F)));
-                            @out[upto++] = unchecked((sbyte)(0x80 | ((utf32 >> 6) & 0x3F)));
-                            @out[upto++] = unchecked((sbyte)(0x80 | (utf32 & 0x3F)));
+                            @out[upto++] = (sbyte)(0xF0 | (utf32 >> 18));
+                            @out[upto++] = (sbyte)(0x80 | ((utf32 >> 12) & 0x3F));
+                            @out[upto++] = (sbyte)(0x80 | ((utf32 >> 6) & 0x3F));
+                            @out[upto++] = (sbyte)(0x80 | (utf32 & 0x3F));
                             continue;
                         }
                     }
