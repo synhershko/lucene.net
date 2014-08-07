@@ -261,10 +261,10 @@ namespace Lucene.Net.Index
             internal readonly IDictionary<int?, ISet<int?>> PositionToTerms;
             internal readonly IDictionary<int?, ISet<int?>> StartOffsetToTerms;
 
-            internal readonly CharTermAttribute TermAtt;
-            internal readonly PositionIncrementAttribute PiAtt;
-            internal readonly OffsetAttribute OAtt;
-            internal readonly PayloadAttribute PAtt;
+            internal readonly ICharTermAttribute TermAtt;
+            internal readonly IPositionIncrementAttribute PiAtt;
+            internal readonly IOffsetAttribute OAtt;
+            internal readonly IPayloadAttribute PAtt;
             internal int i = 0;
 
             protected internal RandomTokenStream(BaseTermVectorsFormatTestCase outerInstance, int len, string[] sampleTerms, BytesRef[] sampleTermBytes)
@@ -362,10 +362,10 @@ namespace Lucene.Net.Index
 
                 AddAttributeImpl(new PermissiveOffsetAttributeImpl());
 
-                TermAtt = AddAttribute<CharTermAttribute>();
-                PiAtt = AddAttribute<PositionIncrementAttribute>();
-                OAtt = AddAttribute<OffsetAttribute>();
-                PAtt = AddAttribute<PayloadAttribute>();
+                TermAtt = AddAttribute<ICharTermAttribute>();
+                PiAtt = AddAttribute<IPositionIncrementAttribute>();
+                OAtt = AddAttribute<IOffsetAttribute>();
+                PAtt = AddAttribute<IPayloadAttribute>();
             }
 
             public virtual bool HasPayloads()
@@ -720,15 +720,15 @@ namespace Lucene.Net.Index
                 {
                     continue;
                 }
-                Directory dir = NewDirectory();
-                RandomIndexWriter writer = new RandomIndexWriter(Random(), dir);
-                RandomDocument doc = docFactory.NewDocument(TestUtil.NextInt(Random(), 1, 2), AtLeast(20000), options);
-                writer.AddDocument(doc.ToDocument());
-                IndexReader reader = writer.Reader;
-                AssertEquals(doc, reader.GetTermVectors(0));
-                reader.Dispose();
-                writer.Dispose();
-                dir.Dispose();
+                using (Directory dir = NewDirectory())
+                using (RandomIndexWriter writer = new RandomIndexWriter(Random(), dir))
+                {
+                    RandomDocument doc = docFactory.NewDocument(TestUtil.NextInt(Random(), 1, 2), AtLeast(20000),
+                        options);
+                    writer.AddDocument(doc.ToDocument());
+                    using (IndexReader reader = writer.Reader)
+                        AssertEquals(doc, reader.GetTermVectors(0));
+                }
             }
         }
 

@@ -1,3 +1,4 @@
+using Lucene.Net.Analysis.Tokenattributes;
 using NUnit.Framework;
 using System;
 
@@ -39,7 +40,7 @@ namespace Lucene.Net.Index
         private readonly float PercentDocs;
         private readonly int MaxTF;
         private int Num;
-        internal CharTermAttribute TermAtt;
+        internal ICharTermAttribute TermAtt;
         internal string Value;
 
         public RepeatingTokenizer(TextReader reader, string val, Random random, float percentDocs, int maxTF)
@@ -49,7 +50,7 @@ namespace Lucene.Net.Index
             this.Random = random;
             this.PercentDocs = percentDocs;
             this.MaxTF = maxTF;
-            this.TermAtt = AddAttribute<CharTermAttribute>();
+            this.TermAtt = AddAttribute<ICharTermAttribute>();
         }
 
         public override bool IncrementToken()
