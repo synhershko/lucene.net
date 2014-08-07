@@ -44,7 +44,7 @@ namespace Lucene.Net.Util
 
         /// <summary>
         /// Length of used characters. </summary>
-        public int Length_Renamed;
+        public int length;
 
         /// <summary>
         /// Creates a new <seealso cref="CharsRef"/> initialized an empty array zero-length
@@ -71,7 +71,7 @@ namespace Lucene.Net.Util
         {
             this.Chars = chars;
             this.Offset = offset;
-            this.Length_Renamed = length;
+            this.length = length;
             Debug.Assert(Valid);
         }
 
@@ -83,7 +83,7 @@ namespace Lucene.Net.Util
         {
             this.Chars = @string.ToCharArray();
             this.Offset = 0;
-            this.Length_Renamed = Chars.Length;
+            this.length = Chars.Length;
         }
 
         /// <summary>
@@ -94,14 +94,14 @@ namespace Lucene.Net.Util
         /// <seealso cref= #deepCopyOf </seealso>
         public object Clone()
         {
-            return new CharsRef(Chars, Offset, Length_Renamed);
+            return new CharsRef(Chars, Offset, length);
         }
 
         public override int GetHashCode()
         {
             const int prime = 31;
             int result = 0;
-            int end = Offset + Length_Renamed;
+            int end = Offset + length;
             for (int i = Offset; i < end; i++)
             {
                 result = prime * result + Chars[i];
@@ -124,11 +124,11 @@ namespace Lucene.Net.Util
 
         public bool CharsEquals(CharsRef other)
         {
-            if (Length_Renamed == other.Length_Renamed)
+            if (length == other.length)
             {
                 int otherUpto = other.Offset;
                 char[] otherChars = other.Chars;
-                int end = Offset + Length_Renamed;
+                int end = Offset + length;
                 for (int upto = Offset; upto < end; upto++, otherUpto++)
                 {
                     if (Chars[upto] != otherChars[otherUpto])
@@ -158,7 +158,7 @@ namespace Lucene.Net.Util
             char[] bChars = other.Chars;
             int bUpto = other.Offset;
 
-            int aStop = aUpto + Math.Min(this.Length_Renamed, other.Length_Renamed);
+            int aStop = aUpto + Math.Min(this.length, other.length);
 
             while (aUpto < aStop)
             {
@@ -175,7 +175,7 @@ namespace Lucene.Net.Util
             }
 
             // One is a prefix of the other, or, they are equal:
-            return this.Length_Renamed - other.Length_Renamed;
+            return this.length - other.length;
         }
 
         /// <summary>
@@ -185,7 +185,7 @@ namespace Lucene.Net.Util
         ///          the <seealso cref="CharsRef"/> to copy </param>
         public void CopyChars(CharsRef other)
         {
-            CopyChars(other.Chars, other.Offset, other.Length_Renamed);
+            CopyChars(other.Chars, other.Offset, other.length);
         }
 
         /// <summary>
@@ -214,7 +214,7 @@ namespace Lucene.Net.Util
                 Offset = 0;
             }
             Array.Copy(otherChars, otherOffset, Chars, Offset, otherLength);
-            Length_Renamed = otherLength;
+            length = otherLength;
         }
 
         /// <summary>
@@ -222,35 +222,35 @@ namespace Lucene.Net.Util
         /// </summary>
         public void Append(char[] otherChars, int otherOffset, int otherLength)
         {
-            int newLen = Length_Renamed + otherLength;
+            int newLen = length + otherLength;
             if (Chars.Length - Offset < newLen)
             {
                 char[] newChars = new char[newLen];
-                Array.Copy(Chars, Offset, newChars, 0, Length_Renamed);
+                Array.Copy(Chars, Offset, newChars, 0, length);
                 Offset = 0;
                 Chars = newChars;
             }
-            Array.Copy(otherChars, otherOffset, Chars, Length_Renamed + Offset, otherLength);
-            Length_Renamed = newLen;
+            Array.Copy(otherChars, otherOffset, Chars, length + Offset, otherLength);
+            length = newLen;
         }
 
         public override string ToString()
         {
-            return new string(Chars, Offset, Length_Renamed);
+            return new string(Chars, Offset, length);
         }
 
         public int Length
         {
             get
             {
-                return Length_Renamed;
+                return length;
             }
         }
 
         public char CharAt(int index)
         {
             // NOTE: must do a real check here to meet the specs of CharSequence
-            if (index < 0 || index >= Length_Renamed)
+            if (index < 0 || index >= length)
             {
                 throw new System.IndexOutOfRangeException();
             }
@@ -260,7 +260,7 @@ namespace Lucene.Net.Util
         public ICharSequence SubSequence(int start, int end)
         {
             // NOTE: must do a real check here to meet the specs of CharSequence
-            if (start < 0 || end > Length_Renamed || start > end)
+            if (start < 0 || end > length || start > end)
             {
                 throw new System.IndexOutOfRangeException();
             }
@@ -302,7 +302,7 @@ namespace Lucene.Net.Util
                 char[] bChars = b.Chars;
                 int bUpto = b.Offset;
 
-                int aStop = aUpto + Math.Min(a.Length_Renamed, b.Length_Renamed);
+                int aStop = aUpto + Math.Min(a.length, b.length);
 
                 while (aUpto < aStop)
                 {
@@ -340,7 +340,7 @@ namespace Lucene.Net.Util
                 }
 
                 // One is a prefix of the other, or, they are equal:
-                return a.Length_Renamed - b.Length_Renamed;
+                return a.length - b.length;
             }
         }
 
@@ -370,13 +370,13 @@ namespace Lucene.Net.Util
                 {
                     throw new InvalidOperationException("chars is null");
                 }
-                if (Length_Renamed < 0)
+                if (length < 0)
                 {
-                    throw new InvalidOperationException("length is negative: " + Length_Renamed);
+                    throw new InvalidOperationException("length is negative: " + length);
                 }
-                if (Length_Renamed > Chars.Length)
+                if (length > Chars.Length)
                 {
-                    throw new InvalidOperationException("length is out of bounds: " + Length_Renamed + ",chars.length=" + Chars.Length);
+                    throw new InvalidOperationException("length is out of bounds: " + length + ",chars.length=" + Chars.Length);
                 }
                 if (Offset < 0)
                 {
@@ -386,13 +386,13 @@ namespace Lucene.Net.Util
                 {
                     throw new InvalidOperationException("offset out of bounds: " + Offset + ",chars.length=" + Chars.Length);
                 }
-                if (Offset + Length_Renamed < 0)
+                if (Offset + length < 0)
                 {
-                    throw new InvalidOperationException("offset+length is negative: offset=" + Offset + ",length=" + Length_Renamed);
+                    throw new InvalidOperationException("offset+length is negative: offset=" + Offset + ",length=" + length);
                 }
-                if (Offset + Length_Renamed > Chars.Length)
+                if (Offset + length > Chars.Length)
                 {
-                    throw new InvalidOperationException("offset+length out of bounds: offset=" + Offset + ",length=" + Length_Renamed + ",chars.length=" + Chars.Length);
+                    throw new InvalidOperationException("offset+length out of bounds: offset=" + Offset + ",length=" + length + ",chars.length=" + Chars.Length);
                 }
                 return true;
             }
