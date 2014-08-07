@@ -282,7 +282,7 @@ namespace Lucene.Net.Search
                 {
                     trackers.Add(tracker);
                 }
-                CollectionsHelper.Sort(trackers, null);
+                trackers.Sort();
                 double lastRecordTimeSec = 0.0;
                 double now = DateTime.Now.ToFileTime() / 100.0d / NANOS_PER_SEC;
                 foreach (SearcherTracker tracker in trackers)

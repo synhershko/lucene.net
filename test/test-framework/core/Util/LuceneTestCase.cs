@@ -2266,12 +2266,12 @@ namespace Lucene.Net.Util
                 // in whatever way it wants (e.g. maybe it packs related fields together or something)
                 // To fix this, we sort the fields in both documents by name, but
                 // we still assume that all instances with same name are in order:
-                System.Collections.IComparer comp = new ComparatorAnonymousInnerClassHelper(this);
-                CollectionsHelper.Sort(leftDoc.Fields, comp);
-                CollectionsHelper.Sort(rightDoc.Fields, comp);
+                Comparison<IndexableField> comp = (a, b) => String.Compare(a.Name(), b.Name(), StringComparison.Ordinal);
+                leftDoc.Fields.Sort(comp);
+                rightDoc.Fields.Sort(comp);
 
-                IEnumerator<IndexableField> leftIterator = leftDoc.GetEnumerator();
-                IEnumerator<IndexableField> rightIterator = rightDoc.GetEnumerator();
+                var leftIterator = leftDoc.GetEnumerator();
+                var rightIterator = rightDoc.GetEnumerator();
                 while (leftIterator.MoveNext())
                 {
                     Assert.IsTrue(rightIterator.MoveNext(), info);

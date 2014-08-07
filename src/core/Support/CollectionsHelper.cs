@@ -131,23 +131,6 @@ namespace Lucene.Net.Support
             }
         }
 
-        public static bool Contains(System.Collections.Generic.ICollection<string> col, string item)
-        {
-            foreach (string s in col) if (s == item) return true;
-            return false;
-        }
-
-        public static bool Contains(System.Collections.ICollection col, System.Object item)
-        {
-            System.Collections.IEnumerator iter = col.GetEnumerator();
-            while (iter.MoveNext())
-            {
-                if (iter.Current.Equals(item))
-                    return true;
-            }
-            return false;
-        }
-
         public static System.String CollectionToString(System.Collections.Generic.IDictionary<string, string> c)
         {
             Hashtable t = new Hashtable();
@@ -239,46 +222,6 @@ namespace Lucene.Net.Support
             T[] singletonArr = new T[] { single };
             HashSet<T> singleton = new HashSet<T>(singletonArr);
             return singleton;
-        }
-
-        /// <summary>
-        /// Sorts an IList collections
-        /// </summary>
-        /// <param name="list">The System.Collections.IList instance that will be sorted</param>
-        /// <param name="Comparator">The Comparator criteria, null to use natural comparator.</param>
-        public static void Sort(System.Collections.IList list, System.Collections.IComparer Comparator)
-        {
-            if (((System.Collections.ArrayList)list).IsReadOnly)
-                throw new System.NotSupportedException();
-
-            if ((Comparator == null) || (Comparator is System.Collections.Comparer))
-            {
-                try
-                {
-                    ((System.Collections.ArrayList)list).Sort();
-                }
-                catch (System.InvalidOperationException e)
-                {
-                    throw new System.InvalidCastException(e.Message);
-                }
-            }
-            else
-            {
-                try
-                {
-                    ((System.Collections.ArrayList)list).Sort(Comparator);
-                }
-                catch (System.InvalidOperationException e)
-                {
-                    throw new System.InvalidCastException(e.Message);
-                }
-            }
-        }
-
-        public static void Sort<T>(List<T> list)
-            where T : IComparable<T>
-        {
-            list.Sort((a, b) => a.CompareTo(b));
         }
 
         /// <summary>
