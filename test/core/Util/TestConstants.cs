@@ -1,3 +1,4 @@
+using System;
 using Lucene.Net.Support;
 using NUnit.Framework;
 using System.Text.RegularExpressions;
@@ -44,7 +45,11 @@ namespace Lucene.Net.Util
         {
             // common-build.xml sets lucene.version, if not, we skip this test!
             string version = AppSettings.Get("lucene.version", null);
-            AssumeTrue("Null lucene.version test property. You should run the tests with the official Lucene build file", version != null);
+            if (version == null)
+            {
+                Console.WriteLine("Null lucene.version test property. You should run the tests with the official Lucene build file");
+                return;
+            }
 
             // remove anything after a "-" from the version string:
             version = Regex.Replace(version, "-.*$", "");

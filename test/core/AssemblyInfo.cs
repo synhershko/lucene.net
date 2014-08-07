@@ -37,7 +37,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDefaultAlias("Lucene.Net")]
 [assembly: AssemblyCulture("")]
 
-[assembly: AssemblyInformationalVersionAttribute("3.0.3")]
+[assembly: AssemblyInformationalVersionAttribute("4.8.0")]
 
 //
 // Version information for an assembly consists of the following four values:
