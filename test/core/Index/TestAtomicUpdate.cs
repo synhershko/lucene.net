@@ -210,7 +210,7 @@ namespace Lucene.Net.Index
             {
                 RunTest(directory);
             }
-            TestUtil.Rm(dirPath);
+            System.IO.Directory.Delete(dirPath.FullName, true);
         }
     }
 }

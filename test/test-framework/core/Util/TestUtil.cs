@@ -78,32 +78,8 @@ namespace Lucene.Net.Util
     /// <summary>
     /// General utility methods for Lucene unit tests.
     /// </summary>
-    public sealed class TestUtil
+    public static class TestUtil
     {
-        private TestUtil()
-        {
-            //
-        }
-
-        /// <summary>
-        /// Deletes one or more files or directories (and everything underneath it).
-        /// </summary>
-        /// <exception cref="IOException"> if any of the given files (or their subhierarchy files in case
-        /// of directories) cannot be removed. </exception>
-        public static void Rm(params DirectoryInfo[] locations)
-        {
-            HashSet<FileSystemInfo> unremoved = Rm(new HashSet<FileSystemInfo>(), locations);
-            if (unremoved.Count != 0)
-            {
-                StringBuilder b = new StringBuilder("Could not remove the following files (in the order of attempts):\n");
-                foreach (FileSystemInfo f in unremoved)
-                {
-                    b.Append("   ").Append(f.FullName).Append("\n");
-                }
-                throw new IOException(b.ToString());
-            }
-        }
-
         private static HashSet<FileSystemInfo> Rm(HashSet<FileSystemInfo> unremoved, params DirectoryInfo[] locations)
         {
             foreach (DirectoryInfo location in locations)
@@ -118,7 +94,7 @@ namespace Lucene.Net.Util
                     {
                         location.Delete();
                     }
-                    catch (Exception delFailed)
+                    catch (Exception)
                     {
                         unremoved.Add(location);
                     }
@@ -139,6 +115,7 @@ namespace Lucene.Net.Util
                     }
                     catch (Exception delFailed)
                     {
+                        Console.WriteLine(delFailed.Message);
                         unremoved.Add(file);
                     }
                 }
@@ -153,7 +130,7 @@ namespace Lucene.Net.Util
         /// </summary>
         public static void Unzip(FileInfo zipName, DirectoryInfo destDir)
         {
-            Rm(destDir);
+            System.IO.Directory.Delete(destDir.FullName, true);
             destDir.CreateSubdirectory(destDir.FullName);// mkdir();
 
             using (ZipInputStream s = new ZipInputStream(File.OpenRead(zipName.FullName)))

@@ -99,7 +99,7 @@ namespace Lucene.Net.Index
             w.Dispose();
             d.Dispose();
 
-            TestUtil.Rm(tmpDir);
+            System.IO.Directory.Delete(tmpDir.FullName, true);
         }
 
         private class ThreadAnonymousInnerClassHelper : ThreadClass

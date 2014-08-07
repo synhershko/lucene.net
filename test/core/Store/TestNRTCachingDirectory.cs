@@ -148,7 +148,7 @@ namespace Lucene.Net.Store
                 throw new IOException("java.io.tmpdir undefined, cannot run test");
             DirectoryInfo TempDir = new DirectoryInfo(Path.Combine(tempDir, "RAMDirIndex"));
 
-            TestUtil.Rm(TempDir);
+            System.IO.Directory.Delete(TempDir.FullName, true);
             Directory dir = new NRTCachingDirectory(NewFSDirectory(TempDir), 2.0, 25.0);
             try
             {

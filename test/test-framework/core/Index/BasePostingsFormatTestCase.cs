@@ -1257,7 +1257,7 @@ namespace Lucene.Net.Index
 
             fieldsProducer.Dispose();
             dir.Dispose();
-            TestUtil.Rm(path);
+            System.IO.Directory.Delete(path.FullName, true);
         }
 
         public virtual void TestDocsOnly()
@@ -1313,7 +1313,7 @@ namespace Lucene.Net.Index
                 fieldsProducer = null;
 
                 dir.Dispose();
-                TestUtil.Rm(path);
+                System.IO.Directory.Delete(path.FullName, true);
             }
         }
 

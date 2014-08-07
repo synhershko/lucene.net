@@ -191,7 +191,7 @@ namespace Lucene.Net.Store
 
             dir.Dispose();
             // Cleanup
-            TestUtil.Rm(indexDir);
+            System.IO.Directory.Delete(indexDir.FullName, true);
         }
 
         // Verify: NativeFSLockFactory works correctly
@@ -257,8 +257,8 @@ namespace Lucene.Net.Store
 
             dir1.Dispose();
             dir2.Dispose();
-            TestUtil.Rm(fdir1);
-            TestUtil.Rm(fdir2);
+            System.IO.Directory.Delete(fdir1.FullName, true);
+            System.IO.Directory.Delete(fdir2.FullName, true);
         }
 
         // Verify: default LockFactory has no prefix (ie
@@ -281,7 +281,7 @@ namespace Lucene.Net.Store
             Assert.IsNull(dir.LockFactory.LockPrefix, "Default lock prefix should be null");
             dir.Dispose();
 
-            TestUtil.Rm(dirName);
+            System.IO.Directory.Delete(dirName.FullName, true);
         }
 
         private class WriterThread : ThreadClass

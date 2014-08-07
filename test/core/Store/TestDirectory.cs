@@ -254,7 +254,7 @@ namespace Lucene.Net.Store
                 Assert.IsFalse(dir.IsOpen);
             }
 
-            TestUtil.Rm(path);
+            System.IO.Directory.Delete(path.FullName, true);
         }
 
         // LUCENE-1464
@@ -271,7 +271,7 @@ namespace Lucene.Net.Store
             }
             finally
             {
-                TestUtil.Rm(path);
+                System.IO.Directory.Delete(path.FullName, true);
             }
         }
 
@@ -310,7 +310,7 @@ namespace Lucene.Net.Store
         public virtual void TestCopySubdir()
         {
             //File path = CreateTempDir("testsubdir");
-            DirectoryInfo path = new DirectoryInfo(Path.Combine(AppSettings.Get("tempDir", ""), "testsubdir"));
+            var path = new DirectoryInfo(Path.Combine(AppSettings.Get("tempDir", ""), "testsubdir"));
             try
             {
                 //path.mkdirs();
@@ -322,7 +322,7 @@ namespace Lucene.Net.Store
             }
             finally
             {
-                TestUtil.Rm(path);
+                System.IO.Directory.Delete(path.FullName, true);
             }
         }
 
@@ -351,7 +351,7 @@ namespace Lucene.Net.Store
             finally
             {
                 fsDir.Dispose();
-                TestUtil.Rm(path);
+                System.IO.Directory.Delete(path.FullName, true);
             }
         }
 

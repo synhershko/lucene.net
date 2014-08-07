@@ -324,7 +324,7 @@ namespace Lucene.Net.Store
             }
             finally
             {
-                TestUtil.Rm(indexDir);
+                System.IO.Directory.Delete(indexDir.FullName, true);
             }
         }
 

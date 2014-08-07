@@ -445,7 +445,7 @@ namespace Lucene.Net.Index
             dir.Dispose();
 
             // Try to erase the data - this ensures that the writer closed all files
-            TestUtil.Rm(dirFile);
+            System.IO.Directory.Delete(dirFile.FullName, true);
             dir = NewFSDirectory(dirFile);
 
             // Now create the data set again, just as before
@@ -462,7 +462,7 @@ namespace Lucene.Net.Index
 
             // The following will fail if reader did not close
             // all files
-            TestUtil.Rm(dirFile);
+            System.IO.Directory.Delete(dirFile.FullName, true);
         }
 
         [Test]
@@ -735,7 +735,7 @@ namespace Lucene.Net.Index
         public virtual void TestNoDir()
         {
             DirectoryInfo tempDir = CreateTempDir("doesnotexist");
-            TestUtil.Rm(tempDir);
+            System.IO.Directory.Delete(tempDir.FullName, true);
             Directory dir = NewFSDirectory(tempDir);
             try
             {

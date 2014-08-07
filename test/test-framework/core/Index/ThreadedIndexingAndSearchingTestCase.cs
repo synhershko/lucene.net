@@ -762,7 +762,7 @@ namespace Lucene.Net.Index
 
             TestUtil.CheckIndex(Dir);
             Dir.Dispose();
-            TestUtil.Rm(tempDir);
+            System.IO.Directory.Delete(tempDir.FullName, true);
 
             if (VERBOSE)
             {

@@ -110,8 +110,8 @@ namespace Lucene.Net.Store
         {
             DirectoryInfo primDir = CreateTempDir("foo");
             DirectoryInfo secondDir = CreateTempDir("bar");
-            TestUtil.Rm(primDir);
-            TestUtil.Rm(secondDir);
+            System.IO.Directory.Delete(primDir.FullName, true);
+            System.IO.Directory.Delete(secondDir.FullName, true);
             Directory dir = NewFSSwitchDirectory(primDir, secondDir, new HashSet<string>());
             try
             {
