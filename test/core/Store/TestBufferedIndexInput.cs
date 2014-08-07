@@ -268,54 +268,59 @@ namespace Lucene.Net.Store
         public virtual void TestSetBufferSize()
         {
             //File indexDir = CreateTempDir("testSetBufferSize");
-            DirectoryInfo indexDir = new DirectoryInfo(Path.Combine(AppSettings.Get("tempDir", ""), "testSetBufferSize"));
-            MockFSDirectory dir = new MockFSDirectory(indexDir, Random());
+            var indexDir = new DirectoryInfo(Path.Combine(AppSettings.Get("tempDir", ""), "testSetBufferSize"));
             try
             {
-                IndexWriter writer = new IndexWriter(dir, (new IndexWriterConfig(TEST_VERSION_CURRENT, new MockAnalyzer(Random()))).SetOpenMode(IndexWriterConfig.OpenMode_e.CREATE).SetMergePolicy(NewLogMergePolicy(false)));
-                for (int i = 0; i < 37; i++)
+                using (MockFSDirectory dir = new MockFSDirectory(indexDir, Random()))
                 {
-                    Document doc = new Document();
-                    doc.Add(NewTextField("content", "aaa bbb ccc ddd" + i, Field.Store.YES));
-                    doc.Add(NewTextField("id", "" + i, Field.Store.YES));
-                    writer.AddDocument(doc);
+                    using (IndexWriter writer = new IndexWriter(dir,
+                        (new IndexWriterConfig(TEST_VERSION_CURRENT, new MockAnalyzer(Random()))).SetOpenMode(
+                            IndexWriterConfig.OpenMode_e.CREATE).SetMergePolicy(NewLogMergePolicy(false))))
+                    {
+                        for (int i = 0; i < 37; i++)
+                        {
+                            var doc = new Document();
+                            doc.Add(NewTextField("content", "aaa bbb ccc ddd" + i, Field.Store.YES));
+                            doc.Add(NewTextField("id", "" + i, Field.Store.YES));
+                            writer.AddDocument(doc);
+                        }
+
+                        dir.AllIndexInputs.Clear();
+                        dir.TweakBufferSizes();
+                        writer.DeleteDocuments(new Term("id", "0"));
+
+                        var aaa = new Term("content", "aaa");
+                        var bbb = new Term("content", "bbb");
+                        
+                        IndexSearcher searcher;
+                        ScoreDoc[] hits;
+                        using (var reader = DirectoryReader.Open(writer, true))
+                        {
+                            searcher = NewSearcher(reader);
+                            hits = searcher.Search(new TermQuery(bbb), null, 1000).ScoreDocs;
+                            dir.TweakBufferSizes();
+                            Assert.AreEqual(36, hits.Length);
+                        }
+
+                        dir.TweakBufferSizes();
+                        writer.DeleteDocuments(new Term("id", "4"));
+                        using (var reader = DirectoryReader.Open(writer, true))
+                        {
+                            searcher = NewSearcher(reader);
+
+                            hits = searcher.Search(new TermQuery(bbb), null, 1000).ScoreDocs;
+                            dir.TweakBufferSizes();
+                            Assert.AreEqual(35, hits.Length);
+                            dir.TweakBufferSizes();
+                            hits = searcher.Search(new TermQuery(new Term("id", "33")), null, 1000).ScoreDocs;
+                            dir.TweakBufferSizes();
+                            Assert.AreEqual(1, hits.Length);
+                            hits = searcher.Search(new TermQuery(aaa), null, 1000).ScoreDocs;
+                            dir.TweakBufferSizes();
+                            Assert.AreEqual(35, hits.Length);
+                        }
+                    }
                 }
-
-                dir.AllIndexInputs.Clear();
-
-                IndexReader reader = DirectoryReader.Open(writer, true);
-                Term aaa = new Term("content", "aaa");
-                Term bbb = new Term("content", "bbb");
-
-                reader.Dispose();
-
-                dir.TweakBufferSizes();
-                writer.DeleteDocuments(new Term("id", "0"));
-                reader = DirectoryReader.Open(writer, true);
-                IndexSearcher searcher = NewSearcher(reader);
-                ScoreDoc[] hits = searcher.Search(new TermQuery(bbb), null, 1000).ScoreDocs;
-                dir.TweakBufferSizes();
-                Assert.AreEqual(36, hits.Length);
-
-                reader.Dispose();
-
-                dir.TweakBufferSizes();
-                writer.DeleteDocuments(new Term("id", "4"));
-                reader = DirectoryReader.Open(writer, true);
-                searcher = NewSearcher(reader);
-
-                hits = searcher.Search(new TermQuery(bbb), null, 1000).ScoreDocs;
-                dir.TweakBufferSizes();
-                Assert.AreEqual(35, hits.Length);
-                dir.TweakBufferSizes();
-                hits = searcher.Search(new TermQuery(new Term("id", "33")), null, 1000).ScoreDocs;
-                dir.TweakBufferSizes();
-                Assert.AreEqual(1, hits.Length);
-                hits = searcher.Search(new TermQuery(aaa), null, 1000).ScoreDocs;
-                dir.TweakBufferSizes();
-                Assert.AreEqual(35, hits.Length);
-                writer.Dispose();
-                reader.Dispose();
             }
             finally
             {
