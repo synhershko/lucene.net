@@ -1,644 +1,452 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!--
-
- Licensed to the Apache Software Foundation (ASF) under one
- or more contributor license agreements.  See the NOTICE file
- distributed with this work for additional information
- regarding copyright ownership.  The ASF licenses this file
- to you under the Apache License, Version 2.0 (the
- "License"); you may not use this file except in compliance
- with the License.  You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing,
- software distributed under the License is distributed on an
- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- KIND, either express or implied.  See the License for the
- specific language governing permissions and limitations
- under the License.
-
--->
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5D4AD9BE-1FFB-41AB-9943-25737971BF57}</ProjectGuid>
-    <RootNamespace>Lucene.Net</RootNamespace>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{9B06B39D-9B24-45D3-AB54-87F3A0DB7735}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
     <AssemblyName>Lucene.Net</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
-    <OutputPath>..\..\build\bin\core\$(Configuration.Replace("35", ""))\$(Framework)\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <DefineConstants>TRACE;DEBUG;$(Framework)</DefineConstants>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>618</NoWarn>
-    <Optimize>false</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <OutputType>Library</OutputType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug35|AnyCPU' ">
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
-    <OutputPath>..\..\build\bin\core\$(Configuration.Replace("35", ""))\$(Framework)\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <DefineConstants>TRACE;DEBUG;$(Framework)</DefineConstants>
-    <DebugSymbols>true</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>618</NoWarn>
     <Optimize>false</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
-    <DebugType>full</DebugType>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>blah.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <OutputType>Library</OutputType>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
-    <OutputPath>..\..\build\bin\core\$(Configuration.Replace("35", ""))\$(Framework)\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <DefineConstants>TRACE;$(Framework)</DefineConstants>
-    <DocumentationFile>..\..\build\bin\core\$(Configuration.Replace("35", ""))\$(Framework)\Lucene.Net.XML</DocumentationFile>
-    <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>618,1591</NoWarn>
-    <Optimize>true</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <DebugSymbols>true</DebugSymbols>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <OutputType>Library</OutputType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release35|AnyCPU' ">
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
-    <OutputPath>..\..\build\bin\core\$(Configuration.Replace("35", ""))\$(Framework)\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <DefineConstants>TRACE;$(Framework)</DefineConstants>
-    <DocumentationFile>..\..\build\bin\core\$(Configuration.Replace("35", ""))\$(Framework)\Lucene.Net.XML</DocumentationFile>
-    <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>618,1591</NoWarn>
     <Optimize>true</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
-    <DebugType>pdbonly</DebugType>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <DebugSymbols>true</DebugSymbols>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <OutputType>Library</OutputType>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <RootNamespace>Lucene.Net</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Lucene.Net.snk</AssemblyOriginatorKeyFile>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System">
-      <Name>System</Name>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="nunit.framework, Version=2.5.9.10348, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\NUnit.org\NUnit\2.5.9\bin\net-2.0\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Condition="'$(Framework)' == 'NET35'" Include="System.Core" />
+    <Reference Include="System" />
     <Reference Include="System.configuration" />
-    <Reference Include="System.Xml">
-      <Name>System.XML</Name>
-    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analysis\Analyzer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\ASCIIFoldingFilter.cs" />
-    <Compile Include="Analysis\BaseCharFilter.cs" />
+    <None Include="Lucene.Net.Search.RemoteSearchable.config" />
+    <None Include="Lucene.Net.Search.TestSort.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Analysis\Analyzer.cs" />
+    <Compile Include="Analysis\AnalyzerWrapper.cs" />
     <Compile Include="Analysis\CachingTokenFilter.cs" />
-    <Compile Include="Analysis\CharArraySet.cs" />
     <Compile Include="Analysis\CharFilter.cs" />
-    <Compile Include="Analysis\CharReader.cs" />
-    <Compile Include="Analysis\CharStream.cs" />
-    <Compile Include="Analysis\CharTokenizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\ISOLatin1AccentFilter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\KeywordAnalyzer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\KeywordTokenizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\LengthFilter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\LetterTokenizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\LowerCaseFilter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\LowerCaseTokenizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\MappingCharFilter.cs" />
-    <Compile Include="Analysis\NormalizeCharMap.cs" />
     <Compile Include="Analysis\NumericTokenStream.cs" />
-    <Compile Include="Analysis\PerFieldAnalyzerWrapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\PorterStemFilter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\PorterStemmer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\SimpleAnalyzer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\Standard\StandardAnalyzer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\Standard\StandardFilter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\Standard\StandardTokenizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\Standard\StandardTokenizerImpl.cs" />
-    <Compile Include="Analysis\StopAnalyzer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\StopFilter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\TeeSinkTokenFilter.cs" />
-    <Compile Include="Analysis\Token.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Analysis\ReusableStringReader.cs" />
+    <Compile Include="Analysis\Token.cs" />
+    <Compile Include="Analysis\Tokenattributes\ICharTermAttribute.cs" />
+    <Compile Include="Analysis\Tokenattributes\CharTermAttribute.cs" />
     <Compile Include="Analysis\Tokenattributes\FlagsAttribute.cs" />
     <Compile Include="Analysis\Tokenattributes\IFlagsAttribute.cs" />
+    <Compile Include="Analysis\Tokenattributes\ITermAttribute.cs" />
+    <Compile Include="Analysis\Tokenattributes\IKeywordAttribute.cs" />
+    <Compile Include="Analysis\Tokenattributes\KeywordAttribute.cs" />
     <Compile Include="Analysis\Tokenattributes\IOffsetAttribute.cs" />
     <Compile Include="Analysis\Tokenattributes\OffsetAttribute.cs" />
     <Compile Include="Analysis\Tokenattributes\IPayloadAttribute.cs" />
     <Compile Include="Analysis\Tokenattributes\PayloadAttribute.cs" />
     <Compile Include="Analysis\Tokenattributes\IPositionIncrementAttribute.cs" />
     <Compile Include="Analysis\Tokenattributes\PositionIncrementAttribute.cs" />
-    <Compile Include="Analysis\Tokenattributes\ITermAttribute.cs" />
-    <Compile Include="Analysis\Tokenattributes\TermAttribute.cs" />
+    <Compile Include="Analysis\Tokenattributes\IPositionLengthAttribute.cs" />
+    <Compile Include="Analysis\Tokenattributes\PositionLengthAttribute.cs" />
+    <Compile Include="Analysis\Tokenattributes\ITermToBytesRefAttribute.cs" />
     <Compile Include="Analysis\Tokenattributes\ITypeAttribute.cs" />
+    <Compile Include="Analysis\Tokenattributes\TermToBytesRefAttribute.cs" />
     <Compile Include="Analysis\Tokenattributes\TypeAttribute.cs" />
-    <Compile Include="Analysis\TokenFilter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\Tokenizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\TokenStream.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\WhitespaceAnalyzer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\WhitespaceTokenizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Analysis\WordlistLoader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Document\AbstractField.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Analysis\TokenFilter.cs" />
+    <Compile Include="Analysis\Tokenizer.cs" />
+    <Compile Include="Analysis\TokenStream.cs" />
+    <Compile Include="Analysis\TokenStreamToAutomaton.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Codecs\BlockTermState.cs" />
+    <Compile Include="Codecs\BlockTreeTermsReader.cs" />
+    <Compile Include="Codecs\BlockTreeTermsWriter.cs" />
+    <Compile Include="Codecs\Codec.cs" />
+    <Compile Include="Codecs\CodecUtil.cs" />
+    <Compile Include="Codecs\Compressing\CompressingStoredFieldsFormat.cs" />
+    <Compile Include="Codecs\Compressing\CompressingStoredFieldsIndexReader.cs" />
+    <Compile Include="Codecs\Compressing\CompressingStoredFieldsIndexWriter.cs" />
+    <Compile Include="Codecs\Compressing\CompressingStoredFieldsReader.cs" />
+    <Compile Include="Codecs\Compressing\CompressingStoredFieldsWriter.cs" />
+    <Compile Include="Codecs\Compressing\CompressingTermVectorsFormat.cs" />
+    <Compile Include="Codecs\Compressing\CompressingTermVectorsReader.cs" />
+    <Compile Include="Codecs\Compressing\CompressingTermVectorsWriter.cs" />
+    <Compile Include="Codecs\Compressing\CompressionMode.cs" />
+    <Compile Include="Codecs\Compressing\Compressor.cs" />
+    <Compile Include="Codecs\Compressing\Decompressor.cs" />
+    <Compile Include="Codecs\Compressing\LZ4.cs" />
+    <Compile Include="Codecs\DocValuesConsumer.cs" />
+    <Compile Include="Codecs\DocValuesFormat.cs" />
+    <Compile Include="Codecs\DocValuesProducer.cs" />
+    <Compile Include="Codecs\FieldInfosFormat.cs" />
+    <Compile Include="Codecs\FieldInfosReader.cs" />
+    <Compile Include="Codecs\FieldInfosWriter.cs" />
+    <Compile Include="Codecs\FieldsConsumer.cs" />
+    <Compile Include="Codecs\FieldsProducer.cs" />
+    <Compile Include="Codecs\FilterCodec.cs" />
+    <Compile Include="Codecs\LiveDocsFormat.cs" />
+    <Compile Include="Codecs\Lucene3x\Lucene3xCodec.cs" />
+    <Compile Include="Codecs\Lucene3x\Lucene3xFieldInfosFormat.cs" />
+    <Compile Include="Codecs\Lucene3x\Lucene3xFieldInfosReader.cs" />
+    <Compile Include="Codecs\Lucene3x\Lucene3xFields.cs" />
+    <Compile Include="Codecs\Lucene3x\Lucene3xNormsFormat.cs" />
+    <Compile Include="Codecs\Lucene3x\Lucene3xNormsProducer.cs" />
+    <Compile Include="Codecs\Lucene3x\Lucene3xPostingsFormat.cs" />
+    <Compile Include="Codecs\Lucene3x\Lucene3xSegmentInfoFormat.cs" />
+    <Compile Include="Codecs\Lucene3x\Lucene3xSegmentInfoReader.cs" />
+    <Compile Include="Codecs\Lucene3x\Lucene3xSkipListReader.cs" />
+    <Compile Include="Codecs\Lucene3x\Lucene3xStoredFieldsFormat.cs" />
+    <Compile Include="Codecs\Lucene3x\Lucene3xStoredFieldsReader.cs" />
+    <Compile Include="Codecs\Lucene3x\Lucene3xTermVectorsFormat.cs" />
+    <Compile Include="Codecs\Lucene3x\Lucene3xTermVectorsReader.cs" />
+    <Compile Include="Codecs\Lucene3x\SegmentTermDocs.cs" />
+    <Compile Include="Codecs\Lucene3x\SegmentTermEnum.cs" />
+    <Compile Include="Codecs\Lucene3x\SegmentTermPositions.cs" />
+    <Compile Include="Codecs\Lucene3x\TermBuffer.cs" />
+    <Compile Include="Codecs\Lucene3x\TermInfo.cs" />
+    <Compile Include="Codecs\Lucene3x\TermInfosReader.cs" />
+    <Compile Include="Codecs\Lucene3x\TermInfosReaderIndex.cs" />
+    <Compile Include="Codecs\Lucene40\BitVector.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40Codec.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40DocValuesFormat.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40DocValuesReader.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40FieldInfosFormat.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40FieldInfosReader.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40LiveDocsFormat.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40NormsFormat.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40PostingsBaseFormat.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40PostingsFormat.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40PostingsReader.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40SegmentInfoFormat.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40SegmentInfoReader.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40SegmentInfoWriter.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40SkipListReader.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40StoredFieldsFormat.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40StoredFieldsReader.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40StoredFieldsWriter.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40TermVectorsFormat.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40TermVectorsReader.cs" />
+    <Compile Include="Codecs\Lucene40\Lucene40TermVectorsWriter.cs" />
+    <Compile Include="Codecs\Lucene41\ForUtil.cs" />
+    <Compile Include="Codecs\Lucene41\Lucene41Codec.cs" />
+    <Compile Include="Codecs\Lucene41\Lucene41PostingsBaseFormat.cs" />
+    <Compile Include="Codecs\Lucene41\Lucene41PostingsFormat.cs" />
+    <Compile Include="Codecs\Lucene41\Lucene41PostingsReader.cs" />
+    <Compile Include="Codecs\Lucene41\Lucene41PostingsWriter.cs" />
+    <Compile Include="Codecs\Lucene41\Lucene41SkipReader.cs" />
+    <Compile Include="Codecs\Lucene41\Lucene41SkipWriter.cs" />
+    <Compile Include="Codecs\Lucene41\Lucene41StoredFieldsFormat.cs" />
+    <Compile Include="Codecs\Lucene42\Lucene42Codec.cs" />
+    <Compile Include="Codecs\Lucene42\Lucene42DocValuesFormat.cs" />
+    <Compile Include="Codecs\Lucene42\Lucene42DocValuesProducer.cs" />
+    <Compile Include="Codecs\Lucene42\Lucene42FieldInfosFormat.cs" />
+    <Compile Include="Codecs\Lucene42\Lucene42FieldInfosReader.cs" />
+    <Compile Include="Codecs\Lucene42\Lucene42NormsConsumer.cs" />
+    <Compile Include="Codecs\Lucene42\Lucene42NormsFormat.cs" />
+    <Compile Include="Codecs\Lucene42\Lucene42TermVectorsFormat.cs" />
+    <Compile Include="Codecs\Lucene45\Lucene45Codec.cs" />
+    <Compile Include="Codecs\Lucene45\Lucene45DocValuesConsumer.cs" />
+    <Compile Include="Codecs\Lucene45\Lucene45DocValuesFormat.cs" />
+    <Compile Include="Codecs\Lucene45\Lucene45DocValuesProducer.cs" />
+    <Compile Include="Codecs\Lucene46\Lucene46Codec.cs" />
+    <Compile Include="Codecs\Lucene46\Lucene46FieldInfosFormat.cs" />
+    <Compile Include="Codecs\Lucene46\Lucene46FieldInfosReader.cs" />
+    <Compile Include="Codecs\Lucene46\Lucene46FieldInfosWriter.cs" />
+    <Compile Include="Codecs\Lucene46\Lucene46SegmentInfoFormat.cs" />
+    <Compile Include="Codecs\Lucene46\Lucene46SegmentInfoReader.cs" />
+    <Compile Include="Codecs\Lucene46\Lucene46SegmentInfoWriter.cs" />
+    <Compile Include="Codecs\MappingMultiDocsAndPositionsEnum.cs" />
+    <Compile Include="Codecs\MappingMultiDocsEnum.cs" />
+    <Compile Include="Codecs\MultiLevelSkipListReader.cs" />
+    <Compile Include="Codecs\MultiLevelSkipListWriter.cs" />
+    <Compile Include="Codecs\NormsFormat.cs" />
+    <Compile Include="Codecs\Perfield\PerFieldDocValuesFormat.cs" />
+    <Compile Include="Codecs\Perfield\PerFieldPostingsFormat.cs" />
+    <Compile Include="Codecs\PostingsBaseFormat.cs" />
+    <Compile Include="Codecs\PostingsConsumer.cs" />
+    <Compile Include="Codecs\PostingsFormat.cs" />
+    <Compile Include="Codecs\PostingsReaderBase.cs" />
+    <Compile Include="Codecs\PostingsWriterBase.cs" />
+    <Compile Include="Codecs\SegmentInfoFormat.cs" />
+    <Compile Include="Codecs\SegmentInfoReader.cs" />
+    <Compile Include="Codecs\SegmentInfoWriter.cs" />
+    <Compile Include="Codecs\StoredFieldsFormat.cs" />
+    <Compile Include="Codecs\StoredFieldsReader.cs" />
+    <Compile Include="Codecs\StoredFieldsWriter.cs" />
+    <Compile Include="Codecs\TermsConsumer.cs" />
+    <Compile Include="Codecs\TermStats.cs" />
+    <Compile Include="Codecs\TermVectorsFormat.cs" />
+    <Compile Include="Codecs\TermVectorsReader.cs" />
+    <Compile Include="Codecs\TermVectorsWriter.cs" />
+    <Compile Include="Document\BinaryDocValuesField.cs" />
+    <Compile Include="Document\ByteDocValuesField.cs" />
     <Compile Include="Document\CompressionTools.cs" />
-    <Compile Include="Document\DateField.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Document\DateTools.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Document\Document.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Document\Field.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Document\Fieldable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Document\FieldSelector.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Document\FieldSelectorResult.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Document\LoadFirstFieldSelector.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Document\MapFieldSelector.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Document\NumberTools.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Document\NumericField.cs" />
-    <Compile Include="Document\SetBasedFieldSelector.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\AbstractAllTermDocs.cs" />
-    <Compile Include="Index\AllTermDocs.cs" />
-    <Compile Include="Index\BufferedDeletes.cs" />
-    <Compile Include="Index\ByteBlockPool.cs" />
+    <Compile Include="Document\DateTools.cs" />
+    <Compile Include="Document\DerefBytesDocValuesField.cs" />
+    <Compile Include="Document\Document.cs" />
+    <Compile Include="Document\DocumentStoredFieldVisitor.cs" />
+    <Compile Include="Document\DoubleDocValuesField.cs" />
+    <Compile Include="Document\DoubleField.cs" />
+    <Compile Include="Document\Field.cs" />
+    <Compile Include="Document\FieldType.cs" />
+    <Compile Include="Document\FloatDocValuesField.cs" />
+    <Compile Include="Document\FloatField.cs" />
+    <Compile Include="Document\IntDocValuesField.cs" />
+    <Compile Include="Document\IntField.cs" />
+    <Compile Include="Document\LongDocValuesField.cs" />
+    <Compile Include="Document\LongField.cs" />
+    <Compile Include="Document\NumericDocValuesField.cs" />
+    <Compile Include="Document\PackedLongDocValuesField.cs" />
+    <Compile Include="Document\ShortDocValuesField.cs" />
+    <Compile Include="Document\SortedBytesDocValuesField.cs" />
+    <Compile Include="Document\SortedDocValuesField.cs" />
+    <Compile Include="Document\SortedSetDocValuesField.cs" />
+    <Compile Include="Document\StoredField.cs" />
+    <Compile Include="Document\StraightBytesDocValuesField.cs" />
+    <Compile Include="Document\StringField.cs" />
+    <Compile Include="Document\TextField.cs" />
+    <Compile Include="Index\AtomicReader.cs" />
+    <Compile Include="Index\AtomicReaderContext.cs" />
+    <Compile Include="Index\AutomatonTermsEnum.cs" />
+    <Compile Include="Index\BaseCompositeReader.cs" />
+    <Compile Include="Index\BinaryDocValues.cs" />
+    <Compile Include="Index\BinaryDocValuesFieldUpdates.cs" />
+    <Compile Include="Index\BinaryDocValuesWriter.cs" />
+    <Compile Include="Index\BitsSlice.cs" />
+    <Compile Include="Index\BufferedUpdates.cs" />
+    <Compile Include="Index\BufferedUpdatesStream.cs" />
     <Compile Include="Index\ByteSliceReader.cs" />
     <Compile Include="Index\ByteSliceWriter.cs" />
-    <Compile Include="Index\CharBlockPool.cs" />
     <Compile Include="Index\CheckIndex.cs" />
-    <Compile Include="Index\CompoundFileReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\CompoundFileWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Index\CoalescedUpdates.cs" />
+    <Compile Include="Index\CompositeReader.cs" />
+    <Compile Include="Index\CompositeReaderContext.cs" />
     <Compile Include="Index\ConcurrentMergeScheduler.cs" />
     <Compile Include="Index\CorruptIndexException.cs" />
-    <Compile Include="Index\DefaultSkipListReader.cs" />
-    <Compile Include="Index\DefaultSkipListWriter.cs" />
     <Compile Include="Index\DirectoryReader.cs" />
     <Compile Include="Index\DocConsumer.cs" />
-    <Compile Include="Index\DocConsumerPerThread.cs" />
     <Compile Include="Index\DocFieldConsumer.cs" />
     <Compile Include="Index\DocFieldConsumerPerField.cs" />
-    <Compile Include="Index\DocFieldConsumerPerThread.cs" />
-    <Compile Include="Index\DocFieldConsumers.cs" />
-    <Compile Include="Index\DocFieldConsumersPerField.cs" />
-    <Compile Include="Index\DocFieldConsumersPerThread.cs" />
     <Compile Include="Index\DocFieldProcessor.cs" />
     <Compile Include="Index\DocFieldProcessorPerField.cs" />
-    <Compile Include="Index\DocFieldProcessorPerThread.cs" />
     <Compile Include="Index\DocInverter.cs" />
     <Compile Include="Index\DocInverterPerField.cs" />
-    <Compile Include="Index\DocInverterPerThread.cs" />
+    <Compile Include="Index\DocsAndPositionsEnum.cs" />
+    <Compile Include="Index\DocsEnum.cs" />
+    <Compile Include="Index\DocTermOrds.cs" />
     <Compile Include="Index\DocumentsWriter.cs" />
-    <Compile Include="Index\DocumentsWriterThreadState.cs" />
-    <Compile Include="Index\FieldInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\FieldInfos.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Index\DocumentsWriterDeleteQueue.cs" />
+    <Compile Include="Index\DocumentsWriterFlushControl.cs" />
+    <Compile Include="Index\DocumentsWriterFlushQueue.cs" />
+    <Compile Include="Index\DocumentsWriterPerThread.cs" />
+    <Compile Include="Index\DocumentsWriterPerThreadPool.cs" />
+    <Compile Include="Index\DocumentsWriterStallControl.cs" />
+    <Compile Include="Index\DocValues.cs" />
+    <Compile Include="Index\DocValuesFieldUpdates.cs" />
+    <Compile Include="Index\DocValuesProcessor.cs" />
+    <Compile Include="Index\DocValuesUpdate.cs" />
+    <Compile Include="Index\DocValuesWriter.cs" />
+    <Compile Include="Index\FieldInfo.cs" />
+    <Compile Include="Index\FieldInfos.cs" />
     <Compile Include="Index\FieldInvertState.cs" />
-    <Compile Include="Index\FieldReaderException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\FieldSortedTermVectorMapper.cs" />
-    <Compile Include="Index\FieldsReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\FieldsWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\FilterIndexReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\FormatPostingsDocsConsumer.cs" />
-    <Compile Include="Index\FormatPostingsDocsWriter.cs" />
-    <Compile Include="Index\FormatPostingsFieldsConsumer.cs" />
-    <Compile Include="Index\FormatPostingsFieldsWriter.cs" />
-    <Compile Include="Index\FormatPostingsPositionsConsumer.cs" />
-    <Compile Include="Index\FormatPostingsPositionsWriter.cs" />
-    <Compile Include="Index\FormatPostingsTermsConsumer.cs" />
-    <Compile Include="Index\FormatPostingsTermsWriter.cs" />
-    <Compile Include="Index\FreqProxFieldMergeState.cs" />
+    <Compile Include="Index\Fields.cs" />
+    <Compile Include="Index\FilterAtomicReader.cs" />
+    <Compile Include="Index\FilterDirectoryReader.cs" />
+    <Compile Include="Index\FilteredTermsEnum.cs" />
+    <Compile Include="Index\FlushByRamOrCountsPolicy.cs" />
+    <Compile Include="Index\FlushPolicy.cs" />
     <Compile Include="Index\FreqProxTermsWriter.cs" />
     <Compile Include="Index\FreqProxTermsWriterPerField.cs" />
-    <Compile Include="Index\FreqProxTermsWriterPerThread.cs" />
+    <Compile Include="Index\FrozenBufferedUpdates.cs" />
+    <Compile Include="Index\IndexableField.cs" />
+    <Compile Include="Index\IndexableFieldType.cs" />
     <Compile Include="Index\IndexCommit.cs" />
     <Compile Include="Index\IndexDeletionPolicy.cs" />
-    <Compile Include="Index\IndexFileDeleter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\IndexFileNameFilter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\IndexFileNames.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\IndexReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\IndexWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\IntBlockPool.cs" />
+    <Compile Include="Index\IndexFileDeleter.cs" />
+    <Compile Include="Index\IndexFileNames.cs" />
+    <Compile Include="Index\IndexFormatTooNewException.cs" />
+    <Compile Include="Index\IndexFormatTooOldException.cs" />
+    <Compile Include="Index\IndexNotFoundException.cs" />
+    <Compile Include="Index\IndexReader.cs" />
+    <Compile Include="Index\IndexReaderContext.cs" />
+    <Compile Include="Index\IndexUpgrader.cs" />
+    <Compile Include="Index\IndexWriter.cs" />
+    <Compile Include="Index\IndexWriterConfig.cs" />
     <Compile Include="Index\InvertedDocConsumer.cs" />
     <Compile Include="Index\InvertedDocConsumerPerField.cs" />
-    <Compile Include="Index\InvertedDocConsumerPerThread.cs" />
     <Compile Include="Index\InvertedDocEndConsumer.cs" />
     <Compile Include="Index\InvertedDocEndConsumerPerField.cs" />
-    <Compile Include="Index\InvertedDocEndConsumerPerThread.cs" />
     <Compile Include="Index\KeepOnlyLastCommitDeletionPolicy.cs" />
+    <Compile Include="Index\LiveIndexWriterConfig.cs" />
     <Compile Include="Index\LogByteSizeMergePolicy.cs" />
     <Compile Include="Index\LogDocMergePolicy.cs" />
     <Compile Include="Index\LogMergePolicy.cs" />
-    <Compile Include="Index\MergeDocIDRemapper.cs" />
     <Compile Include="Index\MergePolicy.cs" />
     <Compile Include="Index\MergeScheduler.cs" />
-    <Compile Include="Index\MultiLevelSkipListReader.cs" />
-    <Compile Include="Index\MultiLevelSkipListWriter.cs" />
-    <Compile Include="Index\MultipleTermPositions.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\MultiReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\NormsWriter.cs" />
-    <Compile Include="Index\NormsWriterPerField.cs" />
-    <Compile Include="Index\NormsWriterPerThread.cs" />
-    <Compile Include="Index\ParallelReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\Payload.cs" />
-    <Compile Include="Index\PositionBasedTermVectorMapper.cs" />
-    <Compile Include="Index\RawPostingList.cs" />
-    <Compile Include="Index\ReadOnlyDirectoryReader.cs" />
-    <Compile Include="Index\ReadOnlySegmentReader.cs" />
-    <Compile Include="Index\ReusableStringReader.cs" />
-    <Compile Include="Index\SegmentInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\SegmentInfos.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\SegmentMergeInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\SegmentMergeQueue.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\SegmentMerger.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\SegmentReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\SegmentTermDocs.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\SegmentTermEnum.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\SegmentTermPositions.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\SegmentTermPositionVector.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\SegmentTermVector.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Index\MergeState.cs" />
+    <Compile Include="Index\MergeTrigger.cs" />
+    <Compile Include="Index\MultiBits.cs" />
+    <Compile Include="Index\MultiDocsAndPositionsEnum.cs" />
+    <Compile Include="Index\MultiDocsEnum.cs" />
+    <Compile Include="Index\MultiDocValues.cs" />
+    <Compile Include="Index\MultiFields.cs" />
+    <Compile Include="Index\MultiReader.cs" />
+    <Compile Include="Index\MultiTerms.cs" />
+    <Compile Include="Index\MultiTermsEnum.cs" />
+    <Compile Include="Index\NoDeletionPolicy.cs" />
+    <Compile Include="Index\NoMergePolicy.cs" />
+    <Compile Include="Index\NoMergeScheduler.cs" />
+    <Compile Include="Index\NormsConsumer.cs" />
+    <Compile Include="Index\NormsConsumerPerField.cs" />
+    <Compile Include="Index\NoSuchFileException.cs" />
+    <Compile Include="Index\NumericDocValues.cs" />
+    <Compile Include="Index\NumericDocValuesFieldUpdates.cs" />
+    <Compile Include="Index\NumericDocValuesWriter.cs" />
+    <Compile Include="Index\OrdTermState.cs" />
+    <Compile Include="Index\ParallelAtomicReader.cs" />
+    <Compile Include="Index\ParallelCompositeReader.cs" />
+    <Compile Include="Index\ParallelPostingsArray.cs" />
+    <Compile Include="Index\PersistentSnapshotDeletionPolicy.cs" />
+    <Compile Include="Index\PrefixCodedTerms.cs" />
+    <Compile Include="Index\RandomAccessOrds.cs" />
+    <Compile Include="Index\ReaderManager.cs" />
+    <Compile Include="Index\ReadersAndUpdates.cs" />
+    <Compile Include="Index\ReaderSlice.cs" />
+    <Compile Include="Index\ReaderUtil.cs" />
+    <Compile Include="Index\SegmentCommitInfo.cs" />
+    <Compile Include="Index\SegmentCoreReaders.cs" />
+    <Compile Include="Index\SegmentDocValues.cs" />
+    <Compile Include="Index\SegmentInfo.cs" />
+    <Compile Include="Index\SegmentInfos.cs" />
+    <Compile Include="Index\SegmentMerger.cs" />
+    <Compile Include="Index\SegmentReader.cs" />
+    <Compile Include="Index\SegmentReadState.cs" />
     <Compile Include="Index\SegmentWriteState.cs" />
     <Compile Include="Index\SerialMergeScheduler.cs" />
+    <Compile Include="Index\SimpleMergedSegmentWarmer.cs" />
+    <Compile Include="Index\SingleTermsEnum.cs" />
+    <Compile Include="Index\SingletonSortedSetDocValues.cs" />
+    <Compile Include="Index\SlowCompositeReaderWrapper.cs" />
     <Compile Include="Index\SnapshotDeletionPolicy.cs" />
-    <Compile Include="Index\SortedTermVectorMapper.cs" />
-    <Compile Include="Index\StaleReaderException.cs" />
-    <Compile Include="Index\StoredFieldsWriter.cs" />
-    <Compile Include="Index\StoredFieldsWriterPerThread.cs" />
-    <Compile Include="Index\Term.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\TermBuffer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\TermDocs.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\TermEnum.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\TermFreqVector.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\TermInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\TermInfosReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\TermInfosWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\TermPositions.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\TermPositionVector.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Index\SortedDocValues.cs" />
+    <Compile Include="Index\SortedDocValuesTermsEnum.cs" />
+    <Compile Include="Index\SortedDocValuesWriter.cs" />
+    <Compile Include="Index\SortedSetDocValues.cs" />
+    <Compile Include="Index\SortedSetDocValuesTermsEnum.cs" />
+    <Compile Include="Index\SortedSetDocValuesWriter.cs" />
+    <Compile Include="Index\StandardDirectoryReader.cs" />
+    <Compile Include="Index\StoredFieldsConsumer.cs" />
+    <Compile Include="Index\StoredFieldsProcessor.cs" />
+    <Compile Include="Index\StoredFieldVisitor.cs" />
+    <Compile Include="Index\Term.cs" />
+    <Compile Include="Index\TermContext.cs" />
+    <Compile Include="Index\Terms.cs" />
+    <Compile Include="Index\TermsEnum.cs" />
     <Compile Include="Index\TermsHash.cs" />
     <Compile Include="Index\TermsHashConsumer.cs" />
     <Compile Include="Index\TermsHashConsumerPerField.cs" />
-    <Compile Include="Index\TermsHashConsumerPerThread.cs" />
     <Compile Include="Index\TermsHashPerField.cs" />
-    <Compile Include="Index\TermsHashPerThread.cs" />
-    <Compile Include="Index\TermVectorEntry.cs" />
-    <Compile Include="Index\TermVectorEntryFreqSortedComparator.cs" />
-    <Compile Include="Index\TermVectorMapper.cs" />
-    <Compile Include="Index\TermVectorOffsetInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\TermVectorsReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Index\TermVectorsTermsWriter.cs" />
-    <Compile Include="Index\TermVectorsTermsWriterPerField.cs" />
-    <Compile Include="Index\TermVectorsTermsWriterPerThread.cs" />
-    <Compile Include="Index\TermVectorsWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="LucenePackage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Messages\Message.cs" />
-    <Compile Include="Messages\MessageImpl.cs" />
-    <Compile Include="Messages\NLS.cs" />
-    <Compile Include="Messages\INLSException.cs" />
-    <Compile Include="QueryParser\CharStream.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QueryParser\FastCharStream.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QueryParser\MultiFieldQueryParser.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QueryParser\ParseException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QueryParser\QueryParser.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QueryParser\QueryParserConstants.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QueryParser\QueryParserTokenManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QueryParser\Token.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QueryParser\TokenMgrError.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\BooleanClause.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\BooleanQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\BooleanScorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\BooleanScorer2.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\CachingSpanFilter.cs" />
-    <Compile Include="Search\CachingWrapperFilter.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Index\TermState.cs" />
+    <Compile Include="Index\TermVectorsConsumer.cs" />
+    <Compile Include="Index\TermVectorsConsumerPerField.cs" />
+    <Compile Include="Index\ThreadAffinityDocumentsWriterThreadPool.cs" />
+    <Compile Include="Index\TieredMergePolicy.cs" />
+    <Compile Include="Index\TrackingIndexWriter.cs" />
+    <Compile Include="Index\TwoPhaseCommit.cs" />
+    <Compile Include="Index\TwoPhaseCommitTool.cs" />
+    <Compile Include="Index\TwoStoredFieldsConsumers.cs" />
+    <Compile Include="Index\UpgradeIndexMergePolicy.cs" />
+    <Compile Include="LucenePackage.cs" />
+    <Compile Include="LZOCompressor.cs" />
+    <Compile Include="Search\AutomatonQuery.cs" />
+    <Compile Include="Search\BitsFilteredDocIdSet.cs" />
+    <Compile Include="Search\BooleanClause.cs" />
+    <Compile Include="Search\BooleanQuery.cs" />
+    <Compile Include="Search\BooleanScorer.cs" />
+    <Compile Include="Search\BooleanScorer2.cs" />
+    <Compile Include="Search\BoostAttribute.cs" />
+    <Compile Include="Search\BoostAttributeImpl.cs" />
+    <Compile Include="Search\BulkScorer.cs" />
+    <Compile Include="Search\CachingCollector.cs" />
+    <Compile Include="Search\CachingWrapperFilter.cs" />
+    <Compile Include="Search\CollectionStatistics.cs" />
+    <Compile Include="Search\CollectionTerminatedException.cs" />
     <Compile Include="Search\Collector.cs" />
-    <Compile Include="Search\ComplexExplanation.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\ConjunctionScorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\ConstantScoreQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\DefaultSimilarity.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\DisjunctionMaxQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\DisjunctionMaxScorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\DisjunctionSumScorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Search\ComplexExplanation.cs" />
+    <Compile Include="Search\ConjunctionScorer.cs" />
+    <Compile Include="Search\ConstantScoreAutoRewrite.cs" />
+    <Compile Include="Search\ConstantScoreQuery.cs" />
+    <Compile Include="Search\ControlledRealTimeReopenThread.cs" />
+    <Compile Include="Search\DisjunctionMaxQuery.cs" />
+    <Compile Include="Search\DisjunctionMaxScorer.cs" />
+    <Compile Include="Search\DisjunctionScorer.cs" />
+    <Compile Include="Search\DisjunctionSumScorer.cs" />
     <Compile Include="Search\DocIdSet.cs" />
     <Compile Include="Search\DocIdSetIterator.cs" />
-    <Compile Include="Search\ExactPhraseScorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Explanation.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\FieldCache.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\FieldCacheImpl.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Search\DocTermOrdsRangeFilter.cs" />
+    <Compile Include="Search\DocTermOrdsRewriteMethod.cs" />
+    <Compile Include="Search\ExactPhraseScorer.cs" />
+    <Compile Include="Search\Explanation.cs" />
+    <Compile Include="Search\FakeScorer.cs" />
+    <Compile Include="Search\FieldCache.cs" />
+    <Compile Include="Search\FieldCacheDocIdSet.cs" />
+    <Compile Include="Search\FieldCacheImpl.cs" />
     <Compile Include="Search\FieldCacheRangeFilter.cs" />
+    <Compile Include="Search\FieldCacheRewriteMethod.cs" />
     <Compile Include="Search\FieldCacheTermsFilter.cs" />
     <Compile Include="Search\FieldComparator.cs" />
     <Compile Include="Search\FieldComparatorSource.cs" />
-    <Compile Include="Search\FieldDoc.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\FieldDocSortedHitQueue.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Search\FieldDoc.cs" />
+    <Compile Include="Search\FieldValueFilter.cs" />
     <Compile Include="Search\FieldValueHitQueue.cs" />
-    <Compile Include="Search\Filter.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Search\Filter.cs" />
     <Compile Include="Search\FilteredDocIdSet.cs" />
     <Compile Include="Search\FilteredDocIdSetIterator.cs" />
-    <Compile Include="Search\FilteredQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\FilteredTermEnum.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\FilterManager.cs" />
-    <Compile Include="Search\Function\ByteFieldSource.cs" />
-    <Compile Include="Search\Function\CustomScoreProvider.cs" />
-    <Compile Include="Search\Function\CustomScoreQuery.cs" />
-    <Compile Include="Search\Function\DocValues.cs" />
-    <Compile Include="Search\Function\FieldCacheSource.cs" />
-    <Compile Include="Search\Function\FieldScoreQuery.cs" />
-    <Compile Include="Search\Function\FloatFieldSource.cs" />
-    <Compile Include="Search\Function\IntFieldSource.cs" />
-    <Compile Include="Search\Function\OrdFieldSource.cs" />
-    <Compile Include="Search\Function\ReverseOrdFieldSource.cs" />
-    <Compile Include="Search\Function\ShortFieldSource.cs" />
-    <Compile Include="Search\Function\ValueSource.cs" />
-    <Compile Include="Search\Function\ValueSourceQuery.cs" />
-    <Compile Include="Search\FuzzyQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\FuzzyTermEnum.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\HitQueue.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\IndexSearcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\MatchAllDocsQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\MultiPhraseQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\MultiSearcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\MultiTermQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Search\FilteredQuery.cs" />
+    <Compile Include="Search\FuzzyQuery.cs" />
+    <Compile Include="Search\FuzzyTermsEnum.cs" />
+    <Compile Include="Search\HitQueue.cs" />
+    <Compile Include="Search\IndexSearcher.cs" />
+    <Compile Include="Search\LiveFieldValues.cs" />
+    <Compile Include="Search\MatchAllDocsQuery.cs" />
+    <Compile Include="Search\IMaxNonCompetitiveBoostAttribute.cs" />
+    <Compile Include="Search\MaxNonCompetitiveBoostAttribute.cs" />
+    <Compile Include="Search\MinShouldMatchSumScorer.cs" />
+    <Compile Include="Search\MultiCollector.cs" />
+    <Compile Include="Search\MultiPhraseQuery.cs" />
+    <Compile Include="Search\MultiTermQuery.cs" />
     <Compile Include="Search\MultiTermQueryWrapperFilter.cs" />
+    <Compile Include="Search\NGramPhraseQuery.cs" />
     <Compile Include="Search\NumericRangeFilter.cs" />
     <Compile Include="Search\NumericRangeQuery.cs" />
-    <Compile Include="Search\ParallelMultiSearcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Search\Payloads\AveragePayloadFunction.cs" />
     <Compile Include="Search\Payloads\MaxPayloadFunction.cs" />
     <Compile Include="Search\Payloads\MinPayloadFunction.cs" />
@@ -646,229 +454,194 @@
     <Compile Include="Search\Payloads\PayloadNearQuery.cs" />
     <Compile Include="Search\Payloads\PayloadSpanUtil.cs" />
     <Compile Include="Search\Payloads\PayloadTermQuery.cs" />
-    <Compile Include="Search\PhrasePositions.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\PhraseQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\PhraseQueue.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\PhraseScorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Search\PhrasePositions.cs" />
+    <Compile Include="Search\PhraseQuery.cs" />
+    <Compile Include="Search\PhraseQueue.cs" />
     <Compile Include="Search\PositiveScoresOnlyCollector.cs" />
-    <Compile Include="Search\PrefixFilter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\PrefixQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\PrefixTermEnum.cs" />
-    <Compile Include="Search\Query.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\QueryTermVector.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Search\PrefixFilter.cs" />
+    <Compile Include="Search\PrefixQuery.cs" />
+    <Compile Include="Search\PrefixTermsEnum.cs" />
+    <Compile Include="Search\Query.cs" />
+    <Compile Include="Search\QueryRescorer.cs" />
     <Compile Include="Search\QueryWrapperFilter.cs" />
-    <Compile Include="Search\ReqExclScorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\ReqOptSumScorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Search\ReferenceManager.cs" />
+    <Compile Include="Search\RegexpQuery.cs" />
+    <Compile Include="Search\ReqExclScorer.cs" />
+    <Compile Include="Search\ReqOptSumScorer.cs" />
+    <Compile Include="Search\Rescorer.cs" />
     <Compile Include="Search\ScoreCachingWrappingScorer.cs" />
-    <Compile Include="Search\ScoreDoc.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Scorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Searchable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Searcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Similarity.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\SimilarityDelegator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\SingleTermEnum.cs" />
-    <Compile Include="Search\SloppyPhraseScorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Sort.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\SortField.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\SpanFilter.cs" />
-    <Compile Include="Search\SpanFilterResult.cs" />
-    <Compile Include="Search\SpanQueryFilter.cs" />
+    <Compile Include="Search\ScoreDoc.cs" />
+    <Compile Include="Search\Scorer.cs" />
+    <Compile Include="Search\ScoringRewrite.cs" />
+    <Compile Include="Search\SearcherFactory.cs" />
+    <Compile Include="Search\SearcherLifetimeManager.cs" />
+    <Compile Include="Search\SearcherManager.cs" />
+    <Compile Include="Search\Similarities\AfterEffect.cs" />
+    <Compile Include="Search\Similarities\AfterEffectB.cs" />
+    <Compile Include="Search\Similarities\AfterEffectL.cs" />
+    <Compile Include="Search\Similarities\BasicModel.cs" />
+    <Compile Include="Search\Similarities\BasicModelBE.cs" />
+    <Compile Include="Search\Similarities\BasicModelD.cs" />
+    <Compile Include="Search\Similarities\BasicModelG.cs" />
+    <Compile Include="Search\Similarities\BasicModelIF.cs" />
+    <Compile Include="Search\Similarities\BasicModelIn.cs" />
+    <Compile Include="Search\Similarities\BasicModelIne.cs" />
+    <Compile Include="Search\Similarities\BasicModelP.cs" />
+    <Compile Include="Search\Similarities\BasicStats.cs" />
+    <Compile Include="Search\Similarities\BM25Similarity.cs" />
+    <Compile Include="Search\Similarities\DefaultSimilarity.cs" />
+    <Compile Include="Search\Similarities\DFRSimilarity.cs" />
+    <Compile Include="Search\Similarities\Distribution.cs" />
+    <Compile Include="Search\Similarities\DistributionLL.cs" />
+    <Compile Include="Search\Similarities\DistributionSPL.cs" />
+    <Compile Include="Search\Similarities\IBSimilarity.cs" />
+    <Compile Include="Search\Similarities\Lambda.cs" />
+    <Compile Include="Search\Similarities\LambdaDF.cs" />
+    <Compile Include="Search\Similarities\LambdaTTF.cs" />
+    <Compile Include="Search\Similarities\LMDirichletSimilarity.cs" />
+    <Compile Include="Search\Similarities\LMJelinekMercerSimilarity.cs" />
+    <Compile Include="Search\Similarities\LMSimilarity.cs" />
+    <Compile Include="Search\Similarities\MultiSimilarity.cs" />
+    <Compile Include="Search\Similarities\Normalization.cs" />
+    <Compile Include="Search\Similarities\NormalizationH1.cs" />
+    <Compile Include="Search\Similarities\NormalizationH2.cs" />
+    <Compile Include="Search\Similarities\NormalizationH3.cs" />
+    <Compile Include="Search\Similarities\NormalizationZ.cs" />
+    <Compile Include="Search\Similarities\PerFieldSimilarityWrapper.cs" />
+    <Compile Include="Search\Similarities\Similarity.cs" />
+    <Compile Include="Search\Similarities\SimilarityBase.cs" />
+    <Compile Include="Search\Similarities\TFIDFSimilarity.cs" />
+    <Compile Include="Search\SloppyPhraseScorer.cs" />
+    <Compile Include="Search\Sort.cs" />
+    <Compile Include="Search\SortField.cs" />
+    <Compile Include="Search\SortRescorer.cs" />
     <Compile Include="Search\Spans\FieldMaskingSpanQuery.cs" />
-    <Compile Include="Search\Spans\NearSpansOrdered.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Spans\NearSpansUnordered.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Spans\SpanFirstQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Spans\SpanNearQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Spans\SpanNotQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Spans\SpanOrQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Spans\SpanQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Spans\Spans.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Spans\SpanScorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Spans\SpanTermQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\Spans\SpanWeight.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Search\Spans\NearSpansOrdered.cs" />
+    <Compile Include="Search\Spans\NearSpansUnordered.cs" />
+    <Compile Include="Search\Spans\SpanFirstQuery.cs" />
+    <Compile Include="Search\Spans\SpanMultiTermQueryWrapper.cs" />
+    <Compile Include="Search\Spans\SpanNearPayloadCheckQuery.cs" />
+    <Compile Include="Search\Spans\SpanNearQuery.cs" />
+    <Compile Include="Search\Spans\SpanNotQuery.cs" />
+    <Compile Include="Search\Spans\SpanOrQuery.cs" />
+    <Compile Include="Search\Spans\SpanPayloadCheckQuery.cs" />
+    <Compile Include="Search\Spans\SpanPositionCheckQuery.cs" />
+    <Compile Include="Search\Spans\SpanPositionRangeQuery.cs" />
+    <Compile Include="Search\Spans\SpanQuery.cs" />
+    <Compile Include="Search\Spans\Spans.cs" />
+    <Compile Include="Search\Spans\SpanScorer.cs" />
+    <Compile Include="Search\Spans\SpanTermQuery.cs" />
+    <Compile Include="Search\Spans\SpanWeight.cs" />
     <Compile Include="Search\Spans\TermSpans.cs" />
-    <Compile Include="Search\TermQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Search\TermCollectingRewrite.cs" />
+    <Compile Include="Search\TermQuery.cs" />
     <Compile Include="Search\TermRangeFilter.cs" />
     <Compile Include="Search\TermRangeQuery.cs" />
-    <Compile Include="Search\TermRangeTermEnum.cs" />
-    <Compile Include="Search\TermScorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Search\TermRangeTermsEnum.cs" />
+    <Compile Include="Search\TermScorer.cs" />
+    <Compile Include="Search\TermStatistics.cs" />
     <Compile Include="Search\TimeLimitingCollector.cs" />
-    <Compile Include="Search\TopDocs.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Search\TopDocs.cs" />
     <Compile Include="Search\TopDocsCollector.cs" />
     <Compile Include="Search\TopFieldCollector.cs" />
-    <Compile Include="Search\TopFieldDocs.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Search\TopFieldDocs.cs" />
     <Compile Include="Search\TopScoreDocCollector.cs" />
-    <Compile Include="Search\Weight.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\WildcardQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\WildcardTermEnum.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\AlreadyClosedException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\BufferedIndexInput.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\BufferedIndexOutput.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\CheckSumIndexInput.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\CheckSumIndexOutput.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\Directory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\FileSwitchDirectory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\FSDirectory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\FSLockFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\IndexInput.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\IndexOutput.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\Lock.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\LockFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\LockObtainFailedException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\LockReleaseFailedException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\LockStressTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\LockVerifyServer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\MMapDirectory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\NativeFSLockFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\NIOFSDirectory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\NoLockFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\NoSuchDirectoryException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\RAMDirectory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\RAMFile.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\RAMInputStream.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\RAMOutputStream.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\SimpleFSDirectory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\SimpleFSLockFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\SingleInstanceLockFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Store\VerifyingLockFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Search\TopTermsRewrite.cs" />
+    <Compile Include="Search\TotalHitCountCollector.cs" />
+    <Compile Include="Search\Weight.cs" />
+    <Compile Include="Search\WildcardQuery.cs" />
+    <Compile Include="Store\AlreadyClosedException.cs" />
+    <Compile Include="Store\BaseDirectory.cs" />
+    <Compile Include="Store\BufferedChecksum.cs" />
+    <Compile Include="Store\BufferedChecksumIndexInput.cs" />
+    <Compile Include="Store\BufferedIndexInput.cs" />
+    <Compile Include="Store\BufferedIndexOutput.cs" />
+    <Compile Include="Store\ByteArrayDataInput.cs" />
+    <Compile Include="Store\ByteArrayDataOutput.cs" />
+    <Compile Include="Store\ByteBufferIndexInput.cs" />
+    <Compile Include="Store\ChecksumIndexInput.cs" />
+    <Compile Include="Store\CompoundFileDirectory.cs" />
+    <Compile Include="Store\CompoundFileWriter.cs" />
+    <Compile Include="Store\DataInput.cs" />
+    <Compile Include="Store\DataOutput.cs" />
+    <Compile Include="Store\Directory.cs" />
+    <Compile Include="Store\FileSwitchDirectory.cs" />
+    <Compile Include="Store\FilterDirectory.cs" />
+    <Compile Include="Store\FlushInfo.cs" />
+    <Compile Include="Store\FSDirectory.cs" />
+    <Compile Include="Store\FSLockFactory.cs" />
+    <Compile Include="Store\IndexInput.cs" />
+    <Compile Include="Store\IndexOutput.cs" />
+    <Compile Include="Store\InputStreamDataInput.cs" />
+    <Compile Include="Store\IOContext.cs" />
+    <Compile Include="Store\Lock.cs" />
+    <Compile Include="Store\LockFactory.cs" />
+    <Compile Include="Store\LockObtainFailedException.cs" />
+    <Compile Include="Store\LockReleaseFailedException.cs" />
+    <Compile Include="Store\LockStressTest.cs" />
+    <Compile Include="Store\LockVerifyServer.cs" />
+    <Compile Include="Store\MergeInfo.cs" />
+    <Compile Include="Store\MMapDirectory.cs" />
+    <Compile Include="Store\NativeFSLockFactory.cs" />
+    <Compile Include="Store\NIOFSDirectory.cs" />
+    <Compile Include="Store\NoLockFactory.cs" />
+    <Compile Include="Store\NoSuchDirectoryException.cs" />
+    <Compile Include="Store\NRTCachingDirectory.cs" />
+    <Compile Include="Store\OutputStreamDataOutput.cs" />
+    <Compile Include="Store\RAMDirectory.cs" />
+    <Compile Include="Store\RAMFile.cs" />
+    <Compile Include="Store\RAMInputStream.cs" />
+    <Compile Include="Store\RAMOutputStream.cs" />
+    <Compile Include="Store\RateLimitedDirectoryWrapper.cs" />
+    <Compile Include="Store\RateLimitedIndexOutput.cs" />
+    <Compile Include="Store\RateLimiter.cs" />
+    <Compile Include="Store\SimpleFSDirectory.cs" />
+    <Compile Include="Store\SimpleFSLockFactory.cs" />
+    <Compile Include="Store\SingleInstanceLockFactory.cs" />
+    <Compile Include="Store\TrackingDirectoryWrapper.cs" />
+    <Compile Include="Store\VerifyingLockFactory.cs" />
+    <Compile Include="StringHelperClass.cs" />
     <Compile Include="Support\AppSettings.cs" />
+    <Compile Include="Support\AtomicBoolean.cs" />
+    <Compile Include="Support\AtomicInteger.cs" />
+    <Compile Include="Support\AtomicLong.cs" />
+    <Compile Include="Support\Buffer.cs" />
     <Compile Include="Support\AttributeImplItem.cs" />
     <Compile Include="Support\BitSetSupport.cs" />
+    <Compile Include="Support\BufferUnderflowException.cs" />
     <Compile Include="Support\BuildType.cs" />
+    <Compile Include="Support\ByteArrayOutputStream.cs" />
+    <Compile Include="Support\ByteBuffer.cs" />
     <Compile Include="Support\Character.cs" />
+    <Compile Include="Support\Arrays.cs" />
+    <Compile Include="Support\ConcurrentHashMap.cs" />
+    <Compile Include="Support\ConcurrentHashMapWrapper.cs" />
+    <Compile Include="Support\ConcurrentHashSet.cs" />
+    <Compile Include="Support\ConcurrentList.cs" />
+    <Compile Include="Support\FileStreamExtensions.cs" />
+    <Compile Include="Support\HashCodeMerge.cs" />
+    <Compile Include="Support\ICallable.cs" />
+    <Compile Include="Support\ICharSequence.cs" />
+    <Compile Include="Support\ICompletionService.cs" />
+    <Compile Include="Support\IdentityComparer.cs" />
+    <Compile Include="Support\IdentityHashMap.cs" />
+    <Compile Include="Support\IdentityHashSet.cs" />
+    <Compile Include="Support\IdentityWeakReference.cs" />
+    <Compile Include="Support\IDictionaryExtensions.cs" />
+    <Compile Include="Support\ListExtensions.cs" />
+    <Compile Include="Support\MathExtension.cs" />
+    <Compile Include="Support\MemoryMappedFileByteBuffer.cs" />
+    <Compile Include="Support\PriorityQueue.cs" />
+    <Compile Include="Support\ReentrantLock.cs" />
+    <Compile Include="Support\SetExtensions.cs" />
+    <Compile Include="Support\StringBuilderExtensions.cs" />
+    <Compile Include="Support\StringCharSequenceWrapper.cs" />
+    <Compile Include="Support\StringSupport.cs" />
+    <Compile Include="Support\StringTokenizer.cs" />
+    <Compile Include="Support\TaskSchedulerCompletionService.cs" />
+    <Compile Include="Support\ThreadFactory.cs" />
+    <Compile Include="Support\TimeHelper.cs" />
+    <Compile Include="Support\UnmodifiableDictionary.cs" />
     <Compile Include="Support\CloseableThreadLocalProfiler.cs" />
     <Compile Include="Support\CollectionsHelper.cs" />
     <Compile Include="Support\Compare.cs" />
@@ -887,102 +660,201 @@
     <Compile Include="Support\FileSupport.cs" />
     <Compile Include="Support\GeneralKeyedCollection.cs" />
     <Compile Include="Support\HashMap.cs" />
+    <Compile Include="Support\IChecksum.cs" />
     <Compile Include="Support\Inflater.cs" />
     <Compile Include="Support\IThreadRunnable.cs" />
     <Compile Include="Support\Number.cs" />
     <Compile Include="Support\OS.cs" />
     <Compile Include="Support\SharpZipLib.cs" />
     <Compile Include="Support\Single.cs" />
-    <Compile Include="Support\IChecksum.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Support\TextSupport.cs" />
     <Compile Include="Support\ThreadClass.cs" />
     <Compile Include="Support\ThreadLock.cs" />
     <Compile Include="Support\WeakDictionary.cs" />
+    <Compile Include="Util\ArrayInPlaceMergeSorter.cs" />
+    <Compile Include="Util\ArrayIntroSorter.cs" />
+    <Compile Include="Util\ArrayTimSorter.cs" />
     <Compile Include="Util\ArrayUtil.cs" />
-    <Compile Include="Util\IAttribute.cs" />
     <Compile Include="Util\Attribute.cs" />
     <Compile Include="Util\AttributeSource.cs" />
-    <Compile Include="Util\AverageGuessMemoryModel.cs" />
+    <Compile Include="Util\Automaton\Automaton.cs" />
+    <Compile Include="Util\Automaton\AutomatonProvider.cs" />
+    <Compile Include="Util\Automaton\BasicAutomata.cs" />
+    <Compile Include="Util\Automaton\BasicOperations.cs" />
+    <Compile Include="Util\Automaton\ByteRunAutomaton.cs" />
+    <Compile Include="Util\Automaton\CharacterRunAutomaton.cs" />
+    <Compile Include="Util\Automaton\CompiledAutomaton.cs" />
+    <Compile Include="Util\Automaton\DaciukMihovAutomatonBuilder.cs" />
+    <Compile Include="Util\Automaton\Lev1ParametricDescription.cs" />
+    <Compile Include="Util\Automaton\Lev1TParametricDescription.cs" />
+    <Compile Include="Util\Automaton\Lev2ParametricDescription.cs" />
+    <Compile Include="Util\Automaton\Lev2TParametricDescription.cs" />
+    <Compile Include="Util\Automaton\LevenshteinAutomata.cs" />
+    <Compile Include="Util\Automaton\MinimizationOperations.cs" />
+    <Compile Include="Util\Automaton\RegExp.cs" />
+    <Compile Include="Util\Automaton\RunAutomaton.cs" />
+    <Compile Include="Util\Automaton\SortedIntSet.cs" />
+    <Compile Include="Util\Automaton\SpecialOperations.cs" />
+    <Compile Include="Util\Automaton\State.cs" />
+    <Compile Include="Util\Automaton\StatePair.cs" />
+    <Compile Include="Util\Automaton\Transition.cs" />
+    <Compile Include="Util\Automaton\UTF32ToUTF8.cs" />
+    <Compile Include="Util\Bits.cs" />
     <Compile Include="Util\BitUtil.cs" />
-    <Compile Include="Util\BitVector.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Util\BroadWord.cs" />
+    <Compile Include="Util\ByteBlockPool.cs" />
+    <Compile Include="Util\BytesRef.cs" />
+    <Compile Include="Util\BytesRefArray.cs" />
+    <Compile Include="Util\BytesRefHash.cs" />
+    <Compile Include="Util\BytesRefIterator.cs" />
+    <Compile Include="Util\CharsRef.cs" />
     <Compile Include="Util\CloseableThreadLocal.cs" />
-    <Compile Include="Util\Constants.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Util\CollectionUtil.cs" />
+    <Compile Include="Util\CommandLineUtil.cs" />
+    <Compile Include="Util\Constants.cs" />
+    <Compile Include="Util\Counter.cs" />
     <Compile Include="Util\DocIdBitSet.cs" />
+    <Compile Include="Util\DoubleBarrelLRUCache.cs" />
     <Compile Include="Util\FieldCacheSanityChecker.cs" />
-    <Compile Include="Util\IdentityDictionary.cs" />
+    <Compile Include="Util\FilterIterator.cs" />
+    <Compile Include="Util\FixedBitSet.cs" />
+    <Compile Include="Util\Fst\Builder.cs" />
+    <Compile Include="Util\Fst\ByteSequenceOutputs.cs" />
+    <Compile Include="Util\Fst\BytesRefFSTEnum.cs" />
+    <Compile Include="Util\Fst\BytesStore.cs" />
+    <Compile Include="Util\Fst\CharSequenceOutputs.cs" />
+    <Compile Include="Util\Fst\ForwardBytesReader.cs" />
+    <Compile Include="Util\Fst\FST.cs" />
+    <Compile Include="Util\Fst\FSTEnum.cs" />
+    <Compile Include="Util\Fst\IntSequenceOutputs.cs" />
+    <Compile Include="Util\Fst\IntsRefFSTEnum.cs" />
+    <Compile Include="Util\Fst\NodeHash.cs" />
+    <Compile Include="Util\Fst\NoOutputs.cs" />
+    <Compile Include="Util\Fst\Outputs.cs" />
+    <Compile Include="Util\Fst\PairOutputs.cs" />
+    <Compile Include="Util\Fst\PositiveIntOutputs.cs" />
+    <Compile Include="Util\Fst\ReverseBytesReader.cs" />
+    <Compile Include="Util\Fst\Util.cs" />
+    <Compile Include="Util\GrowableByteArrayDataOutput.cs" />
+    <Compile Include="Util\IAttribute.cs" />
+    <Compile Include="Util\IAttributeReflector.cs" />
+    <Compile Include="Util\IBoostAttribute.cs" />
     <Compile Include="Util\IndexableBinaryStringTools.cs" />
+    <Compile Include="Util\InfoStream.cs" />
+    <Compile Include="Util\InPlaceMergeSorter.cs" />
+    <Compile Include="Util\IntBlockPool.cs" />
+    <Compile Include="Util\IntroSorter.cs" />
+    <Compile Include="Util\IntsRef.cs" />
+    <Compile Include="Util\IOUtils.cs" />
+    <Compile Include="Util\LongBitSet.cs" />
+    <Compile Include="Util\LongsRef.cs" />
+    <Compile Include="Util\LongValues.cs" />
     <Compile Include="Util\MapOfSets.cs" />
-    <Compile Include="Util\MemoryModel.cs" />
+    <Compile Include="Util\MathUtil.cs" />
+    <Compile Include="Util\MergedIterator.cs" />
+    <Compile Include="Util\MutableBits.cs" />
+    <Compile Include="Util\Mutable\MutableValue.cs" />
+    <Compile Include="Util\Mutable\MutableValueBool.cs" />
+    <Compile Include="Util\Mutable\MutableValueDate.cs" />
+    <Compile Include="Util\Mutable\MutableValueDouble.cs" />
+    <Compile Include="Util\Mutable\MutableValueFloat.cs" />
+    <Compile Include="Util\Mutable\MutableValueInt.cs" />
+    <Compile Include="Util\Mutable\MutableValueLong.cs" />
+    <Compile Include="Util\Mutable\MutableValueStr.cs" />
+    <Compile Include="Util\NamedSPILoader.cs" />
+    <Compile Include="Util\NamedThreadFactory.cs" />
     <Compile Include="Util\NumericUtils.cs" />
+    <Compile Include="Util\OfflineSorter.cs" />
     <Compile Include="Util\OpenBitSet.cs" />
     <Compile Include="Util\OpenBitSetDISI.cs" />
     <Compile Include="Util\OpenBitSetIterator.cs" />
-    <Compile Include="Util\PriorityQueue.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Util\Cache\Cache.cs" />
-    <Compile Include="Util\Cache\SimpleLRUCache.cs" />
-    <Compile Include="Util\Cache\SimpleMapCache.cs" />
+    <Compile Include="Util\Packed\AbstractAppendingLongBuffer.cs" />
+    <Compile Include="Util\Packed\AbstractBlockPackedWriter.cs" />
+    <Compile Include="Util\Packed\AbstractPagedMutable.cs" />
+    <Compile Include="Util\Packed\AppendingDeltaPackedLongBuffer.cs" />
+    <Compile Include="Util\Packed\AppendingPackedLongBuffer.cs" />
+    <Compile Include="Util\Packed\BlockPackedReader.cs" />
+    <Compile Include="Util\Packed\BlockPackedReaderIterator.cs" />
+    <Compile Include="Util\Packed\BlockPackedWriter.cs" />
+    <Compile Include="Util\Packed\BulkOperation.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked1.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked10.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked11.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked12.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked13.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked14.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked15.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked16.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked17.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked18.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked19.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked2.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked20.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked21.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked22.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked23.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked24.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked3.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked4.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked5.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked6.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked7.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked8.cs" />
+    <Compile Include="Util\Packed\BulkOperationPacked9.cs" />
+    <Compile Include="Util\Packed\BulkOperationPackedSingleBlock.cs" />
+    <Compile Include="Util\Packed\Direct16.cs" />
+    <Compile Include="Util\Packed\Direct32.cs" />
+    <Compile Include="Util\Packed\Direct64.cs" />
+    <Compile Include="Util\Packed\Direct8.cs" />
+    <Compile Include="Util\Packed\DirectPacked64SingleBlockReader.cs" />
+    <Compile Include="Util\Packed\DirectPackedReader.cs" />
+    <Compile Include="Util\Packed\EliasFanoDecoder.cs" />
+    <Compile Include="Util\Packed\EliasFanoDocIdSet.cs" />
+    <Compile Include="Util\Packed\EliasFanoEncoder.cs" />
+    <Compile Include="Util\Packed\GrowableWriter.cs" />
+    <Compile Include="Util\Packed\MonotonicAppendingLongBuffer.cs" />
+    <Compile Include="Util\Packed\MonotonicBlockPackedReader.cs" />
+    <Compile Include="Util\Packed\MonotonicBlockPackedWriter.cs" />
+    <Compile Include="Util\Packed\Packed16ThreeBlocks.cs" />
+    <Compile Include="Util\Packed\Packed64.cs" />
+    <Compile Include="Util\Packed\Packed64SingleBlock.cs" />
+    <Compile Include="Util\Packed\Packed8ThreeBlocks.cs" />
+    <Compile Include="Util\Packed\PackedDataInput.cs" />
+    <Compile Include="Util\Packed\PackedDataOutput.cs" />
+    <Compile Include="Util\Packed\PackedInts.cs" />
+    <Compile Include="Util\Packed\PackedReaderIterator.cs" />
+    <Compile Include="Util\Packed\PackedWriter.cs" />
+    <Compile Include="Util\Packed\PagedGrowableWriter.cs" />
+    <Compile Include="Util\Packed\PagedMutable.cs" />
+    <Compile Include="Util\PagedBytes.cs" />
+    <Compile Include="Util\PForDeltaDocIdSet.cs" />
+    <Compile Include="Util\PrintStreamInfoStream.cs" />
+    <Compile Include="Util\PriorityQueue.cs" />
+    <Compile Include="Util\QueryBuilder.cs" />
     <Compile Include="Util\RamUsageEstimator.cs" />
-    <Compile Include="Util\ReaderUtil.cs" />
-    <Compile Include="Util\ScorerDocQueue.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Util\SimpleStringInterner.cs" />
-    <Compile Include="Util\SmallFloat.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Util\SortedVIntList.cs" />
-    <Compile Include="Util\SorterTemplate.cs" />
-    <Compile Include="Util\StringHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Util\StringInterner.cs" />
-    <Compile Include="Util\ToStringUtils.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Util\RecyclingByteBlockAllocator.cs" />
+    <Compile Include="Util\RecyclingIntBlockAllocator.cs" />
+    <Compile Include="Util\RefCount.cs" />
+    <Compile Include="Util\RollingBuffer.cs" />
+    <Compile Include="Util\SentinelIntSet.cs" />
+    <Compile Include="Util\SetOnce.cs" />
+    <Compile Include="Util\SloppyMath.cs" />
+    <Compile Include="Util\SmallFloat.cs" />
+    <Compile Include="Util\Sorter.cs" />
+    <Compile Include="Util\SPIClassIterator.cs" />
+    <Compile Include="Util\StringHelper.cs" />
+    <Compile Include="Util\ThreadInterruptedException.cs" />
+    <Compile Include="Util\TimSorter.cs" />
+    <Compile Include="Util\ToStringUtils.cs" />
     <Compile Include="Util\UnicodeUtil.cs" />
     <Compile Include="Util\Version.cs" />
-    <None Include="Analysis\Standard\StandardTokenizerImpl.jflex" />
-    <None Include="Lucene.Net.Search.RemoteSearchable.config" />
-    <None Include="Lucene.Net.Search.TestSort.config" />
-    <None Include="Lucene.Net.snk" />
-    <Content Include="Analysis\Standard\READ_BEFORE_REGENERATING.txt" />
-    <None Include="QueryParser\QueryParser.jj" />
+    <Compile Include="Util\VirtualMethod.cs" />
+    <Compile Include="Util\WAH8DocIdSet.cs" />
+    <Compile Include="Util\WeakIdentityMap.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
 </Project>

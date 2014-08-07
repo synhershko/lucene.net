@@ -61,7 +61,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Lucene.Net.csproj">
+    <ProjectReference Include="..\src\core\Lucene.Net.csproj">
       <Project>{9b06b39d-9b24-45d3-ab54-87f3a0db7735}</Project>
       <Name>Lucene.Net</Name>
     </ProjectReference>
