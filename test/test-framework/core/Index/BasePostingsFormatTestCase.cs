@@ -1260,36 +1260,43 @@ namespace Lucene.Net.Index
             System.IO.Directory.Delete(path.FullName, true);
         }
 
+        [Test]
         public virtual void TestDocsOnly()
         {
             TestFull(IndexOptions_e.DOCS_ONLY, false);
         }
 
+        [Test]
         public virtual void TestDocsAndFreqs()
         {
             TestFull(IndexOptions_e.DOCS_AND_FREQS, false);
         }
 
+        [Test]
         public virtual void TestDocsAndFreqsAndPositions()
         {
             TestFull(IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS, false);
         }
 
+        [Test]
         public virtual void TestDocsAndFreqsAndPositionsAndPayloads()
         {
             TestFull(IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS, true);
         }
 
+        [Test]
         public virtual void TestDocsAndFreqsAndPositionsAndOffsets()
         {
             TestFull(IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS, false);
         }
 
+        [Test]
         public virtual void TestDocsAndFreqsAndPositionsAndOffsetsAndPayloads()
         {
             TestFull(IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS, true);
         }
 
+        [Test]
         public virtual void TestRandom()
         {
             int iters = 5;
