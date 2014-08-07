@@ -19,6 +19,8 @@
  *
 */
 
+using System;
+
 namespace Lucene.Net.Support
 {
     /// <summary>
@@ -107,18 +109,53 @@ namespace Lucene.Net.Support
 
         public static int CharCount(int codePoint)
         {
-            // .NET chars are always length 1
-            return 1;
+            // A given codepoint can be represented in .NET either by 1 char (up to UTF16),
+            // or by if it's a UTF32 codepoint, in which case the current char will be a surrogate
+            return codePoint >= MIN_SUPPLEMENTARY_CODE_POINT ? 2 : 1;
         }
 
-        public static bool IsLowSurrogate(char ch)
+        public static int CodePointAt(string seq, int index)
         {
-            return ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE;
+            char c1 = seq[index++];
+            if (char.IsHighSurrogate(c1))
+            {
+                if (index < seq.Length)
+                {
+                    char c2 = seq[index];
+                    if (char.IsLowSurrogate(c2))
+                    {
+                        return ToCodePoint(c1, c2);
+                    }
+                }
+            }
+            return c1;
         }
 
-        public static bool IsHighSurrogate(char ch)
+        public static int CodePointAt(char[] a, int index, int limit)
         {
-            return ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE;
+            if (index >= limit || limit < 0 || limit > a.Length)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            return CodePointAtImpl(a, index, limit);
+        }
+
+        // throws ArrayIndexOutofBoundsException if index out of bounds
+        static int CodePointAtImpl(char[] a, int index, int limit)
+        {
+            char c1 = a[index++];
+            if (char.IsHighSurrogate(c1))
+            {
+                if (index < limit)
+                {
+                    char c2 = a[index];
+                    if (char.IsLowSurrogate(c2))
+                    {
+                        return ToCodePoint(c1, c2);
+                    }
+                }
+            }
+            return c1;
         }
     }
 }
