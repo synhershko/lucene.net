@@ -58,9 +58,6 @@
   <ItemGroup>
     <None Include="core\App.config" />
     <None Include="core\Lucene.Net.snk" />
-    <None Include="core\Test.nunit">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -995,10 +992,6 @@
     <Compile Include="test-framework\core\Util\TimeUnits.cs">
       <SubType>Code</SubType>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="core\Lucene.Net.Test.csproj" />
-    <Content Include="lib\ICSharpCode.SharpZipLib.dll" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="core\Util\Cache\" />
