@@ -1215,13 +1215,14 @@ namespace Lucene.Net.Index
             {
                 IndexWriterConfig conf = NewIndexWriterConfig(TEST_VERSION_CURRENT, new MockAnalyzer(Random()));
                 conf.SetCodec(new UnRegisteredCodec());
-                IndexWriter w = new IndexWriter(toAdd, conf);
-                Document doc = new Document();
-                FieldType customType = new FieldType();
-                customType.Indexed = true;
-                doc.Add(NewField("foo", "bar", customType));
-                w.AddDocument(doc);
-                w.Dispose();
+                using (var w = new IndexWriter(toAdd, conf))
+                {
+                    Document doc = new Document();
+                    FieldType customType = new FieldType();
+                    customType.Indexed = true;
+                    doc.Add(NewField("foo", "bar", customType));
+                    w.AddDocument(doc);
+                }
             }
 
             // LUCENE TODO: Pulsing41Codec is not in core

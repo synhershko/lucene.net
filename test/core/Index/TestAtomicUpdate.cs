@@ -199,15 +199,17 @@ namespace Lucene.Net.Index
             Directory directory;
 
             // First in a RAM directory:
-            directory = new MockDirectoryWrapper(Random(), new RAMDirectory());
-            RunTest(directory);
-            directory.Dispose();
+            using (directory = new MockDirectoryWrapper(Random(), new RAMDirectory()))
+            {
+                RunTest(directory);
+            }
 
             // Second in an FSDirectory:
             DirectoryInfo dirPath = CreateTempDir("lucene.test.atomic");
-            directory = NewFSDirectory(dirPath);
-            RunTest(directory);
-            directory.Dispose();
+            using (directory = NewFSDirectory(dirPath))
+            {
+                RunTest(directory);
+            }
             TestUtil.Rm(dirPath);
         }
     }
