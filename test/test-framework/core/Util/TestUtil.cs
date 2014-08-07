@@ -1014,13 +1014,11 @@ namespace Lucene.Net.Util
         /// Checks some basic behaviour of an AttributeImpl </summary>
         /// <param name="att">Attribute to reflect</param>
         /// <param name="reflectedValues"> contains a map with "AttributeClass#key" as values </param>
-        public static void AssertAttributeReflection<T>(Attribute att, IDictionary<string, T> reflectedValues)
+        public static void AssertAttributeReflection(Attribute att, IDictionary<string, object> reflectedValues)
         {
             IDictionary<string, object> map = new Dictionary<string, object>();
             att.ReflectWith(new AttributeReflectorAnonymousInnerClassHelper(map));
-            //Assert.AreEqual(reflectedValues, map, "Reflection does not produce same map");
-            Assert.IsTrue(CollectionsHelper.DictEquals((Dictionary<string, object>)reflectedValues, map), "Reflection does not produce same map");
-            //Assert.IsTrue(CollectionsHelper.Equals((Dictionary<string, object>)reflectedValues, (Dictionary<string, object>)map), "Reflection does not produce same map");
+            Assert.AreEqual(reflectedValues, map, "Reflection does not produce same map");
         }
 
         private class AttributeReflectorAnonymousInnerClassHelper : IAttributeReflector
