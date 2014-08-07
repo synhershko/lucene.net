@@ -96,6 +96,12 @@ namespace Lucene.Net.Search
             indexStore.Dispose();
         }
 
+        [Test]
+        public void Test()
+        {
+            // noop, required for the before and after tests to run
+        }
+
         ///
         [TestFixtureTearDown]
         public virtual void TestAfter()
