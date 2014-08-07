@@ -307,7 +307,7 @@ namespace Lucene.Net.Util
         /// The recommended way to use custom implementations is using an <seealso cref="AttributeFactory"/>.
         /// </font></p>
         /// </summary>
-        public virtual void AddAttributeImpl(Attribute att)
+        public void AddAttributeImpl(Attribute att)
         {
             Type clazz = att.GetType();
             if (AttributeImpls.ContainsKey(clazz))
@@ -336,7 +336,7 @@ namespace Lucene.Net.Util
             }
         }
 
-        public virtual T AddAttribute<T>()
+        public T AddAttribute<T>()
             where T : IAttribute
         {
             var attClass = typeof(T);
