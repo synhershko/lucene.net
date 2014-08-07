@@ -1,6 +1,7 @@
 using Lucene.Net.Randomized.Generators;
 using Lucene.Net.Support;
 using System;
+using NUnit.Framework;
 
 namespace Lucene.Net.Index
 {
@@ -37,6 +38,7 @@ namespace Lucene.Net.Index
         /// Create a new <seealso cref="MergePolicy"/> instance. </summary>
         protected internal abstract MergePolicy MergePolicy();
 
+        [Test]
         public virtual void TestForceMergeNotNeeded()
         {
             Directory dir = NewDirectory();

@@ -51,6 +51,20 @@ namespace Lucene.Net.Support
             return -1;
         }
 
+        public static int PrevSetBit(this BitArray bitArray, int index)
+        {
+            while (index >= 0 && index < bitArray.Length)
+            {
+                // if index bit is set, return it
+                // otherwise check previous index bit
+                if (bitArray.Get(index))
+                    return index;
+                index--;
+            }
+            // if no bits are set at or before index, return -1
+            return -1;
+        }
+
         // Produces a bitwise-and of the two BitArrays without requiring they be the same length
         public static BitArray And_UnequalLengths(this BitArray bitsA, BitArray bitsB)
         {

@@ -28,8 +28,8 @@ namespace Lucene.Net.Util.Fst
     using MMapDirectory = Lucene.Net.Store.MMapDirectory;
     using PackedInts = Lucene.Net.Util.Packed.PackedInts;
 
-    //ORIGINAL LINE: @Ignore("Requires tons of heap to run (420G works)") @TimeoutSuite(millis = 100 * TimeUnits.HOUR) public class Test2BFST extends Lucene.Net.Util.LuceneTestCase
-    [Ignore]
+    //ORIGINAL LINE: @TimeoutSuite(millis = 100 * TimeUnits.HOUR) public class Test2BFST extends Lucene.Net.Util.LuceneTestCase
+    [Ignore("Requires tons of heap to run (420G works)")]
     [TestFixture]
     public class Test2BFST : LuceneTestCase
     {

@@ -55,7 +55,7 @@ namespace Lucene.Net.Util
             long bb = aa;
             do
             {
-                // aa = a.PrevSetBit(aa-1);
+                aa = a.PrevSetBit(aa-1);
                 aa--;
                 while ((aa >= 0) && (!a.Get(aa)))
                 {
