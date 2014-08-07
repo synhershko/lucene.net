@@ -67,18 +67,16 @@ namespace Lucene.Net.Util
         public static readonly string OS_ARCH = GetEnvironmentVariable("PROCESSOR_ARCHITECTURE", "x86");
         public static readonly string OS_VERSION = GetEnvironmentVariable("OS_VERSION", "?");
 
-        /// @deprecated With Lucene 4.0, we are always on Java 6
-        [Obsolete("With Lucene 4.0, we are always on Java 6")]
+        [Obsolete("We are not running on Java for heavens sake")]
         public static readonly bool JRE_IS_MINIMUM_JAVA6 = (bool)new bool?(true); // prevent inlining in foreign class files
 
-        /// @deprecated With Lucene 4.8, we are always on Java 7
-        [Obsolete("With Lucene 4.8, we are always on Java 7")]
+        [Obsolete("We are not running on Java for heavens sake")]
         public static readonly bool JRE_IS_MINIMUM_JAVA7 = (bool)new bool?(true); // prevent inlining in foreign class files
 
+        [Obsolete("We are not running on Java for heavens sake")]
         public static readonly bool JRE_IS_MINIMUM_JAVA8;
 
-        /// <summary>
-        /// True iff running on a 64bit JVM </summary>
+        [Obsolete("We are not running on Java for heavens sake")]
         public static readonly bool JRE_IS_64BIT;
 
         static Constants()
