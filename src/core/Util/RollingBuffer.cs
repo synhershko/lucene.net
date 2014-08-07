@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System;
 using System.Diagnostics;
 
@@ -52,11 +51,10 @@ namespace Lucene.Net.Util
 
         protected RollingBuffer()
         {
-            Assert.Fail("GIVE ROLLING BUFFER A DELEGATE FOR NEW INSTANCE");
-            /*for (int idx = 0; idx < Buffer.Length; idx++)
+            for (var idx = 0; idx < Buffer.Length; idx++)
             {
-              Buffer[idx] = NewInstance();
-            }*/
+                Buffer[idx] = NewInstance(); // TODO GIVE ROLLING BUFFER A DELEGATE FOR NEW INSTANCE
+            }
         }
 
         protected RollingBuffer(Func<T> factory)
@@ -114,7 +112,7 @@ namespace Lucene.Net.Util
             {
                 if (Count == Buffer.Length)
                 {
-                    T[] newBuffer = (T[])new T[ArrayUtil.Oversize(1 + Count, RamUsageEstimator.NUM_BYTES_OBJECT_REF)];
+                    var newBuffer = new T[ArrayUtil.Oversize(1 + Count, RamUsageEstimator.NUM_BYTES_OBJECT_REF)];
                     Array.Copy(Buffer, NextWrite, newBuffer, 0, Buffer.Length - NextWrite);
                     Array.Copy(Buffer, 0, newBuffer, Buffer.Length - NextWrite, NextWrite);
                     for (int i = Buffer.Length; i < newBuffer.Length; i++)
