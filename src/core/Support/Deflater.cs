@@ -125,9 +125,7 @@ namespace Lucene.Net.Support
 
         public int Deflate(byte[] output, int offset, int length)
         {
-            //LUCENE TODO: brute-force converting for now to eliminate TypeMismatchError
-            byte[] byteOutput = output.Select(b => (byte)b).ToArray();
-            return deflate3Method(byteOutput, offset, length);
+            return deflate3Method(output, offset, length);
         }
 
         public void Reset()

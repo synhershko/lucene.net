@@ -94,33 +94,29 @@ namespace Lucene.Net.Document
             IndexableField binaryFldCompressed = new StoredField("binaryCompressed", (sbyte[])(Array)CompressionTools.Compress(BinaryValCompressed.GetBytes(Encoding.UTF8)));
             IndexableField stringFldCompressed = new StoredField("stringCompressed", (sbyte[])(Array)CompressionTools.CompressString(BinaryValCompressed));
 
-            Document doc = new Document();
+            var doc = new Document {binaryFldCompressed, stringFldCompressed};
 
-            doc.Add(binaryFldCompressed);
-            doc.Add(stringFldCompressed);
+            using (Directory dir = NewDirectory())
+            using (RandomIndexWriter writer = new RandomIndexWriter(Random(), dir))
+            {
+                writer.AddDocument(doc);
 
-            /// <summary>
-            /// add the doc to a ram index </summary>
-            Directory dir = NewDirectory();
-            RandomIndexWriter writer = new RandomIndexWriter(Random(), dir);
-            writer.AddDocument(doc);
+                using (IndexReader reader = writer.Reader)
+                {
+                    Document docFromReader = reader.Document(0);
+                    Assert.IsTrue(docFromReader != null);
 
-            /// <summary>
-            /// open a reader and fetch the document </summary>
-            IndexReader reader = writer.Reader;
-            Document docFromReader = reader.Document(0);
-            Assert.IsTrue(docFromReader != null);
+                    string binaryFldCompressedTest =
+                        Encoding.UTF8.GetString(
+                            CompressionTools.Decompress(docFromReader.GetBinaryValue("binaryCompressed")));
+                    //new string(CompressionTools.Decompress(docFromReader.GetBinaryValue("binaryCompressed")), IOUtils.CHARSET_UTF_8);
+                    Assert.IsTrue(binaryFldCompressedTest.Equals(BinaryValCompressed));
+                    Assert.IsTrue(
+                        CompressionTools.DecompressString(docFromReader.GetBinaryValue("stringCompressed"))
+                            .Equals(BinaryValCompressed));
+                }
 
-            /// <summary>
-            /// fetch the binary compressed field and compare it's content with the original one </summary>
-            string binaryFldCompressedTest = Encoding.UTF8.GetString(CompressionTools.Decompress(docFromReader.GetBinaryValue("binaryCompressed")));
-            //new string(CompressionTools.Decompress(docFromReader.GetBinaryValue("binaryCompressed")), IOUtils.CHARSET_UTF_8);
-            Assert.IsTrue(binaryFldCompressedTest.Equals(BinaryValCompressed));
-            Assert.IsTrue(CompressionTools.DecompressString(docFromReader.GetBinaryValue("stringCompressed")).Equals(BinaryValCompressed));
-
-            writer.Dispose();
-            reader.Dispose();
-            dir.Dispose();
+            }
         }
     }
 }

@@ -60,7 +60,7 @@ namespace Lucene.Net.Document
                 compressor.Finish();
 
                 // Compress the data
-                byte[] buf = new byte[1024];
+                var buf = new byte[1024];
                 while (!compressor.IsFinished)
                 {
                     int count = compressor.Deflate(buf);
