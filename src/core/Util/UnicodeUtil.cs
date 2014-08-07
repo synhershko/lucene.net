@@ -154,14 +154,14 @@ namespace Lucene.Net.Util
                 }
                 else if (code < 0x800)
                 {
-                    @out[upto++] = unchecked((sbyte)(0xC0 | (code >> 6)));
-                    @out[upto++] = unchecked((sbyte)(0x80 | (code & 0x3F)));
+                    @out[upto++] = (sbyte)(0xC0 | (code >> 6));
+                    @out[upto++] = (sbyte)(0x80 | (code & 0x3F));
                 }
                 else if (code < 0xD800 || code > 0xDFFF)
                 {
-                    @out[upto++] = unchecked((sbyte)(0xE0 | (code >> 12)));
-                    @out[upto++] = unchecked((sbyte)(0x80 | ((code >> 6) & 0x3F)));
-                    @out[upto++] = unchecked((sbyte)(0x80 | (code & 0x3F)));
+                    @out[upto++] = (sbyte)(0xE0 | (code >> 12));
+                    @out[upto++] = (sbyte)(0x80 | ((code >> 6) & 0x3F));
+                    @out[upto++] = (sbyte)(0x80 | (code & 0x3F));
                 }
                 else
                 {
@@ -169,16 +169,16 @@ namespace Lucene.Net.Util
                     // confirm valid high surrogate
                     if (code < 0xDC00 && i < end)
                     {
-                        int utf32 = (int)source.CharAt(i);
+                        var utf32 = (int)source.CharAt(i);
                         // confirm valid low surrogate and write pair
                         if (utf32 >= 0xDC00 && utf32 <= 0xDFFF)
                         {
                             utf32 = (code << 10) + utf32 + SURROGATE_OFFSET;
                             i++;
-                            @out[upto++] = unchecked((sbyte)(0xF0 | (utf32 >> 18)));
-                            @out[upto++] = unchecked((sbyte)(0x80 | ((utf32 >> 12) & 0x3F)));
-                            @out[upto++] = unchecked((sbyte)(0x80 | ((utf32 >> 6) & 0x3F)));
-                            @out[upto++] = unchecked((sbyte)(0x80 | (utf32 & 0x3F)));
+                            @out[upto++] = (sbyte)(0xF0 | (utf32 >> 18));
+                            @out[upto++] = (sbyte)(0x80 | ((utf32 >> 12) & 0x3F));
+                            @out[upto++] = (sbyte)(0x80 | ((utf32 >> 6) & 0x3F));
+                            @out[upto++] = (sbyte)(0x80 | (utf32 & 0x3F));
                             continue;
                         }
                     }
@@ -426,40 +426,21 @@ namespace Lucene.Net.Util
             for (; pos < limit; codePointCount++)
             {
                 int v = bytes[pos] & 0xFF;
-                if (v < 0x80) // 0xxx xxxx
+                if (v <   /* 0xxx xxxx */ 0x80) { pos += 1; continue; }
+                if (v >=  /* 110x xxxx */ 0xc0)
                 {
-                    pos += 1;
-                    continue;
-                }
-                if (v >= 0xc0) // 110x xxxx
-                {
-                    if (v < 0xe0) // 111x xxxx
-                    {
-                        pos += 2;
-                        continue;
-                    }
-                    if (v < 0xf0) // 1111 xxxx
-                    {
-                        pos += 3;
-                        continue;
-                    }
-                    if (v < 0xf8) // 1111 1xxx
-                    {
-                        pos += 4;
-                        continue;
-                    }
-                    // fallthrough, consider 5 and 6 byte sequences invalid.
+                    if (v < /* 111x xxxx */ 0xe0) { pos += 2; continue; }
+                    if (v < /* 1111 xxxx */ 0xf0) { pos += 3; continue; }
+                    if (v < /* 1111 1xxx */ 0xf8) { pos += 4; continue; }
+                    // fallthrough, consider 5 and 6 byte sequences invalid. 
                 }
 
                 // Anything not covered above is invalid UTF8.
-                throw new System.ArgumentException();
+                throw new ArgumentException();
             }
 
             // Check if we didn't go over the limit on the last character.
-            if (pos > limit)
-            {
-                throw new System.ArgumentException();
-            }
+            if (pos > limit) throw new ArgumentException();
 
             return codePointCount;
         }

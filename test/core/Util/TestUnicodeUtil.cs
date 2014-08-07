@@ -1,3 +1,4 @@
+using System.Globalization;
 using Lucene.Net.Support;
 using NUnit.Framework;
 using System;
@@ -122,8 +123,7 @@ namespace Lucene.Net.Util
             {
                 string s = TestUtil.RandomUnicodeString(Random());
                 UnicodeUtil.UTF16toUTF8(s.ToCharArray(), 0, s.Length, utf8);
-                //Assert.AreEqual(s.CodePointCount(0, s.Length), UnicodeUtil.CodePointCount(utf8));
-                Assert.AreEqual(s.Length, UnicodeUtil.CodePointCount(utf8));
+                Assert.AreEqual(UnicodeUtil.CodePointCount(new BytesRef(s)), UnicodeUtil.CodePointCount(utf8));
             }
         }
 
