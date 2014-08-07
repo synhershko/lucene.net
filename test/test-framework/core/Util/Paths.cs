@@ -154,9 +154,6 @@ namespace Lucene.Net.Util
                     var parameters = list.ToArray();
 
                     s_projectRootDirectory = Path.GetFullPath(CombinePath(assemblyLocation, parameters));
-
-                    //TODO: remove
-                    Console.WriteLine(s_projectRootDirectory);
                 }
                 return s_projectRootDirectory;
             }
