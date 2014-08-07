@@ -40,25 +40,25 @@ namespace Lucene.Net.Util.Automaton
     /// </summary>
     public abstract class RunAutomaton
     {
-        internal readonly int MaxInterval;
-        internal readonly int Size_Renamed;
-        internal readonly bool[] Accept;
-        internal readonly int Initial;
-        internal readonly int[] Transitions; // delta(state,c) = transitions[state*points.length +
+        private readonly int _maxInterval;
+        private readonly int _size;
+        protected readonly bool[] Accept;
+        protected readonly int Initial;
+        protected readonly int[] Transitions; // delta(state,c) = transitions[state*points.length +
 
         // getCharClass(c)]
-        internal readonly int[] Points; // char interval start points
+        private readonly int[] _points; // char interval start points
 
-        internal readonly int[] Classmap; // map from char number to class class
+        private readonly int[] _classmap; // map from char number to class class
 
         /// <summary>
         /// Returns a string representation of this automaton.
         /// </summary>
         public override string ToString()
         {
-            StringBuilder b = new StringBuilder();
+            var b = new StringBuilder();
             b.Append("initial state: ").Append(Initial).Append("\n");
-            for (int i = 0; i < Size_Renamed; i++)
+            for (int i = 0; i < _size; i++)
             {
                 b.Append("state " + i);
                 if (Accept[i])
@@ -69,20 +69,20 @@ namespace Lucene.Net.Util.Automaton
                 {
                     b.Append(" [reject]:\n");
                 }
-                for (int j = 0; j < Points.Length; j++)
+                for (int j = 0; j < _points.Length; j++)
                 {
-                    int k = Transitions[i * Points.Length + j];
+                    int k = Transitions[i * _points.Length + j];
                     if (k != -1)
                     {
-                        int min = Points[j];
+                        int min = _points[j];
                         int max;
-                        if (j + 1 < Points.Length)
+                        if (j + 1 < _points.Length)
                         {
-                            max = (Points[j + 1] - 1);
+                            max = (_points[j + 1] - 1);
                         }
                         else
                         {
-                            max = MaxInterval;
+                            max = _maxInterval;
                         }
                         b.Append(" ");
                         Transition.AppendCharString(min, b);
@@ -105,7 +105,7 @@ namespace Lucene.Net.Util.Automaton
         {
             get
             {
-                return Size_Renamed;
+                return _size;
             }
         }
 
@@ -136,16 +136,16 @@ namespace Lucene.Net.Util.Automaton
         {
             get
             {
-                return (int[])(Array)Points.Clone();
+                return (int[])(Array)_points.Clone();
             }
         }
 
         /// <summary>
         /// Gets character class of given codepoint
         /// </summary>
-        internal int GetCharClass(int c)
+        protected int GetCharClass(int c)
         {
-            return SpecialOperations.FindIndex(c, Points);
+            return SpecialOperations.FindIndex(c, _points);
         }
 
         /// <summary>
@@ -153,17 +153,19 @@ namespace Lucene.Net.Util.Automaton
         /// <code>Automaton</code>.
         /// </summary>
         /// <param name="a"> an automaton </param>
-        public RunAutomaton(Automaton a, int maxInterval, bool tableize)
+        /// <param name="maxInterval"></param>
+        /// <param name="tableize"></param>
+        protected RunAutomaton(Automaton a, int maxInterval, bool tableize)
         {
-            this.MaxInterval = maxInterval;
+            this._maxInterval = maxInterval;
             a.Determinize();
-            Points = a.StartPoints;
+            _points = a.StartPoints;
             State[] states = a.NumberedStates;
             Initial = a.Initial.Number;
-            Size_Renamed = states.Length;
-            Accept = new bool[Size_Renamed];
-            Transitions = new int[Size_Renamed * Points.Length];
-            for (int n = 0; n < Size_Renamed * Points.Length; n++)
+            _size = states.Length;
+            Accept = new bool[_size];
+            Transitions = new int[_size * _points.Length];
+            for (int n = 0; n < _size * _points.Length; n++)
             {
                 Transitions[n] = -1;
             }
@@ -171,12 +173,12 @@ namespace Lucene.Net.Util.Automaton
             {
                 int n = s.number;
                 Accept[n] = s.accept;
-                for (int c = 0; c < Points.Length; c++)
+                for (int c = 0; c < _points.Length; c++)
                 {
-                    State q = s.Step(Points[c]);
+                    State q = s.Step(_points[c]);
                     if (q != null)
                     {
-                        Transitions[n * Points.Length + c] = q.number;
+                        Transitions[n * _points.Length + c] = q.number;
                     }
                 }
             }
@@ -185,20 +187,20 @@ namespace Lucene.Net.Util.Automaton
              */
             if (tableize)
             {
-                Classmap = new int[maxInterval + 1];
+                _classmap = new int[maxInterval + 1];
                 int i = 0;
                 for (int j = 0; j <= maxInterval; j++)
                 {
-                    if (i + 1 < Points.Length && j == Points[i + 1])
+                    if (i + 1 < _points.Length && j == _points[i + 1])
                     {
                         i++;
                     }
-                    Classmap[j] = i;
+                    _classmap[j] = i;
                 }
             }
             else
             {
-                Classmap = null;
+                _classmap = null;
             }
         }
 
@@ -211,13 +213,13 @@ namespace Lucene.Net.Util.Automaton
         /// </summary>
         public int Step(int state, int c)
         {
-            if (Classmap == null)
+            if (_classmap == null)
             {
-                return Transitions[state * Points.Length + GetCharClass(c)];
+                return Transitions[state * _points.Length + GetCharClass(c)];
             }
             else
             {
-                return Transitions[state * Points.Length + Classmap[c]];
+                return Transitions[state * _points.Length + _classmap[c]];
             }
         }
 
@@ -226,9 +228,9 @@ namespace Lucene.Net.Util.Automaton
             const int prime = 31;
             int result = 1;
             result = prime * result + Initial;
-            result = prime * result + MaxInterval;
-            result = prime * result + Points.Length;
-            result = prime * result + Size_Renamed;
+            result = prime * result + _maxInterval;
+            result = prime * result + _points.Length;
+            result = prime * result + _size;
             return result;
         }
 
@@ -251,15 +253,15 @@ namespace Lucene.Net.Util.Automaton
             {
                 return false;
             }
-            if (MaxInterval != other.MaxInterval)
+            if (_maxInterval != other._maxInterval)
             {
                 return false;
             }
-            if (Size_Renamed != other.Size_Renamed)
+            if (_size != other._size)
             {
                 return false;
             }
-            if (!Arrays.Equals(Points, other.Points))
+            if (!Arrays.Equals(_points, other._points))
             {
                 return false;
             }
