@@ -89,9 +89,9 @@ namespace Lucene.Net.Analysis
         [Test]
         public virtual void TestSingleChar()
         {
-            CharacterRunAutomaton single = new CharacterRunAutomaton((new RegExp(".")).ToAutomaton());
+            var single = new CharacterRunAutomaton((new RegExp(".")).ToAutomaton());
             Analyzer a = new MockAnalyzer(new Random(), single, false);
-            AssertAnalyzesTo(a, "foobar", new string[] { "f", "o", "o", "b", "a", "r" }, new int[] { 0, 1, 2, 3, 4, 5 }, new int[] { 1, 2, 3, 4, 5, 6 });
+            AssertAnalyzesTo(a, "foobar", new[] { "f", "o", "o", "b", "a", "r" }, new[] { 0, 1, 2, 3, 4, 5 }, new[] { 1, 2, 3, 4, 5, 6 });
             CheckRandomData(new Random(), a, 100);
         }
 

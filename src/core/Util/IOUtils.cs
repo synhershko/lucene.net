@@ -76,13 +76,13 @@ namespace Lucene.Net.Util
         {
             Exception th = null;
 
-            foreach (IDisposable @object in objects)
+            foreach (IDisposable o in objects)
             {
                 try
                 {
-                    if (@object != null)
+                    if (o != null)
                     {
-                        @object.Dispose();
+                        o.Dispose();
                     }
                 }
                 catch (Exception t)

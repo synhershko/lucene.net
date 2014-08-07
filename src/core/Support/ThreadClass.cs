@@ -32,43 +32,43 @@ namespace Lucene.Net.Support
         /// <summary>
         /// The instance of System.Threading.Thread
         /// </summary>
-        private System.Threading.Thread threadField;
+        private Thread _threadField;
 
         /// <summary>
         /// Initializes a new instance of the ThreadClass class
         /// </summary>
         public ThreadClass()
         {
-            threadField = new System.Threading.Thread(new System.Threading.ThreadStart(Run));
+            _threadField = new Thread(Run);
         }
 
         /// <summary>
         /// Initializes a new instance of the Thread class.
         /// </summary>
+        /// <param name="name">The name of the thread</param>
+        public ThreadClass(System.String name)
+        {
+            _threadField = new Thread(Run);
+            this.Name = name;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Thread class.
+        /// </summary>
+        /// <param name="start">A ThreadStart delegate that references the methods to be invoked when this thread begins executing</param>
+        public ThreadClass(ThreadStart start)
+        {
+            _threadField = new Thread(start);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Thread class.
+        /// </summary>
+        /// <param name="start">A ThreadStart delegate that references the methods to be invoked when this thread begins executing</param>
         /// <param name="Name">The name of the thread</param>
-        public ThreadClass(System.String Name)
+        public ThreadClass(ThreadStart start, String Name)
         {
-            threadField = new System.Threading.Thread(new System.Threading.ThreadStart(Run));
-            this.Name = Name;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Thread class.
-        /// </summary>
-        /// <param name="Start">A ThreadStart delegate that references the methods to be invoked when this thread begins executing</param>
-        public ThreadClass(System.Threading.ThreadStart Start)
-        {
-            threadField = new System.Threading.Thread(Start);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Thread class.
-        /// </summary>
-        /// <param name="Start">A ThreadStart delegate that references the methods to be invoked when this thread begins executing</param>
-        /// <param name="Name">The name of the thread</param>
-        public ThreadClass(System.Threading.ThreadStart Start, System.String Name)
-        {
-            threadField = new System.Threading.Thread(Start);
+            _threadField = new Thread(start);
             this.Name = Name;
         }
 
@@ -84,7 +84,7 @@ namespace Lucene.Net.Support
         /// </summary>
         public virtual void Start()
         {
-            threadField.Start();
+            _threadField.Start();
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Lucene.Net.Support
         /// </summary>
         public virtual void Interrupt()
         {
-            threadField.Interrupt();
+            _threadField.Interrupt();
         }
 
         /// <summary>
@@ -102,45 +102,45 @@ namespace Lucene.Net.Support
         {
             get
             {
-                return threadField;
+                return _threadField;
             }
             set
             {
-                threadField = value;
+                _threadField = value;
             }
         }
 
         /// <summary>
         /// Gets or sets the name of the thread
         /// </summary>
-        public System.String Name
+        public String Name
         {
             get
             {
-                return threadField.Name;
+                return _threadField.Name;
             }
             set
             {
-                if (threadField.Name == null)
-                    threadField.Name = value;
+                if (_threadField.Name == null)
+                    _threadField.Name = value;
             }
         }
 
         public void SetDaemon(bool isDaemon)
         {
-            threadField.IsBackground = isDaemon;
+            _threadField.IsBackground = isDaemon;
         }
 
         /// <summary>
         /// Gets or sets a value indicating the scheduling priority of a thread
         /// </summary>
-        public System.Threading.ThreadPriority Priority
+        public ThreadPriority Priority
         {
             get
             {
                 try
                 {
-                    return threadField.Priority;
+                    return _threadField.Priority;
                 }
                 catch
                 {
@@ -151,7 +151,7 @@ namespace Lucene.Net.Support
             {
                 try
                 {
-                    threadField.Priority = value;
+                    _threadField.Priority = value;
                 }
                 catch { }
             }
@@ -164,7 +164,7 @@ namespace Lucene.Net.Support
         {
             get
             {
-                return threadField.IsAlive;
+                return _threadField.IsAlive;
             }
         }
 
@@ -175,11 +175,11 @@ namespace Lucene.Net.Support
         {
             get
             {
-                return threadField.IsBackground;
+                return _threadField.IsBackground;
             }
             set
             {
-                threadField.IsBackground = value;
+                _threadField.IsBackground = value;
             }
         }
 
@@ -188,7 +188,7 @@ namespace Lucene.Net.Support
         /// </summary>
         public void Join()
         {
-            threadField.Join();
+            _threadField.Join();
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace Lucene.Net.Support
         /// <param name="MiliSeconds">Time of wait in milliseconds</param>
         public void Join(long MiliSeconds)
         {
-            threadField.Join(new System.TimeSpan(MiliSeconds * 10000));
+            _threadField.Join(new System.TimeSpan(MiliSeconds * 10000));
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace Lucene.Net.Support
         /// <param name="NanoSeconds">Time of wait in nanoseconds</param>
         public void Join(long MiliSeconds, int NanoSeconds)
         {
-            threadField.Join(new System.TimeSpan(MiliSeconds * 10000 + NanoSeconds * 100));
+            _threadField.Join(new System.TimeSpan(MiliSeconds * 10000 + NanoSeconds * 100));
         }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace Lucene.Net.Support
         /// </summary>
         public void Resume()
         {
-            Monitor.PulseAll(threadField);
+            Monitor.PulseAll(_threadField);
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace Lucene.Net.Support
         /// </summary>
         public void Abort()
         {
-            threadField.Abort();
+            _threadField.Abort();
         }
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace Lucene.Net.Support
         /// <param name="stateInfo">An object that contains application-specific information, such as state, which can be used by the thread being aborted</param>
         public void Abort(object stateInfo)
         {
-            threadField.Abort(stateInfo);
+            _threadField.Abort(stateInfo);
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace Lucene.Net.Support
         /// </summary>
         public void Suspend()
         {
-            Monitor.Wait(threadField);
+            Monitor.Wait(_threadField);
         }
 
         /// <summary>
@@ -301,18 +301,18 @@ namespace Lucene.Net.Support
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
-            if (obj is ThreadClass) return this.threadField.Equals(((ThreadClass)obj).threadField);
+            if (obj is ThreadClass) return this._threadField.Equals(((ThreadClass)obj)._threadField);
             return false;
         }
 
         public override int GetHashCode()
         {
-            return this.threadField.GetHashCode();
+            return this._threadField.GetHashCode();
         }
 
         public ThreadState State
         {
-            get { return threadField.ThreadState; }
+            get { return _threadField.ThreadState; }
         }
     }
 }

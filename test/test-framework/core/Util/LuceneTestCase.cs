@@ -335,7 +335,13 @@ namespace Lucene.Net.Util
         /// True if and only if tests are run in verbose mode. If this flag is false
         /// tests are not expected to print any messages.
         /// </summary>
-        public static bool VERBOSE = RandomizedTest.SystemPropertyAsBoolean("tests.verbose", false);
+        public static bool VERBOSE = RandomizedTest.SystemPropertyAsBoolean("tests.verbose",
+#if DEBUG
+            true
+#else
+            false
+#endif
+            );
 
         /// <summary>
         /// TODO: javadoc? </summary>

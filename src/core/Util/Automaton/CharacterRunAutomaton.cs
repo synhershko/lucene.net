@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-using System.Globalization;
 using Lucene.Net.Support;
 
 namespace Lucene.Net.Util.Automaton
