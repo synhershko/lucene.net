@@ -96,7 +96,7 @@ namespace Lucene.Net.Util
     /// @lucene.internal
     /// </summary>
 
-    public sealed class UnicodeUtil
+    public static class UnicodeUtil
     {
         /// <summary>
         /// A binary term consisting of a number of 0xff bytes, likely to be bigger than other terms
@@ -106,10 +106,6 @@ namespace Lucene.Net.Util
         ///
         /// </summary>
         public static readonly BytesRef BIG_TERM = new BytesRef(new sbyte[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 }); // TODO this is unrelated here find a better place for it
-
-        private UnicodeUtil() // no instance
-        {
-        }
 
         public const int UNI_SUR_HIGH_START = 0xD800;
         public const int UNI_SUR_HIGH_END = 0xDBFF;
@@ -123,7 +119,7 @@ namespace Lucene.Net.Util
         private const long HALF_SHIFT = 10;
         private const long HALF_MASK = 0x3FFL;
 
-        private static readonly int SURROGATE_OFFSET = MIN_SUPPLEMENTARY_CODE_POINT - (UNI_SUR_HIGH_START << (int)HALF_SHIFT) - UNI_SUR_LOW_START;
+        private const int SURROGATE_OFFSET = MIN_SUPPLEMENTARY_CODE_POINT - (UNI_SUR_HIGH_START << (int) HALF_SHIFT) - UNI_SUR_LOW_START;
 
         /// <summary>
         /// Encode characters from a char[] source, starting at
