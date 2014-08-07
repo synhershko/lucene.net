@@ -117,7 +117,7 @@ namespace Lucene.Net.Analysis
         public static void AssertTokenStreamContents(TokenStream ts, string[] output, int[] startOffsets, int[] endOffsets, string[] types, int[] posIncrements, int[] posLengths, int? finalOffset, int? finalPosInc, bool[] keywordAtts, bool offsetsAreCorrect)
         {
             Assert.IsNotNull(output);
-            ICheckClearAttributesAttribute checkClearAtt = ts.AddAttribute<ICheckClearAttributesAttribute>();
+            var checkClearAtt = ts.AddAttribute<ICheckClearAttributesAttribute>();
 
             ICharTermAttribute termAtt = null;
             if (output.Length > 0)

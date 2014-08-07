@@ -85,7 +85,13 @@ namespace Lucene.Net.Analysis
     public abstract class LookaheadTokenFilter<T> : TokenFilter
         where T : LookaheadTokenFilter.Position
     {
-        private const bool DEBUG = false;
+        protected const bool DEBUG = 
+#if DEBUG
+            true
+#else
+            false
+#endif
+            ;
 
         protected internal readonly IPositionIncrementAttribute PosIncAtt;// = AddAttribute<PositionIncrementAttribute>();
         protected internal readonly IPositionLengthAttribute PosLenAtt;// = addAttribute(typeof(PositionLengthAttribute));
