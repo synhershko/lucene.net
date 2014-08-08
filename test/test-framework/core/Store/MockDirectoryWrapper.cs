@@ -43,14 +43,14 @@ namespace Lucene.Net.Store
     /// It also adds a number of features useful for testing:
     /// <ul>
     ///   <li> Instances created by <seealso cref="LuceneTestCase#newDirectory()"/> are tracked
-    ///        to ensure they are closed by the test.
+    ///        to ensure they are closed by the test.</li>
     ///   <li> When a MockDirectoryWrapper is closed, it will throw an exception if
     ///        it has any open files against it (with a stacktrace indicating where
-    ///        they were opened from).
+    ///        they were opened from).</li>
     ///   <li> When a MockDirectoryWrapper is closed, it runs CheckIndex to test if
-    ///        the index was corrupted.
+    ///        the index was corrupted.</li>
     ///   <li> MockDirectoryWrapper simulates some "features" of Windows, such as
-    ///        refusing to write/delete to open files.
+    ///        refusing to write/delete to open files.</li>
     /// </ul>
     /// </summary>
     public class MockDirectoryWrapper : BaseDirectoryWrapper
@@ -245,7 +245,7 @@ namespace Lucene.Net.Store
                     {
                         // randomly fail with IOE on any file
                         MaybeThrowIOException(name);
-                        @in.Sync(new string[] { name });
+                        @in.Sync(new[] { name });
                         UnSyncedFiles.Remove(name);
                     }
                 }
@@ -281,7 +281,7 @@ namespace Lucene.Net.Store
         /// Simulates a crash of OS or machine by overwriting
         ///  unsynced files.
         /// </summary>
-        public virtual void Crash()
+        public void Crash()
         {
             lock (this)
             {
@@ -300,7 +300,7 @@ namespace Lucene.Net.Store
                     {
                         f.Dispose();
                     }
-                    catch (Exception ignored)
+                    catch (Exception)
                     {
                     }
                 }
@@ -591,11 +591,11 @@ namespace Lucene.Net.Store
 
                         if (!assertNoDeleteOpenFile)
                         {
-                            throw (IOException)FillOpenTrace(new IOException("MockDirectoryWrapper: file \"" + name + "\" is still open: cannot delete"), name, true);
+                            throw FillOpenTrace(new IOException("MockDirectoryWrapper: file \"" + name + "\" is still open: cannot delete"), name, true);
                         }
                         else
                         {
-                            throw (AssertionException)FillOpenTrace(new AssertionException("MockDirectoryWrapper: file \"" + name + "\" is still open: cannot delete"), name, true);
+                            throw FillOpenTrace(new AssertionException("MockDirectoryWrapper: file \"" + name + "\" is still open: cannot delete"), name, true);
                         }
                     }
                     else
@@ -725,7 +725,7 @@ namespace Lucene.Net.Store
             Slice
         }
 
-        internal virtual void AddFileHandle(IDisposable c, string name, Handle handle)
+        internal void AddFileHandle(IDisposable c, string name, Handle handle)
         {
             //Trace.TraceInformation("Add {0} {1}", c, name);
 
