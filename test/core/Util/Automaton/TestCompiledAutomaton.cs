@@ -107,15 +107,20 @@ namespace Lucene.Net.Util.Automaton
         }
 
         [Test]
-        public virtual void TestRandom()
+        public void TestRandom()
         {
             int numTerms = AtLeast(400);
+            if (VERBOSE)
+            {
+                Console.WriteLine("Testing with {0} terms", numTerms);
+            }
+
             ISet<string> terms = new HashSet<string>();
-            while (terms.Count != numTerms)
+            while (terms.Count < numTerms)
             {
                 terms.Add(RandomString());
             }
-            TestTerms(terms.ToArray(/*new string[terms.Size()]*/));
+            TestTerms(terms.ToArray());
         }
 
         private string RandomString()

@@ -281,25 +281,25 @@ namespace Lucene.Net.Util.Automaton
                 }
             }
 
-            public virtual int[] GetRandomAcceptedString(Random r)
+            public int[] GetRandomAcceptedString(Random r)
             {
                 IList<int?> soFar = new List<int?>();
-                if (!String.IsNullOrEmpty(a.Singleton))
+                if (a.IsSingleton)
                 {
                     // accepts only one
-                    string s = a.Singleton;
+                    var s = a.Singleton;
 
                     int charUpto = 0;
                     while (charUpto < s.Length)
                     {
-                        int cp = s[charUpto];
+                        int cp = Character.CodePointAt(s, charUpto);
                         charUpto += Character.CharCount(cp);
                         soFar.Add(cp);
                     }
                 }
                 else
                 {
-                    State s = a.InitialState;
+                    var s = a.InitialState;
 
                     while (true)
                     {

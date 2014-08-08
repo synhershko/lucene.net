@@ -205,11 +205,11 @@ namespace Lucene.Net.Util.Automaton
             }
         }
 
-        internal virtual bool IsSingleton
+        public bool IsSingleton
         {
             get
             {
-                return singleton != null;
+                return Singleton != null;
             }
         }
 

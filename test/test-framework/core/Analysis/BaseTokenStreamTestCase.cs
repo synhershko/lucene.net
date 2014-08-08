@@ -617,8 +617,7 @@ namespace Lucene.Net.Analysis
             RandomIndexWriter iw = null;
             string postingsFormat = TestUtil.GetPostingsFormat("dummy");
             bool codecOk = iterations * maxWordLength < 100000
-                || !(postingsFormat.Equals("Memory")
-                || postingsFormat.Equals("SimpleText"));
+                || !(postingsFormat.Equals("Memory") || postingsFormat.Equals("SimpleText"));
             if (Rarely(random) && codecOk)
             {
                 dir = NewFSDirectory(CreateTempDir("bttc"));

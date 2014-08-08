@@ -1,3 +1,4 @@
+using Lucene.Net.Index;
 using Lucene.Net.Support;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -29,39 +30,39 @@ namespace Lucene.Net.Util.Automaton
     [TestFixture]
     public class TestDeterminizeLexicon : LuceneTestCase
     {
-        private IList<Automaton> Automata = new List<Automaton>();
-        private IList<string> Terms = new List<string>();
-
         [Test]
-        public virtual void TestLexicon()
+        public void TestLexicon()
         {
+            var automata = new List<Automaton>();
+            var terms = new List<string>();
+
             int num = AtLeast(1);
             for (int i = 0; i < num; i++)
             {
-                Automata.Clear();
-                Terms.Clear();
+                automata.Clear();
+                terms.Clear();
                 for (int j = 0; j < 5000; j++)
                 {
                     string randomString = TestUtil.RandomUnicodeString(Random());
-                    Terms.Add(randomString);
-                    Automata.Add(BasicAutomata.MakeString(randomString));
+                    terms.Add(randomString);
+                    automata.Add(BasicAutomata.MakeString(randomString));
                 }
-                AssertLexicon();
+                AssertLexicon(automata, terms);
             }
         }
 
-        public virtual void AssertLexicon()
+        public void AssertLexicon(List<Automaton> a, List<string> terms)
         {
-            Automata = CollectionsHelper.Shuffle(Automata);
-            Automaton lex = BasicOperations.Union(Automata);
+            var automata = CollectionsHelper.Shuffle(a);
+            var lex = BasicOperations.Union(automata);
             lex.Determinize();
             Assert.IsTrue(SpecialOperations.IsFinite(lex));
-            foreach (string s in Terms)
+            foreach (string s in terms)
             {
                 Assert.IsTrue(BasicOperations.Run(lex, s));
             }
-            ByteRunAutomaton lexByte = new ByteRunAutomaton(lex);
-            foreach (string s in Terms)
+            var lexByte = new ByteRunAutomaton(lex);
+            foreach (string s in terms)
             {
                 sbyte[] bytes = s.GetBytes(Encoding.UTF8);
                 Assert.IsTrue(lexByte.Run(bytes, 0, bytes.Length));

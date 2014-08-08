@@ -127,7 +127,7 @@ namespace Lucene.Net.Util.Automaton
 
         // Evenly picks random code point from the 4 "buckets"
         // (bucket = same #bytes when encoded to utf8)
-        private int GetCodeStart(Random r)
+        private static int GetCodeStart(Random r)
         {
             switch (r.Next(4))
             {
@@ -151,7 +151,7 @@ namespace Lucene.Net.Util.Automaton
         }
 
         [Test]
-        public virtual void TestRandomRanges()
+        public void TestRandomRanges()
         {
             Random r = Random();
             int ITERS = AtLeast(10);
@@ -179,9 +179,8 @@ namespace Lucene.Net.Util.Automaton
                     continue;
                 }
 
-                Automaton a = new Automaton();
-                State end = new State();
-                end.Accept = true;
+                var a = new Automaton();
+                var end = new State {Accept = true};
                 a.InitialState.AddTransition(new Transition(startCode, endCode, end));
                 a.Deterministic = true;
 
@@ -190,7 +189,7 @@ namespace Lucene.Net.Util.Automaton
         }
 
         [Test]
-        public virtual void TestSpecialCase()
+        public void TestSpecialCase()
         {
             RegExp re = new RegExp(".?");
             Automaton automaton = re.ToAutomaton();
@@ -207,7 +206,7 @@ namespace Lucene.Net.Util.Automaton
         }
 
         [Test]
-        public virtual void TestSpecialCase2()
+        public void TestSpecialCase2()
         {
             RegExp re = new RegExp(".+\u0775");
             string input = "\ufadc\ufffd\ub80b\uda5a\udc68\uf234\u0056\uda5b\udcc1\ufffd\ufffd\u0775";
@@ -222,7 +221,7 @@ namespace Lucene.Net.Util.Automaton
         }
 
         [Test]
-        public virtual void TestSpecialCase3()
+        public void TestSpecialCase3()
         {
             RegExp re = new RegExp("(\\鯺)*(.)*\\Ӕ");
             string input = "\u5cfd\ufffd\ub2f7\u0033\ue304\u51d7\u3692\udb50\udfb3\u0576\udae2\udc62\u0053\u0449\u04d4";
@@ -237,7 +236,7 @@ namespace Lucene.Net.Util.Automaton
         }
 
         [Test]
-        public virtual void TestRandomRegexes()
+        public void TestRandomRegexes()
         {
             int num = AtLeast(250);
             for (int i = 0; i < num; i++)
@@ -246,20 +245,20 @@ namespace Lucene.Net.Util.Automaton
             }
         }
 
-        private void AssertAutomaton(Automaton automaton)
+        private static void AssertAutomaton(Automaton automaton)
         {
-            CharacterRunAutomaton cra = new CharacterRunAutomaton(automaton);
-            ByteRunAutomaton bra = new ByteRunAutomaton(automaton);
-            AutomatonTestUtil.RandomAcceptedStrings ras = new AutomatonTestUtil.RandomAcceptedStrings(automaton);
+            var cra = new CharacterRunAutomaton(automaton);
+            var bra = new ByteRunAutomaton(automaton);
+            var ras = new AutomatonTestUtil.RandomAcceptedStrings(automaton);
 
             int num = AtLeast(1000);
             for (int i = 0; i < num; i++)
             {
-                string @string;
+                string s;
                 if (Random().NextBoolean())
                 {
                     // likely not accepted
-                    @string = TestUtil.RandomUnicodeString(Random());
+                    s = TestUtil.RandomUnicodeString(Random());
                 }
                 else
                 {
@@ -267,7 +266,7 @@ namespace Lucene.Net.Util.Automaton
                     int[] codepoints = ras.GetRandomAcceptedString(Random());
                     try
                     {
-                        @string = UnicodeUtil.NewString(codepoints, 0, codepoints.Length);
+                        s = UnicodeUtil.NewString(codepoints, 0, codepoints.Length);
                     }
                     catch (Exception e)
                     {
@@ -279,8 +278,8 @@ namespace Lucene.Net.Util.Automaton
                         throw e;
                     }
                 }
-                sbyte[] bytes = @string.GetBytes(Encoding.UTF8);
-                Assert.AreEqual(cra.Run(@string), bra.Run(bytes, 0, bytes.Length));
+                var bytes = s.GetBytes(Encoding.UTF8);
+                Assert.AreEqual(cra.Run(s), bra.Run(bytes, 0, bytes.Length));
             }
         }
     }
