@@ -433,64 +433,42 @@ namespace Lucene.Net.Util
         ///  because not all file systems and operating systems allow to fsync on a directory) </param>
         public static void Fsync(string fileToSync, bool isDir)
         {
-            System.IO.IOException exc = null;
-
-            // If the file is a directory we have to open read-only, for regular files we must open r/w for the fsync to have an effect.
-            // See http://blog.httrack.com/blog/2013/11/15/everything-you-always-wanted-to-know-about-fsync/
-            try
+            var retryCount = 1;
+            while (true)
             {
-                //FileChannel file = FileChannel.open(fileToSync.toPath(), isDir ? StandardOpenOption.READ : StandardOpenOption.WRITE);
-                using (
-                    FileStream fs = new FileStream(fileToSync, FileMode.OpenOrCreate,
-                        isDir ? FileAccess.Read : FileAccess.Write))
+                FileStream file = null;
+                using (file)
                 {
-                    for (int retry = 0; retry < 5; retry++)
+                    try
                     {
-                        try
+                        // If the file is a directory we have to open read-only, for regular files we must open r/w for the fsync to have an effect.
+                        // See http://blog.httrack.com/blog/2013/11/15/everything-you-always-wanted-to-know-about-fsync/
+                        file = new FileStream(fileToSync, FileMode.OpenOrCreate,
+                            isDir ? FileAccess.Read : FileAccess.Write,
+                            isDir ? FileShare.Read : FileShare.ReadWrite);
+                        //FileSupport.Sync(file);
+                        file.Flush(true);
+                        return;
+                    }
+                    catch (IOException e)
+                    {
+                        if (isDir)
                         {
-                            //LUCENE TO-DO I believe this is the equivalent of forcing the stream to disk
-                            fs.Flush(true);
+                            Debug.Assert((Constants.LINUX || Constants.MAC_OS_X) == false,
+                                "On Linux and MacOSX fsyncing a directory should not throw IOException, " +
+                                "we just don't want to rely on that in production (undocumented). Got: " + e); // Ignore exception if it is a directory
                             return;
                         }
-                        catch (System.IO.IOException ioe)
-                        {
-                            if (exc == null)
-                            {
-                                exc = ioe;
-                            }
-                            try
-                            {
-                                // Pause 5 msec
-                                Thread.Sleep(5);
-                            }
-                            catch (ThreadInterruptedException ie)
-                            {
-                                ThreadInterruptedException ex = new ThreadInterruptedException(ie);
-                                //ex.addSuppressed(exc);
-                                throw ex;
-                            }
-                        }
+
+                        if (retryCount == 5)
+                            throw;
+
+                        // Pause 5 msec
+                        Thread.Sleep(5);
                     }
                 }
-
+                retryCount++;
             }
-            catch (System.IO.IOException ioe)
-            {
-                if (exc == null)
-                {
-                    exc = ioe;
-                }
-            }
-            //}
-
-            if (isDir)
-            {
-                Debug.Assert((Constants.LINUX || Constants.MAC_OS_X) == false, "On Linux and MacOSX fsyncing a directory should not throw IOException, " + "we just don't want to rely on that in production (undocumented). Got: " + exc);		  // Ignore exception if it is a directory
-                return;
-            }
-
-            // Throw original exception
-            throw exc;
         }
     }
 }

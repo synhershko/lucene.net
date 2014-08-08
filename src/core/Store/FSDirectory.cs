@@ -194,7 +194,8 @@ namespace Lucene.Net.Store
         /// </summary>
         public static FSDirectory Open(DirectoryInfo path, LockFactory lockFactory)
         {
-            if ((Constants.WINDOWS || Constants.SUN_OS || Constants.LINUX) && Constants.JRE_IS_64BIT && MMapDirectory.UNMAP_SUPPORTED)
+            if ((Constants.WINDOWS || Constants.SUN_OS || Constants.LINUX) && Constants.JRE_IS_64BIT &&
+                MMapDirectory.UNMAP_SUPPORTED)
             {
                 return new MMapDirectory(path, lockFactory);
             }
@@ -220,7 +221,7 @@ namespace Lucene.Net.Store
                 // in index dir. If no index dir is given, set ourselves
                 if (value is FSLockFactory)
                 {
-                    FSLockFactory lf = (FSLockFactory)value;
+                    FSLockFactory lf = (FSLockFactory) value;
                     DirectoryInfo dir = lf.LockDir;
                     // if the lock factory has no lockDir set, use the this directory as lockDir
                     if (dir == null)
@@ -423,7 +424,7 @@ namespace Lucene.Net.Store
                 for (int charIDX = 0; charIDX < dirName.Length; charIDX++)
                 {
                     char ch = dirName[charIDX];
-                    digest = 31 * digest + ch;
+                    digest = 31*digest + ch;
                 }
                 return "lucene-" + digest.ToString("x");
             }
@@ -470,10 +471,7 @@ namespace Lucene.Net.Store
                 }
                 this.ChunkSize = value;
             }
-            get
-            {
-                return ChunkSize;
-            }
+            get { return ChunkSize; }
         }
 
         /// <summary>
@@ -547,49 +545,17 @@ namespace Lucene.Net.Store
 
             public override long Length
             {
-                get
-                {
-                    return File.Length;
-                }
+                get { return File.Length; }
             }
         }
 
-        protected void Fsync(String name)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        protected void Fsync(String name, bool isDir = false)
         {
-            FileInfo fullFile = new FileInfo(Path.Combine(Directory_Renamed.FullName, name));
-            bool success = false;
-            int retryCount = 0;
-            IOException exc = null;
-            while (!success && retryCount < 5)
-            {
-                retryCount++;
-                FileStream file = null;
-                try
-                {
-                    try
-                    {
-                        file = new System.IO.FileStream(fullFile.FullName, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write, System.IO.FileShare.ReadWrite);
-                        FileSupport.Sync(file);
-                        success = true;
-                    }
-                    finally
-                    {
-                        if (file != null)
-                            file.Dispose();
-                    }
-                }
-                catch (IOException ioe)
-                {
-                    if (exc == null)
-                        exc = ioe;
-
-                    // Pause 5 msec
-                    Thread.Sleep(5);
-                }
-            }
-            if (!success)
-                // Throw original exception
-                throw exc;
+            IOUtils.Fsync(Path.Combine(Directory_Renamed.FullName, name), false);            
         }
     }
 }

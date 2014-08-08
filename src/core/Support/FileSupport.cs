@@ -92,13 +92,13 @@ namespace Lucene.Net.Support
             if (fileStream == null)
                 throw new ArgumentNullException("fileStream");
 
-            fileStream.Flush();
+            fileStream.Flush(true);
 
-            //if (OS.IsWindows)
-            //{
-            //    if (!FlushFileBuffers(fileStream.Handle))
-            //        throw new System.IO.IOException();
-            //}
+            if (OS.IsWindows)
+            {
+                if (!FlushFileBuffers(fileStream.Handle))
+                    throw new IOException();
+            }
             //else if (OS.IsUnix)
             //{
             //    if (fsync(fileStream.Handle) != IntPtr.Zero)
@@ -115,7 +115,7 @@ namespace Lucene.Net.Support
         //[System.Runtime.InteropServices.DllImport("libc")]
         //extern static IntPtr fsync(IntPtr fd);
 
-        //[System.Runtime.InteropServices.DllImport("kernel32.dll")]
-        //extern static bool FlushFileBuffers(IntPtr hFile);
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        extern static bool FlushFileBuffers(IntPtr hFile);
     }
 }
