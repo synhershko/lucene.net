@@ -2115,7 +2115,7 @@ namespace Lucene.Net.Index
 
             if (maxNumSegments < 1)
             {
-                throw new System.ArgumentException("maxNumSegments must be >= 1; got " + maxNumSegments);
+                throw new ArgumentException("maxNumSegments must be >= 1; got " + maxNumSegments);
             }
 
             if (infoStream.IsEnabled("IW"))

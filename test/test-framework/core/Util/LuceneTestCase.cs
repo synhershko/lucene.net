@@ -1,4 +1,6 @@
+using System.Runtime.CompilerServices;
 using Lucene.Net.Index;
+using Lucene.Net.Randomized;
 using Lucene.Net.Randomized.Generators;
 using Lucene.Net.Support;
 using NUnit.Framework;
@@ -940,29 +942,22 @@ namespace Lucene.Net.Util
             {
                 int maxNumThreadStates = Rarely(r) ? TestUtil.NextInt(r, 5, 20) : TestUtil.NextInt(r, 1, 4); // reasonable value -  crazy value
 
-                try
+                if (Rarely(r))
                 {
-                    if (Rarely(r))
-                    {
-                        // Retrieve the package-private setIndexerThreadPool
-                        // method:
-                        MethodInfo setIndexerThreadPoolMethod = typeof(IndexWriterConfig).GetMethod("SetIndexerThreadPool", new Type[] { typeof(DocumentsWriterPerThreadPool) });
-                        //setIndexerThreadPoolMethod.setAccessible(true);
-                        Type clazz = typeof(RandomDocumentsWriterPerThreadPool);
-                        ConstructorInfo ctor = clazz.GetConstructor(new Type[] { typeof(int), typeof(Random) });
-                        //ctor.Accessible = true;
-                        // random thread pool
-                        setIndexerThreadPoolMethod.Invoke(c, new object[] { ctor.Invoke(new object[] { maxNumThreadStates, r }) });
-                    }
-                    else
-                    {
-                        // random thread pool
-                        c.SetMaxThreadStates(maxNumThreadStates);
-                    }
+                    // Retrieve the package-private setIndexerThreadPool
+                    // method:
+                    MethodInfo setIndexerThreadPoolMethod = typeof(IndexWriterConfig).GetMethod("SetIndexerThreadPool", new Type[] { typeof(DocumentsWriterPerThreadPool) });
+                    //setIndexerThreadPoolMethod.setAccessible(true);
+                    Type clazz = typeof(RandomDocumentsWriterPerThreadPool);
+                    ConstructorInfo ctor = clazz.GetConstructor(new[] { typeof(int), typeof(Random) });
+                    //ctor.Accessible = true;
+                    // random thread pool
+                    setIndexerThreadPoolMethod.Invoke(c, new[] { ctor.Invoke(new object[] { maxNumThreadStates, r }) });
                 }
-                catch (Exception e)
+                else
                 {
-                    Rethrow.DoRethrow(e);
+                    // random thread pool
+                    c.SetMaxThreadStates(maxNumThreadStates);
                 }
             }
 
@@ -2703,6 +2698,15 @@ namespace Lucene.Net.Util
             {
                 CleanupQueue.Add(f);
             }
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        protected string GetFullMethodName()
+        {
+            var st = new StackTrace();
+            var sf = st.GetFrame(1);
+
+            return string.Format("{0}+{1}", this.GetType().Name, sf.GetMethod().Name);
         }
 
         /*private static class TemporaryFilesCleanupRule : TestRuleAdapter

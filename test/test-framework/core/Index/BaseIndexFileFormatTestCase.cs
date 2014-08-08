@@ -39,6 +39,7 @@ namespace Lucene.Net.Index
 
         private Codec SavedCodec;
 
+        [SetUp]
         public override void SetUp()
         {
             base.SetUp();
@@ -47,6 +48,7 @@ namespace Lucene.Net.Index
             Codec.Default = Codec;
         }
 
+        [TearDown]
         public override void TearDown()
         {
             Codec.Default = SavedCodec; // restore
@@ -84,7 +86,9 @@ namespace Lucene.Net.Index
         }
 
         /// <summary>
-        /// The purpose of this test is to make sure that bulk merge doesn't accumulate useless data over runs. </summary>
+        /// The purpose of this test is to make sure that bulk merge doesn't accumulate useless data over runs.
+        /// </summary>
+        [Test]
         public virtual void TestMergeStability()
         {
             Directory dir = NewDirectory();
