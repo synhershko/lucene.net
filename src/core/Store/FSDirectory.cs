@@ -20,6 +20,8 @@ using System.Collections.Generic;
 
 // Used only for WRITE_LOCK_NAME in deprecated create=true case:
 using System.Linq;
+using System.Threading;
+using Lucene.Net.Support;
 
 namespace Lucene.Net.Store
 {

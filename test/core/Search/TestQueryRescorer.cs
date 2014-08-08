@@ -230,7 +230,7 @@ namespace Lucene.Net.Search
             int docID = hits2.ScoreDocs[0].Doc;
             Explanation explain = rescorer.Explain(searcher, searcher.Explain(bq, docID), docID);
             string s = explain.ToString();
-            Assert.IsTrue(s.Contains("TestQueryRescorer$"));
+            Assert.IsTrue(s.Contains("TestQueryRescorer+"));
             Assert.IsTrue(s.Contains("combined first and second pass score"));
             Assert.IsTrue(s.Contains("first pass score"));
             Assert.IsTrue(s.Contains("= second pass score"));
@@ -239,7 +239,7 @@ namespace Lucene.Net.Search
             docID = hits2.ScoreDocs[1].Doc;
             explain = rescorer.Explain(searcher, searcher.Explain(bq, docID), docID);
             s = explain.ToString();
-            Assert.IsTrue(s.Contains("TestQueryRescorer$"));
+            Assert.IsTrue(s.Contains("TestQueryRescorer+"));
             Assert.IsTrue(s.Contains("combined first and second pass score"));
             Assert.IsTrue(s.Contains("first pass score"));
             Assert.IsTrue(s.Contains("no second pass score"));
