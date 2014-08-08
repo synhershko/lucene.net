@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Lucene.Net.Util;
 
 namespace Lucene.Net.Index
 {
@@ -85,7 +86,7 @@ namespace Lucene.Net.Index
         // note: we have to sync this map even though its just for debugging/toString,
         // otherwise DWPT's .toString() calls that iterate over the map can
         // cause concurrentmodificationexception if indexwriter's infostream is on
-        private IDictionary<string, PostingsFormat> PreviousMappings = new ConcurrentHashMapWrapper<string, PostingsFormat>(new Dictionary<string, PostingsFormat>());
+        private readonly IDictionary<string, PostingsFormat> PreviousMappings = new ConcurrentHashMapWrapper<string, PostingsFormat>(new Dictionary<string, PostingsFormat>());
 
         private IDictionary<string, DocValuesFormat> PreviousDVMappings = new ConcurrentHashMapWrapper<string, DocValuesFormat>(new Dictionary<string, DocValuesFormat>());
         private readonly int PerFieldSeed;
@@ -135,7 +136,22 @@ namespace Lucene.Net.Index
             int maxItemsPerBlock = 2 * (Math.Max(2, minItemsPerBlock - 1)) + random.Next(100);
             int lowFreqCutoff = TestUtil.NextInt(random, 2, 100);
 
-            Add(avoidCodecs, new Lucene41PostingsFormat(minItemsPerBlock, maxItemsPerBlock), /*, new FSTPostingsFormat(), new FSTOrdPostingsFormat(), new FSTPulsing41PostingsFormat(1 + random.Next(20)), new FSTOrdPulsing41PostingsFormat(1 + random.Next(20)), new DirectPostingsFormat(LuceneTestCase.Rarely(random) ? 1 : (LuceneTestCase.Rarely(random) ? int.MaxValue : maxItemsPerBlock), LuceneTestCase.Rarely(random) ? 1 : (LuceneTestCase.Rarely(random) ? int.MaxValue : lowFreqCutoff)), new Pulsing41PostingsFormat(1 + random.Next(20), minItemsPerBlock, maxItemsPerBlock), new Pulsing41PostingsFormat(1 + random.Next(20), minItemsPerBlock, maxItemsPerBlock), new TestBloomFilteredLucene41Postings(), new MockSepPostingsFormat(), new MockFixedIntBlockPostingsFormat(TestUtil.NextInt(random, 1, 2000)), new MockVariableIntBlockPostingsFormat(TestUtil.NextInt(random, 1, 127)), new MockRandomPostingsFormat(random), new NestedPulsingPostingsFormat(), new Lucene41WithOrds(), new SimpleTextPostingsFormat(),*/ new AssertingPostingsFormat() /*, new MemoryPostingsFormat(true, random.nextFloat()), new MemoryPostingsFormat(false, random.nextFloat())*/);
+            Add(avoidCodecs,
+                new Lucene41PostingsFormat(minItemsPerBlock, maxItemsPerBlock),
+                /*
+                new FSTPostingsFormat(),
+                new FSTOrdPostingsFormat(),
+                new FSTPulsing41PostingsFormat(1 + random.Next(20)), new FSTOrdPulsing41PostingsFormat(1 + random.Next(20)),
+                new DirectPostingsFormat(LuceneTestCase.Rarely(random) ? 1 : (LuceneTestCase.Rarely(random) ? int.MaxValue : maxItemsPerBlock), LuceneTestCase.Rarely(random) ? 1 : (LuceneTestCase.Rarely(random) ? int.MaxValue : lowFreqCutoff)),
+                new Pulsing41PostingsFormat(1 + random.Next(20), minItemsPerBlock, maxItemsPerBlock), new Pulsing41PostingsFormat(1 + random.Next(20), minItemsPerBlock, maxItemsPerBlock),
+                new TestBloomFilteredLucene41Postings(), new MockSepPostingsFormat(), new MockFixedIntBlockPostingsFormat(TestUtil.NextInt(random, 1, 2000)),
+                new MockVariableIntBlockPostingsFormat(TestUtil.NextInt(random, 1, 127)), new MockRandomPostingsFormat(random),
+                new NestedPulsingPostingsFormat(), new Lucene41WithOrds(), new SimpleTextPostingsFormat(),
+                */
+                new AssertingPostingsFormat()
+                /*new MemoryPostingsFormat(true, random.nextFloat()), new MemoryPostingsFormat(false, random.nextFloat())*/
+                );
+
             // add pulsing again with (usually) different parameters
             //TODO as a PostingsFormat which wraps others, we should allow TestBloomFilteredLucene41Postings to be constructed
             //with a choice of concrete PostingsFormats. Maybe useful to have a generic means of marking and dealing

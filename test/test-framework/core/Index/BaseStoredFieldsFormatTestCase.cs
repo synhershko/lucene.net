@@ -1,4 +1,5 @@
 using Apache.NMS.Util;
+using Lucene.Net.Codecs;
 using Lucene.Net.Randomized.Generators;
 using Lucene.Net.Support;
 using Lucene.Net.Util;
@@ -55,7 +56,7 @@ namespace Lucene.Net.Index
     using TopDocs = Lucene.Net.Search.TopDocs;
 
     /// <summary>
-    /// Base class aiming at testing <seealso cref="StoredFieldsFormat stored fields formats"/>.
+    /// Base class aiming at testing <seealso cref="StoredFieldsFormat"/>.
     /// To test a new format, all you need is to register a new <seealso cref="Codec"/> which
     /// uses it and extend this class and override <seealso cref="#getCodec()"/>.
     /// @lucene.experimental
@@ -186,8 +187,9 @@ namespace Lucene.Net.Index
             dir.Dispose();
         }
 
+        [Test]
         // LUCENE-1727: make sure doc fields are stored in order
-        public virtual void TestStoredFieldsOrder()
+        public void TestStoredFieldsOrder()
         {
             Directory d = NewDirectory();
             IndexWriter w = new IndexWriter(d, NewIndexWriterConfig(TEST_VERSION_CURRENT, new MockAnalyzer(Random())));
@@ -222,8 +224,9 @@ namespace Lucene.Net.Index
             d.Dispose();
         }
 
+        [Test]
         // LUCENE-1219
-        public virtual void TestBinaryFieldOffsetLength()
+        public void TestBinaryFieldOffsetLength()
         {
             Directory dir = NewDirectory();
             IndexWriter w = new IndexWriter(dir, NewIndexWriterConfig(TEST_VERSION_CURRENT, new MockAnalyzer(Random())));
@@ -255,7 +258,7 @@ namespace Lucene.Net.Index
             dir.Dispose();
         }
 
-        public virtual void TestNumericField()
+        public void TestNumericField()
         {
             Directory dir = NewDirectory();
             RandomIndexWriter w = new RandomIndexWriter(Random(), dir);
@@ -339,7 +342,8 @@ namespace Lucene.Net.Index
             dir.Dispose();
         }
 
-        public virtual void TestIndexedBit()
+        [Test]
+        public void TestIndexedBit()
         {
             Directory dir = NewDirectory();
             RandomIndexWriter w = new RandomIndexWriter(Random(), dir);
@@ -357,7 +361,8 @@ namespace Lucene.Net.Index
             dir.Dispose();
         }
 
-        public virtual void TestReadSkip()
+        [Test]
+        public void TestReadSkip()
         {
             Directory dir = NewDirectory();
             IndexWriterConfig iwConf = NewIndexWriterConfig(TEST_VERSION_CURRENT, new MockAnalyzer(Random()));
@@ -411,7 +416,8 @@ namespace Lucene.Net.Index
             dir.Dispose();
         }
 
-        public virtual void TestEmptyDocs()
+        [Test]
+        public void TestEmptyDocs()
         {
             Directory dir = NewDirectory();
             IndexWriterConfig iwConf = NewIndexWriterConfig(TEST_VERSION_CURRENT, new MockAnalyzer(Random()));
@@ -439,7 +445,8 @@ namespace Lucene.Net.Index
             dir.Dispose();
         }
 
-        public virtual void TestConcurrentReads()
+        [Test]
+        public void TestConcurrentReads()
         {
             Directory dir = NewDirectory();
             IndexWriterConfig iwConf = NewIndexWriterConfig(TEST_VERSION_CURRENT, new MockAnalyzer(Random()));
@@ -546,9 +553,9 @@ namespace Lucene.Net.Index
             }
         }
 
-        private sbyte[] RandomByteArray(int length, int max)
+        private static sbyte[] RandomByteArray(int length, int max)
         {
-            sbyte[] result = new sbyte[length];
+            var result = new sbyte[length];
             for (int i = 0; i < length; ++i)
             {
                 result[i] = (sbyte)Random().Next(max);
@@ -556,6 +563,7 @@ namespace Lucene.Net.Index
             return result;
         }
 
+        [Test]
         public virtual void TestWriteReadMerge()
         {
             // get another codec, other than the default: so we are merging segments across different codecs
@@ -661,8 +669,9 @@ namespace Lucene.Net.Index
             dir.Dispose();
         }
 
+        [Test]
         //ORIGINAL LINE: @Nightly public void testBigDocuments() throws java.io.IOException
-        public virtual void TestBigDocuments()
+        public void TestBigDocuments()
         {
             // "big" as "much bigger than the chunk size"
             // for this test we force a FS dir
@@ -738,7 +747,8 @@ namespace Lucene.Net.Index
             dir.Dispose();
         }
 
-        public virtual void TestBulkMergeWithDeletes()
+        [Test]
+        public void TestBulkMergeWithDeletes()
         {
             int numDocs = AtLeast(200);
             Directory dir = NewDirectory();
