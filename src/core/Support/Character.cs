@@ -20,6 +20,7 @@
 */
 
 using System;
+using Lucene.Net.Util;
 
 namespace Lucene.Net.Support
 {
@@ -114,6 +115,26 @@ namespace Lucene.Net.Support
             return codePoint >= MIN_SUPPLEMENTARY_CODE_POINT ? 2 : 1;
         }
 
+        public static int CodePointCount(string seq, int beginIndex, int endIndex)
+        {
+            int length = seq.Length;
+            if (beginIndex < 0 || endIndex > length || beginIndex > endIndex)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            int n = endIndex - beginIndex;
+            for (int i = beginIndex; i < endIndex;)
+            {
+                if (char.IsHighSurrogate(seq[i++]) && i < endIndex &&
+                    char.IsLowSurrogate(seq[i]))
+                {
+                    n--;
+                    i++;
+                }
+            }
+            return n;
+        }
+
         public static int CodePointAt(string seq, int index)
         {
             char c1 = seq[index++];
@@ -122,6 +143,23 @@ namespace Lucene.Net.Support
                 if (index < seq.Length)
                 {
                     char c2 = seq[index];
+                    if (char.IsLowSurrogate(c2))
+                    {
+                        return ToCodePoint(c1, c2);
+                    }
+                }
+            }
+            return c1;
+        }
+
+        public static int CodePointAt(ICharSequence seq, int index)
+        {
+            char c1 = seq.CharAt(index++);
+            if (char.IsHighSurrogate(c1))
+            {
+                if (index < seq.Length)
+                {
+                    char c2 = seq.CharAt(index);
                     if (char.IsLowSurrogate(c2))
                     {
                         return ToCodePoint(c1, c2);

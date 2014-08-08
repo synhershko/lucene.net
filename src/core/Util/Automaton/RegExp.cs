@@ -963,7 +963,7 @@ namespace Lucene.Net.Util.Automaton
 
         private bool Peek(string s)
         {
-            return More() && s.IndexOf(b[Pos]) != -1;
+            return More() && s.IndexOf((char)Character.CodePointAt(b, Pos)) != -1;
         }
 
         private bool Match(int c)
@@ -972,7 +972,7 @@ namespace Lucene.Net.Util.Automaton
             {
                 return false;
             }
-            if (b[Pos] == c)
+            if (Character.CodePointAt(b, Pos) == c)
             {
                 Pos += Character.CharCount(c);
                 return true;
@@ -991,7 +991,7 @@ namespace Lucene.Net.Util.Automaton
             {
                 throw new System.ArgumentException("unexpected end-of-string");
             }
-            int ch = b[Pos];
+            int ch = Character.CodePointAt(b, Pos);
             Pos += Character.CharCount(ch);
             return ch;
         }

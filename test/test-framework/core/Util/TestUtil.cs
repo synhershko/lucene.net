@@ -2,7 +2,6 @@ using ICSharpCode.SharpZipLib.Zip;
 using Lucene.Net.Index;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
@@ -318,7 +317,7 @@ namespace Lucene.Net.Util
         /// start and end are BOTH inclusive </summary>
         public static long NextLong(Random r, long start, long end)
         {
-            Debug.Assert(end >= start);
+            Assert.True(end >= start);
             BigInteger range = (BigInteger)end + (BigInteger)1 - (BigInteger)start;
             if (range.CompareTo((BigInteger)int.MaxValue) <= 0)
             {
@@ -329,8 +328,8 @@ namespace Lucene.Net.Util
                 // probably not evenly distributed when range is large, but OK for tests
                 BigInteger augend = new BigInteger(end + 1 - start) * (BigInteger)(r.NextDouble());
                 long result = start + (long)augend;
-                Debug.Assert(result >= start);
-                Debug.Assert(result <= end);
+                Assert.True(result >= start);
+                Assert.True(result <= end);
                 return result;
             }
         }
@@ -706,11 +705,11 @@ namespace Lucene.Net.Util
         /// </summary>
         public static string RandomlyRecaseCodePoints(Random random, string str)
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             int pos = 0;
             while (pos < str.Length)
             {
-                int codePoint = str[pos];
+                int codePoint = Character.CodePointAt(str, pos);
                 pos += Character.CharCount(codePoint);
                 switch (NextInt(random, 0, 2))
                 {
@@ -1327,7 +1326,7 @@ namespace Lucene.Net.Util
 
         public static string RandomAnalysisString(Random random, int maxLength, bool simple)
         {
-            Debug.Assert(maxLength >= 0);
+            Assert.True(maxLength >= 0);
 
             // sometimes just a purely random string
             if (random.Next(31) == 0)
@@ -1382,7 +1381,7 @@ namespace Lucene.Net.Util
                     }
                     else if (evilness < 15)
                     {
-                        Debug.Assert(sb.Length == 0); // we should always get wordLength back!
+                        Assert.AreEqual(0, sb.Length); // we should always get wordLength back!
                         sb.Append(TestUtil.RandomRealisticUnicodeString(random, wordLength, wordLength));
                     }
                     else if (evilness == 16)
@@ -1413,7 +1412,7 @@ namespace Lucene.Net.Util
             {
                 // mix up case
                 string mixedUp = TestUtil.RandomlyRecaseCodePoints(random, sb.ToString());
-                Debug.Assert(mixedUp.Length == sb.Length, "Lengths are not the same: mixedUp = " + mixedUp + ", length = " + mixedUp.Length + ", sb = " + sb + ", length = " + sb.Length);
+                Assert.True(mixedUp.Length == sb.Length, "Lengths are not the same: mixedUp = " + mixedUp + ", length = " + mixedUp.Length + ", sb = " + sb + ", length = " + sb.Length);
                 return mixedUp;
             }
             else

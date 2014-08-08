@@ -1062,7 +1062,7 @@ namespace Lucene.Net.Util.Automaton
                 State p = a.Initial;
                 for (int i = 0, cp = 0; i < s.Length; i += Character.CharCount(cp))
                 {
-                    State q = p.Step(cp = s[i]);
+                    State q = p.Step(cp = Character.CodePointAt(s, i));
                     if (q == null)
                     {
                         return false;
@@ -1083,7 +1083,7 @@ namespace Lucene.Net.Util.Automaton
                 bool accept = a.Initial.accept;
                 for (int i = 0, c = 0; i < s.Length; i += Character.CharCount(c))
                 {
-                    c = s[i];
+                    c = Character.CodePointAt(s, i);
                     accept = false;
                     pp_other.Clear();
                     bb_other.SetAll(false);

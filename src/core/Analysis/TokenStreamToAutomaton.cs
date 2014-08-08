@@ -1,4 +1,5 @@
 using Lucene.Net.Analysis.Tokenattributes;
+using Lucene.Net.Support;
 using Lucene.Net.Util;
 using System;
 using System.Diagnostics;
@@ -131,13 +132,13 @@ namespace Lucene.Net.Analysis
         /// </summary>
         public virtual Automaton ToAutomaton(TokenStream @in)
         {
-            Automaton a = new Automaton();
+            var a = new Automaton();
             bool deterministic = true;
 
-            IPositionIncrementAttribute posIncAtt = @in.AddAttribute<IPositionIncrementAttribute>();
-            IPositionLengthAttribute posLengthAtt = @in.AddAttribute<IPositionLengthAttribute>();
-            IOffsetAttribute offsetAtt = @in.AddAttribute<IOffsetAttribute>();
-            ITermToBytesRefAttribute termBytesAtt = @in.AddAttribute<ITermToBytesRefAttribute>();
+            var posIncAtt = @in.AddAttribute<IPositionIncrementAttribute>();
+            var posLengthAtt = @in.AddAttribute<IPositionLengthAttribute>();
+            var offsetAtt = @in.AddAttribute<IOffsetAttribute>();
+            var termBytesAtt = @in.AddAttribute<ITermToBytesRefAttribute>();
 
             BytesRef term = termBytesAtt.BytesRef;
 
@@ -218,21 +219,20 @@ namespace Lucene.Net.Analysis
 
                 State state = posData.Leaving;
                 int termLen = termUTF8.Length;
-                /*LUCENE TO-DO Never referenced
                 if (unicodeArcs)
                 {
-                  string utf16 = termUTF8.Utf8ToString();
-                  termUnicode = new int[utf16.codePointCount(0, utf16.Length)];
-                  termLen = termUnicode.Length;
-                  for (int cp, i = 0, j = 0; i < utf16.Length; i += char.charCount(cp))
-                  {
-                    termUnicode[j++] = cp = utf16.codePointAt(i);
-                  }
+                    string utf16 = termUTF8.Utf8ToString();
+                    termUnicode = new int[Character.CodePointCount(utf16, 0, utf16.Length)];
+                    termLen = termUnicode.Length;
+                    for (int cp, i = 0, j = 0; i < utf16.Length; i += Character.CharCount(cp))
+                    {
+                        termUnicode[j++] = cp = Character.CodePointAt(utf16, i);
+                    }
                 }
                 else
                 {
-                  termLen = termUTF8.Length;
-                }*/
+                    termLen = termUTF8.Length;
+                }
 
                 for (int byteIDX = 0; byteIDX < termLen; byteIDX++)
                 {

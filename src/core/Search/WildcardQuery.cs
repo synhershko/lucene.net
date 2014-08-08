@@ -76,7 +76,7 @@ namespace Lucene.Net.Search
 
             for (int i = 0; i < wildcardText.Length; )
             {
-                int c = wildcardText[i];//.codePointAt(i);
+                int c = Character.CodePointAt(wildcardText, i);
                 int length = Character.CharCount(c);
                 switch (c)
                 {
@@ -92,7 +92,7 @@ namespace Lucene.Net.Search
                         // add the next codepoint instead, if it exists
                         if (i + length < wildcardText.Length)
                         {
-                            int nextChar = wildcardText[i + length];//.codePointAt(i + length);
+                            int nextChar = Character.CodePointAt(wildcardText, i + length);
                             length += Character.CharCount(nextChar);
                             automata.Add(BasicAutomata.MakeChar(nextChar));
                             break;

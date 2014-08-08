@@ -125,7 +125,7 @@ namespace Lucene.Net.Util.Automaton
             int[] word = new int[length];
             for (int i = 0, j = 0, cp = 0; i < input.Length; i += Character.CharCount(cp))
             {
-                word[j++] = cp = input[i]/*.codePointAt(i)*/;
+                word[j++] = cp = Character.CodePointAt(input, i);
             }
             return word;
         }

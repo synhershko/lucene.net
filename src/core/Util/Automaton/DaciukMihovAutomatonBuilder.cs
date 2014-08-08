@@ -230,11 +230,11 @@ namespace Lucene.Net.Util.Automaton
             // Descend in the automaton (find matching prefix).
             int pos = 0, max = current.Length;
             State next, state = Root;
-            while (pos < max && (next = state.LastChild(current.CharAt(pos))) != null)
+            while (pos < max && (next = state.LastChild(Character.CodePointAt(current, pos))) != null)
             {
                 state = next;
                 // todo, optimize me
-                pos += Character.CharCount(current.CharAt(pos));
+                pos += Character.CharCount(Character.CodePointAt(current, pos));
             }
 
             if (state.HasChildren())
@@ -269,15 +269,15 @@ namespace Lucene.Net.Util.Automaton
         /// <summary>
         /// Internal recursive traversal for conversion.
         /// </summary>
-        private static Lucene.Net.Util.Automaton.State Convert(State s, IdentityHashMap<State, Lucene.Net.Util.Automaton.State> visited)
+        private static Util.Automaton.State Convert(State s, IdentityHashMap<State, Lucene.Net.Util.Automaton.State> visited)
         {
-            Lucene.Net.Util.Automaton.State converted = visited[s];
+            Util.Automaton.State converted = visited[s];
             if (converted != null)
             {
                 return converted;
             }
 
-            converted = new Lucene.Net.Util.Automaton.State();
+            converted = new Util.Automaton.State();
             converted.Accept = s.Is_final;
 
             visited[s] = converted;
@@ -356,7 +356,7 @@ namespace Lucene.Net.Util.Automaton
             int len = current.Length;
             while (fromIndex < len)
             {
-                int cp = current.CharAt(fromIndex);// char.codePointAt(current, fromIndex);
+                int cp = Character.CodePointAt(current, fromIndex);
                 state = state.NewState(cp);
                 fromIndex += Character.CharCount(cp);
             }

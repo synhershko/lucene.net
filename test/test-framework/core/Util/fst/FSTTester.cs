@@ -153,7 +153,7 @@ namespace Lucene.Net.Util.Fst
                 {
                     ir.Grow(intIdx + 1);
                 }
-                int utf32 = s[charIdx];
+                int utf32 = Character.CodePointAt(s, charIdx);
                 ir.Ints[intIdx] = utf32;
                 charIdx += Character.CharCount(utf32);
                 intIdx++;

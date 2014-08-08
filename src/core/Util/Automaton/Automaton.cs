@@ -627,7 +627,7 @@ namespace Lucene.Net.Util.Automaton
                 for (int i = 0, cp = 0; i < singleton.Length; i += Character.CharCount(cp))
                 {
                     State q = new State();
-                    p.AddTransition(new Transition(cp = singleton[i], q));
+                    p.AddTransition(new Transition(cp = Character.CodePointAt(singleton, i), q));
                     p = q;
                 }
                 p.accept = true;

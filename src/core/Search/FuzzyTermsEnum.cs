@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 namespace Lucene.Net.Search
 {
@@ -53,7 +54,7 @@ namespace Lucene.Net.Search
     /// </summary>
     public class FuzzyTermsEnum : TermsEnum
     {
-        private bool InstanceFieldsInitialized = false;
+        private readonly bool InstanceFieldsInitialized = false;
 
         private void InitializeInstanceFields()
         {
@@ -135,7 +136,7 @@ namespace Lucene.Net.Search
             this.TermText = new int[utf16.Length];
             for (int cp, i = 0, j = 0; i < utf16.Length; i += Character.CharCount(cp))
             {
-                TermText[j++] = cp = utf16[i];//.codePointAt(i);
+                TermText[j++] = cp = Character.CodePointAt(utf16, i);
             }
             this.TermLength = TermText.Length;
             this.DfaAtt = atts.AddAttribute<ILevenshteinAutomataAttribute>();

@@ -977,24 +977,21 @@ namespace Lucene.Net.Util.Fst
         /// </summary>
         public static IntsRef ToUTF32(string s, IntsRef scratch)
         {
-            throw new NotImplementedException(".NET does not support UTF32 native strings.");
-
-            /*int charIdx = 0;
+            int charIdx = 0;
             int intIdx = 0;
-            int charLimit = s.length();
+            int charLimit = s.Length;
             while (charIdx < charLimit)
             {
-              scratch.Grow(intIdx + 1);
-              int utf32 = char.codePointAt(s, charIdx);
-              scratch.Ints[intIdx] = utf32;
-              charIdx += char.charCount(utf32);
-              intIdx++;
+                scratch.Grow(intIdx + 1);
+                int utf32 = Character.CodePointAt(s, charIdx);
+                scratch.Ints[intIdx] = utf32;
+                charIdx += Character.CharCount(utf32);
+                intIdx++;
             }
             scratch.Length = intIdx;
-            return scratch;*/
+            return scratch;
         }
 
-        /*LUCENE TO-DO Not in use
         /// <summary>
         /// Decodes the Unicode codepoints from the provided
         ///  char[] and places them in the provided scratch
@@ -1002,20 +999,20 @@ namespace Lucene.Net.Util.Fst
         /// </summary>
         public static IntsRef ToUTF32(char[] s, int offset, int length, IntsRef scratch)
         {
-          int charIdx = offset;
-          int intIdx = 0;
-          int charLimit = offset + length;
-          while (charIdx < charLimit)
-          {
-            scratch.Grow(intIdx + 1);
-            int utf32 = char.codePointAt(s, charIdx, charLimit);
-            scratch.Ints[intIdx] = utf32;
-            charIdx += Character.CharCount(utf32);
-            intIdx++;
-          }
-          scratch.Length = intIdx;
-          return scratch;
-        }*/
+            int charIdx = offset;
+            int intIdx = 0;
+            int charLimit = offset + length;
+            while (charIdx < charLimit)
+            {
+                scratch.Grow(intIdx + 1);
+                int utf32 = Character.CodePointAt(s, charIdx, charLimit);
+                scratch.Ints[intIdx] = utf32;
+                charIdx += Character.CharCount(utf32);
+                intIdx++;
+            }
+            scratch.Length = intIdx;
+            return scratch;
+        }
 
         /// <summary>
         /// Just takes unsigned byte values from the BytesRef and
