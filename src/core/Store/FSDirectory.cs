@@ -398,8 +398,6 @@ namespace Lucene.Net.Store
             // (otherwise it can happen that the directory does not yet exist)!
             if (toSync.Count > 0)
             {
-                //LUCENE TO-DO
-                //IOUtils.Fsync(Directory_Renamed.FullName, true);
                 IOUtils.Fsync(Directory_Renamed.FullName, true);
             }
 
@@ -556,9 +554,42 @@ namespace Lucene.Net.Store
             }
         }
 
-        protected internal virtual void Fsync(string name)
+        protected void Fsync(String name)
         {
-            IOUtils.Fsync(Path.Combine(Directory.FullName, name), false);
+            FileInfo fullFile = new FileInfo(Path.Combine(Directory_Renamed.FullName, name));
+            bool success = false;
+            int retryCount = 0;
+            IOException exc = null;
+            while (!success && retryCount < 5)
+            {
+                retryCount++;
+                FileStream file = null;
+                try
+                {
+                    try
+                    {
+                        file = new System.IO.FileStream(fullFile.FullName, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write, System.IO.FileShare.ReadWrite);
+                        FileSupport.Sync(file);
+                        success = true;
+                    }
+                    finally
+                    {
+                        if (file != null)
+                            file.Dispose();
+                    }
+                }
+                catch (IOException ioe)
+                {
+                    if (exc == null)
+                        exc = ioe;
+
+                    // Pause 5 msec
+                    Thread.Sleep(5);
+                }
+            }
+            if (!success)
+                // Throw original exception
+                throw exc;
         }
     }
 }
