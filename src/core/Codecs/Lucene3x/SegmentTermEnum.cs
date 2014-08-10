@@ -32,7 +32,7 @@ namespace Lucene.Net.Codecs.Lucene3x
     /// @lucene.experimental
 
     [Obsolete]
-    public sealed class SegmentTermEnum : ICloneable, IDisposable
+    public sealed class SegmentTermEnum : IDisposable
     {
         private IndexInput Input;
         internal FieldInfos FieldInfos;
@@ -108,25 +108,19 @@ namespace Lucene.Net.Codecs.Lucene3x
             }
         }
 
-        public object Clone()
+        private SegmentTermEnum(SegmentTermEnum other)
         {
-            SegmentTermEnum clone = null;
-            try
-            {
-                clone = (SegmentTermEnum)base.MemberwiseClone();
-            }
-            catch (InvalidOperationException e)
-            {
-            }
+            this.Input = (IndexInput)Input.Clone();
+            this.TermInfo_Renamed = new TermInfo(TermInfo_Renamed);
 
-            clone.Input = (IndexInput)Input.Clone();
-            clone.TermInfo_Renamed = new TermInfo(TermInfo_Renamed);
+            this.TermBuffer = (TermBuffer)TermBuffer.Clone();
+            this.PrevBuffer = (TermBuffer)PrevBuffer.Clone();
+            this.ScanBuffer = new TermBuffer();
+        }
 
-            clone.TermBuffer = (TermBuffer)TermBuffer.Clone();
-            clone.PrevBuffer = (TermBuffer)PrevBuffer.Clone();
-            clone.ScanBuffer = new TermBuffer();
-
-            return clone;
+        public SegmentTermEnum Clone()
+        {
+            return new SegmentTermEnum(this);
         }
 
         internal void Seek(long pointer, long p, Term t, TermInfo ti)
