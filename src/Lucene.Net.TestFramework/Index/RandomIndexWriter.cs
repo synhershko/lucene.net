@@ -126,7 +126,7 @@ namespace Lucene.Net.Index
 
         /// <summary>
         /// Adds a Document. </summary>
-        /// <seealso cref= IndexWriter#addDocument(Iterable) </seealso>
+        /// <seealso cref=IndexWriter#addDocument(Iterable) </seealso>
         public virtual void AddDocument(IEnumerable<IndexableField> doc)
         {
             AddDocument(doc, w.Analyzer);
@@ -181,7 +181,7 @@ namespace Lucene.Net.Index
                     this.OuterInstance = outerInstance;
                 }
 
-                internal bool done;
+                private bool done;
                 private IEnumerable<IndexableField> current;
 
                 public bool MoveNext()

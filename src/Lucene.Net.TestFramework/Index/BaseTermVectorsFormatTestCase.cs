@@ -474,13 +474,13 @@ namespace Lucene.Net.Index
             }
         }
 
-        protected internal virtual void AssertEquals(RandomDocument doc, Fields fields)
+        protected virtual void AssertEquals(RandomDocument doc, Fields fields)
         {
             // compare field names
             Assert.AreEqual(doc == null, fields == null);
             Assert.AreEqual(doc.FieldNames.Length, fields.Size());
-            HashSet<string> fields1 = new HashSet<string>();
-            HashSet<string> fields2 = new HashSet<string>();
+            var fields1 = new HashSet<string>();
+            var fields2 = new HashSet<string>();
             for (int i = 0; i < doc.FieldNames.Length; ++i)
             {
                 fields1.Add(doc.FieldNames[i]);
@@ -864,46 +864,44 @@ namespace Lucene.Net.Index
         // don't share mutable data
         public virtual void TestClone()
         {
-            RandomDocumentFactory docFactory = new RandomDocumentFactory(this, 5, 20);
-            int numDocs = AtLeast(100);
-            foreach (Options options in ValidOptions())
+            var docFactory = new RandomDocumentFactory(this, 5, 20);
+            var numDocs = AtLeast(100);
+            foreach (var options in ValidOptions())
             {
-                RandomDocument[] docs = new RandomDocument[numDocs];
-                for (int i = 0; i < numDocs; ++i)
+                var docs = new RandomDocument[numDocs];
+                for (var i = 0; i < numDocs; ++i)
                 {
                     docs[i] = docFactory.NewDocument(TestUtil.NextInt(Random(), 1, 3), AtLeast(10), options);
                 }
-                Directory dir = NewDirectory();
-                RandomIndexWriter writer = new RandomIndexWriter(Random(), dir);
-                for (int i = 0; i < numDocs; ++i)
-                {
-                    writer.AddDocument(AddId(docs[i].ToDocument(), "" + i));
-                }
-                IndexReader reader = writer.Reader;
-                for (int i = 0; i < numDocs; ++i)
-                {
-                    int docID = DocID(reader, "" + i);
-                    AssertEquals(docs[i], reader.GetTermVectors(docID));
-                }
 
-                AtomicReference<Exception> exception = new AtomicReference<Exception>();
-                ThreadClass[] threads = new ThreadClass[2];
-                for (int i = 0; i < threads.Length; ++i)
+                using (Directory dir = NewDirectory())
+                using (var writer = new RandomIndexWriter(Random(), dir))
                 {
-                    threads[i] = new ThreadAnonymousInnerClassHelper(this, numDocs, docs, reader, exception, i);
+                    for (int i = 0; i < numDocs; ++i)
+                    {
+                        writer.AddDocument(AddId(docs[i].ToDocument(), "" + i));
+                    }
+
+                    var exception = new AtomicReference<Exception>();
+                    using (IndexReader reader = writer.Reader)
+                    {
+                        for (var i = 0; i < numDocs; ++i)
+                        {
+                            int docId = DocID(reader, "" + i);
+                            AssertEquals(docs[i], reader.GetTermVectors(docId));
+                        }
+
+                        var threads = new ThreadClass[2];
+                        for (int i = 0; i < threads.Length; ++i)
+                        {
+                            threads[i] = new ThreadAnonymousInnerClassHelper(this, numDocs, docs, reader, exception, i);
+                        }
+                        Array.ForEach(threads, t => t.Start());
+                        Array.ForEach(threads, t => t.Join());
+                    }
+
+                    Assert.IsNull(exception.Value, "One thread threw an exception");
                 }
-                foreach (ThreadClass thread in threads)
-                {
-                    thread.Start();
-                }
-                foreach (ThreadClass thread in threads)
-                {
-                    thread.Join();
-                }
-                reader.Dispose();
-                writer.Dispose();
-                dir.Dispose();
-                Assert.IsNull(exception.Value, "One thread threw an exception");
             }
         }
 
@@ -911,19 +909,19 @@ namespace Lucene.Net.Index
         {
             private readonly BaseTermVectorsFormatTestCase OuterInstance;
 
-            private int NumDocs;
-            private Lucene.Net.Index.BaseTermVectorsFormatTestCase.RandomDocument[] Docs;
-            private IndexReader Reader;
-            private AtomicReference<Exception> ARException;
+            private readonly int _numDocs;
+            private readonly RandomDocument[] _docs;
+            private readonly IndexReader _reader;
+            private readonly AtomicReference<Exception> _arException;
             private int i;
 
-            public ThreadAnonymousInnerClassHelper(BaseTermVectorsFormatTestCase outerInstance, int numDocs, Lucene.Net.Index.BaseTermVectorsFormatTestCase.RandomDocument[] docs, IndexReader reader, AtomicReference<Exception> exception, int i)
+            public ThreadAnonymousInnerClassHelper(BaseTermVectorsFormatTestCase outerInstance, int numDocs, RandomDocument[] docs, IndexReader reader, AtomicReference<Exception> exception, int i)
             {
                 this.OuterInstance = outerInstance;
-                this.NumDocs = numDocs;
-                this.Docs = docs;
-                this.Reader = reader;
-                this.ARException = exception;
+                this._numDocs = numDocs;
+                this._docs = docs;
+                this._reader = reader;
+                this._arException = exception;
                 this.i = i;
             }
 
@@ -933,14 +931,14 @@ namespace Lucene.Net.Index
                 {
                     for (int i = 0; i < AtLeast(100); ++i)
                     {
-                        int idx = Random().Next(NumDocs);
-                        int docID = OuterInstance.DocID(Reader, "" + idx);
-                        OuterInstance.AssertEquals(Docs[idx], Reader.GetTermVectors(docID));
+                        int idx = Random().Next(_numDocs);
+                        int docID = OuterInstance.DocID(_reader, "" + idx);
+                        OuterInstance.AssertEquals(_docs[idx], _reader.GetTermVectors(docID));
                     }
                 }
                 catch (Exception t)
                 {
-                    ARException.Value = t;
+                    _arException.Value = t;
                 }
             }
         }
