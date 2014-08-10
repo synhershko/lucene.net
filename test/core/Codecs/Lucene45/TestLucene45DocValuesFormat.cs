@@ -27,7 +27,7 @@ namespace Lucene.Net.Codecs.Lucene45
     {
         private readonly Codec Codec_Renamed = TestUtil.AlwaysDocValuesFormat(new Lucene45DocValuesFormat());
 
-        protected internal override Codec Codec
+        protected override Codec Codec
         {
             get
             {

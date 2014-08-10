@@ -705,7 +705,7 @@ namespace Lucene.Net.Search
 
         protected internal NodeState[] Nodes;
         internal int MaxSearcherAgeSeconds;
-        internal long EndTimeNanos;
+        protected long EndTimeNanos;
         private ThreadClass ChangeIndicesThread;
 
         protected internal virtual void Start(int numNodes, double runTimeSec, int maxSearcherAgeSeconds)

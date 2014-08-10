@@ -34,7 +34,7 @@ namespace Lucene.Net.Codecs.Lucene3x
             LuceneTestCase.OLD_FORMAT_IMPERSONATION_IS_ACTIVE = true;
         }
 
-        protected internal override Codec Codec
+        protected override Codec Codec
         {
             get
             {

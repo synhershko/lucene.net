@@ -33,7 +33,7 @@ namespace Lucene.Net.Codecs.Compressing
     [TestFixture]
     public class TestCompressingStoredFieldsFormat : BaseStoredFieldsFormatTestCase
     {
-        protected internal override Codec Codec
+        protected override Codec Codec
         {
             get
             {

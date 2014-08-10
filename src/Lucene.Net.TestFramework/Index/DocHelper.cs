@@ -37,7 +37,7 @@ namespace Lucene.Net.Index
     using StringField = Lucene.Net.Document.StringField;
     using TextField = Lucene.Net.Document.TextField;
 
-    internal class DocHelper
+    public class DocHelper
     {
         public static readonly FieldType CustomType;
         public const string FIELD_1_TEXT = "field one text";

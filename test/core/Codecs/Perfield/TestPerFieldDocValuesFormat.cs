@@ -63,7 +63,7 @@ namespace Lucene.Net.Codecs.Perfield
             base.SetUp();
         }
 
-        protected internal override Codec Codec
+        protected override Codec Codec
         {
             get
             {
@@ -71,7 +71,7 @@ namespace Lucene.Net.Codecs.Perfield
             }
         }
 
-        protected internal override bool CodecAcceptsHugeBinaryValues(string field)
+        protected override bool CodecAcceptsHugeBinaryValues(string field)
         {
             return TestUtil.FieldSupportsHugeBinaryDocValues(field);
         }

@@ -34,7 +34,7 @@ namespace Lucene.Net.Codecs.Lucene40
             OLD_FORMAT_IMPERSONATION_IS_ACTIVE = true; // explicitly instantiates ancient codec
         }
 
-        protected internal override Codec Codec
+        protected override Codec Codec
         {
             get
             {
@@ -43,7 +43,7 @@ namespace Lucene.Net.Codecs.Lucene40
         }
 
         // LUCENE-4583: this codec should throw IAE on huge binary values:
-        protected internal override bool CodecAcceptsHugeBinaryValues(string field)
+        protected override bool CodecAcceptsHugeBinaryValues(string field)
         {
             return false;
         }

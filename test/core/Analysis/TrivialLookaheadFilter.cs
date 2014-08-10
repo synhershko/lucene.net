@@ -39,7 +39,7 @@ namespace Lucene.Net.Analysis
             OffsetAtt = AddAttribute<IOffsetAttribute>();
         }
 
-        protected internal override TestPosition NewPosition()
+        protected override TestPosition NewPosition()
         {
             return new TestPosition();
         }
@@ -62,7 +62,7 @@ namespace Lucene.Net.Analysis
             InsertUpto = -1;
         }
 
-        protected internal override void AfterPosition()
+        protected override void AfterPosition()
         {
             if (InsertUpto < OutputPos)
             {

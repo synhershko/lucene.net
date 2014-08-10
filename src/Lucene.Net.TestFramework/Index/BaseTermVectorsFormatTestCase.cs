@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Lucene.Net.Codecs;
 
 namespace Lucene.Net.Index
 {
@@ -49,7 +50,7 @@ namespace Lucene.Net.Index
     using TokenStream = Lucene.Net.Analysis.TokenStream;
 
     /// <summary>
-    /// Base class aiming at testing <seealso cref="TermVectorsFormat term vectors formats"/>.
+    /// Base class aiming at testing <seealso cref="TermVectorsFormat"/>.
     /// To test a new format, all you need is to register a new <seealso cref="Codec"/> which
     /// uses it and extend this class and override <seealso cref="#getCodec()"/>.
     /// @lucene.experimental
@@ -138,12 +139,12 @@ namespace Lucene.Net.Index
             }
         }
 
-        protected internal virtual IEnumerable<Options> ValidOptions()
+        protected virtual IEnumerable<Options> ValidOptions()
         {
             return OptionsWrapper.GetAsEnumer();
         }
 
-        protected internal virtual IEnumerable<Options> ValidOptions(Options startInc, Options endInc)
+        protected virtual IEnumerable<Options> ValidOptions(Options startInc, Options endInc)
         {
             return OptionsWrapper.GetAsEnumer(startInc, endInc);
         }

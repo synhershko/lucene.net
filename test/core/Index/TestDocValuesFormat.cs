@@ -26,7 +26,7 @@ namespace Lucene.Net.Index
     /// </summary>
     public class TestDocValuesFormat : BaseDocValuesFormatTestCase
     {
-        protected internal override Codec Codec
+        protected override Codec Codec
         {
             get
             {
@@ -34,7 +34,7 @@ namespace Lucene.Net.Index
             }
         }
 
-        protected internal override bool CodecAcceptsHugeBinaryValues(string field)
+        protected override bool CodecAcceptsHugeBinaryValues(string field)
         {
             return TestUtil.FieldSupportsHugeBinaryDocValues(field);
         }

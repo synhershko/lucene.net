@@ -30,7 +30,7 @@ namespace Lucene.Net.Index
     [TestFixture]
     public class TestStoredFieldsFormat : BaseStoredFieldsFormatTestCase
     {
-        protected internal override Codec Codec
+        protected override Codec Codec
         {
             get
             {

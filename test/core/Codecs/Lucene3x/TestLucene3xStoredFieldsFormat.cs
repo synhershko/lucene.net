@@ -32,7 +32,7 @@ namespace Lucene.Net.Codecs.Lucene3x
             base.SetUp();
         }
 
-        protected internal override Codec Codec
+        protected override Codec Codec
         {
             get
             {

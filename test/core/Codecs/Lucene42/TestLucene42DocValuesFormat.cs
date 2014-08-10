@@ -31,7 +31,7 @@ namespace Lucene.Net.Codecs.Lucene42
             OLD_FORMAT_IMPERSONATION_IS_ACTIVE = true; // explicitly instantiates ancient codec
         }
 
-        protected internal override Codec Codec
+        protected override Codec Codec
         {
             get
             {
@@ -39,7 +39,7 @@ namespace Lucene.Net.Codecs.Lucene42
             }
         }
 
-        protected internal override bool CodecAcceptsHugeBinaryValues(string field)
+        protected override bool CodecAcceptsHugeBinaryValues(string field)
         {
             return false;
         }

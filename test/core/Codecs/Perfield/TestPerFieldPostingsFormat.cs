@@ -31,7 +31,7 @@ namespace Lucene.Net.Codecs.Perfield
     [TestFixture]
     public class TestPerFieldPostingsFormat : BasePostingsFormatTestCase
     {
-        protected internal override Codec Codec
+        protected override Codec Codec
         {
             get
             {

@@ -1,8 +1,8 @@
+using System.Numerics;
 using ICSharpCode.SharpZipLib.Zip;
 using Lucene.Net.Index;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 

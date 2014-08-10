@@ -32,7 +32,7 @@ namespace Lucene.Net.Index
     [TestFixture]
     public class TestTermVectorsFormat : BaseTermVectorsFormatTestCase
     {
-        protected internal override Codec Codec
+        protected override Codec Codec
         {
             get
             {
@@ -40,7 +40,7 @@ namespace Lucene.Net.Index
             }
         }
 
-        protected internal override IEnumerable<Options> ValidOptions()
+        protected override IEnumerable<Options> ValidOptions()
         {
             if (Codec is Lucene3xCodec)
             {

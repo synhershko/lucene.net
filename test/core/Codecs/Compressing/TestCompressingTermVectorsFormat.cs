@@ -35,7 +35,7 @@ namespace Lucene.Net.Codecs.Compressing
     [TestFixture]
     public class TestCompressingTermVectorsFormat : BaseTermVectorsFormatTestCase
     {
-        protected internal override Codec Codec
+        protected override Codec Codec
         {
             get
             {

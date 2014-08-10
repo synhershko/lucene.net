@@ -510,7 +510,7 @@ namespace Lucene.Net.Index
             w.ForceMerge(maxSegmentCount);
         }
 
-        internal sealed class TestPointInfoStream : InfoStream
+        public sealed class TestPointInfoStream : InfoStream
         {
             internal readonly InfoStream @delegate;
             internal readonly TestPoint TestPoint;
