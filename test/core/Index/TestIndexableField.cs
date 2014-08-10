@@ -125,9 +125,9 @@ namespace Lucene.Net.Index
                     set { }
                 }
 
-                public FieldInfo.IndexOptions_e? IndexOptionsValue
+                public FieldInfo.IndexOptions? IndexOptionsValue
                 {
-                    get { return FieldInfo.IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS; }
+                    get { return FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS; }
                     set { }
                 }
 

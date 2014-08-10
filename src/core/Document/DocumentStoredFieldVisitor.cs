@@ -75,7 +75,7 @@ namespace Lucene.Net.Document
             ft.StoreTermVectors = fieldInfo.HasVectors();
             ft.Indexed = fieldInfo.Indexed;
             ft.OmitNorms = fieldInfo.OmitsNorms();
-            ft.IndexOptionsValue = fieldInfo.IndexOptions;
+            ft.IndexOptionsValue = fieldInfo.FieldIndexOptions;
             Doc.Add(new Field(fieldInfo.Name, value, ft));
         }
 

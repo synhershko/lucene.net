@@ -8,8 +8,6 @@ namespace Lucene.Net.Index
     using BytesRef = Lucene.Net.Util.BytesRef;
     using FieldsConsumer = Lucene.Net.Codecs.FieldsConsumer;
     using FixedBitSet = Lucene.Net.Util.FixedBitSet;
-    using IndexOptions_e = Lucene.Net.Index.FieldInfo.IndexOptions_e;
-
     /*
          * Licensed to the Apache Software Foundation (ASF) under one or more
          * contributor license agreements.  See the NOTICE file distributed with
@@ -57,7 +55,7 @@ namespace Lucene.Net.Index
             this.fieldInfo = fieldInfo;
             DocState = termsHashPerField.DocState;
             FieldState = termsHashPerField.FieldState;
-            IndexOptions = fieldInfo.IndexOptions;
+            IndexOptions = fieldInfo.FieldIndexOptions;
         }
 
         internal override int StreamCount
@@ -99,11 +97,11 @@ namespace Lucene.Net.Index
         {
             // Record, up front, whether our in-RAM format will be
             // with or without term freqs:
-            IndexOptions = fieldInfo.IndexOptions;
+            IndexOptions = fieldInfo.FieldIndexOptions;
             PayloadAttribute = null;
         }
 
-        private IndexOptions_e? IndexOptions
+        private FieldInfo.IndexOptions? IndexOptions
         {
             set
             {
@@ -114,9 +112,9 @@ namespace Lucene.Net.Index
                 }
                 else
                 {
-                    HasFreq = value >= IndexOptions_e.DOCS_AND_FREQS;
-                    HasProx = value >= IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS;
-                    HasOffsets = value >= IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
+                    HasFreq = value >= FieldInfo.IndexOptions.DOCS_AND_FREQS;
+                    HasProx = value >= FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
+                    HasOffsets = value >= FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
                 }
             }
         }
@@ -415,12 +413,12 @@ namespace Lucene.Net.Index
             // according to this.indexOptions, but then write the
             // new segment to the directory according to
             // currentFieldIndexOptions:
-            IndexOptions_e? currentFieldIndexOptions = fieldInfo.IndexOptions;
+            FieldInfo.IndexOptions? currentFieldIndexOptions = fieldInfo.FieldIndexOptions;
             Debug.Assert(currentFieldIndexOptions != null);
 
-            bool writeTermFreq = currentFieldIndexOptions >= IndexOptions_e.DOCS_AND_FREQS;
-            bool writePositions = currentFieldIndexOptions >= IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS;
-            bool writeOffsets = currentFieldIndexOptions >= IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
+            bool writeTermFreq = currentFieldIndexOptions >= FieldInfo.IndexOptions.DOCS_AND_FREQS;
+            bool writePositions = currentFieldIndexOptions >= FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
+            bool writeOffsets = currentFieldIndexOptions >= FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
 
             bool readTermFreq = this.HasFreq;
             bool readPositions = this.HasProx;

@@ -1,3 +1,4 @@
+using Lucene.Net.Index;
 using Lucene.Net.Support;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,6 @@ namespace Lucene.Net.Codecs.Lucene40
     using Document = Lucene.Net.Document.Document;
     using Field = Lucene.Net.Document.Field;
     using FieldType = Lucene.Net.Document.FieldType;
-    using IndexOptions_e = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using IndexWriterConfig = Lucene.Net.Index.IndexWriterConfig;
     using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
 
@@ -117,21 +117,21 @@ namespace Lucene.Net.Codecs.Lucene40
             dir.Dispose(); // checkindex
         }
 
-        internal virtual IndexOptions_e IndexOptions()
+        internal virtual FieldInfo.IndexOptions IndexOptions()
         {
             switch (Random().Next(4))
             {
                 case 0:
-                    return IndexOptions_e.DOCS_ONLY;
+                    return FieldInfo.IndexOptions.DOCS_ONLY;
 
                 case 1:
-                    return IndexOptions_e.DOCS_AND_FREQS;
+                    return FieldInfo.IndexOptions.DOCS_AND_FREQS;
 
                 case 2:
-                    return IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS;
+                    return FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
 
                 default:
-                    return IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
+                    return FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
             }
         }
 

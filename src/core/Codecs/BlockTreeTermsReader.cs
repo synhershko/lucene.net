@@ -38,7 +38,6 @@ namespace Lucene.Net.Codecs
     using FieldInfos = Lucene.Net.Index.FieldInfos;
     using IndexFileNames = Lucene.Net.Index.IndexFileNames;
     using IndexInput = Lucene.Net.Store.IndexInput;
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using IOContext = Lucene.Net.Store.IOContext;
     using IOUtils = Lucene.Net.Util.IOUtils;
     using RamUsageEstimator = Lucene.Net.Util.RamUsageEstimator;
@@ -177,7 +176,7 @@ namespace Lucene.Net.Codecs
                     rootCode.Length = numBytes;
                     FieldInfo fieldInfo = fieldInfos.FieldInfo(field);
                     Debug.Assert(fieldInfo != null, "field=" + field);
-                    long sumTotalTermFreq = fieldInfo.IndexOptions == IndexOptions.DOCS_ONLY ? -1 : @in.ReadVLong();
+                    long sumTotalTermFreq = fieldInfo.FieldIndexOptions == FieldInfo.IndexOptions.DOCS_ONLY ? -1 : @in.ReadVLong();
                     long sumDocFreq = @in.ReadVLong();
                     int docCount = @in.ReadVInt();
                     int longsSize = Version >= BlockTreeTermsWriter.VERSION_META_ARRAY ? @in.ReadVInt() : 0;
@@ -557,7 +556,7 @@ namespace Lucene.Net.Codecs
             private readonly BlockTreeTermsReader OuterInstance;
 
             internal readonly long NumTerms;
-            internal readonly FieldInfo FieldInfo;
+            internal readonly FieldInfo fieldInfo;
             internal readonly long SumTotalTermFreq_Renamed;
             internal readonly long SumDocFreq_Renamed;
             internal readonly int DocCount_Renamed;
@@ -573,7 +572,7 @@ namespace Lucene.Net.Codecs
             {
                 this.OuterInstance = outerInstance;
                 Debug.Assert(numTerms > 0);
-                this.FieldInfo = fieldInfo;
+                this.fieldInfo = fieldInfo;
                 //DEBUG = BlockTreeTermsReader.DEBUG && fieldInfo.name.equals("id");
                 this.NumTerms = numTerms;
                 this.SumTotalTermFreq_Renamed = sumTotalTermFreq;
@@ -629,22 +628,22 @@ namespace Lucene.Net.Codecs
 
             public override bool HasFreqs()
             {
-                return FieldInfo.IndexOptions >= IndexOptions.DOCS_AND_FREQS;
+                return fieldInfo.FieldIndexOptions >= FieldInfo.IndexOptions.DOCS_AND_FREQS;
             }
 
             public override bool HasOffsets()
             {
-                return FieldInfo.IndexOptions >= IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
+                return fieldInfo.FieldIndexOptions >= FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
             }
 
             public override bool HasPositions()
             {
-                return FieldInfo.IndexOptions >= IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
+                return fieldInfo.FieldIndexOptions >= FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
             }
 
             public override bool HasPayloads()
             {
-                return FieldInfo.HasPayloads();
+                return fieldInfo.HasPayloads();
             }
 
             public override TermsEnum Iterator(TermsEnum reuse)
@@ -1014,7 +1013,7 @@ namespace Lucene.Net.Codecs
                             // stats
                             TermState.DocFreq = StatsReader.ReadVInt();
                             //if (DEBUG) System.out.println("    dF=" + state.docFreq);
-                            if (OuterInstance.OuterInstance.FieldInfo.IndexOptions != IndexOptions.DOCS_ONLY)
+                            if (OuterInstance.OuterInstance.fieldInfo.FieldIndexOptions != FieldInfo.IndexOptions.DOCS_ONLY)
                             {
                                 TermState.TotalTermFreq = TermState.DocFreq + StatsReader.ReadVLong();
                                 //if (DEBUG) System.out.println("    totTF=" + state.totalTermFreq);
@@ -1024,7 +1023,7 @@ namespace Lucene.Net.Codecs
                             {
                                 Longs[i] = BytesReader.ReadVLong();
                             }
-                            OuterInstance.OuterInstance.OuterInstance.PostingsReader.DecodeTerm(Longs, BytesReader, OuterInstance.OuterInstance.FieldInfo, TermState, absolute);
+                            OuterInstance.OuterInstance.OuterInstance.PostingsReader.DecodeTerm(Longs, BytesReader, OuterInstance.OuterInstance.fieldInfo, TermState, absolute);
 
                             MetaDataUpto++;
                             absolute = false;
@@ -1033,7 +1032,7 @@ namespace Lucene.Net.Codecs
                     }
                 }
 
-                internal BytesRef SavedStartTerm_Renamed;
+                private BytesRef SavedStartTerm_Renamed;
 
                 // TODO: in some cases we can filter by length?  eg
                 // regexp foo*bar must be at least length 6 bytes
@@ -1197,19 +1196,19 @@ namespace Lucene.Net.Codecs
                 public override DocsEnum Docs(Bits skipDocs, DocsEnum reuse, int flags)
                 {
                     CurrentFrame.DecodeMetaData();
-                    return OuterInstance.OuterInstance.PostingsReader.Docs(OuterInstance.FieldInfo, CurrentFrame.TermState, skipDocs, reuse, flags);
+                    return OuterInstance.OuterInstance.PostingsReader.Docs(OuterInstance.fieldInfo, CurrentFrame.TermState, skipDocs, reuse, flags);
                 }
 
                 public override DocsAndPositionsEnum DocsAndPositions(Bits skipDocs, DocsAndPositionsEnum reuse, int flags)
                 {
-                    if (OuterInstance.FieldInfo.IndexOptions < IndexOptions.DOCS_AND_FREQS_AND_POSITIONS)
+                    if (OuterInstance.fieldInfo.FieldIndexOptions < FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS)
                     {
                         // Positions were not indexed:
                         return null;
                     }
 
                     CurrentFrame.DecodeMetaData();
-                    return OuterInstance.OuterInstance.PostingsReader.DocsAndPositions(OuterInstance.FieldInfo, CurrentFrame.TermState, skipDocs, reuse, flags);
+                    return OuterInstance.OuterInstance.PostingsReader.DocsAndPositions(OuterInstance.fieldInfo, CurrentFrame.TermState, skipDocs, reuse, flags);
                 }
 
                 // NOTE: specialized to only doing the first-time
@@ -1613,7 +1612,7 @@ namespace Lucene.Net.Codecs
                 /// </summary>
                 public Stats ComputeBlockStats()
                 {
-                    Stats stats = new Stats(OuterInstance.OuterInstance.Segment, OuterInstance.FieldInfo.Name);
+                    Stats stats = new Stats(OuterInstance.OuterInstance.Segment, OuterInstance.fieldInfo.Name);
                     if (OuterInstance.Index != null)
                     {
                         stats.IndexNodeCount = OuterInstance.Index.NodeCount;
@@ -2601,12 +2600,12 @@ namespace Lucene.Net.Codecs
                     //if (DEBUG) {
                     //System.out.println("  state=" + currentFrame.state);
                     //}
-                    return OuterInstance.OuterInstance.PostingsReader.Docs(OuterInstance.FieldInfo, CurrentFrame.State, skipDocs, reuse, flags);
+                    return OuterInstance.OuterInstance.PostingsReader.Docs(OuterInstance.fieldInfo, CurrentFrame.State, skipDocs, reuse, flags);
                 }
 
                 public override DocsAndPositionsEnum DocsAndPositions(Bits skipDocs, DocsAndPositionsEnum reuse, int flags)
                 {
-                    if (OuterInstance.FieldInfo.IndexOptions < IndexOptions.DOCS_AND_FREQS_AND_POSITIONS)
+                    if (OuterInstance.fieldInfo.FieldIndexOptions < FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS)
                     {
                         // Positions were not indexed:
                         return null;
@@ -2614,7 +2613,7 @@ namespace Lucene.Net.Codecs
 
                     Debug.Assert(!Eof);
                     CurrentFrame.DecodeMetaData();
-                    return OuterInstance.OuterInstance.PostingsReader.DocsAndPositions(OuterInstance.FieldInfo, CurrentFrame.State, skipDocs, reuse, flags);
+                    return OuterInstance.OuterInstance.PostingsReader.DocsAndPositions(OuterInstance.fieldInfo, CurrentFrame.State, skipDocs, reuse, flags);
                 }
 
                 public override void SeekExact(BytesRef target, TermState otherState)
@@ -3077,7 +3076,7 @@ namespace Lucene.Net.Codecs
                             // stats
                             State.DocFreq = StatsReader.ReadVInt();
                             //if (DEBUG) System.out.println("    dF=" + state.docFreq);
-                            if (OuterInstance.OuterInstance.FieldInfo.IndexOptions != IndexOptions.DOCS_ONLY)
+                            if (OuterInstance.OuterInstance.fieldInfo.FieldIndexOptions != FieldInfo.IndexOptions.DOCS_ONLY)
                             {
                                 State.TotalTermFreq = State.DocFreq + StatsReader.ReadVLong();
                                 //if (DEBUG) System.out.println("    totTF=" + state.totalTermFreq);
@@ -3087,7 +3086,7 @@ namespace Lucene.Net.Codecs
                             {
                                 Longs[i] = BytesReader.ReadVLong();
                             }
-                            OuterInstance.OuterInstance.OuterInstance.PostingsReader.DecodeTerm(Longs, BytesReader, OuterInstance.OuterInstance.FieldInfo, State, absolute);
+                            OuterInstance.OuterInstance.OuterInstance.PostingsReader.DecodeTerm(Longs, BytesReader, OuterInstance.OuterInstance.fieldInfo, State, absolute);
 
                             MetaDataUpto++;
                             absolute = false;

@@ -147,7 +147,7 @@ namespace Lucene.Net.Codecs.asserting
         internal class AssertingTermsConsumer : TermsConsumer
         {
             internal readonly TermsConsumer @in;
-            internal readonly FieldInfo FieldInfo;
+            private readonly FieldInfo fieldInfo;
             internal BytesRef LastTerm = null;
             internal TermsConsumerState State = TermsConsumerState.INITIAL;
             internal AssertingPostingsConsumer LastPostingsConsumer = null;
@@ -158,7 +158,7 @@ namespace Lucene.Net.Codecs.asserting
             internal AssertingTermsConsumer(TermsConsumer @in, FieldInfo fieldInfo)
             {
                 this.@in = @in;
-                this.FieldInfo = fieldInfo;
+                this.fieldInfo = fieldInfo;
             }
 
             public override PostingsConsumer StartTerm(BytesRef text)
@@ -167,7 +167,7 @@ namespace Lucene.Net.Codecs.asserting
                 State = TermsConsumerState.START;
                 Debug.Assert(LastTerm == null || @in.Comparator.Compare(text, LastTerm) > 0);
                 LastTerm = BytesRef.DeepCopyOf(text);
-                return LastPostingsConsumer = new AssertingPostingsConsumer(@in.StartTerm(text), FieldInfo, VisitedDocs);
+                return LastPostingsConsumer = new AssertingPostingsConsumer(@in.StartTerm(text), fieldInfo, VisitedDocs);
             }
 
             public override void FinishTerm(BytesRef text, TermStats stats)
@@ -178,7 +178,7 @@ namespace Lucene.Net.Codecs.asserting
                 Debug.Assert(stats.DocFreq > 0); // otherwise, this method should not be called.
                 Debug.Assert(stats.DocFreq == LastPostingsConsumer.DocFreq);
                 SumDocFreq += stats.DocFreq;
-                if (FieldInfo.IndexOptions == FieldInfo.IndexOptions_e.DOCS_ONLY)
+                if (fieldInfo.FieldIndexOptions == FieldInfo.IndexOptions.DOCS_ONLY)
                 {
                     Debug.Assert(stats.TotalTermFreq == -1);
                 }
@@ -198,7 +198,7 @@ namespace Lucene.Net.Codecs.asserting
                 Debug.Assert(docCount == VisitedDocs.Cardinality());
                 Debug.Assert(sumDocFreq >= docCount);
                 Debug.Assert(sumDocFreq == this.SumDocFreq);
-                if (FieldInfo.IndexOptions == FieldInfo.IndexOptions_e.DOCS_ONLY)
+                if (fieldInfo.FieldIndexOptions == FieldInfo.IndexOptions.DOCS_ONLY)
                 {
                     Debug.Assert(sumTotalTermFreq == -1);
                 }
@@ -228,7 +228,7 @@ namespace Lucene.Net.Codecs.asserting
         internal class AssertingPostingsConsumer : PostingsConsumer
         {
             internal readonly PostingsConsumer @in;
-            internal readonly FieldInfo FieldInfo;
+            private readonly FieldInfo fieldInfo;
             internal readonly OpenBitSet VisitedDocs;
             internal PostingsConsumerState State = PostingsConsumerState.INITIAL;
             internal int Freq;
@@ -241,7 +241,7 @@ namespace Lucene.Net.Codecs.asserting
             internal AssertingPostingsConsumer(PostingsConsumer @in, FieldInfo fieldInfo, OpenBitSet visitedDocs)
             {
                 this.@in = @in;
-                this.FieldInfo = fieldInfo;
+                this.fieldInfo = fieldInfo;
                 this.VisitedDocs = visitedDocs;
             }
 
@@ -250,7 +250,7 @@ namespace Lucene.Net.Codecs.asserting
                 Debug.Assert(State == PostingsConsumerState.INITIAL);
                 State = PostingsConsumerState.START;
                 Debug.Assert(docID >= 0);
-                if (FieldInfo.IndexOptions == FieldInfo.IndexOptions_e.DOCS_ONLY)
+                if (fieldInfo.FieldIndexOptions == FieldInfo.IndexOptions.DOCS_ONLY)
                 {
                     Debug.Assert(freq == -1);
                     this.Freq = 0; // we don't expect any positions here
@@ -276,7 +276,7 @@ namespace Lucene.Net.Codecs.asserting
                 PositionCount++;
                 Debug.Assert(position >= LastPosition || position == -1); // we still allow -1 from old 3.x indexes
                 LastPosition = position;
-                if (FieldInfo.IndexOptions == FieldInfo.IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS)
+                if (fieldInfo.FieldIndexOptions == FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS)
                 {
                     Debug.Assert(startOffset >= 0);
                     Debug.Assert(startOffset >= LastStartOffset);
@@ -290,7 +290,7 @@ namespace Lucene.Net.Codecs.asserting
                 }
                 if (payload != null)
                 {
-                    Debug.Assert(FieldInfo.HasPayloads());
+                    Debug.Assert(fieldInfo.HasPayloads());
                 }
                 @in.AddPosition(position, payload, startOffset, endOffset);
             }
@@ -299,7 +299,7 @@ namespace Lucene.Net.Codecs.asserting
             {
                 Debug.Assert(State == PostingsConsumerState.START);
                 State = PostingsConsumerState.INITIAL;
-                if (FieldInfo.IndexOptions < FieldInfo.IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS)
+                if (fieldInfo.FieldIndexOptions < FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS)
                 {
                     Debug.Assert(PositionCount == 0); // we should not have fed any positions!
                 }

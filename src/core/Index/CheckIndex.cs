@@ -35,7 +35,6 @@ namespace Lucene.Net.Index
     using DocValuesStatus = Lucene.Net.Index.CheckIndex.Status.DocValuesStatus;
     using FixedBitSet = Lucene.Net.Util.FixedBitSet;
     using IndexInput = Lucene.Net.Store.IndexInput;
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using IOContext = Lucene.Net.Store.IOContext;
     using LongBitSet = Lucene.Net.Util.LongBitSet;
     using Lucene3xSegmentInfoFormat = Lucene.Net.Codecs.Lucene3x.Lucene3xSegmentInfoFormat;
@@ -991,7 +990,7 @@ namespace Lucene.Net.Index
                 bool hasOffsets = terms.HasOffsets();
 
                 // term vectors cannot omit TF:
-                bool expectedHasFreqs = (isVectors || fieldInfo.IndexOptions >= IndexOptions.DOCS_AND_FREQS);
+                bool expectedHasFreqs = (isVectors || fieldInfo.FieldIndexOptions >= FieldInfo.IndexOptions.DOCS_AND_FREQS);
 
                 if (hasFreqs != expectedHasFreqs)
                 {
@@ -1008,7 +1007,7 @@ namespace Lucene.Net.Index
 
                 if (!isVectors)
                 {
-                    bool expectedHasPositions = fieldInfo.IndexOptions >= IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
+                    bool expectedHasPositions = fieldInfo.FieldIndexOptions >= FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
                     if (hasPositions != expectedHasPositions)
                     {
                         throw new Exception("field \"" + field + "\" should have hasPositions=" + expectedHasPositions + " but got " + hasPositions);
@@ -1020,7 +1019,7 @@ namespace Lucene.Net.Index
                         throw new Exception("field \"" + field + "\" should have hasPayloads=" + expectedHasPayloads + " but got " + hasPayloads);
                     }
 
-                    bool expectedHasOffsets = fieldInfo.IndexOptions >= IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
+                    bool expectedHasOffsets = fieldInfo.FieldIndexOptions >= FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
                     if (hasOffsets != expectedHasOffsets)
                     {
                         throw new Exception("field \"" + field + "\" should have hasOffsets=" + expectedHasOffsets + " but got " + hasOffsets);
@@ -2061,7 +2060,7 @@ namespace Lucene.Net.Index
                             {
                                 Terms terms = tfv.Terms(field);
                                 termsEnum = terms.Iterator(termsEnum);
-                                bool postingsHasFreq = fieldInfo.IndexOptions >= IndexOptions.DOCS_AND_FREQS;
+                                bool postingsHasFreq = fieldInfo.FieldIndexOptions >= FieldInfo.IndexOptions.DOCS_AND_FREQS;
                                 bool postingsHasPayload = fieldInfo.HasPayloads();
                                 bool vectorsHasPayload = terms.HasPayloads();
 

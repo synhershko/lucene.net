@@ -68,26 +68,26 @@ namespace Lucene.Net.Codecs.Lucene42
                     bool storeTermVector = (bits & Lucene42FieldInfosFormat.STORE_TERMVECTOR) != 0;
                     bool omitNorms = (bits & Lucene42FieldInfosFormat.OMIT_NORMS) != 0;
                     bool storePayloads = (bits & Lucene42FieldInfosFormat.STORE_PAYLOADS) != 0;
-                    FieldInfo.IndexOptions_e indexOptions;
+                    FieldInfo.IndexOptions indexOptions;
                     if (!isIndexed)
                     {
-                        indexOptions = default(FieldInfo.IndexOptions_e);
+                        indexOptions = default(FieldInfo.IndexOptions);
                     }
                     else if ((bits & Lucene42FieldInfosFormat.OMIT_TERM_FREQ_AND_POSITIONS) != 0)
                     {
-                        indexOptions = FieldInfo.IndexOptions_e.DOCS_ONLY;
+                        indexOptions = FieldInfo.IndexOptions.DOCS_ONLY;
                     }
                     else if ((bits & Lucene42FieldInfosFormat.OMIT_POSITIONS) != 0)
                     {
-                        indexOptions = FieldInfo.IndexOptions_e.DOCS_AND_FREQS;
+                        indexOptions = FieldInfo.IndexOptions.DOCS_AND_FREQS;
                     }
                     else if ((bits & Lucene42FieldInfosFormat.STORE_OFFSETS_IN_POSTINGS) != 0)
                     {
-                        indexOptions = FieldInfo.IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
+                        indexOptions = FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
                     }
                     else
                     {
-                        indexOptions = FieldInfo.IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS;
+                        indexOptions = FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
                     }
 
                     // DV Types are packed in one byte

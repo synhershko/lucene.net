@@ -14,7 +14,6 @@ namespace Lucene.Net.Index
     using Document = Lucene.Net.Document.Document;
     using Field = Lucene.Net.Document.Field;
     using FieldType = Lucene.Net.Document.FieldType;
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
 
     /*
@@ -99,12 +98,12 @@ namespace Lucene.Net.Index
             int options = Random().Next(3);
             if (options == 0)
             {
-                fieldType.IndexOptionsValue = IndexOptions.DOCS_AND_FREQS; // we dont actually need positions
+                fieldType.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_AND_FREQS; // we dont actually need positions
                 fieldType.StoreTermVectors = true; // but enforce term vectors when we do this so we check SOMETHING
             }
             else if (options == 1 && !DoesntSupportOffsets.Contains(TestUtil.GetPostingsFormat("field")))
             {
-                fieldType.IndexOptionsValue = IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
+                fieldType.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
             }
             // else just positions
 

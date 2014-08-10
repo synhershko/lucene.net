@@ -23,7 +23,6 @@ namespace Lucene.Net.Index
      */
 
     using DocValuesType_e = Lucene.Net.Index.FieldInfo.DocValuesType_e;
-    using IndexOptions_e = Lucene.Net.Index.FieldInfo.IndexOptions_e;
 
     /// <summary>
     /// Collection of <seealso cref="FieldInfo"/>s (accessible by number or by name).
@@ -80,9 +79,9 @@ namespace Lucene.Net.Index
                 ByName[info.Name] = info;
 
                 hasVectors |= info.HasVectors();
-                hasProx |= info.Indexed && info.IndexOptions >= IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS;
-                hasFreq |= info.Indexed && info.IndexOptions != IndexOptions_e.DOCS_ONLY;
-                hasOffsets |= info.Indexed && info.IndexOptions >= IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
+                hasProx |= info.Indexed && info.FieldIndexOptions >= Index.FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
+                hasFreq |= info.Indexed && info.FieldIndexOptions != Index.FieldInfo.IndexOptions.DOCS_ONLY;
+                hasOffsets |= info.Indexed && info.FieldIndexOptions >= Index.FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
                 hasNorms |= info.HasNorms();
                 hasDocValues |= info.HasDocValues();
                 hasPayloads |= info.HasPayloads();
@@ -376,7 +375,7 @@ namespace Lucene.Net.Index
                 return AddOrUpdateInternal(name, -1, fieldType.Indexed, false, fieldType.OmitNorms, false, fieldType.IndexOptionsValue, fieldType.DocValueType, null);
             }
 
-            internal FieldInfo AddOrUpdateInternal(string name, int preferredFieldNumber, bool isIndexed, bool storeTermVector, bool omitNorms, bool storePayloads, IndexOptions_e? indexOptions, DocValuesType_e? docValues, DocValuesType_e? normType)
+            internal FieldInfo AddOrUpdateInternal(string name, int preferredFieldNumber, bool isIndexed, bool storeTermVector, bool omitNorms, bool storePayloads, FieldInfo.IndexOptions? indexOptions, DocValuesType_e? docValues, DocValuesType_e? normType)
             {
                 FieldInfo fi = FieldInfo(name);
                 if (fi == null)
@@ -420,7 +419,7 @@ namespace Lucene.Net.Index
             public FieldInfo Add(FieldInfo fi)
             {
                 // IMPORTANT - reuse the field number if possible for consistent field numbers across segments
-                return AddOrUpdateInternal(fi.Name, fi.Number, fi.Indexed, fi.HasVectors(), fi.OmitsNorms(), fi.HasPayloads(), fi.IndexOptions, fi.DocValuesType, fi.NormType);
+                return AddOrUpdateInternal(fi.Name, fi.Number, fi.Indexed, fi.HasVectors(), fi.OmitsNorms(), fi.HasPayloads(), fi.FieldIndexOptions, fi.DocValuesType, fi.NormType);
             }
 
             public FieldInfo FieldInfo(string fieldName)

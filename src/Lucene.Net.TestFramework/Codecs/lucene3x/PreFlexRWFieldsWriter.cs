@@ -86,7 +86,7 @@ namespace Lucene.Net.Codecs.Lucene3x
         public override TermsConsumer AddField(FieldInfo field)
         {
             Debug.Assert(field.Number != -1);
-            if (field.IndexOptions >= FieldInfo.IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS)
+            if (field.FieldIndexOptions >= FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS)
             {
                 throw new System.NotSupportedException("this codec cannot index offsets");
             }
@@ -127,7 +127,7 @@ namespace Lucene.Net.Codecs.Lucene3x
                     InstanceFieldsInitialized = true;
                 }
                 this.FieldInfo = fieldInfo;
-                OmitTF = fieldInfo.IndexOptions == FieldInfo.IndexOptions_e.DOCS_ONLY;
+                OmitTF = fieldInfo.FieldIndexOptions == FieldInfo.IndexOptions.DOCS_ONLY;
                 StorePayloads = fieldInfo.HasPayloads();
             }
 

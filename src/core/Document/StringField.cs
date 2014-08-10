@@ -1,3 +1,5 @@
+using Lucene.Net.Index;
+
 namespace Lucene.Net.Document
 {
     /*
@@ -16,9 +18,6 @@ namespace Lucene.Net.Document
      * See the License for the specific language governing permissions and
      * limitations under the License.
      */
-
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
-
     /// <summary>
     /// A field that is indexed but not tokenized: the entire
     ///  String value is indexed as a single token.  For example
@@ -45,13 +44,13 @@ namespace Lucene.Net.Document
         {
             TYPE_NOT_STORED.Indexed = true;
             TYPE_NOT_STORED.OmitNorms = true;
-            TYPE_NOT_STORED.IndexOptionsValue = IndexOptions.DOCS_ONLY;
+            TYPE_NOT_STORED.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_ONLY;
             TYPE_NOT_STORED.Tokenized = false;
             TYPE_NOT_STORED.Freeze();
 
             TYPE_STORED.Indexed = true;
             TYPE_STORED.OmitNorms = true;
-            TYPE_STORED.IndexOptionsValue = IndexOptions.DOCS_ONLY;
+            TYPE_STORED.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_ONLY;
             TYPE_STORED.Stored = true;
             TYPE_STORED.Tokenized = false;
             TYPE_STORED.Freeze();

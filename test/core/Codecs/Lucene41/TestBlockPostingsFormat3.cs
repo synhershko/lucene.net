@@ -1,3 +1,4 @@
+using Lucene.Net.Index;
 using Lucene.Net.Support;
 using System;
 using System.Collections.Generic;
@@ -43,7 +44,6 @@ namespace Lucene.Net.Codecs.Lucene41
     using Field = Lucene.Net.Document.Field;
     using FieldType = Lucene.Net.Document.FieldType;
     using FixedBitSet = Lucene.Net.Util.FixedBitSet;
-    using IndexOptions_e = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using IndexWriter = Lucene.Net.Index.IndexWriter;
     using IndexWriterConfig = Lucene.Net.Index.IndexWriterConfig;
     using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
@@ -84,12 +84,12 @@ namespace Lucene.Net.Codecs.Lucene41
             FieldType docsOnlyType = new FieldType(TextField.TYPE_NOT_STORED);
             // turn this on for a cross-check
             docsOnlyType.StoreTermVectors = true;
-            docsOnlyType.IndexOptionsValue = IndexOptions_e.DOCS_ONLY;
+            docsOnlyType.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_ONLY;
 
             FieldType docsAndFreqsType = new FieldType(TextField.TYPE_NOT_STORED);
             // turn this on for a cross-check
             docsAndFreqsType.StoreTermVectors = true;
-            docsAndFreqsType.IndexOptionsValue = IndexOptions_e.DOCS_AND_FREQS;
+            docsAndFreqsType.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_AND_FREQS;
 
             FieldType positionsType = new FieldType(TextField.TYPE_NOT_STORED);
             // turn these on for a cross-check
@@ -98,7 +98,7 @@ namespace Lucene.Net.Codecs.Lucene41
             positionsType.StoreTermVectorOffsets = true;
             positionsType.StoreTermVectorPayloads = true;
             FieldType offsetsType = new FieldType(positionsType);
-            offsetsType.IndexOptionsValue = IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
+            offsetsType.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
             Field field1 = new Field("field1docs", "", docsOnlyType);
             Field field2 = new Field("field2freqs", "", docsAndFreqsType);
             Field field3 = new Field("field3positions", "", positionsType);

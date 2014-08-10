@@ -27,7 +27,6 @@ namespace Lucene.Net.Index
     using Document = Lucene.Net.Document.Document;
     using Field = Lucene.Net.Document.Field;
     using FieldType = Lucene.Net.Document.FieldType;
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
     using MockAnalyzer = Lucene.Net.Analysis.MockAnalyzer;
     using TestUtil = Lucene.Net.Util.TestUtil;
@@ -47,7 +46,7 @@ namespace Lucene.Net.Index
             RandomIndexWriter w = new RandomIndexWriter(Random(), dir);
             Document doc = new Document();
             FieldType ft = new FieldType(TextField.TYPE_NOT_STORED);
-            ft.IndexOptionsValue = IndexOptions.DOCS_AND_FREQS;
+            ft.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_AND_FREQS;
             Field f = NewField("foo", "this is a test test", ft);
             doc.Add(f);
             for (int i = 0; i < 100; i++)
@@ -82,7 +81,7 @@ namespace Lucene.Net.Index
 
             // f1,f2,f3: docs only
             FieldType ft = new FieldType(TextField.TYPE_NOT_STORED);
-            ft.IndexOptionsValue = IndexOptions.DOCS_ONLY;
+            ft.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_ONLY;
 
             Field f1 = NewField("f1", "this field has docs only", ft);
             d.Add(f1);
@@ -94,7 +93,7 @@ namespace Lucene.Net.Index
             d.Add(f3);
 
             FieldType ft2 = new FieldType(TextField.TYPE_NOT_STORED);
-            ft2.IndexOptionsValue = IndexOptions.DOCS_AND_FREQS;
+            ft2.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_AND_FREQS;
 
             // f4,f5,f6 docs and freqs
             Field f4 = NewField("f4", "this field has docs and freqs", ft2);
@@ -107,7 +106,7 @@ namespace Lucene.Net.Index
             d.Add(f6);
 
             FieldType ft3 = new FieldType(TextField.TYPE_NOT_STORED);
-            ft3.IndexOptionsValue = IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
+            ft3.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
 
             // f7,f8,f9 docs/freqs/positions
             Field f7 = NewField("f7", "this field has docs and freqs and positions", ft3);
@@ -166,23 +165,23 @@ namespace Lucene.Net.Index
             SegmentReader reader = GetOnlySegmentReader(DirectoryReader.Open(ram));
             FieldInfos fi = reader.FieldInfos;
             // docs + docs = docs
-            Assert.AreEqual(IndexOptions.DOCS_ONLY, fi.FieldInfo("f1").IndexOptions);
+            Assert.AreEqual(FieldInfo.IndexOptions.DOCS_ONLY, fi.FieldInfo("f1").FieldIndexOptions);
             // docs + docs/freqs = docs
-            Assert.AreEqual(IndexOptions.DOCS_ONLY, fi.FieldInfo("f2").IndexOptions);
+            Assert.AreEqual(FieldInfo.IndexOptions.DOCS_ONLY, fi.FieldInfo("f2").FieldIndexOptions);
             // docs + docs/freqs/pos = docs
-            Assert.AreEqual(IndexOptions.DOCS_ONLY, fi.FieldInfo("f3").IndexOptions);
+            Assert.AreEqual(FieldInfo.IndexOptions.DOCS_ONLY, fi.FieldInfo("f3").FieldIndexOptions);
             // docs/freqs + docs = docs
-            Assert.AreEqual(IndexOptions.DOCS_ONLY, fi.FieldInfo("f4").IndexOptions);
+            Assert.AreEqual(FieldInfo.IndexOptions.DOCS_ONLY, fi.FieldInfo("f4").FieldIndexOptions);
             // docs/freqs + docs/freqs = docs/freqs
-            Assert.AreEqual(IndexOptions.DOCS_AND_FREQS, fi.FieldInfo("f5").IndexOptions);
+            Assert.AreEqual(FieldInfo.IndexOptions.DOCS_AND_FREQS, fi.FieldInfo("f5").FieldIndexOptions);
             // docs/freqs + docs/freqs/pos = docs/freqs
-            Assert.AreEqual(IndexOptions.DOCS_AND_FREQS, fi.FieldInfo("f6").IndexOptions);
+            Assert.AreEqual(FieldInfo.IndexOptions.DOCS_AND_FREQS, fi.FieldInfo("f6").FieldIndexOptions);
             // docs/freqs/pos + docs = docs
-            Assert.AreEqual(IndexOptions.DOCS_ONLY, fi.FieldInfo("f7").IndexOptions);
+            Assert.AreEqual(FieldInfo.IndexOptions.DOCS_ONLY, fi.FieldInfo("f7").FieldIndexOptions);
             // docs/freqs/pos + docs/freqs = docs/freqs
-            Assert.AreEqual(IndexOptions.DOCS_AND_FREQS, fi.FieldInfo("f8").IndexOptions);
+            Assert.AreEqual(FieldInfo.IndexOptions.DOCS_AND_FREQS, fi.FieldInfo("f8").FieldIndexOptions);
             // docs/freqs/pos + docs/freqs/pos = docs/freqs/pos
-            Assert.AreEqual(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS, fi.FieldInfo("f9").IndexOptions);
+            Assert.AreEqual(FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS, fi.FieldInfo("f9").FieldIndexOptions);
 
             reader.Dispose();
             ram.Dispose();
@@ -211,7 +210,7 @@ namespace Lucene.Net.Index
             Document d = new Document();
 
             FieldType ft = new FieldType(TextField.TYPE_NOT_STORED);
-            ft.IndexOptionsValue = IndexOptions.DOCS_AND_FREQS;
+            ft.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_AND_FREQS;
             Field f1 = NewField("f1", "this field has term freqs", ft);
             d.Add(f1);
 
@@ -250,7 +249,7 @@ namespace Lucene.Net.Index
         {
             // no positions
             FieldType ft = new FieldType(TextField.TYPE_NOT_STORED);
-            ft.IndexOptionsValue = IndexOptions.DOCS_AND_FREQS;
+            ft.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_AND_FREQS;
 
             Directory dir = NewDirectory();
             RandomIndexWriter iw = new RandomIndexWriter(Random(), dir);
@@ -283,7 +282,7 @@ namespace Lucene.Net.Index
 
             DirectoryReader ir = iw.Reader;
             FieldInfos fis = MultiFields.GetMergedFieldInfos(ir);
-            Assert.AreEqual(IndexOptions.DOCS_AND_FREQS, fis.FieldInfo("foo").IndexOptions);
+            Assert.AreEqual(FieldInfo.IndexOptions.DOCS_AND_FREQS, fis.FieldInfo("foo").FieldIndexOptions);
             Assert.IsFalse(fis.FieldInfo("foo").HasPayloads());
             iw.Dispose();
             ir.Dispose();

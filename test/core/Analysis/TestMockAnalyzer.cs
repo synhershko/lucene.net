@@ -1,4 +1,5 @@
 using System;
+using Lucene.Net.Index;
 
 namespace Lucene.Net.Analysis
 {
@@ -36,7 +37,6 @@ namespace Lucene.Net.Analysis
     using Field = Lucene.Net.Document.Field;
     using Fields = Lucene.Net.Index.Fields;
     using FieldType = Lucene.Net.Document.FieldType;
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using IOUtils = Lucene.Net.Util.IOUtils;
     using RandomIndexWriter = Lucene.Net.Index.RandomIndexWriter;
     using RegExp = Lucene.Net.Util.Automaton.RegExp;
@@ -351,7 +351,7 @@ namespace Lucene.Net.Analysis
             Document doc = new Document();
             FieldType ft = new FieldType();
             ft.Indexed = true;
-            ft.IndexOptionsValue = IndexOptions.DOCS_ONLY;
+            ft.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_ONLY;
             ft.Tokenized = true;
             ft.StoreTermVectors = true;
             ft.StoreTermVectorPositions = true;

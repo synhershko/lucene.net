@@ -1,4 +1,5 @@
 using System;
+using Lucene.Net.Index;
 
 namespace Lucene.Net.Document
 {
@@ -20,8 +21,7 @@ namespace Lucene.Net.Document
      */
 
     // javadocs
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
-
+    
     // javadocs
     // javadocs
 
@@ -136,13 +136,13 @@ namespace Lucene.Net.Document
             TYPE_NOT_STORED.Indexed = true;
             TYPE_NOT_STORED.Tokenized = true;
             TYPE_NOT_STORED.OmitNorms = true;
-            TYPE_NOT_STORED.IndexOptionsValue = IndexOptions.DOCS_ONLY;
+            TYPE_NOT_STORED.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_ONLY;
             TYPE_NOT_STORED.NumericTypeValue = Lucene.Net.Document.FieldType.NumericType.LONG;
             TYPE_NOT_STORED.Freeze();
             TYPE_STORED.Indexed = true;
             TYPE_STORED.Tokenized = true;
             TYPE_STORED.OmitNorms = true;
-            TYPE_STORED.IndexOptionsValue = IndexOptions.DOCS_ONLY;
+            TYPE_STORED.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_ONLY;
             TYPE_STORED.NumericTypeValue = Lucene.Net.Document.FieldType.NumericType.LONG;
             TYPE_STORED.Stored = true;
             TYPE_STORED.Freeze();

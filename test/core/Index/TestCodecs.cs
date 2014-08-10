@@ -19,7 +19,6 @@ namespace Lucene.Net.Index
     using FieldsConsumer = Lucene.Net.Codecs.FieldsConsumer;
     using FieldsProducer = Lucene.Net.Codecs.FieldsProducer;
     using FieldType = Lucene.Net.Document.FieldType;
-    using IndexOptions_e = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using IndexSearcher = Lucene.Net.Search.IndexSearcher;
     using InfoStream = Lucene.Net.Util.InfoStream;
     using Lucene3xCodec = Lucene.Net.Codecs.Lucene3x.Lucene3xCodec;
@@ -182,9 +181,9 @@ namespace Lucene.Net.Index
                     set { }
                 }
 
-                public IndexOptions_e? IndexOptionsValue
+                public FieldInfo.IndexOptions? IndexOptionsValue
                 {
-                    get { return OmitTF ? IndexOptions_e.DOCS_ONLY : IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS; }
+                    get { return OmitTF ? FieldInfo.IndexOptions.DOCS_ONLY : FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS; }
                     set { }
                 }
 

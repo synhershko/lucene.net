@@ -1,5 +1,6 @@
 using System.Linq;
 using Apache.NMS.Util;
+using Lucene.Net.Index;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,6 @@ namespace Lucene.Net.Analysis
     using Field = Lucene.Net.Document.Field;
     using FieldType = Lucene.Net.Document.FieldType;
     using IAttribute = Lucene.Net.Util.IAttribute;
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using IOUtils = Lucene.Net.Util.IOUtils;
     using LineFileDocs = Lucene.Net.Util.LineFileDocs;
     using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
@@ -700,25 +700,25 @@ namespace Lucene.Net.Analysis
                 switch (random.Next(4))
                 {
                     case 0:
-                        ft.IndexOptionsValue = IndexOptions.DOCS_ONLY;
+                        ft.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_ONLY;
                         break;
 
                     case 1:
-                        ft.IndexOptionsValue = IndexOptions.DOCS_AND_FREQS;
+                        ft.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_AND_FREQS;
                         break;
 
                     case 2:
-                        ft.IndexOptionsValue = IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
+                        ft.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
                         break;
 
                     default:
                         if (supportsOffsets && offsetsAreCorrect)
                         {
-                            ft.IndexOptionsValue = IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
+                            ft.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
                         }
                         else
                         {
-                            ft.IndexOptionsValue = IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
+                            ft.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
                         }
                         break;
                 }

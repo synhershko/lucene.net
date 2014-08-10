@@ -31,7 +31,6 @@ namespace Lucene.Net.Index
     using NUnit.Framework;
     using System.Runtime.CompilerServices;
     using Codec = Lucene.Net.Codecs.Codec;
-    using IndexOptions_e = Lucene.Net.Index.FieldInfo.IndexOptions_e;
 
     // NOTE: this test will fail w/ PreFlexRW codec!  (Because
     // this test uses full binary term space, but PreFlex cannot
@@ -205,7 +204,7 @@ namespace Lucene.Net.Index
                 MyTokenStream ts = new MyTokenStream(Random(), TERMS_PER_DOC);
 
                 FieldType customType = new FieldType(TextField.TYPE_NOT_STORED);
-                customType.IndexOptionsValue = IndexOptions_e.DOCS_ONLY;
+                customType.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_ONLY;
                 customType.OmitNorms = true;
                 Field field = new Field("field", ts, customType);
                 doc.Add(field);

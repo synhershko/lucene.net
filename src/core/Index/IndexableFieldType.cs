@@ -21,7 +21,6 @@ namespace Lucene.Net.Index
 
     // javadocs
     using DocValuesType_e = Lucene.Net.Index.FieldInfo.DocValuesType_e;
-    using IndexOptions_e = Lucene.Net.Index.FieldInfo.IndexOptions_e;
 
     /// <summary>
     /// Describes the properties of a field.
@@ -96,7 +95,7 @@ namespace Lucene.Net.Index
         /// <seealso cref="IndexOptionsValue"/>, describing what should be
         /// recorded into the inverted index
         /// </summary>
-        IndexOptions_e? IndexOptionsValue { get; set; }
+        FieldInfo.IndexOptions? IndexOptionsValue { get; set; }
 
         FieldType.NumericType? NumericTypeValue { get; set; }
 

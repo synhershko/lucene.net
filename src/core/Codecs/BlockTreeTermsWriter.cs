@@ -29,8 +29,6 @@ namespace Lucene.Net.Codecs
          * See the License for the specific language governing permissions and
          * limitations under the License.
          */
-
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using IndexOutput = Lucene.Net.Store.IndexOutput;
     using IntsRef = Lucene.Net.Util.IntsRef;
     using IOUtils = Lucene.Net.Util.IOUtils;
@@ -240,7 +238,7 @@ namespace Lucene.Net.Codecs
 
         private class FieldMetaData
         {
-            public readonly FieldInfo FieldInfo;
+            public readonly FieldInfo fieldInfo;
             public readonly BytesRef RootCode;
             public readonly long NumTerms;
             public readonly long IndexStartFP;
@@ -252,7 +250,7 @@ namespace Lucene.Net.Codecs
             public FieldMetaData(FieldInfo fieldInfo, BytesRef rootCode, long numTerms, long indexStartFP, long sumTotalTermFreq, long sumDocFreq, int docCount, int longsSize)
             {
                 Debug.Assert(numTerms > 0);
-                this.FieldInfo = fieldInfo;
+                this.fieldInfo = fieldInfo;
                 Debug.Assert(rootCode != null, "field=" + fieldInfo.Name + " numTerms=" + numTerms);
                 this.RootCode = rootCode;
                 this.IndexStartFP = indexStartFP;
@@ -520,7 +518,7 @@ namespace Lucene.Net.Codecs
         {
             private readonly BlockTreeTermsWriter OuterInstance;
 
-            internal readonly FieldInfo FieldInfo;
+            internal readonly FieldInfo fieldInfo;
             internal readonly int LongsSize;
             internal long NumTerms;
             internal long SumTotalTermFreq;
@@ -953,14 +951,14 @@ namespace Lucene.Net.Codecs
 
                         // Write term stats, to separate byte[] blob:
                         StatsWriter.WriteVInt(state.DocFreq);
-                        if (FieldInfo.IndexOptions != IndexOptions.DOCS_ONLY)
+                        if (fieldInfo.FieldIndexOptions != FieldInfo.IndexOptions.DOCS_ONLY)
                         {
                             Debug.Assert(state.TotalTermFreq >= state.DocFreq, state.TotalTermFreq + " vs " + state.DocFreq);
                             StatsWriter.WriteVLong(state.TotalTermFreq - state.DocFreq);
                         }
 
                         // Write term meta data
-                        OuterInstance.PostingsWriter.EncodeTerm(longs, BytesWriter, FieldInfo, state, absolute);
+                        OuterInstance.PostingsWriter.EncodeTerm(longs, BytesWriter, fieldInfo, state, absolute);
                         for (int pos = 0; pos < LongsSize; pos++)
                         {
                             Debug.Assert(longs[pos] >= 0);
@@ -996,7 +994,7 @@ namespace Lucene.Net.Codecs
 
                             // Write term stats, to separate byte[] blob:
                             StatsWriter.WriteVInt(state.DocFreq);
-                            if (FieldInfo.IndexOptions != IndexOptions.DOCS_ONLY)
+                            if (fieldInfo.FieldIndexOptions != FieldInfo.IndexOptions.DOCS_ONLY)
                             {
                                 Debug.Assert(state.TotalTermFreq >= state.DocFreq);
                                 StatsWriter.WriteVLong(state.TotalTermFreq - state.DocFreq);
@@ -1011,7 +1009,7 @@ namespace Lucene.Net.Codecs
                             // separate anymore:
 
                             // Write term meta data
-                            OuterInstance.PostingsWriter.EncodeTerm(longs, BytesWriter, FieldInfo, state, absolute);
+                            OuterInstance.PostingsWriter.EncodeTerm(longs, BytesWriter, fieldInfo, state, absolute);
                             for (int pos = 0; pos < LongsSize; pos++)
                             {
                                 Debug.Assert(longs[pos] >= 0);
@@ -1095,7 +1093,7 @@ namespace Lucene.Net.Codecs
             internal TermsWriter(BlockTreeTermsWriter outerInstance, FieldInfo fieldInfo)
             {
                 this.OuterInstance = outerInstance;
-                this.FieldInfo = fieldInfo;
+                this.fieldInfo = fieldInfo;
 
                 NoOutputs = NoOutputs.Singleton;
 
@@ -1177,11 +1175,11 @@ namespace Lucene.Net.Codecs
                     //   w.close();
                     // }
 
-                    OuterInstance.Fields.Add(new FieldMetaData(FieldInfo, ((PendingBlock)Pending[0]).Index.EmptyOutput, NumTerms, IndexStartFP, sumTotalTermFreq, sumDocFreq, docCount, LongsSize));
+                    OuterInstance.Fields.Add(new FieldMetaData(fieldInfo, ((PendingBlock)Pending[0]).Index.EmptyOutput, NumTerms, IndexStartFP, sumTotalTermFreq, sumDocFreq, docCount, LongsSize));
                 }
                 else
                 {
-                    Debug.Assert(sumTotalTermFreq == 0 || FieldInfo.IndexOptions == IndexOptions.DOCS_ONLY && sumTotalTermFreq == -1);
+                    Debug.Assert(sumTotalTermFreq == 0 || fieldInfo.FieldIndexOptions == FieldInfo.IndexOptions.DOCS_ONLY && sumTotalTermFreq == -1);
                     Debug.Assert(sumDocFreq == 0);
                     Debug.Assert(docCount == 0);
                 }
@@ -1206,11 +1204,11 @@ namespace Lucene.Net.Codecs
                 foreach (FieldMetaData field in Fields)
                 {
                     //System.out.println("  field " + field.fieldInfo.name + " " + field.numTerms + " terms");
-                    @out.WriteVInt(field.FieldInfo.Number);
+                    @out.WriteVInt(field.fieldInfo.Number);
                     @out.WriteVLong(field.NumTerms);
                     @out.WriteVInt(field.RootCode.Length);
                     @out.WriteBytes(field.RootCode.Bytes, field.RootCode.Offset, field.RootCode.Length);
-                    if (field.FieldInfo.IndexOptions != IndexOptions.DOCS_ONLY)
+                    if (field.fieldInfo.FieldIndexOptions != FieldInfo.IndexOptions.DOCS_ONLY)
                     {
                         @out.WriteVLong(field.SumTotalTermFreq);
                     }

@@ -12,7 +12,6 @@ namespace Lucene.Net.Index
     using DocumentStoredFieldVisitor = Lucene.Net.Document.DocumentStoredFieldVisitor;
     using Field = Lucene.Net.Document.Field;
     using IndexInput = Lucene.Net.Store.IndexInput;
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using IndexOutput = Lucene.Net.Store.IndexOutput;
     using IOContext = Lucene.Net.Store.IOContext;
     using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
@@ -88,19 +87,19 @@ namespace Lucene.Net.Index
             Assert.IsTrue(field.FieldType().StoreTermVectors);
 
             Assert.IsFalse(field.FieldType().OmitNorms);
-            Assert.IsTrue(field.FieldType().IndexOptionsValue == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS);
+            Assert.IsTrue(field.FieldType().IndexOptionsValue == FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS);
 
             field = (Field)doc.GetField(DocHelper.TEXT_FIELD_3_KEY);
             Assert.IsTrue(field != null);
             Assert.IsFalse(field.FieldType().StoreTermVectors);
             Assert.IsTrue(field.FieldType().OmitNorms);
-            Assert.IsTrue(field.FieldType().IndexOptionsValue == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS);
+            Assert.IsTrue(field.FieldType().IndexOptionsValue == FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS);
 
             field = (Field)doc.GetField(DocHelper.NO_TF_KEY);
             Assert.IsTrue(field != null);
             Assert.IsFalse(field.FieldType().StoreTermVectors);
             Assert.IsFalse(field.FieldType().OmitNorms);
-            Assert.IsTrue(field.FieldType().IndexOptionsValue == IndexOptions.DOCS_ONLY);
+            Assert.IsTrue(field.FieldType().IndexOptionsValue == FieldInfo.IndexOptions.DOCS_ONLY);
 
             DocumentStoredFieldVisitor visitor = new DocumentStoredFieldVisitor(DocHelper.TEXT_FIELD_3_KEY);
             reader.Document(0, visitor);

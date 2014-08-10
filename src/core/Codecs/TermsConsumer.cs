@@ -94,7 +94,7 @@ namespace Lucene.Net.Codecs
 
         /// <summary>
         /// Default merge impl </summary>
-        public virtual void Merge(MergeState mergeState, FieldInfo.IndexOptions_e? indexOptions, TermsEnum termsEnum)
+        public virtual void Merge(MergeState mergeState, FieldInfo.IndexOptions? indexOptions, TermsEnum termsEnum)
         {
             BytesRef term;
             Debug.Assert(termsEnum != null);
@@ -103,7 +103,7 @@ namespace Lucene.Net.Codecs
             long sumDFsinceLastAbortCheck = 0;
             FixedBitSet visitedDocs = new FixedBitSet(mergeState.SegmentInfo.DocCount);
 
-            if (indexOptions == FieldInfo.IndexOptions_e.DOCS_ONLY)
+            if (indexOptions == FieldInfo.IndexOptions.DOCS_ONLY)
             {
                 if (DocsEnum == null)
                 {
@@ -138,7 +138,7 @@ namespace Lucene.Net.Codecs
                     }
                 }
             }
-            else if (indexOptions == FieldInfo.IndexOptions_e.DOCS_AND_FREQS)
+            else if (indexOptions == FieldInfo.IndexOptions.DOCS_AND_FREQS)
             {
                 if (DocsAndFreqsEnum == null)
                 {
@@ -171,7 +171,7 @@ namespace Lucene.Net.Codecs
                     }
                 }
             }
-            else if (indexOptions == FieldInfo.IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS)
+            else if (indexOptions == FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS)
             {
                 if (PostingsEnum == null)
                 {
@@ -205,7 +205,7 @@ namespace Lucene.Net.Codecs
             }
             else
             {
-                Debug.Assert(indexOptions == FieldInfo.IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+                Debug.Assert(indexOptions == FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
                 if (PostingsEnum == null)
                 {
                     PostingsEnum = new MappingMultiDocsAndPositionsEnum();
@@ -236,7 +236,7 @@ namespace Lucene.Net.Codecs
                     }
                 }
             }
-            Finish(indexOptions == FieldInfo.IndexOptions_e.DOCS_ONLY ? -1 : sumTotalTermFreq, sumDocFreq, visitedDocs.Cardinality());
+            Finish(indexOptions == FieldInfo.IndexOptions.DOCS_ONLY ? -1 : sumTotalTermFreq, sumDocFreq, visitedDocs.Cardinality());
         }
     }
 }

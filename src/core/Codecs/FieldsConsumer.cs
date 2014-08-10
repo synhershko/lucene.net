@@ -80,7 +80,7 @@ namespace Lucene.Net.Codecs
                 if (terms != null)
                 {
                     TermsConsumer termsConsumer = AddField(info);
-                    termsConsumer.Merge(mergeState, info.IndexOptions, terms.Iterator(null));
+                    termsConsumer.Merge(mergeState, info.FieldIndexOptions, terms.Iterator(null));
                 }
             }
         }

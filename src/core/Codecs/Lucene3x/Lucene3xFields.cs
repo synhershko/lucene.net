@@ -31,7 +31,6 @@ namespace Lucene.Net.Codecs.Lucene3x
     using FieldInfos = Lucene.Net.Index.FieldInfos;
     using IndexFileNames = Lucene.Net.Index.IndexFileNames;
     using IndexInput = Lucene.Net.Store.IndexInput;
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using IOContext = Lucene.Net.Store.IOContext;
     using IOUtils = Lucene.Net.Util.IOUtils;
     using SegmentInfo = Lucene.Net.Index.SegmentInfo;
@@ -101,7 +100,7 @@ namespace Lucene.Net.Codecs.Lucene3x
                     {
                         Fields[fi.Name] = fi;
                         PreTerms_[fi.Name] = new PreTerms(this, fi);
-                        if (fi.IndexOptions == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS)
+                        if (fi.FieldIndexOptions == FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS)
                         {
                             anyProx = true;
                         }
@@ -196,18 +195,18 @@ namespace Lucene.Net.Codecs.Lucene3x
         {
             private readonly Lucene3xFields OuterInstance;
 
-            internal readonly FieldInfo FieldInfo;
+            internal readonly FieldInfo fieldInfo;
 
             internal PreTerms(Lucene3xFields outerInstance, FieldInfo fieldInfo)
             {
                 this.OuterInstance = outerInstance;
-                this.FieldInfo = fieldInfo;
+                this.fieldInfo = fieldInfo;
             }
 
             public override TermsEnum Iterator(TermsEnum reuse)
             {
-                PreTermsEnum termsEnum = new PreTermsEnum(OuterInstance);
-                termsEnum.Reset(FieldInfo);
+                var termsEnum = new PreTermsEnum(OuterInstance);
+                termsEnum.Reset(fieldInfo);
                 return termsEnum;
             }
 
@@ -259,24 +258,24 @@ namespace Lucene.Net.Codecs.Lucene3x
 
             public override bool HasFreqs()
             {
-                return FieldInfo.IndexOptions >= IndexOptions.DOCS_AND_FREQS;
+                return fieldInfo.FieldIndexOptions >= FieldInfo.IndexOptions.DOCS_AND_FREQS;
             }
 
             public override bool HasOffsets()
             {
                 // preflex doesn't support this
-                Debug.Assert(FieldInfo.IndexOptions < IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+                Debug.Assert(fieldInfo.FieldIndexOptions < FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
                 return false;
             }
 
             public override bool HasPositions()
             {
-                return FieldInfo.IndexOptions >= IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
+                return fieldInfo.FieldIndexOptions >= FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
             }
 
             public override bool HasPayloads()
             {
-                return FieldInfo.HasPayloads();
+                return fieldInfo.HasPayloads();
             }
         }
 
@@ -290,7 +289,7 @@ namespace Lucene.Net.Codecs.Lucene3x
             }
 
             internal SegmentTermEnum TermEnum;
-            internal FieldInfo FieldInfo;
+            internal FieldInfo fieldInfo;
             internal string InternedFieldName;
             internal bool SkipNext;
             internal BytesRef Current;
@@ -360,7 +359,7 @@ namespace Lucene.Net.Codecs.Lucene3x
                 }
 
                 // Seek "back":
-                OuterInstance.TermsDict.SeekEnum(te, new Term(FieldInfo.Name, term), true);
+                OuterInstance.TermsDict.SeekEnum(te, new Term(fieldInfo.Name, term), true);
 
                 // Test if the term we seek'd to in fact found a
                 // surrogate pair at the same position as the E:
@@ -502,7 +501,7 @@ namespace Lucene.Net.Codecs.Lucene3x
 
                     // TODO: more efficient seek?  can we simply swap
                     // the enums?
-                    OuterInstance.TermsDict.SeekEnum(TermEnum, new Term(FieldInfo.Name, ScratchTerm), true);
+                    OuterInstance.TermsDict.SeekEnum(TermEnum, new Term(fieldInfo.Name, ScratchTerm), true);
 
                     Term t2 = TermEnum.Term();
 
@@ -690,7 +689,7 @@ namespace Lucene.Net.Codecs.Lucene3x
 
                         // Seek "forward":
                         // TODO: more efficient seek?
-                        OuterInstance.TermsDict.SeekEnum(SeekTermEnum, new Term(FieldInfo.Name, ScratchTerm), true);
+                        OuterInstance.TermsDict.SeekEnum(SeekTermEnum, new Term(fieldInfo.Name, ScratchTerm), true);
 
                         ScratchTerm.Bytes[upTo] = Scratch[0];
                         ScratchTerm.Bytes[upTo + 1] = Scratch[1];
@@ -782,7 +781,7 @@ namespace Lucene.Net.Codecs.Lucene3x
             internal virtual void Reset(FieldInfo fieldInfo)
             {
                 //System.out.println("pff.reset te=" + termEnum);
-                this.FieldInfo = fieldInfo;
+                this.fieldInfo = fieldInfo;
                 InternedFieldName = String.Intern(fieldInfo.Name);
                 Term term = new Term(InternedFieldName);
                 if (TermEnum == null)
@@ -843,7 +842,7 @@ namespace Lucene.Net.Codecs.Lucene3x
                 }
                 SkipNext = false;
                 TermInfosReader tis = OuterInstance.TermsDict;
-                Term t0 = new Term(FieldInfo.Name, term);
+                Term t0 = new Term(fieldInfo.Name, term);
 
                 Debug.Assert(TermEnum != null);
 
@@ -1090,7 +1089,7 @@ namespace Lucene.Net.Codecs.Lucene3x
             public override DocsAndPositionsEnum DocsAndPositions(Bits liveDocs, DocsAndPositionsEnum reuse, int flags)
             {
                 PreDocsAndPositionsEnum docsPosEnum;
-                if (FieldInfo.IndexOptions != IndexOptions.DOCS_AND_FREQS_AND_POSITIONS)
+                if (fieldInfo.FieldIndexOptions != FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS)
                 {
                     return null;
                 }

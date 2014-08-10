@@ -48,7 +48,6 @@ namespace Lucene.Net.Index
     using Field = Lucene.Net.Document.Field;
     using FieldCache_Fields = Lucene.Net.Search.FieldCache_Fields;
     using FieldType = Lucene.Net.Document.FieldType;
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using IndexOutput = Lucene.Net.Store.IndexOutput;
     using IndexSearcher = Lucene.Net.Search.IndexSearcher;
     using IOContext = Lucene.Net.Store.IOContext;
@@ -2109,10 +2108,10 @@ namespace Lucene.Net.Index
             IndexWriter w = new IndexWriter(dir, new IndexWriterConfig(TEST_VERSION_CURRENT, new MockAnalyzer(Random())));
 
             FieldType docsAndFreqs = new FieldType(TextField.TYPE_NOT_STORED);
-            docsAndFreqs.IndexOptionsValue = IndexOptions.DOCS_AND_FREQS;
+            docsAndFreqs.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_AND_FREQS;
 
             FieldType docsOnly = new FieldType(TextField.TYPE_NOT_STORED);
-            docsOnly.IndexOptionsValue = IndexOptions.DOCS_ONLY;
+            docsOnly.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_ONLY;
 
             Document doc = new Document();
             doc.Add(new Field("field", "a b c", docsAndFreqs));

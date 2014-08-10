@@ -2,7 +2,6 @@ using Lucene.Net.Analysis.Tokenattributes;
 
 namespace Lucene.Net.Index
 {
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using IOUtils = Lucene.Net.Util.IOUtils;
 
     /*
@@ -87,7 +86,7 @@ namespace Lucene.Net.Index
 
                     // only bother checking offsets if something will consume them.
                     // TODO: after we fix analyzers, also check if termVectorOffsets will be indexed.
-                    bool checkOffsets = fieldType.IndexOptionsValue == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
+                    bool checkOffsets = fieldType.IndexOptionsValue == FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS;
                     int lastStartOffset = 0;
 
                     if (i > 0)

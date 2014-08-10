@@ -8,7 +8,6 @@ namespace Lucene.Net.Index
     using Document = Lucene.Net.Document.Document;
     using Field = Lucene.Net.Document.Field;
     using FieldType = Lucene.Net.Document.FieldType;
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
 
     /*
@@ -65,7 +64,7 @@ namespace Lucene.Net.Index
             Document doc = new Document();
             FieldType ft = new FieldType(TextField.TYPE_NOT_STORED);
             ft.OmitNorms = true;
-            ft.IndexOptionsValue = IndexOptions.DOCS_ONLY;
+            ft.IndexOptionsValue = FieldInfo.IndexOptions.DOCS_ONLY;
             Field field = new Field("field", new MyTokenStream(), ft);
             doc.Add(field);
 

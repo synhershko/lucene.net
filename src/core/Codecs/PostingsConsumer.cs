@@ -26,7 +26,6 @@ namespace Lucene.Net.Codecs
     using DocsAndPositionsEnum = Lucene.Net.Index.DocsAndPositionsEnum;
     using DocsEnum = Lucene.Net.Index.DocsEnum;
     using FixedBitSet = Lucene.Net.Util.FixedBitSet;
-    using IndexOptions = Lucene.Net.Index.FieldInfo.IndexOptions_e;
     using MergeState = Lucene.Net.Index.MergeState;
 
     /// <summary>
@@ -86,12 +85,12 @@ namespace Lucene.Net.Codecs
         /// Default merge impl: append documents, mapping around
         ///  deletes
         /// </summary>
-        public virtual TermStats Merge(MergeState mergeState, FieldInfo.IndexOptions_e? indexOptions, DocsEnum postings, FixedBitSet visitedDocs)
+        public virtual TermStats Merge(MergeState mergeState, FieldInfo.IndexOptions? indexOptions, DocsEnum postings, FixedBitSet visitedDocs)
         {
             int df = 0;
             long totTF = 0;
 
-            if (indexOptions == IndexOptions.DOCS_ONLY)
+            if (indexOptions == FieldInfo.IndexOptions.DOCS_ONLY)
             {
                 while (true)
                 {
@@ -107,7 +106,7 @@ namespace Lucene.Net.Codecs
                 }
                 totTF = -1;
             }
-            else if (indexOptions == IndexOptions.DOCS_AND_FREQS)
+            else if (indexOptions == FieldInfo.IndexOptions.DOCS_AND_FREQS)
             {
                 while (true)
                 {
@@ -124,9 +123,9 @@ namespace Lucene.Net.Codecs
                     totTF += freq;
                 }
             }
-            else if (indexOptions == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS)
+            else if (indexOptions == FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS)
             {
-                DocsAndPositionsEnum postingsEnum = (DocsAndPositionsEnum)postings;
+                var postingsEnum = (DocsAndPositionsEnum)postings;
                 while (true)
                 {
                     int doc = postingsEnum.NextDoc();
@@ -150,8 +149,8 @@ namespace Lucene.Net.Codecs
             }
             else
             {
-                Debug.Assert(indexOptions == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
-                DocsAndPositionsEnum postingsEnum = (DocsAndPositionsEnum)postings;
+                Debug.Assert(indexOptions == FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+                var postingsEnum = (DocsAndPositionsEnum)postings;
                 while (true)
                 {
                     int doc = postingsEnum.NextDoc();
@@ -173,7 +172,7 @@ namespace Lucene.Net.Codecs
                     df++;
                 }
             }
-            return new TermStats(df, indexOptions == IndexOptions.DOCS_ONLY ? -1 : totTF);
+            return new TermStats(df, indexOptions == FieldInfo.IndexOptions.DOCS_ONLY ? -1 : totTF);
         }
     }
 }

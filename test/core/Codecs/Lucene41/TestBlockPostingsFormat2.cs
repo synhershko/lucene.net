@@ -73,15 +73,17 @@ namespace Lucene.Net.Codecs.Lucene41
         private Document NewDocument()
         {
             Document doc = new Document();
-            foreach (FieldInfo.IndexOptions_e option in Enum.GetValues(typeof(FieldInfo.IndexOptions_e)))
+            foreach (FieldInfo.IndexOptions option in Enum.GetValues(typeof(FieldInfo.IndexOptions)))
             {
-                FieldType ft = new FieldType(TextField.TYPE_NOT_STORED);
+                var ft = new FieldType(TextField.TYPE_NOT_STORED)
+                {
+                    StoreTermVectors = true,
+                    StoreTermVectorOffsets = true,
+                    StoreTermVectorPositions = true,
+                    StoreTermVectorPayloads = true,
+                    IndexOptionsValue = option
+                };
                 // turn on tvs for a cross-check, since we rely upon checkindex in this test (for now)
-                ft.StoreTermVectors = true;
-                ft.StoreTermVectorOffsets = true;
-                ft.StoreTermVectorPositions = true;
-                ft.StoreTermVectorPayloads = true;
-                ft.IndexOptionsValue = option;
                 doc.Add(new Field(option.ToString(), "", ft));
             }
             return doc;

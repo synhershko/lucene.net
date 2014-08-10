@@ -88,20 +88,20 @@ namespace Lucene.Net.Codecs.Lucene3x
                     bool storeTermVector = (bits & STORE_TERMVECTOR) != 0;
                     bool omitNorms = (bits & OMIT_NORMS) != 0;
                     bool storePayloads = (bits & STORE_PAYLOADS) != 0;
-                    FieldInfo.IndexOptions_e indexOptions;
+                    FieldInfo.IndexOptions indexOptions;
                     if (!isIndexed)
                     {
-                        indexOptions = default(FieldInfo.IndexOptions_e);
+                        indexOptions = default(FieldInfo.IndexOptions);
                     }
                     else if ((bits & OMIT_TERM_FREQ_AND_POSITIONS) != 0)
                     {
-                        indexOptions = FieldInfo.IndexOptions_e.DOCS_ONLY;
+                        indexOptions = FieldInfo.IndexOptions.DOCS_ONLY;
                     }
                     else if ((bits & OMIT_POSITIONS) != 0)
                     {
                         if (format <= FORMAT_OMIT_POSITIONS)
                         {
-                            indexOptions = FieldInfo.IndexOptions_e.DOCS_AND_FREQS;
+                            indexOptions = FieldInfo.IndexOptions.DOCS_AND_FREQS;
                         }
                         else
                         {
@@ -110,13 +110,13 @@ namespace Lucene.Net.Codecs.Lucene3x
                     }
                     else
                     {
-                        indexOptions = FieldInfo.IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS;
+                        indexOptions = FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
                     }
 
                     // LUCENE-3027: past indices were able to write
                     // storePayloads=true when omitTFAP is also true,
                     // which is invalid.  We correct that, here:
-                    if (indexOptions != FieldInfo.IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS)
+                    if (indexOptions != FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS)
                     {
                         storePayloads = false;
                     }

@@ -85,12 +85,12 @@ namespace Lucene.Net.Codecs.Lucene3x
                     if (fi.Indexed)
                     {
                         bits |= IS_INDEXED;
-                        Debug.Assert(fi.IndexOptions == FieldInfo.IndexOptions_e.DOCS_AND_FREQS_AND_POSITIONS || !fi.HasPayloads());
-                        if (fi.IndexOptions == FieldInfo.IndexOptions_e.DOCS_ONLY)
+                        Debug.Assert(fi.FieldIndexOptions == FieldInfo.IndexOptions.DOCS_AND_FREQS_AND_POSITIONS || !fi.HasPayloads());
+                        if (fi.FieldIndexOptions == FieldInfo.IndexOptions.DOCS_ONLY)
                         {
                             bits |= OMIT_TERM_FREQ_AND_POSITIONS;
                         }
-                        else if (fi.IndexOptions == FieldInfo.IndexOptions_e.DOCS_AND_FREQS)
+                        else if (fi.FieldIndexOptions == FieldInfo.IndexOptions.DOCS_AND_FREQS)
                         {
                             bits |= OMIT_POSITIONS;
                         }
