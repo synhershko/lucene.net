@@ -450,9 +450,6 @@
     <Compile Include="Util\Paths.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Util\Rethrow.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Util\TestRuleSetupAndRestoreClassEnv.cs">
       <SubType>Code</SubType>
     </Compile>

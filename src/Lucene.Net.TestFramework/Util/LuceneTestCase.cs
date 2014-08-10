@@ -1187,30 +1187,22 @@ namespace Lucene.Net.Util
             Type clazz;
             try
             {
-                try
-                {
-                    clazz = CommandLineUtil.LoadFSDirectoryClass(fsdirClass);
-                }
-                catch (System.InvalidCastException e)
-                {
-                    // TEST_DIRECTORY is not a sub-class of FSDirectory, so draw one at random
-                    fsdirClass = RandomInts.RandomFrom(Random(), FS_DIRECTORIES);
-                    clazz = CommandLineUtil.LoadFSDirectoryClass(fsdirClass);
-                }
-
-                Directory fsdir = NewFSDirectoryImpl(clazz, d);
-                BaseDirectoryWrapper wrapped = WrapDirectory(Random(), fsdir, bare);
-                if (lf != null)
-                {
-                    wrapped.LockFactory = lf;
-                }
-                return wrapped;
+                clazz = CommandLineUtil.LoadFSDirectoryClass(fsdirClass);
             }
-            catch (Exception e)
+            catch (System.InvalidCastException e)
             {
-                Rethrow.DoRethrow(e);
-                throw null; // dummy to prevent compiler failure
+                // TEST_DIRECTORY is not a sub-class of FSDirectory, so draw one at random
+                fsdirClass = RandomInts.RandomFrom(Random(), FS_DIRECTORIES);
+                clazz = CommandLineUtil.LoadFSDirectoryClass(fsdirClass);
             }
+
+            Directory fsdir = NewFSDirectoryImpl(clazz, d);
+            BaseDirectoryWrapper wrapped = WrapDirectory(Random(), fsdir, bare);
+            if (lf != null)
+            {
+                wrapped.LockFactory = lf;
+            }
+            return wrapped;
         }
 
         /// <summary>
@@ -1399,16 +1391,7 @@ namespace Lucene.Net.Util
 
         private static Directory NewFSDirectoryImpl(Type clazz, DirectoryInfo file)
         {
-            FSDirectory d = null;
-            try
-            {
-                d = CommandLineUtil.NewFSDirectory(clazz, file);
-            }
-            catch (Exception e)
-            {
-                Rethrow.DoRethrow(e);
-            }
-            return d;
+            return CommandLineUtil.NewFSDirectory(clazz, file);
         }
 
         private static Directory NewDirectoryImpl(Random random, string clazzName)
@@ -1427,25 +1410,17 @@ namespace Lucene.Net.Util
 
             Trace.TraceInformation("Type of Directory is : {0}", clazzName);
 
-            try
+            Type clazz = CommandLineUtil.LoadDirectoryClass(clazzName);
+            // If it is a FSDirectory type, try its ctor(File)
+            if (clazz.IsSubclassOf(typeof (FSDirectory)))
             {
-                Type clazz = CommandLineUtil.LoadDirectoryClass(clazzName);
-                // If it is a FSDirectory type, try its ctor(File)
-                if (clazz.IsSubclassOf(typeof(FSDirectory)))
-                {
-                    DirectoryInfo dir = CreateTempDir("index-" + clazzName);
-                    dir.Create(); // ensure it's created so we 'have' it.
-                    return NewFSDirectoryImpl(clazz, dir);
-                }
+                DirectoryInfo dir = CreateTempDir("index-" + clazzName);
+                dir.Create(); // ensure it's created so we 'have' it.
+                return NewFSDirectoryImpl(clazz, dir);
+            }
 
-                // try empty ctor
-                return (Directory)Activator.CreateInstance(clazz);
-            }
-            catch (Exception e)
-            {
-                Rethrow.DoRethrow(e);
-                throw null;
-            }
+            // try empty ctor
+            return (Directory) Activator.CreateInstance(clazz);
         }
 
         /// <summary>
@@ -1620,14 +1595,7 @@ namespace Lucene.Net.Util
             {
                 if (maybeWrap)
                 {
-                    try
-                    {
-                        r = MaybeWrapReader(r);
-                    }
-                    catch (IOException e)
-                    {
-                        Rethrow.DoRethrow(e);
-                    }
+                    r = MaybeWrapReader(r);
                 }
                 // TODO: this whole check is a coverage hack, we should move it to tests for various filterreaders.
                 // ultimately whatever you do will be checkIndex'd at the end anyway.
@@ -1635,14 +1603,7 @@ namespace Lucene.Net.Util
                 {
                     // TODO: not useful to check DirectoryReader (redundant with checkindex)
                     // but maybe sometimes run this on the other crazy readers maybeWrapReader creates?
-                    try
-                    {
-                        TestUtil.CheckReader(r);
-                    }
-                    catch (IOException e)
-                    {
-                        Rethrow.DoRethrow(e);
-                    }
+                    TestUtil.CheckReader(r);
                 }
                 IndexSearcher ret;
                 if (wrapWithAssertions)

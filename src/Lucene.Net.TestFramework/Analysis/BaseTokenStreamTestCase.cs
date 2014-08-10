@@ -41,8 +41,7 @@ namespace Lucene.Net.Analysis
     using IOUtils = Lucene.Net.Util.IOUtils;
     using LineFileDocs = Lucene.Net.Util.LineFileDocs;
     using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
-    using RandomIndexWriter = Lucene.Net.Index.RandomIndexWriter;
-    using Rethrow = Lucene.Net.Util.Rethrow;
+    using RandomIndexWriter = Lucene.Net.Index.RandomIndexWriter;   
     using TestUtil = Lucene.Net.Util.TestUtil;
     using TextField = Lucene.Net.Document.TextField;
 
@@ -594,7 +593,7 @@ namespace Lucene.Net.Analysis
                 catch (Exception e)
                 {
                     Console.WriteLine("Exception in Thread: " + e);
-                    Rethrow.DoRethrow(e);
+                    throw;
                 }
                 finally
                 {

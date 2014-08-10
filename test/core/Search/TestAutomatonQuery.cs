@@ -34,7 +34,6 @@ namespace Lucene.Net.Search
     using LuceneTestCase = Lucene.Net.Util.LuceneTestCase;
     using MultiFields = Lucene.Net.Index.MultiFields;
     using RandomIndexWriter = Lucene.Net.Index.RandomIndexWriter;
-    using Rethrow = Lucene.Net.Util.Rethrow;
     using SingleTermsEnum = Lucene.Net.Index.SingleTermsEnum;
     using Term = Lucene.Net.Index.Term;
     using Terms = Lucene.Net.Index.Terms;
@@ -260,17 +259,10 @@ namespace Lucene.Net.Search
 
             public override void Run()
             {
-                try
+                StartingGun.@await();
+                for (int i = 0; i < Queries.Length; i++)
                 {
-                    StartingGun.@await();
-                    for (int i = 0; i < Queries.Length; i++)
-                    {
-                        Queries[i].GetHashCode();
-                    }
-                }
-                catch (Exception e)
-                {
-                    Rethrow.DoRethrow(e);
+                    Queries[i].GetHashCode();
                 }
             }
         }
