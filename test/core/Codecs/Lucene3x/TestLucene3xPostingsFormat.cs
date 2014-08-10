@@ -1,3 +1,5 @@
+using NUnit.Framework;
+
 namespace Lucene.Net.Codecs.Lucene3x
 {
     using BasePostingsFormatTestCase = Lucene.Net.Index.BasePostingsFormatTestCase;
@@ -27,11 +29,10 @@ namespace Lucene.Net.Codecs.Lucene3x
     {
         private readonly Codec Codec_Renamed = new PreFlexRWCodec();
 
-        /// <summary>
-        /// we will manually instantiate preflex-rw here </summary>
-        public static void BeforeClass3xPostingsFormat()
+        [TestFixtureSetUp]
+        public static void BeforeClass()
         {
-            LuceneTestCase.OLD_FORMAT_IMPERSONATION_IS_ACTIVE = true;
+            OLD_FORMAT_IMPERSONATION_IS_ACTIVE = true; // explicitly instantiates ancient codec
         }
 
         protected override Codec Codec

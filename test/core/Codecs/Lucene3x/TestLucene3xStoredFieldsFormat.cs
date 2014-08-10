@@ -25,11 +25,10 @@ namespace Lucene.Net.Codecs.Lucene3x
     [TestFixture]
     public class TestLucene3xStoredFieldsFormat : BaseStoredFieldsFormatTestCase
     {
-        [SetUp]
-        public override void SetUp()
+        [TestFixtureSetUp]
+        public static void BeforeClass()
         {
-            LuceneTestCase.OLD_FORMAT_IMPERSONATION_IS_ACTIVE = true;
-            base.SetUp();
+            OLD_FORMAT_IMPERSONATION_IS_ACTIVE = true; // explicitly instantiates ancient codec
         }
 
         protected override Codec Codec

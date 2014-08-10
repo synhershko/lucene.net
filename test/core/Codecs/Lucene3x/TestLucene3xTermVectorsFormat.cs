@@ -1,3 +1,5 @@
+using NUnit.Framework;
+
 namespace Lucene.Net.Codecs.Lucene3x
 {
     using System.Collections.Generic;
@@ -24,6 +26,7 @@ namespace Lucene.Net.Codecs.Lucene3x
 
     public class TestLucene3xTermVectorsFormat : BaseTermVectorsFormatTestCase
     {
+        [SetUp]
         public override void SetUp()
         {
             LuceneTestCase.OLD_FORMAT_IMPERSONATION_IS_ACTIVE = true;
