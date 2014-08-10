@@ -1202,26 +1202,11 @@ namespace Lucene.Net.Index
             while (iterator.MoveNext())
             {
                 var dummy = iterator.Current;
-                try
-                {
-                    iterator.Reset();
-                    Assert.Fail("Fields.iterator() allows for removal");
-                }
-                catch (NotImplementedException expected)
-                {
-                    // expected;
-                }
+                // .NET: Testing for iterator.Remove() isn't applicable
             }
             Assert.IsFalse(iterator.MoveNext());
-            /*try
-            {
-              iterator.next();
-              Assert.Fail("Fields.iterator() doesn't throw NoSuchElementException when past the end");
-            }
-            catch (NoSuchElementException expected)
-            {
-              // expected
-            }*/
+
+            // .NET: Testing for NoSuchElementException with .NET iterators isn't applicable
         }
 
         /// <summary>
@@ -1234,7 +1219,7 @@ namespace Lucene.Net.Index
             Directory dir = NewFSDirectory(path);
 
             // TODO test thread safety of buildIndex too
-            FieldsProducer fieldsProducer = BuildIndex(dir, options, withPayloads, true);
+            var fieldsProducer = BuildIndex(dir, options, withPayloads, true);
 
             TestFields(fieldsProducer);
 
@@ -1243,14 +1228,14 @@ namespace Lucene.Net.Index
 
             for (int i = 0; i <= maxIndexOption; i++)
             {
-                ISet<Option> AllOptionsHashSet = new HashSet<Option>(Enum.GetValues(typeof(Option)).Cast<Option>());
-                TestTerms(fieldsProducer, AllOptionsHashSet, allOptions[i], options, true);
+                ISet<Option> allOptionsHashSet = new HashSet<Option>(Enum.GetValues(typeof(Option)).Cast<Option>());
+                TestTerms(fieldsProducer, allOptionsHashSet, allOptions[i], options, true);
                 if (withPayloads)
                 {
                     // If we indexed w/ payloads, also test enums w/o accessing payloads:
-                    ISet<Option> PayloadsHashSet = new HashSet<Option>() { Option.PAYLOADS };
-                    HashSet<Option> ComplementHashSet = new HashSet<Option>(AllOptionsHashSet.Except(PayloadsHashSet));
-                    TestTerms(fieldsProducer, ComplementHashSet, allOptions[i], options, true);
+                    ISet<Option> payloadsHashSet = new HashSet<Option>() { Option.PAYLOADS };
+                    var complementHashSet = new HashSet<Option>(allOptionsHashSet.Except(payloadsHashSet));
+                    TestTerms(fieldsProducer, complementHashSet, allOptions[i], options, true);
                 }
             }
 
