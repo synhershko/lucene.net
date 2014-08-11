@@ -29,14 +29,14 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The Apache Software Foundation")]
 [assembly: AssemblyProduct("Lucene.Net")]
-[assembly: AssemblyCopyright("Copyright 2006 - 2011 The Apache Software Foundation")]
-[assembly: AssemblyTrademark("Copyright 2006 - 2011 The Apache Software Foundation")]
+[assembly: AssemblyCopyright("Copyright 2006 - 2014 The Apache Software Foundation")]
+[assembly: AssemblyTrademark("Copyright 2006 - 2014 The Apache Software Foundation")]
 [assembly: AssemblyDefaultAlias("Lucene.Net")]
 [assembly: AssemblyCulture("")]
 
 [assembly: CLSCompliant(true)]
 
-[assembly: AssemblyInformationalVersionAttribute("3.0.3")]
+[assembly: AssemblyInformationalVersionAttribute("4.8.0")]
 
 // for testing
 [assembly: InternalsVisibleTo("Lucene.Net.Test, PublicKey=002400000480000094000000060200000024000052534131000400000100010075a07ce602f88e" +
