@@ -9,12 +9,15 @@ if not "%PackageVersion%" == "" (
    set version=-Version %PackageVersion%
 )
 
+REM Packages restore
+%nuget% restore
+
 REM Build
 %WINDIR%\Microsoft.NET\Framework\v4.0.30319\msbuild Lucene.Net.sln /p:Configuration="%config%" /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
 if not "%errorlevel%"=="0" goto failure
 
 REM Unit tests
-%GallioEcho% test\bin\%config%\ProjectA.Tests.dll
+%GallioEcho% test\bin\%config%\Lucene.Net.Tests.dll
 if not "%errorlevel%"=="0" goto failure
 
 REM Package
