@@ -17,7 +17,7 @@ REM Build
 if not "%errorlevel%"=="0" goto failure
 
 REM Unit tests
-%GallioEcho% test\bin\%config%\Lucene.Net.Tests.dll
+"%GallioEcho%" test\bin\%config%\Lucene.Net.Tests.dll
 if not "%errorlevel%"=="0" goto failure
 
 REM Package
