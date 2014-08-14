@@ -1,5 +1,3 @@
-package org.apache.lucene.codecs.pulsing;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -17,29 +15,33 @@ package org.apache.lucene.codecs.pulsing;
  * limitations under the License.
  */
 
-import org.apache.lucene.codecs.BlockTreeTermsWriter;
-import org.apache.lucene.codecs.lucene41.Lucene41PostingsBaseFormat;
-import org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat; // javadocs
+namespace Lucene.Net.Codecs.Pulsing
+{
+    using Lucene.Net.Codecs.Lucene41;
 
-/**
- * Concrete pulsing implementation over {@link Lucene41PostingsFormat}.
- * 
- * @lucene.experimental
- */
-public class Pulsing41PostingsFormat extends PulsingPostingsFormat {
+    /// <summary>
+    /// Concrete pulsing implementation over {@link Lucene41PostingsFormat}.
+    /// 
+    /// @lucene.experimental 
+    /// </summary>
+    public class Pulsing41PostingsFormat : PulsingPostingsFormat
+    {
 
-  /** Inlines docFreq=1 terms, otherwise uses the normal "Lucene41" format. */
-  public Pulsing41PostingsFormat() {
-    this(1);
-  }
+        /// <summary>Inlines docFreq=1 terms, otherwise uses the normal "Lucene41" format.</summary>
+        public Pulsing41PostingsFormat() : this(1)
+        {
+        }
 
-  /** Inlines docFreq=<code>freqCutoff</code> terms, otherwise uses the normal "Lucene41" format. */
-  public Pulsing41PostingsFormat(int freqCutoff) {
-    this(freqCutoff, BlockTreeTermsWriter.DEFAULT_MIN_BLOCK_SIZE, BlockTreeTermsWriter.DEFAULT_MAX_BLOCK_SIZE);
-  }
+        /// <summary>Inlines docFreq=<code>freqCutoff</code> terms, otherwise uses the normal "Lucene41" format.</summary>
+        public Pulsing41PostingsFormat(int freqCutoff) :
+            this(freqCutoff, BlockTreeTermsWriter.DEFAULT_MIN_BLOCK_SIZE, BlockTreeTermsWriter.DEFAULT_MAX_BLOCK_SIZE)
+        {
+        }
 
-  /** Inlines docFreq=<code>freqCutoff</code> terms, otherwise uses the normal "Lucene41" format. */
-  public Pulsing41PostingsFormat(int freqCutoff, int minBlockSize, int maxBlockSize) {
-    super("Pulsing41", new Lucene41PostingsBaseFormat(), freqCutoff, minBlockSize, maxBlockSize);
-  }
+        /// <summary>Inlines docFreq=<code>freqCutoff</code> terms, otherwise uses the normal "Lucene41" format.</summary>
+        public Pulsing41PostingsFormat(int freqCutoff, int minBlockSize, int maxBlockSize) :
+            base("Pulsing41", new Lucene41PostingsBaseFormat(), freqCutoff, minBlockSize, maxBlockSize)
+        {
+        }
+    }
 }

@@ -1,5 +1,3 @@
-package org.apache.lucene.codecs.blockterms;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -17,23 +15,10 @@ package org.apache.lucene.codecs.blockterms;
  * limitations under the License.
  */
 
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.IOContext;
-import org.apache.lucene.store.IndexInput;
-import org.apache.lucene.codecs.CodecUtil;
-import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.FieldInfos;
-import org.apache.lucene.index.FieldInfo;
-import org.apache.lucene.util.BytesRef;
-import org.apache.lucene.util.IOUtils;
-import org.apache.lucene.util.PagedBytes;
-import org.apache.lucene.util.packed.PackedInts;
-
-import java.util.HashMap;
-import java.util.Comparator;
-import java.io.IOException;
-
-import org.apache.lucene.index.IndexFileNames;
+namespace Lucene.Net.Codecs.BlockTerms
+{
+    
+}
 
 /** 
  * TermsIndexReader for simple every Nth terms indexes.

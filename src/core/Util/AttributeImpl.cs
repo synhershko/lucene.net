@@ -31,7 +31,7 @@ namespace Lucene.Net.Util
 	/// Attributes are used to add data in a dynamic, yet type-safe way to a source
 	/// of usually streamed objects, e. g. a <seealso cref="Lucene.Net.Analysis.TokenStream"/>.
 	/// </summary>
-	public abstract class AttributeImpl : Attribute, ICloneable 
+	public abstract class AttributeImpl : IAttribute, ICloneable 
 	{
 	  /// <summary>
 	  /// Clears the values in this AttributeImpl and resets it to its 
@@ -57,7 +57,7 @@ namespace Lucene.Net.Util
 		return buffer.ToString();
 	  }
 
-	  private class AttributeReflectorAnonymousInnerClassHelper : AttributeReflector
+	  private class AttributeReflectorAnonymousInnerClassHelper : IAttributeReflector
 	  {
 		  private readonly AttributeImpl OuterInstance;
 
@@ -71,7 +71,12 @@ namespace Lucene.Net.Util
 			  this.Buffer = buffer;
 		  }
 
-		  public virtual void Reflect(Type attClass, string key, object value)
+	      public void Reflect<T>(string key, object value) where T : IAttribute
+	      {
+	          throw new NotImplementedException();
+	      }
+
+	      public virtual void Reflect(Type attClass, string key, object value)
 		  {
 			if (Buffer.Length > 0)
 			{
@@ -108,7 +113,7 @@ namespace Lucene.Net.Util
 	  /// different values. So don't automatically exclude e.g. {@code null} properties!
 	  /// </summary>
 	  /// <seealso cref= #reflectAsString(boolean) </seealso>
-	  public virtual void ReflectWith(AttributeReflector reflector)
+	  public virtual void ReflectWith(IAttributeReflector reflector)
 	  {
 		Type clazz = this.GetType();
 		LinkedList<WeakReference> interfaces = AttributeSource.GetAttributeInterfaces(clazz);

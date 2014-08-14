@@ -1,5 +1,3 @@
-package org.apache.lucene.codecs.blockterms;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -17,12 +15,10 @@ package org.apache.lucene.codecs.blockterms;
  * limitations under the License.
  */
 
-import org.apache.lucene.codecs.TermStats;
-import org.apache.lucene.index.FieldInfo;
-import org.apache.lucene.util.BytesRef;
-
-import java.io.Closeable;
-import java.io.IOException;
+namespace Lucene.Net.Codecs.BlockTerms
+{
+    
+}
 
 /** 
  * Base class for terms index implementations to plug

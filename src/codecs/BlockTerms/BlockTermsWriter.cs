@@ -1,5 +1,3 @@
-package org.apache.lucene.codecs.blockterms;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -17,29 +15,10 @@ package org.apache.lucene.codecs.blockterms;
  * limitations under the License.
  */
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
-import org.apache.lucene.codecs.CodecUtil;
-import org.apache.lucene.codecs.FieldsConsumer;
-import org.apache.lucene.codecs.PostingsConsumer;
-import org.apache.lucene.codecs.PostingsWriterBase;
-import org.apache.lucene.codecs.TermStats;
-import org.apache.lucene.codecs.BlockTermState;
-import org.apache.lucene.codecs.TermsConsumer;
-import org.apache.lucene.index.FieldInfo;
-import org.apache.lucene.index.FieldInfo.IndexOptions;
-import org.apache.lucene.index.FieldInfos;
-import org.apache.lucene.index.IndexFileNames;
-import org.apache.lucene.index.SegmentWriteState;
-import org.apache.lucene.store.IndexOutput;
-import org.apache.lucene.store.RAMOutputStream;
-import org.apache.lucene.util.ArrayUtil;
-import org.apache.lucene.util.BytesRef;
-import org.apache.lucene.util.IOUtils;
-import org.apache.lucene.util.RamUsageEstimator;
+namespace Lucene.Net.Codecs.BlockTerms
+{
+    
+}
 
 // TODO: currently we encode all terms between two indexed
 // terms as a block; but, we could decouple the two, ie

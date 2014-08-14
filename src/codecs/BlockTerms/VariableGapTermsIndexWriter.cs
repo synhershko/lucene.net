@@ -1,5 +1,3 @@
-package org.apache.lucene.codecs.blockterms;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -17,25 +15,10 @@ package org.apache.lucene.codecs.blockterms;
  * limitations under the License.
  */
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.lucene.codecs.CodecUtil;
-import org.apache.lucene.codecs.TermStats;
-import org.apache.lucene.index.FieldInfo;
-import org.apache.lucene.index.FieldInfos;
-import org.apache.lucene.index.IndexFileNames;
-import org.apache.lucene.index.SegmentWriteState;
-import org.apache.lucene.store.IndexOutput;
-import org.apache.lucene.util.BytesRef;
-import org.apache.lucene.util.IOUtils;
-import org.apache.lucene.util.IntsRef;
-import org.apache.lucene.util.fst.Builder;
-import org.apache.lucene.util.fst.FST;
-import org.apache.lucene.util.fst.PositiveIntOutputs;
-import org.apache.lucene.util.fst.Util;
-
+namespace Lucene.Net.Codecs.BlockTerms
+{
+    
+}
 /**
  * Selects index terms according to provided pluggable
  * {@link IndexTermSelector}, and stores them in a prefix trie that's

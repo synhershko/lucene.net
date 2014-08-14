@@ -1,5 +1,3 @@
-package org.apache.lucene.codecs.pulsing;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -17,104 +15,113 @@ package org.apache.lucene.codecs.pulsing;
  * limitations under the License.
  */
 
-import java.io.IOException;
 
-import org.apache.lucene.codecs.BlockTreeTermsReader;
-import org.apache.lucene.codecs.BlockTreeTermsWriter;
-import org.apache.lucene.codecs.FieldsConsumer;
-import org.apache.lucene.codecs.FieldsProducer;
-import org.apache.lucene.codecs.PostingsBaseFormat;
-import org.apache.lucene.codecs.PostingsFormat;
-import org.apache.lucene.codecs.PostingsReaderBase;
-import org.apache.lucene.codecs.PostingsWriterBase;
-import org.apache.lucene.index.SegmentReadState;
-import org.apache.lucene.index.SegmentWriteState;
-import org.apache.lucene.util.IOUtils;
 
-/** This postings format "inlines" the postings for terms that have
- *  low docFreq.  It wraps another postings format, which is used for
- *  writing the non-inlined terms.
- *
- *  @lucene.experimental */
+namespace Lucene.Net.Codecs.Pulsing
+{
+    using System;
+    using System.Diagnostics;
+    using Lucene.Net.Index;
+    using Lucene.Net.Util;
 
-public abstract class PulsingPostingsFormat extends PostingsFormat {
+    /// <summary>
+    /// This postings format "inlines" the postings for terms that have
+    /// low docFreq.  It wraps another postings format, which is used for
+    /// writing the non-inlined terms.
+    /// @lucene.experimental 
+    /// </summary>
+    public abstract class PulsingPostingsFormat : PostingsFormat
+    {
 
-  private final int freqCutoff;
-  private final int minBlockSize;
-  private final int maxBlockSize;
-  private final PostingsBaseFormat wrappedPostingsBaseFormat;
-  
-  public PulsingPostingsFormat(String name, PostingsBaseFormat wrappedPostingsBaseFormat, int freqCutoff) {
-    this(name, wrappedPostingsBaseFormat, freqCutoff, BlockTreeTermsWriter.DEFAULT_MIN_BLOCK_SIZE, BlockTreeTermsWriter.DEFAULT_MAX_BLOCK_SIZE);
-  }
+        private readonly int _freqCutoff;
+        private readonly int _minBlockSize;
+        private readonly int _maxBlockSize;
+        private readonly PostingsBaseFormat _wrappedPostingsBaseFormat;
 
-  /** Terms with freq <= freqCutoff are inlined into terms
-   *  dict. */
-  public PulsingPostingsFormat(String name, PostingsBaseFormat wrappedPostingsBaseFormat, int freqCutoff, int minBlockSize, int maxBlockSize) {
-    super(name);
-    this.freqCutoff = freqCutoff;
-    this.minBlockSize = minBlockSize;
-    assert minBlockSize > 1;
-    this.maxBlockSize = maxBlockSize;
-    this.wrappedPostingsBaseFormat = wrappedPostingsBaseFormat;
-  }
+        public int FreqCutoff
+        {
+            get { return _freqCutoff; }
+        }
 
-  @Override
-  public String toString() {
-    return getName() + "(freqCutoff=" + freqCutoff + " minBlockSize=" + minBlockSize + " maxBlockSize=" + maxBlockSize + ")";
-  }
+        protected PulsingPostingsFormat(String name, PostingsBaseFormat wrappedPostingsBaseFormat, int freqCutoff) :
+            this(name, wrappedPostingsBaseFormat, freqCutoff, BlockTreeTermsWriter.DEFAULT_MIN_BLOCK_SIZE,
+            BlockTreeTermsWriter.DEFAULT_MAX_BLOCK_SIZE)
+        {
+        }
 
-  @Override
-  public FieldsConsumer fieldsConsumer(SegmentWriteState state) throws IOException {
-    PostingsWriterBase docsWriter = null;
+        /// <summary>Terms with freq <= freqCutoff are inlined into terms dict.</summary>
+        protected PulsingPostingsFormat(String name, PostingsBaseFormat wrappedPostingsBaseFormat, int freqCutoff,
+            int minBlockSize, int maxBlockSize) : base(name)
+        {
+            Debug.Assert(minBlockSize > 1);
 
-    // Terms that have <= freqCutoff number of docs are
-    // "pulsed" (inlined):
-    PostingsWriterBase pulsingWriter = null;
+            _freqCutoff = freqCutoff;
+            _minBlockSize = minBlockSize;
+            _maxBlockSize = maxBlockSize;
+            _wrappedPostingsBaseFormat = wrappedPostingsBaseFormat;
+        }
 
-    // Terms dict
-    boolean success = false;
-    try {
-      docsWriter = wrappedPostingsBaseFormat.postingsWriterBase(state);
+        public override String ToString()
+        {
+            return string.Format("{0} (freqCutoff={1}, minBlockSize={2}, maxBlockSize={3})", Name, _freqCutoff, _minBlockSize, _maxBlockSize);
+        }
 
-      // Terms that have <= freqCutoff number of docs are
-      // "pulsed" (inlined):
-      pulsingWriter = new PulsingPostingsWriter(state, freqCutoff, docsWriter);
-      FieldsConsumer ret = new BlockTreeTermsWriter(state, pulsingWriter, minBlockSize, maxBlockSize);
-      success = true;
-      return ret;
-    } finally {
-      if (!success) {
-        IOUtils.closeWhileHandlingException(docsWriter, pulsingWriter);
-      }
+        public override FieldsConsumer FieldsConsumer(SegmentWriteState state)
+        {
+            PostingsWriterBase docsWriter = null;
+
+            // Terms that have <= freqCutoff number of docs are
+            // "pulsed" (inlined):
+            PostingsWriterBase pulsingWriter = null;
+
+            // Terms dict
+            bool success = false;
+            try
+            {
+                docsWriter = _wrappedPostingsBaseFormat.PostingsWriterBase(state);
+
+                // Terms that have <= freqCutoff number of docs are
+                // "pulsed" (inlined):
+                pulsingWriter = new PulsingPostingsWriter(state, _freqCutoff, docsWriter);
+                FieldsConsumer ret = new BlockTreeTermsWriter(state, pulsingWriter, _minBlockSize, _maxBlockSize);
+                success = true;
+                return ret;
+            }
+            finally
+            {
+                if (!success)
+                {
+                    IOUtils.CloseWhileHandlingException(docsWriter, pulsingWriter);
+                }
+            }
+        }
+
+        public override FieldsProducer FieldsProducer(SegmentReadState state)
+        {
+            PostingsReaderBase docsReader = null;
+            PostingsReaderBase pulsingReader = null;
+
+            bool success = false;
+            try
+            {
+                docsReader = _wrappedPostingsBaseFormat.PostingsReaderBase(state);
+                pulsingReader = new PulsingPostingsReader(state, docsReader);
+                FieldsProducer ret = new BlockTreeTermsReader(
+                    state.Directory, state.FieldInfos, state.SegmentInfo,
+                    pulsingReader,
+                    state.Context,
+                    state.SegmentSuffix,
+                    state.TermsIndexDivisor);
+                success = true;
+                return ret;
+            }
+            finally
+            {
+                if (!success)
+                {
+                    IOUtils.CloseWhileHandlingException(docsReader, pulsingReader);
+                }
+            }
+        }
     }
-  }
-
-  @Override
-  public FieldsProducer fieldsProducer(SegmentReadState state) throws IOException {
-    PostingsReaderBase docsReader = null;
-    PostingsReaderBase pulsingReader = null;
-
-    boolean success = false;
-    try {
-      docsReader = wrappedPostingsBaseFormat.postingsReaderBase(state);
-      pulsingReader = new PulsingPostingsReader(state, docsReader);
-      FieldsProducer ret = new BlockTreeTermsReader(
-                                                    state.directory, state.fieldInfos, state.segmentInfo,
-                                                    pulsingReader,
-                                                    state.context,
-                                                    state.segmentSuffix,
-                                                    state.termsIndexDivisor);
-      success = true;
-      return ret;
-    } finally {
-      if (!success) {
-        IOUtils.closeWhileHandlingException(docsReader, pulsingReader);
-      }
-    }
-  }
-
-  public int getFreqCutoff() {
-    return freqCutoff;
-  }
 }

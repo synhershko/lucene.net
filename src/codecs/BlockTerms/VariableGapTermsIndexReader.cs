@@ -1,5 +1,3 @@
-package org.apache.lucene.codecs.blockterms;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -17,27 +15,10 @@ package org.apache.lucene.codecs.blockterms;
  * limitations under the License.
  */
 
-import java.io.IOException;
-import java.io.FileOutputStream;   // for toDot
-import java.io.OutputStreamWriter; // for toDot
-import java.io.Writer;             // for toDot
-import java.util.HashMap;
-
-import org.apache.lucene.codecs.CodecUtil;
-import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.FieldInfo;
-import org.apache.lucene.index.FieldInfos;
-import org.apache.lucene.index.IndexFileNames;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.IOContext;
-import org.apache.lucene.store.IndexInput;
-import org.apache.lucene.util.BytesRef;
-import org.apache.lucene.util.IntsRef;
-import org.apache.lucene.util.fst.Builder;
-import org.apache.lucene.util.fst.BytesRefFSTEnum;
-import org.apache.lucene.util.fst.FST;
-import org.apache.lucene.util.fst.PositiveIntOutputs;
-import org.apache.lucene.util.fst.Util; // for toDot
+namespace Lucene.Net.Codecs.BlockTerms
+{
+    
+}
 
 /** See {@link VariableGapTermsIndexWriter}
  * 

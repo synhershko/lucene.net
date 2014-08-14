@@ -15,32 +15,38 @@
  * limitations under the License.
  */
 
+using System;
+using Lucene.Net.Codecs;
+using Lucene.Net.Store;
+using Lucene.Net.Util;
+
 namespace Lucene.Net.Codecs.BlockTerms
 {
     
-}
 
-/** Handles a terms dict, but decouples all details of
- *  doc/freqs/positions reading to an instance of {@link
- *  PostingsReaderBase}.  This class is reusable for
- *  codecs that use a different format for
- *  docs/freqs/positions (though codecs are also free to
- *  make their own terms dict impl).
- *
- * <p>This class also interacts with an instance of {@link
- * TermsIndexReaderBase}, to abstract away the specific
- * implementation of the terms dict index. 
- * @lucene.experimental */
-
-public class BlockTermsReader extends FieldsProducer {
+    /// <summary>
+    /// Handles a terms dict, but decouples all details of
+    /// doc/freqs/positions reading to an instance of {@link
+    /// PostingsReaderBase}.  This class is reusable for
+    /// codecs that use a different format for
+    /// docs/freqs/positions (though codecs are also free to
+    /// make their own terms dict impl).
+    ///
+    /// This class also interacts with an instance of {@link
+    /// TermsIndexReaderBase}, to abstract away the specific
+    /// implementation of the terms dict index. 
+    /// 
+    /// @lucene.experimental
+    /// </summary>
+public class BlockTermsReader : FieldsProducer {
   // Open input to the main terms dict file (_X.tis)
-  private final IndexInput in;
+  private readonly IndexInput input;
 
   // Reads the terms dict entries, to gather state to
   // produce DocsEnum on demand
-  private final PostingsReaderBase postingsReader;
+  private readonly PostingsReaderBase postingsReader;
 
-  private final TreeMap<String,FieldReader> fields = new TreeMap<>();
+  private readonly TreeMap<String,BlockTreeTermsReader.FieldReader> fields = new TreeMap<>();
 
   // Reads the terms index
   private TermsIndexReaderBase indexReader;
@@ -48,7 +54,7 @@ public class BlockTermsReader extends FieldsProducer {
   // keeps the dirStart offset
   private long dirOffset;
   
-  private final int version; 
+  private const int version; 
 
   // Used as key for the terms cache
   private static class FieldAndTerm extends DoubleBarrelLRUCache.CloneableKey {
