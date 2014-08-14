@@ -1,4 +1,3 @@
-package org.apache.lucene.codecs.bloom;
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -15,48 +14,50 @@ package org.apache.lucene.codecs.bloom;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import org.apache.lucene.index.FieldInfo;
-import org.apache.lucene.index.SegmentWriteState;
 
+namespace Lucene.Net.Codecs.Bloom
+{
 
-/**
- * Class used to create index-time {@link FuzzySet} appropriately configured for
- * each field. Also called to right-size bitsets for serialization.
- * @lucene.experimental
- */
-public abstract class BloomFilterFactory {
-  
-  /**
-   * 
-   * @param state  The content to be indexed
-   * @param info
-   *          the field requiring a BloomFilter
-   * @return An appropriately sized set or null if no BloomFiltering required
-   */
-  public abstract FuzzySet getSetForField(SegmentWriteState state, FieldInfo info);
-  
-  /**
-   * Called when downsizing bitsets for serialization
-   * 
-   * @param fieldInfo
-   *          The field with sparse set bits
-   * @param initialSet
-   *          The bits accumulated
-   * @return null or a hopefully more densely packed, smaller bitset
-   */
-  public FuzzySet downsize(FieldInfo fieldInfo, FuzzySet initialSet) {
-    // Aim for a bitset size that would have 10% of bits set (so 90% of searches
-    // would fail-fast)
-    float targetMaxSaturation = 0.1f;
-    return initialSet.downsize(targetMaxSaturation);
-  }
+    using Lucene.Net.Index;
 
-  /**
-   * Used to determine if the given filter has reached saturation and should be retired i.e. not saved any more
-   * @param bloomFilter The bloomFilter being tested
-   * @param fieldInfo The field with which this filter is associated
-   * @return true if the set has reached saturation and should be retired
-   */
-  public abstract boolean isSaturated(FuzzySet bloomFilter, FieldInfo fieldInfo);
-  
+    /// <summary>
+    /// Class used to create index-time {@link FuzzySet} appropriately configured for
+    /// each field. Also called to right-size bitsets for serialization.
+    ///
+    ///  @lucene.experimental
+    /// </summary>
+    public abstract class BloomFilterFactory
+    {
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state">The content to be indexed</param>
+        /// <param name="info">The field requiring a BloomFilter</param>
+        /// <returns>An appropriately sized set or null if no BloomFiltering required</returns>
+        public abstract FuzzySet GetSetForField(SegmentWriteState state, FieldInfo info);
+
+        /// <summary>
+        /// Called when downsizing bitsets for serialization
+        /// </summary>
+        /// <param name="fieldInfo">The field with sparse set bits</param>
+        /// <param name="initialSet">The bits accumulated</param>
+        /// <returns> null or a hopefully more densely packed, smaller bitset</returns>
+        public FuzzySet Downsize(FieldInfo fieldInfo, FuzzySet initialSet)
+        {
+            // Aim for a bitset size that would have 10% of bits set (so 90% of searches
+            // would fail-fast)
+            const float targetMaxSaturation = 0.1f;
+            return initialSet.Downsize(targetMaxSaturation);
+        }
+
+        /// <summary>
+        /// Used to determine if the given filter has reached saturation and should be retired i.e. not saved any more
+        /// </summary>
+        /// <param name="bloomFilter">The bloomFilter being tested</param>
+        /// <param name="fieldInfo">The field with which this filter is associated</param>
+        /// <returns>true if the set has reached saturation and should be retired</returns>
+        public abstract bool IsSaturated(FuzzySet bloomFilter, FieldInfo fieldInfo);
+
+    }
 }

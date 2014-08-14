@@ -1,4 +1,3 @@
-package org.apache.lucene.codecs.bloom;
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -15,22 +14,27 @@ package org.apache.lucene.codecs.bloom;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import org.apache.lucene.util.BytesRef;
 
+namespace Lucene.Net.Codecs.Bloom
+{
+    using Lucene.Net.Util;
 
-/**
- * Base class for hashing functions that can be referred to by name.
- * Subclasses are expected to provide threadsafe implementations of the hash function
- * on the range of bytes referenced in the provided {@link BytesRef}
- * @lucene.experimental
- */
-public abstract class HashFunction {
+    /// <summary>
+    /// Base class for hashing functions that can be referred to by name.
+    /// Subclasses are expected to provide threadsafe implementations of the hash function
+    /// on the range of bytes referenced in the provided {@link BytesRef}
+    /// 
+    /// @lucene.experimental
+    /// </summary>
+    public abstract class HashFunction
+    {
 
-  /**
-   * Hashes the contents of the referenced bytes
-   * @param bytes the data to be hashed
-   * @return the hash of the bytes referenced by bytes.offset and length bytes.length
-   */
-  public abstract int hash(BytesRef bytes);
+        /// <summary>
+        /// Hashes the contents of the referenced bytes
+        /// @param bytes the data to be hashed
+        /// @return the hash of the bytes referenced by bytes.offset and length bytes.length
+        /// </summary>
+        public abstract int Hash(BytesRef bytes);
 
+    }
 }
