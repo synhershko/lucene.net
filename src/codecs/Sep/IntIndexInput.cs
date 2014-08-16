@@ -29,20 +29,20 @@ import org.apache.lucene.store.DataInput;
  * @lucene.experimental */
 public abstract class IntIndexInput implements Closeable {
 
-  public abstract Reader reader() throws IOException;
+  public abstract Reader reader() ;
 
   @Override
-  public abstract void close() throws IOException;
+  public abstract void close() ;
 
-  public abstract Index index() throws IOException;
+  public abstract Index index() ;
   
   /** Records a single skip-point in the {@link IntIndexInput.Reader}. */
   public abstract static class Index {
 
-    public abstract void read(DataInput indexIn, boolean absolute) throws IOException;
+    public abstract void read(DataInput indexIn, bool absolute) ;
 
     /** Seeks primary stream to the last read offset */
-    public abstract void seek(IntIndexInput.Reader stream) throws IOException;
+    public abstract void seek(IntIndexInput.Reader stream) ;
 
     public abstract void copyFrom(Index other);
     
@@ -54,6 +54,6 @@ public abstract class IntIndexInput implements Closeable {
   public abstract static class Reader {
 
     /** Reads next single int */
-    public abstract int next() throws IOException;
+    public abstract int next() ;
   }
 }

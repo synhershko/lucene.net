@@ -28,9 +28,9 @@ import java.io.IOException;
 public abstract class IntStreamFactory {
   /** Create an {@link IntIndexInput} on the provided
    *  fileName. */
-  public abstract IntIndexInput openInput(Directory dir, String fileName, IOContext context) throws IOException;
+  public abstract IntIndexInput openInput(Directory dir, String fileName, IOContext context) ;
 
   /** Create an {@link IntIndexOutput} on the provided
    *  fileName. */
-  public abstract IntIndexOutput createOutput(Directory dir, String fileName, IOContext context) throws IOException;
+  public abstract IntIndexOutput createOutput(Directory dir, String fileName, IOContext context) ;
 }

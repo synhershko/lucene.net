@@ -42,13 +42,13 @@ public abstract class VariableIntBlockIndexInput extends IntIndexInput {
   protected final IndexInput in;
   protected final int maxBlockSize;
 
-  protected VariableIntBlockIndexInput(final IndexInput in) throws IOException {
+  protected VariableIntBlockIndexInput(final IndexInput in)  {
     this.in = in;
     maxBlockSize = in.readInt();
   }
 
   @Override
-  public IntIndexInput.Reader reader() throws IOException {
+  public IntIndexInput.Reader reader()  {
     final int[] buffer = new int[maxBlockSize];
     final IndexInput clone = in.clone();
     // TODO: can this be simplified?
@@ -56,7 +56,7 @@ public abstract class VariableIntBlockIndexInput extends IntIndexInput {
   }
 
   @Override
-  public void close() throws IOException {
+  public void close()  {
     in.close();
   }
 
@@ -65,7 +65,7 @@ public abstract class VariableIntBlockIndexInput extends IntIndexInput {
     return new Index();
   }
 
-  protected abstract BlockReader getBlockReader(IndexInput in, int[] buffer) throws IOException;
+  protected abstract BlockReader getBlockReader(IndexInput in, int[] buffer) ;
 
   /**
    * Interface for variable-size block decoders.
@@ -73,8 +73,8 @@ public abstract class VariableIntBlockIndexInput extends IntIndexInput {
    * Implementations should decode into the buffer in {@link #readBlock}.
    */
   public interface BlockReader {
-    public int readBlock() throws IOException;
-    public void seek(long pos) throws IOException;
+    public int readBlock() ;
+    public void seek(long pos) ;
   }
 
   private static class Reader extends IntIndexInput.Reader {
@@ -83,7 +83,7 @@ public abstract class VariableIntBlockIndexInput extends IntIndexInput {
     public final int[] pending;
     int upto;
 
-    private boolean seekPending;
+    private bool seekPending;
     private long pendingFP;
     private int pendingUpto;
     private long lastBlockFP;
@@ -100,11 +100,11 @@ public abstract class VariableIntBlockIndexInput extends IntIndexInput {
       // TODO: should we do this in real-time, not lazy?
       pendingFP = fp;
       pendingUpto = upto;
-      assert pendingUpto >= 0: "pendingUpto=" + pendingUpto;
+      Debug.Assert( pendingUpto >= 0: "pendingUpto=" + pendingUpto;
       seekPending = true;
     }
 
-    private final void maybeSeek() throws IOException {
+    private final void maybeSeek()  {
       if (seekPending) {
         if (pendingFP != lastBlockFP) {
           // need new block
@@ -133,7 +133,7 @@ public abstract class VariableIntBlockIndexInput extends IntIndexInput {
     }
 
     @Override
-    public int next() throws IOException {
+    public int next()  {
       this.maybeSeek();
       if (upto == blockSize) {
         lastBlockFP = in.getFilePointer();
@@ -150,7 +150,7 @@ public abstract class VariableIntBlockIndexInput extends IntIndexInput {
     private int upto;
 
     @Override
-    public void read(final DataInput indexIn, final boolean absolute) throws IOException {
+    public void read(final DataInput indexIn, final bool absolute)  {
       if (absolute) {
         upto = indexIn.readVInt();
         fp = indexIn.readVLong();
@@ -165,9 +165,9 @@ public abstract class VariableIntBlockIndexInput extends IntIndexInput {
           fp += indexIn.readVLong();
         }
       }
-      // TODO: we can't do this assert because non-causal
+      // TODO: we can't do this Debug.Assert( because non-causal
       // int encoders can have upto over the buffer size
-      //assert upto < maxBlockSize: "upto=" + upto + " max=" + maxBlockSize;
+      //Debug.Assert( upto < maxBlockSize: "upto=" + upto + " max=" + maxBlockSize;
     }
 
     @Override
@@ -176,7 +176,7 @@ public abstract class VariableIntBlockIndexInput extends IntIndexInput {
     }
 
     @Override
-    public void seek(final IntIndexInput.Reader other) throws IOException {
+    public void seek(final IntIndexInput.Reader other)  {
       ((Reader) other).seek(fp, upto);
     }
 

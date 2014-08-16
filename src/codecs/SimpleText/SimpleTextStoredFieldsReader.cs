@@ -54,9 +54,9 @@ public class SimpleTextStoredFieldsReader extends StoredFieldsReader {
   private CharsRef scratchUTF16 = new CharsRef();
   private final FieldInfos fieldInfos;
 
-  public SimpleTextStoredFieldsReader(Directory directory, SegmentInfo si, FieldInfos fn, IOContext context) throws IOException {
+  public SimpleTextStoredFieldsReader(Directory directory, SegmentInfo si, FieldInfos fn, IOContext context)  {
     this.fieldInfos = fn;
-    boolean success = false;
+    bool success = false;
     try {
       in = directory.openInput(IndexFileNames.segmentFileName(si.name, "", SimpleTextStoredFieldsWriter.FIELDS_EXTENSION), context);
       success = true;
@@ -80,7 +80,7 @@ public class SimpleTextStoredFieldsReader extends StoredFieldsReader {
   // we don't actually write a .fdx-like index, instead we read the 
   // stored fields file in entirety up-front and save the offsets 
   // so we can seek to the documents later.
-  private void readIndex(int size) throws IOException {
+  private void readIndex(int size)  {
     ChecksumIndexInput input = new BufferedChecksumIndexInput(in);
     offsets = new long[size];
     int upto = 0;
@@ -92,25 +92,25 @@ public class SimpleTextStoredFieldsReader extends StoredFieldsReader {
       }
     }
     SimpleTextUtil.checkFooter(input);
-    assert upto == offsets.length;
+    Debug.Assert( upto == offsets.length;
   }
   
   @Override
-  public void visitDocument(int n, StoredFieldVisitor visitor) throws IOException {
+  public void visitDocument(int n, StoredFieldVisitor visitor)  {
     in.seek(offsets[n]);
     readLine();
-    assert StringHelper.startsWith(scratch, NUM);
+    Debug.Assert( StringHelper.startsWith(scratch, NUM);
     int numFields = parseIntAt(NUM.length);
     
     for (int i = 0; i < numFields; i++) {
       readLine();
-      assert StringHelper.startsWith(scratch, FIELD);
+      Debug.Assert( StringHelper.startsWith(scratch, FIELD);
       int fieldNumber = parseIntAt(FIELD.length);
       FieldInfo fieldInfo = fieldInfos.fieldInfo(fieldNumber);
       readLine();
-      assert StringHelper.startsWith(scratch, NAME);
+      Debug.Assert( StringHelper.startsWith(scratch, NAME);
       readLine();
-      assert StringHelper.startsWith(scratch, TYPE);
+      Debug.Assert( StringHelper.startsWith(scratch, TYPE);
       
       final BytesRef type;
       if (equalsAt(TYPE_STRING, scratch, TYPE.length)) {
@@ -135,16 +135,16 @@ public class SimpleTextStoredFieldsReader extends StoredFieldsReader {
           break;
         case NO:   
           readLine();
-          assert StringHelper.startsWith(scratch, VALUE);
+          Debug.Assert( StringHelper.startsWith(scratch, VALUE);
           break;
         case STOP: return;
       }
     }
   }
   
-  private void readField(BytesRef type, FieldInfo fieldInfo, StoredFieldVisitor visitor) throws IOException {
+  private void readField(BytesRef type, FieldInfo fieldInfo, StoredFieldVisitor visitor)  {
     readLine();
-    assert StringHelper.startsWith(scratch, VALUE);
+    Debug.Assert( StringHelper.startsWith(scratch, VALUE);
     if (type == TYPE_STRING) {
       visitor.stringField(fieldInfo, new String(scratch.bytes, scratch.offset+VALUE.length, scratch.length-VALUE.length, StandardCharsets.UTF_8));
     } else if (type == TYPE_BINARY) {
@@ -175,7 +175,7 @@ public class SimpleTextStoredFieldsReader extends StoredFieldsReader {
   }
   
   @Override
-  public void close() throws IOException {
+  public void close()  {
     try {
       IOUtils.close(in); 
     } finally {
@@ -184,7 +184,7 @@ public class SimpleTextStoredFieldsReader extends StoredFieldsReader {
     }
   }
   
-  private void readLine() throws IOException {
+  private void readLine()  {
     SimpleTextUtil.readLine(in, scratch);
   }
   
@@ -193,7 +193,7 @@ public class SimpleTextStoredFieldsReader extends StoredFieldsReader {
     return ArrayUtil.parseInt(scratchUTF16.chars, 0, scratchUTF16.length);
   }
   
-  private boolean equalsAt(BytesRef a, BytesRef b, int bOffset) {
+  private bool equalsAt(BytesRef a, BytesRef b, int bOffset) {
     return a.length == b.length - bOffset && 
         ArrayUtil.equals(a.bytes, a.offset, b.bytes, b.offset + bOffset, b.length - bOffset);
   }
@@ -204,5 +204,5 @@ public class SimpleTextStoredFieldsReader extends StoredFieldsReader {
   }
 
   @Override
-  public void checkIntegrity() throws IOException {}
+  public void checkIntegrity()  {}
 }

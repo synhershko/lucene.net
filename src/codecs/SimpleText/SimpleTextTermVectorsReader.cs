@@ -60,8 +60,8 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
   private BytesRef scratch = new BytesRef();
   private CharsRef scratchUTF16 = new CharsRef();
   
-  public SimpleTextTermVectorsReader(Directory directory, SegmentInfo si, IOContext context) throws IOException {
-    boolean success = false;
+  public SimpleTextTermVectorsReader(Directory directory, SegmentInfo si, IOContext context)  {
+    bool success = false;
     try {
       in = directory.openInput(IndexFileNames.segmentFileName(si.name, "", VECTORS_EXTENSION), context);
       success = true;
@@ -84,7 +84,7 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
   // we don't actually write a .tvx-like index, instead we read the 
   // vectors file in entirety up-front and save the offsets 
   // so we can seek to the data later.
-  private void readIndex(int maxDoc) throws IOException {
+  private void readIndex(int maxDoc)  {
     ChecksumIndexInput input = new BufferedChecksumIndexInput(in);
     offsets = new long[maxDoc];
     int upto = 0;
@@ -96,43 +96,43 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
       }
     }
     SimpleTextUtil.checkFooter(input);
-    assert upto == offsets.length;
+    Debug.Assert( upto == offsets.length;
   }
   
   @Override
-  public Fields get(int doc) throws IOException {
+  public Fields get(int doc)  {
     SortedMap<String,SimpleTVTerms> fields = new TreeMap<>();
     in.seek(offsets[doc]);
     readLine();
-    assert StringHelper.startsWith(scratch, NUMFIELDS);
+    Debug.Assert( StringHelper.startsWith(scratch, NUMFIELDS);
     int numFields = parseIntAt(NUMFIELDS.length);
     if (numFields == 0) {
       return null; // no vectors for this doc
     }
     for (int i = 0; i < numFields; i++) {
       readLine();
-      assert StringHelper.startsWith(scratch, FIELD);
+      Debug.Assert( StringHelper.startsWith(scratch, FIELD);
       // skip fieldNumber:
       parseIntAt(FIELD.length);
       
       readLine();
-      assert StringHelper.startsWith(scratch, FIELDNAME);
+      Debug.Assert( StringHelper.startsWith(scratch, FIELDNAME);
       String fieldName = readString(FIELDNAME.length, scratch);
       
       readLine();
-      assert StringHelper.startsWith(scratch, FIELDPOSITIONS);
-      boolean positions = Boolean.parseBoolean(readString(FIELDPOSITIONS.length, scratch));
+      Debug.Assert( StringHelper.startsWith(scratch, FIELDPOSITIONS);
+      bool positions = bool.parsebool(readString(FIELDPOSITIONS.length, scratch));
       
       readLine();
-      assert StringHelper.startsWith(scratch, FIELDOFFSETS);
-      boolean offsets = Boolean.parseBoolean(readString(FIELDOFFSETS.length, scratch));
+      Debug.Assert( StringHelper.startsWith(scratch, FIELDOFFSETS);
+      bool offsets = bool.parsebool(readString(FIELDOFFSETS.length, scratch));
       
       readLine();
-      assert StringHelper.startsWith(scratch, FIELDPAYLOADS);
-      boolean payloads = Boolean.parseBoolean(readString(FIELDPAYLOADS.length, scratch));
+      Debug.Assert( StringHelper.startsWith(scratch, FIELDPAYLOADS);
+      bool payloads = bool.parsebool(readString(FIELDPAYLOADS.length, scratch));
       
       readLine();
-      assert StringHelper.startsWith(scratch, FIELDTERMCOUNT);
+      Debug.Assert( StringHelper.startsWith(scratch, FIELDTERMCOUNT);
       int termCount = parseIntAt(FIELDTERMCOUNT.length);
       
       SimpleTVTerms terms = new SimpleTVTerms(offsets, positions, payloads);
@@ -140,7 +140,7 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
       
       for (int j = 0; j < termCount; j++) {
         readLine();
-        assert StringHelper.startsWith(scratch, TERMTEXT);
+        Debug.Assert( StringHelper.startsWith(scratch, TERMTEXT);
         BytesRef term = new BytesRef();
         int termLength = scratch.length - TERMTEXT.length;
         term.grow(termLength);
@@ -151,7 +151,7 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
         terms.terms.put(term, postings);
         
         readLine();
-        assert StringHelper.startsWith(scratch, TERMFREQ);
+        Debug.Assert( StringHelper.startsWith(scratch, TERMFREQ);
         postings.freq = parseIntAt(TERMFREQ.length);
         
         if (positions || offsets) {
@@ -170,11 +170,11 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
           for (int k = 0; k < postings.freq; k++) {
             if (positions) {
               readLine();
-              assert StringHelper.startsWith(scratch, POSITION);
+              Debug.Assert( StringHelper.startsWith(scratch, POSITION);
               postings.positions[k] = parseIntAt(POSITION.length);
               if (payloads) {
                 readLine();
-                assert StringHelper.startsWith(scratch, PAYLOAD);
+                Debug.Assert( StringHelper.startsWith(scratch, PAYLOAD);
                 if (scratch.length - PAYLOAD.length == 0) {
                   postings.payloads[k] = null;
                 } else {
@@ -187,11 +187,11 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
             
             if (offsets) {
               readLine();
-              assert StringHelper.startsWith(scratch, STARTOFFSET);
+              Debug.Assert( StringHelper.startsWith(scratch, STARTOFFSET);
               postings.startOffsets[k] = parseIntAt(STARTOFFSET.length);
               
               readLine();
-              assert StringHelper.startsWith(scratch, ENDOFFSET);
+              Debug.Assert( StringHelper.startsWith(scratch, ENDOFFSET);
               postings.endOffsets[k] = parseIntAt(ENDOFFSET.length);
             }
           }
@@ -210,7 +210,7 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
   }
   
   @Override
-  public void close() throws IOException {
+  public void close()  {
     try {
       IOUtils.close(in); 
     } finally {
@@ -219,7 +219,7 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
     }
   }
 
-  private void readLine() throws IOException {
+  private void readLine()  {
     SimpleTextUtil.readLine(in, scratch);
   }
   
@@ -246,7 +246,7 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
     }
 
     @Override
-    public Terms terms(String field) throws IOException {
+    public Terms terms(String field)  {
       return fields.get(field);
     }
 
@@ -258,11 +258,11 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
   
   private static class SimpleTVTerms extends Terms {
     final SortedMap<BytesRef,SimpleTVPostings> terms;
-    final boolean hasOffsets;
-    final boolean hasPositions;
-    final boolean hasPayloads;
+    final bool hasOffsets;
+    final bool hasPositions;
+    final bool hasPayloads;
     
-    SimpleTVTerms(boolean hasOffsets, boolean hasPositions, boolean hasPayloads) {
+    SimpleTVTerms(bool hasOffsets, bool hasPositions, bool hasPayloads) {
       this.hasOffsets = hasOffsets;
       this.hasPositions = hasPositions;
       this.hasPayloads = hasPayloads;
@@ -270,7 +270,7 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
     }
     
     @Override
-    public TermsEnum iterator(TermsEnum reuse) throws IOException {
+    public TermsEnum iterator(TermsEnum reuse)  {
       // TODO: reuse
       return new SimpleTVTermsEnum(terms);
     }
@@ -281,42 +281,42 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
     }
 
     @Override
-    public long size() throws IOException {
+    public long size()  {
       return terms.size();
     }
 
     @Override
-    public long getSumTotalTermFreq() throws IOException {
+    public long getSumTotalTermFreq()  {
       return -1;
     }
 
     @Override
-    public long getSumDocFreq() throws IOException {
+    public long getSumDocFreq()  {
       return terms.size();
     }
 
     @Override
-    public int getDocCount() throws IOException {
+    public int getDocCount()  {
       return 1;
     }
 
     @Override
-    public boolean hasFreqs() {
+    public bool hasFreqs() {
       return true;
     }
 
     @Override
-    public boolean hasOffsets() {
+    public bool hasOffsets() {
       return hasOffsets;
     }
 
     @Override
-    public boolean hasPositions() {
+    public bool hasPositions() {
       return hasPositions;
     }
     
     @Override
-    public boolean hasPayloads() {
+    public bool hasPayloads() {
       return hasPayloads;
     }
   }
@@ -340,7 +340,7 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
     }
     
     @Override
-    public SeekStatus seekCeil(BytesRef text) throws IOException {
+    public SeekStatus seekCeil(BytesRef text)  {
       iterator = terms.tailMap(text).entrySet().iterator();
       if (!iterator.hasNext()) {
         return SeekStatus.END;
@@ -350,12 +350,12 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
     }
 
     @Override
-    public void seekExact(long ord) throws IOException {
+    public void seekExact(long ord)  {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public BytesRef next() throws IOException {
+    public BytesRef next()  {
       if (!iterator.hasNext()) {
         return null;
       } else {
@@ -365,27 +365,27 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
     }
 
     @Override
-    public BytesRef term() throws IOException {
+    public BytesRef term()  {
       return current.getKey();
     }
 
     @Override
-    public long ord() throws IOException {
+    public long ord()  {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public int docFreq() throws IOException {
+    public int docFreq()  {
       return 1;
     }
 
     @Override
-    public long totalTermFreq() throws IOException {
+    public long totalTermFreq()  {
       return current.getValue().freq;
     }
 
     @Override
-    public DocsEnum docs(Bits liveDocs, DocsEnum reuse, int flags) throws IOException {
+    public DocsEnum docs(Bits liveDocs, DocsEnum reuse, int flags)  {
       // TODO: reuse
       SimpleTVDocsEnum e = new SimpleTVDocsEnum();
       e.reset(liveDocs, (flags & DocsEnum.FLAG_FREQS) == 0 ? 1 : current.getValue().freq);
@@ -393,7 +393,7 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
     }
 
     @Override
-    public DocsAndPositionsEnum docsAndPositions(Bits liveDocs, DocsAndPositionsEnum reuse, int flags) throws IOException {
+    public DocsAndPositionsEnum docsAndPositions(Bits liveDocs, DocsAndPositionsEnum reuse, int flags)  {
       SimpleTVPostings postings = current.getValue();
       if (postings.positions == null && postings.startOffsets == null) {
         return null;
@@ -412,14 +412,14 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
   
   // note: these two enum classes are exactly like the Default impl...
   private static class SimpleTVDocsEnum extends DocsEnum {
-    private boolean didNext;
+    private bool didNext;
     private int doc = -1;
     private int freq;
     private Bits liveDocs;
 
     @Override
-    public int freq() throws IOException {
-      assert freq != -1;
+    public int freq()  {
+      Debug.Assert( freq != -1;
       return freq;
     }
 
@@ -439,7 +439,7 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
     }
 
     @Override
-    public int advance(int target) throws IOException {
+    public int advance(int target)  {
       return slowAdvance(target);
     }
 
@@ -457,7 +457,7 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
   }
   
   private static class SimpleTVDocsAndPositionsEnum extends DocsAndPositionsEnum {
-    private boolean didNext;
+    private bool didNext;
     private int doc = -1;
     private int nextPos;
     private Bits liveDocs;
@@ -467,11 +467,11 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
     private int[] endOffsets;
 
     @Override
-    public int freq() throws IOException {
+    public int freq()  {
       if (positions != null) {
         return positions.length;
       } else {
-        assert startOffsets != null;
+        Debug.Assert( startOffsets != null;
         return startOffsets.length;
       }
     }
@@ -492,7 +492,7 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
     }
 
     @Override
-    public int advance(int target) throws IOException {
+    public int advance(int target)  {
       return slowAdvance(target);
     }
 
@@ -514,7 +514,7 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
 
     @Override
     public int nextPosition() {
-      assert (positions != null && nextPos < positions.length) ||
+      Debug.Assert( (positions != null && nextPos < positions.length) ||
         startOffsets != null && nextPos < startOffsets.length;
       if (positions != null) {
         return positions[nextPos++];
@@ -554,5 +554,5 @@ public class SimpleTextTermVectorsReader extends TermVectorsReader {
   }
 
   @Override
-  public void checkIntegrity() throws IOException {}
+  public void checkIntegrity()  {}
 }

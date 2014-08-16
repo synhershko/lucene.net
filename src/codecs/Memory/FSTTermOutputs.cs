@@ -38,8 +38,8 @@ import org.apache.lucene.util.LongsRef;
 // longsSize is fixed for each field
 class FSTTermOutputs extends Outputs<FSTTermOutputs.TermData> {
   private final static TermData NO_OUTPUT = new TermData();
-  //private static boolean TEST = false;
-  private final boolean hasPos;
+  //private static bool TEST = false;
+  private final bool hasPos;
   private final int longsSize;
 
   /** 
@@ -89,7 +89,7 @@ class FSTTermOutputs extends Outputs<FSTTermOutputs.TermData> {
     }
 
     @Override
-    public boolean equals(Object other_) {
+    public bool equals(Object other_) {
       if (other_ == this) {
         return true;
       } else if (!(other_ instanceof FSTTermOutputs.TermData)) {
@@ -121,7 +121,7 @@ class FSTTermOutputs extends Outputs<FSTTermOutputs.TermData> {
       //if (TEST) System.out.println("ret:"+NO_OUTPUT);
       return NO_OUTPUT;
     }
-    assert t1.longs.length == t2.longs.length;
+    Debug.Assert( t1.longs.length == t2.longs.length;
 
     long[] min = t1.longs, max = t2.longs;
     int pos = 0;
@@ -164,7 +164,7 @@ class FSTTermOutputs extends Outputs<FSTTermOutputs.TermData> {
       //if (TEST) System.out.println("ret:"+t1);
       return t1;
     }
-    assert t1.longs.length == t2.longs.length;
+    Debug.Assert( t1.longs.length == t2.longs.length;
 
     int pos = 0;
     long diff = 0;
@@ -199,7 +199,7 @@ class FSTTermOutputs extends Outputs<FSTTermOutputs.TermData> {
       //if (TEST) System.out.println("ret:"+t1);
       return t1;
     }
-    assert t1.longs.length == t2.longs.length;
+    Debug.Assert( t1.longs.length == t2.longs.length;
 
     int pos = 0;
     long[] accum = new long[longsSize];
@@ -220,7 +220,7 @@ class FSTTermOutputs extends Outputs<FSTTermOutputs.TermData> {
   }
 
   @Override
-  public void write(TermData data, DataOutput out) throws IOException {
+  public void write(TermData data, DataOutput out)  {
     int bit0 = allZero(data.longs) ? 0 : 1;
     int bit1 = ((data.bytes == null || data.bytes.length == 0) ? 0 : 1) << 1;
     int bit2 = ((data.docFreq == 0)  ? 0 : 1) << 2;
@@ -259,7 +259,7 @@ class FSTTermOutputs extends Outputs<FSTTermOutputs.TermData> {
   }
 
   @Override
-  public TermData read(DataInput in) throws IOException {
+  public TermData read(DataInput in)  {
     long[] longs = new long[longsSize];
     byte[] bytes = null;
     int docFreq = 0;
@@ -305,22 +305,22 @@ class FSTTermOutputs extends Outputs<FSTTermOutputs.TermData> {
     return data.toString();
   }
 
-  static boolean statsEqual(final TermData t1, final TermData t2) {
+  static bool statsEqual(final TermData t1, final TermData t2) {
     return t1.docFreq == t2.docFreq && t1.totalTermFreq == t2.totalTermFreq;
   }
-  static boolean bytesEqual(final TermData t1, final TermData t2) {
+  static bool bytesEqual(final TermData t1, final TermData t2) {
     if (t1.bytes == null && t2.bytes == null) {
       return true;
     }
     return t1.bytes != null && t2.bytes != null && Arrays.equals(t1.bytes, t2.bytes);
   }
-  static boolean longsEqual(final TermData t1, final TermData t2) {
+  static bool longsEqual(final TermData t1, final TermData t2) {
     if (t1.longs == null && t2.longs == null) {
       return true;
     }
     return t1.longs != null && t2.longs != null && Arrays.equals(t1.longs, t2.longs);
   }
-  static boolean allZero(final long[] l) {
+  static bool allZero(final long[] l) {
     for (int i = 0; i < l.length; i++) {
       if (l[i] != 0) {
         return false;

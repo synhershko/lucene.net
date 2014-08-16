@@ -63,10 +63,10 @@ class MemoryDocValuesConsumer extends DocValuesConsumer {
   final int maxDoc;
   final float acceptableOverheadRatio;
   
-  MemoryDocValuesConsumer(SegmentWriteState state, String dataCodec, String dataExtension, String metaCodec, String metaExtension, float acceptableOverheadRatio) throws IOException {
+  MemoryDocValuesConsumer(SegmentWriteState state, String dataCodec, String dataExtension, String metaCodec, String metaExtension, float acceptableOverheadRatio)  {
     this.acceptableOverheadRatio = acceptableOverheadRatio;
     maxDoc = state.segmentInfo.getDocCount();
-    boolean success = false;
+    bool success = false;
     try {
       String dataName = IndexFileNames.segmentFileName(state.segmentInfo.name, state.segmentSuffix, dataExtension);
       data = state.directory.createOutput(dataName, state.context);
@@ -83,18 +83,18 @@ class MemoryDocValuesConsumer extends DocValuesConsumer {
   }
 
   @Override
-  public void addNumericField(FieldInfo field, Iterable<Number> values) throws IOException {
+  public void addNumericField(FieldInfo field, Iterable<Number> values)  {
     addNumericField(field, values, true);
   }
 
-  void addNumericField(FieldInfo field, Iterable<Number> values, boolean optimizeStorage) throws IOException {
+  void addNumericField(FieldInfo field, Iterable<Number> values, bool optimizeStorage)  {
     meta.writeVInt(field.number);
     meta.writeByte(NUMBER);
     meta.writeLong(data.getFilePointer());
     long minValue = Long.MAX_VALUE;
     long maxValue = Long.MIN_VALUE;
     long gcd = 0;
-    boolean missing = false;
+    bool missing = false;
     // TODO: more efficient?
     HashSet<Long> uniqueValues = null;
     if (optimizeStorage) {
@@ -134,7 +134,7 @@ class MemoryDocValuesConsumer extends DocValuesConsumer {
 
         ++count;
       }
-      assert count == maxDoc;
+      Debug.Assert( count == maxDoc;
     }
     
     if (missing) {
@@ -203,8 +203,8 @@ class MemoryDocValuesConsumer extends DocValuesConsumer {
   }
   
   @Override
-  public void close() throws IOException {
-    boolean success = false;
+  public void close()  {
+    bool success = false;
     try {
       if (meta != null) {
         meta.writeVInt(-1); // write EOF marker
@@ -225,14 +225,14 @@ class MemoryDocValuesConsumer extends DocValuesConsumer {
   }
 
   @Override
-  public void addBinaryField(FieldInfo field, final Iterable<BytesRef> values) throws IOException {
+  public void addBinaryField(FieldInfo field, final Iterable<BytesRef> values)  {
     // write the byte[] data
     meta.writeVInt(field.number);
     meta.writeByte(BYTES);
     int minLength = Integer.MAX_VALUE;
     int maxLength = Integer.MIN_VALUE;
     final long startFP = data.getFilePointer();
-    boolean missing = false;
+    bool missing = false;
     for(BytesRef v : values) {
       final int length;
       if (v == null) {
@@ -281,7 +281,7 @@ class MemoryDocValuesConsumer extends DocValuesConsumer {
     }
   }
   
-  private void writeFST(FieldInfo field, Iterable<BytesRef> values) throws IOException {
+  private void writeFST(FieldInfo field, Iterable<BytesRef> values)  {
     meta.writeVInt(field.number);
     meta.writeByte(FST);
     meta.writeLong(data.getFilePointer());
@@ -302,7 +302,7 @@ class MemoryDocValuesConsumer extends DocValuesConsumer {
   
   // TODO: in some cases representing missing with minValue-1 wouldn't take up additional space and so on,
   // but this is very simple, and algorithms only check this for values of 0 anyway (doesnt slow down normal decode)
-  void writeMissingBitset(Iterable<?> values) throws IOException {
+  void writeMissingBitset(Iterable<?> values)  {
     long bits = 0;
     int count = 0;
     for (Object v : values) {
@@ -322,7 +322,7 @@ class MemoryDocValuesConsumer extends DocValuesConsumer {
   }
 
   @Override
-  public void addSortedField(FieldInfo field, Iterable<BytesRef> values, Iterable<Number> docToOrd) throws IOException {
+  public void addSortedField(FieldInfo field, Iterable<BytesRef> values, Iterable<Number> docToOrd)  {
     // write the ordinals as numerics
     addNumericField(field, docToOrd, false);
     
@@ -332,7 +332,7 @@ class MemoryDocValuesConsumer extends DocValuesConsumer {
 
   // note: this might not be the most efficient... but its fairly simple
   @Override
-  public void addSortedSetField(FieldInfo field, Iterable<BytesRef> values, final Iterable<Number> docToOrdCount, final Iterable<Number> ords) throws IOException {
+  public void addSortedSetField(FieldInfo field, Iterable<BytesRef> values, final Iterable<Number> docToOrdCount, final Iterable<Number> ords)  {
     // write the ordinals as a binary field
     addBinaryField(field, new Iterable<BytesRef>() {
       @Override
@@ -360,7 +360,7 @@ class MemoryDocValuesConsumer extends DocValuesConsumer {
     }
     
     @Override
-    public boolean hasNext() {
+    public bool hasNext() {
       return counts.hasNext();
     }
 
@@ -390,7 +390,7 @@ class MemoryDocValuesConsumer extends DocValuesConsumer {
     }
     
     // encodes count values to buffer
-    private void encodeValues(int count) throws IOException {
+    private void encodeValues(int count)  {
       out.reset(buffer);
       long lastOrd = 0;
       for (int i = 0; i < count; i++) {

@@ -47,10 +47,10 @@ public final class FSTPostingsFormat extends PostingsFormat {
   }
 
   @Override
-  public FieldsConsumer fieldsConsumer(SegmentWriteState state) throws IOException {
+  public FieldsConsumer fieldsConsumer(SegmentWriteState state)  {
     PostingsWriterBase postingsWriter = new Lucene41PostingsWriter(state);
 
-    boolean success = false;
+    bool success = false;
     try {
       FieldsConsumer ret = new FSTTermsWriter(state, postingsWriter);
       success = true;
@@ -63,13 +63,13 @@ public final class FSTPostingsFormat extends PostingsFormat {
   }
 
   @Override
-  public FieldsProducer fieldsProducer(SegmentReadState state) throws IOException {
+  public FieldsProducer fieldsProducer(SegmentReadState state)  {
     PostingsReaderBase postingsReader = new Lucene41PostingsReader(state.directory,
                                                                 state.fieldInfos,
                                                                 state.segmentInfo,
                                                                 state.context,
                                                                 state.segmentSuffix);
-    boolean success = false;
+    bool success = false;
     try {
       FieldsProducer ret = new FSTTermsReader(state, postingsReader);
       success = true;

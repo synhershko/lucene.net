@@ -42,7 +42,7 @@ public abstract class VariableIntBlockIndexOutput extends IntIndexOutput {
   protected final IndexOutput out;
 
   private int upto;
-  private boolean hitExcDuringWrite;
+  private bool hitExcDuringWrite;
 
   // TODO what Var-Var codecs exist in practice... and what are there blocksizes like?
   // if its less than 128 we should set that as max and use byte?
@@ -51,14 +51,14 @@ public abstract class VariableIntBlockIndexOutput extends IntIndexOutput {
    *  plus the max non-causal lookahead of your codec.  EG Simple9
    *  requires lookahead=1 because on seeing the Nth value
    *  it knows it must now encode the N-1 values before it. */
-  protected VariableIntBlockIndexOutput(IndexOutput out, int maxBlockSize) throws IOException {
+  protected VariableIntBlockIndexOutput(IndexOutput out, int maxBlockSize)  {
     this.out = out;
     out.writeInt(maxBlockSize);
   }
 
   /** Called one value at a time.  Return the number of
    *  buffered input values that have been written to out. */
-  protected abstract int add(int value) throws IOException;
+  protected abstract int add(int value) ;
 
   @Override
   public IntIndexOutput.Index index() {
@@ -72,13 +72,13 @@ public abstract class VariableIntBlockIndexOutput extends IntIndexOutput {
     int lastUpto;
 
     @Override
-    public void mark() throws IOException {
+    public void mark()  {
       fp = out.getFilePointer();
       upto = VariableIntBlockIndexOutput.this.upto;
     }
 
     @Override
-    public void copyFrom(IntIndexOutput.Index other, boolean copyLast) throws IOException {
+    public void copyFrom(IntIndexOutput.Index other, bool copyLast)  {
       Index idx = (Index) other;
       fp = idx.fp;
       upto = idx.upto;
@@ -89,14 +89,14 @@ public abstract class VariableIntBlockIndexOutput extends IntIndexOutput {
     }
 
     @Override
-    public void write(DataOutput indexOut, boolean absolute) throws IOException {
-      assert upto >= 0;
+    public void write(DataOutput indexOut, bool absolute)  {
+      Debug.Assert( upto >= 0;
       if (absolute) {
         indexOut.writeVInt(upto);
         indexOut.writeVLong(fp);
       } else if (fp == lastFP) {
         // same block
-        assert upto >= lastUpto;
+        Debug.Assert( upto >= lastUpto;
         int uptoDelta = upto - lastUpto;
         indexOut.writeVInt(uptoDelta << 1 | 1);
       } else {      
@@ -110,22 +110,22 @@ public abstract class VariableIntBlockIndexOutput extends IntIndexOutput {
   }
 
   @Override
-  public void write(int v) throws IOException {
+  public void write(int v)  {
     hitExcDuringWrite = true;
     upto -= add(v)-1;
     hitExcDuringWrite = false;
-    assert upto >= 0;
+    Debug.Assert( upto >= 0;
   }
 
   @Override
-  public void close() throws IOException {
+  public void close()  {
     try {
       if (!hitExcDuringWrite) {
         // stuff 0s in until the "real" data is flushed:
         int stuffed = 0;
         while(upto > stuffed) {
           upto -= add(0)-1;
-          assert upto >= 0;
+          Debug.Assert( upto >= 0;
           stuffed += 1;
         }
       }

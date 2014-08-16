@@ -53,7 +53,7 @@ namespace Lucene.Net.Codecs.Pulsing
         protected PulsingPostingsFormat(String name, PostingsBaseFormat wrappedPostingsBaseFormat, int freqCutoff,
             int minBlockSize, int maxBlockSize) : base(name)
         {
-            Debug.Assert(minBlockSize > 1);
+            Debug.Debug.Assert((minBlockSize > 1);
 
             _freqCutoff = freqCutoff;
             _minBlockSize = minBlockSize;

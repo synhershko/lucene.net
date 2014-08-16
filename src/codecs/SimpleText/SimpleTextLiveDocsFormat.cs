@@ -52,37 +52,37 @@ public class SimpleTextLiveDocsFormat extends LiveDocsFormat {
   final static BytesRef END              = new BytesRef("END");
   
   @Override
-  public MutableBits newLiveDocs(int size) throws IOException {
+  public MutableBits newLiveDocs(int size)  {
     return new SimpleTextMutableBits(size);
   }
 
   @Override
-  public MutableBits newLiveDocs(Bits existing) throws IOException {
+  public MutableBits newLiveDocs(Bits existing)  {
     final SimpleTextBits bits = (SimpleTextBits) existing;
     return new SimpleTextMutableBits((BitSet)bits.bits.clone(), bits.size);
   }
 
   @Override
-  public Bits readLiveDocs(Directory dir, SegmentCommitInfo info, IOContext context) throws IOException {
-    assert info.hasDeletions();
+  public Bits readLiveDocs(Directory dir, SegmentCommitInfo info, IOContext context)  {
+    Debug.Assert( info.hasDeletions();
     BytesRef scratch = new BytesRef();
     CharsRef scratchUTF16 = new CharsRef();
     
     String fileName = IndexFileNames.fileNameFromGeneration(info.info.name, LIVEDOCS_EXTENSION, info.getDelGen());
     ChecksumIndexInput in = null;
-    boolean success = false;
+    bool success = false;
     try {
       in = dir.openChecksumInput(fileName, context);
       
       SimpleTextUtil.readLine(in, scratch);
-      assert StringHelper.startsWith(scratch, SIZE);
+      Debug.Assert( StringHelper.startsWith(scratch, SIZE);
       int size = parseIntAt(scratch, SIZE.length, scratchUTF16);
       
       BitSet bits = new BitSet(size);
       
       SimpleTextUtil.readLine(in, scratch);
       while (!scratch.equals(END)) {
-        assert StringHelper.startsWith(scratch, DOC);
+        Debug.Assert( StringHelper.startsWith(scratch, DOC);
         int docid = parseIntAt(scratch, DOC.length, scratchUTF16);
         bits.set(docid);
         SimpleTextUtil.readLine(in, scratch);
@@ -107,14 +107,14 @@ public class SimpleTextLiveDocsFormat extends LiveDocsFormat {
   }
 
   @Override
-  public void writeLiveDocs(MutableBits bits, Directory dir, SegmentCommitInfo info, int newDelCount, IOContext context) throws IOException {
+  public void writeLiveDocs(MutableBits bits, Directory dir, SegmentCommitInfo info, int newDelCount, IOContext context)  {
     BitSet set = ((SimpleTextBits) bits).bits;
     int size = bits.length();
     BytesRef scratch = new BytesRef();
     
     String fileName = IndexFileNames.fileNameFromGeneration(info.info.name, LIVEDOCS_EXTENSION, info.getNextDelGen());
     IndexOutput out = null;
-    boolean success = false;
+    bool success = false;
     try {
       out = dir.createOutput(fileName, context);
       SimpleTextUtil.write(out, SIZE);
@@ -141,7 +141,7 @@ public class SimpleTextLiveDocsFormat extends LiveDocsFormat {
   }
 
   @Override
-  public void files(SegmentCommitInfo info, Collection<String> files) throws IOException {
+  public void files(SegmentCommitInfo info, Collection<String> files)  {
     if (info.hasDeletions()) {
       files.add(IndexFileNames.fileNameFromGeneration(info.info.name, LIVEDOCS_EXTENSION, info.getDelGen()));
     }
@@ -158,7 +158,7 @@ public class SimpleTextLiveDocsFormat extends LiveDocsFormat {
     }
     
     @Override
-    public boolean get(int index) {
+    public bool get(int index) {
       return bits.get(index);
     }
 

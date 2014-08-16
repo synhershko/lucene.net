@@ -67,12 +67,12 @@ public class DirectDocValuesFormat extends DocValuesFormat {
   }
   
   @Override
-  public DocValuesConsumer fieldsConsumer(SegmentWriteState state) throws IOException {
+  public DocValuesConsumer fieldsConsumer(SegmentWriteState state)  {
     return new DirectDocValuesConsumer(state, DATA_CODEC, DATA_EXTENSION, METADATA_CODEC, METADATA_EXTENSION);
   }
   
   @Override
-  public DocValuesProducer fieldsProducer(SegmentReadState state) throws IOException {
+  public DocValuesProducer fieldsProducer(SegmentReadState state)  {
     return new DirectDocValuesProducer(state, DATA_CODEC, DATA_EXTENSION, METADATA_CODEC, METADATA_EXTENSION);
   }
   

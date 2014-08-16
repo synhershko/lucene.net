@@ -61,10 +61,10 @@ public class SimpleTextStoredFieldsWriter extends StoredFieldsWriter {
   
   private final BytesRef scratch = new BytesRef();
   
-  public SimpleTextStoredFieldsWriter(Directory directory, String segment, IOContext context) throws IOException {
+  public SimpleTextStoredFieldsWriter(Directory directory, String segment, IOContext context)  {
     this.directory = directory;
     this.segment = segment;
-    boolean success = false;
+    bool success = false;
     try {
       out = directory.createOutput(IndexFileNames.segmentFileName(segment, "", FIELDS_EXTENSION), context);
       success = true;
@@ -76,7 +76,7 @@ public class SimpleTextStoredFieldsWriter extends StoredFieldsWriter {
   }
 
   @Override
-  public void startDocument(int numStoredFields) throws IOException {
+  public void startDocument(int numStoredFields)  {
     write(DOC);
     write(Integer.toString(numDocsWritten));
     newLine();
@@ -89,7 +89,7 @@ public class SimpleTextStoredFieldsWriter extends StoredFieldsWriter {
   }
 
   @Override
-  public void writeField(FieldInfo info, IndexableField field) throws IOException {
+  public void writeField(FieldInfo info, IndexableField field)  {
     write(FIELD);
     write(Integer.toString(info.number));
     newLine();
@@ -164,7 +164,7 @@ public class SimpleTextStoredFieldsWriter extends StoredFieldsWriter {
   }
 
   @Override
-  public void finish(FieldInfos fis, int numDocs) throws IOException {
+  public void finish(FieldInfos fis, int numDocs)  {
     if (numDocsWritten != numDocs) {
       throw new RuntimeException("mergeFields produced an invalid result: docCount is " + numDocs 
           + " but only saw " + numDocsWritten + " file=" + out.toString() + "; now aborting this merge to prevent index corruption");
@@ -175,7 +175,7 @@ public class SimpleTextStoredFieldsWriter extends StoredFieldsWriter {
   }
 
   @Override
-  public void close() throws IOException {
+  public void close()  {
     try {
       IOUtils.close(out);
     } finally {
@@ -183,15 +183,15 @@ public class SimpleTextStoredFieldsWriter extends StoredFieldsWriter {
     }
   }
   
-  private void write(String s) throws IOException {
+  private void write(String s)  {
     SimpleTextUtil.write(out, s, scratch);
   }
   
-  private void write(BytesRef bytes) throws IOException {
+  private void write(BytesRef bytes)  {
     SimpleTextUtil.write(out, bytes);
   }
   
-  private void newLine() throws IOException {
+  private void newLine()  {
     SimpleTextUtil.writeNewline(out);
   }
 }

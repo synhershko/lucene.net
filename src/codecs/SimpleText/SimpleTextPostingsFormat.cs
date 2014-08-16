@@ -41,12 +41,12 @@ public final class SimpleTextPostingsFormat extends PostingsFormat {
   }
 
   @Override
-  public FieldsConsumer fieldsConsumer(SegmentWriteState state) throws IOException {
+  public FieldsConsumer fieldsConsumer(SegmentWriteState state)  {
     return new SimpleTextFieldsWriter(state);
   }
 
   @Override
-  public FieldsProducer fieldsProducer(SegmentReadState state) throws IOException {
+  public FieldsProducer fieldsProducer(SegmentReadState state)  {
     return new SimpleTextFieldsReader(state);
   }
 

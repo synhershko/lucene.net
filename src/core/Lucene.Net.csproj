@@ -673,6 +673,7 @@
     <Compile Include="Util\ArrayTimSorter.cs" />
     <Compile Include="Util\ArrayUtil.cs" />
     <Compile Include="Util\Attribute.cs" />
+    <Compile Include="Util\AttributeImpl.cs" />
     <Compile Include="Util\AttributeSource.cs" />
     <Compile Include="Util\Automaton\Automaton.cs" />
     <Compile Include="Util\Automaton\AutomatonProvider.cs" />

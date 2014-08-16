@@ -70,7 +70,7 @@ public class BlockTermsReader : FieldsProducer {
     }
 
     @Override
-    public boolean equals(Object _other) {
+    public bool equals(Object _other) {
       FieldAndTerm other = (FieldAndTerm) _other;
       return other.field.equals(field) && term.bytesEquals(other.term);
     }
@@ -90,7 +90,7 @@ public class BlockTermsReader : FieldsProducer {
   
   public BlockTermsReader(TermsIndexReaderBase indexReader, Directory dir, FieldInfos fieldInfos, SegmentInfo info, PostingsReaderBase postingsReader, IOContext context,
                           String segmentSuffix)
-    throws IOException {
+     {
     
     this.postingsReader = postingsReader;
 
@@ -98,7 +98,7 @@ public class BlockTermsReader : FieldsProducer {
     in = dir.openInput(IndexFileNames.segmentFileName(info.name, segmentSuffix, BlockTermsWriter.TERMS_EXTENSION),
                        context);
 
-    boolean success = false;
+    bool success = false;
     try {
       version = readHeader(in);
 
@@ -115,7 +115,7 @@ public class BlockTermsReader : FieldsProducer {
       for(int i=0;i<numFields;i++) {
         final int field = in.readVInt();
         final long numTerms = in.readVLong();
-        assert numTerms >= 0;
+        Debug.Assert( numTerms >= 0;
         final long termsStartPointer = in.readVLong();
         final FieldInfo fieldInfo = fieldInfos.fieldInfo(field);
         final long sumTotalTermFreq = fieldInfo.getIndexOptions() == IndexOptions.DOCS_ONLY ? -1 : in.readVLong();
@@ -146,7 +146,7 @@ public class BlockTermsReader : FieldsProducer {
     this.indexReader = indexReader;
   }
 
-  private int readHeader(IndexInput input) throws IOException {
+  private int readHeader(IndexInput input)  {
     int version = CodecUtil.checkHeader(input, BlockTermsWriter.CODEC_NAME,
                           BlockTermsWriter.VERSION_START,
                           BlockTermsWriter.VERSION_CURRENT);
@@ -156,7 +156,7 @@ public class BlockTermsReader : FieldsProducer {
     return version;
   }
   
-  private void seekDir(IndexInput input, long dirOffset) throws IOException {
+  private void seekDir(IndexInput input, long dirOffset)  {
     if (version >= BlockTermsWriter.VERSION_CHECKSUM) {
       input.seek(input.length() - CodecUtil.footerLength() - 8);
       dirOffset = input.readLong();
@@ -168,7 +168,7 @@ public class BlockTermsReader : FieldsProducer {
   }
   
   @Override
-  public void close() throws IOException {
+  public void close()  {
     try {
       try {
         if (indexReader != null) {
@@ -196,8 +196,8 @@ public class BlockTermsReader : FieldsProducer {
   }
 
   @Override
-  public Terms terms(String field) throws IOException {
-    assert field != null;
+  public Terms terms(String field)  {
+    Debug.Assert( field != null;
     return fields.get(field);
   }
 
@@ -216,7 +216,7 @@ public class BlockTermsReader : FieldsProducer {
     final int longsSize;
 
     FieldReader(FieldInfo fieldInfo, long numTerms, long termsStartPointer, long sumTotalTermFreq, long sumDocFreq, int docCount, int longsSize) {
-      assert numTerms > 0;
+      Debug.Assert( numTerms > 0;
       this.fieldInfo = fieldInfo;
       this.numTerms = numTerms;
       this.termsStartPointer = termsStartPointer;
@@ -232,27 +232,27 @@ public class BlockTermsReader : FieldsProducer {
     }
 
     @Override
-    public TermsEnum iterator(TermsEnum reuse) throws IOException {
+    public TermsEnum iterator(TermsEnum reuse)  {
       return new SegmentTermsEnum();
     }
 
     @Override
-    public boolean hasFreqs() {
+    public bool hasFreqs() {
       return fieldInfo.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS) >= 0;
     }
 
     @Override
-    public boolean hasOffsets() {
+    public bool hasOffsets() {
       return fieldInfo.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS) >= 0;
     }
 
     @Override
-    public boolean hasPositions() {
+    public bool hasPositions() {
       return fieldInfo.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS) >= 0;
     }
     
     @Override
-    public boolean hasPayloads() {
+    public bool hasPayloads() {
       return fieldInfo.hasPayloads();
     }
 
@@ -267,12 +267,12 @@ public class BlockTermsReader : FieldsProducer {
     }
 
     @Override
-    public long getSumDocFreq() throws IOException {
+    public long getSumDocFreq()  {
       return sumDocFreq;
     }
 
     @Override
-    public int getDocCount() throws IOException {
+    public int getDocCount()  {
       return docCount;
     }
 
@@ -280,7 +280,7 @@ public class BlockTermsReader : FieldsProducer {
     private final class SegmentTermsEnum extends TermsEnum {
       private final IndexInput in;
       private final BlockTermState state;
-      private final boolean doOrd;
+      private final bool doOrd;
       private final FieldAndTerm fieldTerm = new FieldAndTerm();
       private final TermsIndexReaderBase.FieldIndexEnum indexEnum;
       private final BytesRef term = new BytesRef();
@@ -289,11 +289,11 @@ public class BlockTermsReader : FieldsProducer {
          for the current term. We set it to true on seeking, and then it
          remains valid until next() is called enough times to load another
          terms block: */
-      private boolean indexIsCurrent;
+      private bool indexIsCurrent;
 
       /* True if we've already called .next() on the indexEnum, to "bracket"
          the current block of terms: */
-      private boolean didIndexNext;
+      private bool didIndexNext;
 
       /* Next index term, bracketing the current block of terms; this is
          only valid if didIndexNext is true: */
@@ -301,7 +301,7 @@ public class BlockTermsReader : FieldsProducer {
 
       /* True after seekExact(TermState), do defer seeking.  If the app then
          calls next() (which is not "typical"), then we'll do the real seek */
-      private boolean seekPending;
+      private bool seekPending;
 
       /* How many blocks we've read since last seek.  Once this
          is >= indexEnum.getDivisor() we set indexIsCurrent to false (since
@@ -325,7 +325,7 @@ public class BlockTermsReader : FieldsProducer {
       private byte[] bytes;
       private ByteArrayDataInput bytesReader;
 
-      public SegmentTermsEnum() throws IOException {
+      public SegmentTermsEnum()  {
         in = BlockTermsReader.this.in.clone();
         in.seek(termsStartPointer);
         indexEnum = indexReader.getFieldEnum(fieldInfo);
@@ -353,7 +353,7 @@ public class BlockTermsReader : FieldsProducer {
       // return NOT_FOUND so it's a waste for us to fill in
       // the term that was actually NOT_FOUND
       @Override
-      public SeekStatus seekCeil(final BytesRef target) throws IOException {
+      public SeekStatus seekCeil(final BytesRef target)  {
 
         if (indexEnum == null) {
           throw new IllegalStateException("terms index was not loaded");
@@ -368,7 +368,7 @@ public class BlockTermsReader : FieldsProducer {
           }
         }
 
-        boolean doSeek = true;
+        bool doSeek = true;
 
         // See if we can avoid seeking, because target term
         // is after current term but before next index term:
@@ -408,11 +408,11 @@ public class BlockTermsReader : FieldsProducer {
           // Ask terms index to find biggest indexed term (=
           // first term in a block) that's <= our text:
           in.seek(indexEnum.seek(target));
-          boolean result = nextBlock();
+          bool result = nextBlock();
 
           // Block must exist since, at least, the indexed term
           // is in the block:
-          assert result;
+          Debug.Assert( result;
 
           indexIsCurrent = true;
           didIndexNext = false;
@@ -487,7 +487,7 @@ public class BlockTermsReader : FieldsProducer {
               // Target's prefix is before the common prefix
               // of this block, so we position to start of
               // block and return NOT_FOUND:
-              assert state.termBlockOrd == 0;
+              Debug.Assert( state.termBlockOrd == 0;
 
               final int suffix = termSuffixesReader.readVInt();
               term.length = termBlockPrefix + suffix;
@@ -514,7 +514,7 @@ public class BlockTermsReader : FieldsProducer {
             final int termLen = termBlockPrefix + suffix;
             int bytePos = termSuffixesReader.getPosition();
 
-            boolean next = false;
+            bool next = false;
             final int limit = target.offset + (termLen < target.length ? termLen : target.length);
             int targetPos = target.offset + termBlockPrefix;
             while(targetPos < limit) {
@@ -574,7 +574,7 @@ public class BlockTermsReader : FieldsProducer {
           // cross another index term (besides the first
           // one) while we are scanning:
 
-          assert indexIsCurrent;
+          Debug.Assert( indexIsCurrent;
 
           if (!nextBlock()) {
             //System.out.println("  END");
@@ -586,7 +586,7 @@ public class BlockTermsReader : FieldsProducer {
       }
 
       @Override
-      public BytesRef next() throws IOException {
+      public BytesRef next()  {
         //System.out.println("BTR.next() seekPending=" + seekPending + " pendingSeekCount=" + state.termBlockOrd);
 
         // If seek was previously called and the term was cached,
@@ -595,21 +595,21 @@ public class BlockTermsReader : FieldsProducer {
         // this method catches up all internal state so next()
         // works properly:
         if (seekPending) {
-          assert !indexIsCurrent;
+          Debug.Assert( !indexIsCurrent;
           in.seek(state.blockFilePointer);
           final int pendingSeekCount = state.termBlockOrd;
-          boolean result = nextBlock();
+          bool result = nextBlock();
 
           final long savOrd = state.ord;
 
           // Block must exist since seek(TermState) was called w/ a
           // TermState previously returned by this enum when positioned
           // on a real term:
-          assert result;
+          Debug.Assert( result;
 
           while(state.termBlockOrd < pendingSeekCount) {
             BytesRef nextResult = _next();
-            assert nextResult != null;
+            Debug.Assert( nextResult != null;
           }
           seekPending = false;
           state.ord = savOrd;
@@ -620,7 +620,7 @@ public class BlockTermsReader : FieldsProducer {
       /* Decodes only the term bytes of the next term.  If caller then asks for
          metadata, ie docFreq, totalTermFreq or pulls a D/&PEnum, we then (lazily)
          decode all metadata up to the current term. */
-      private BytesRef _next() throws IOException {
+      private BytesRef _next()  {
         //System.out.println("BTR._next seg=" + segment + " this=" + this + " termCount=" + state.termBlockOrd + " (vs " + blockTermCount + ")");
         if (state.termBlockOrd == blockTermCount && !nextBlock()) {
           //System.out.println("  eof");
@@ -652,7 +652,7 @@ public class BlockTermsReader : FieldsProducer {
       }
 
       @Override
-      public int docFreq() throws IOException {
+      public int docFreq()  {
         //System.out.println("BTR.docFreq");
         decodeMetaData();
         //System.out.println("  return " + state.docFreq);
@@ -660,13 +660,13 @@ public class BlockTermsReader : FieldsProducer {
       }
 
       @Override
-      public long totalTermFreq() throws IOException {
+      public long totalTermFreq()  {
         decodeMetaData();
         return state.totalTermFreq;
       }
 
       @Override
-      public DocsEnum docs(Bits liveDocs, DocsEnum reuse, int flags) throws IOException {
+      public DocsEnum docs(Bits liveDocs, DocsEnum reuse, int flags)  {
         //System.out.println("BTR.docs this=" + this);
         decodeMetaData();
         //System.out.println("BTR.docs:  state.docFreq=" + state.docFreq);
@@ -674,7 +674,7 @@ public class BlockTermsReader : FieldsProducer {
       }
 
       @Override
-      public DocsAndPositionsEnum docsAndPositions(Bits liveDocs, DocsAndPositionsEnum reuse, int flags) throws IOException {
+      public DocsAndPositionsEnum docsAndPositions(Bits liveDocs, DocsAndPositionsEnum reuse, int flags)  {
         if (fieldInfo.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS) < 0) {
           // Positions were not indexed:
           return null;
@@ -687,8 +687,8 @@ public class BlockTermsReader : FieldsProducer {
       @Override
       public void seekExact(BytesRef target, TermState otherState) {
         //System.out.println("BTR.seekExact termState target=" + target.utf8ToString() + " " + target + " this=" + this);
-        assert otherState != null && otherState instanceof BlockTermState;
-        assert !doOrd || ((BlockTermState) otherState).ord < numTerms;
+        Debug.Assert( otherState != null && otherState instanceof BlockTermState;
+        Debug.Assert( !doOrd || ((BlockTermState) otherState).ord < numTerms;
         state.copyFrom(otherState);
         seekPending = true;
         indexIsCurrent = false;
@@ -696,7 +696,7 @@ public class BlockTermsReader : FieldsProducer {
       }
       
       @Override
-      public TermState termState() throws IOException {
+      public TermState termState()  {
         //System.out.println("BTR.termState this=" + this);
         decodeMetaData();
         TermState ts = state.clone();
@@ -705,22 +705,22 @@ public class BlockTermsReader : FieldsProducer {
       }
 
       @Override
-      public void seekExact(long ord) throws IOException {
+      public void seekExact(long ord)  {
         //System.out.println("BTR.seek by ord ord=" + ord);
         if (indexEnum == null) {
           throw new IllegalStateException("terms index was not loaded");
         }
 
-        assert ord < numTerms;
+        Debug.Assert( ord < numTerms;
 
         // TODO: if ord is in same terms block and
         // after current ord, we should avoid this seek just
         // like we do in the seek(BytesRef) case
         in.seek(indexEnum.seek(ord));
-        boolean result = nextBlock();
+        bool result = nextBlock();
 
         // Block must exist since ord < numTerms:
-        assert result;
+        Debug.Assert( result;
 
         indexIsCurrent = true;
         didIndexNext = false;
@@ -728,16 +728,16 @@ public class BlockTermsReader : FieldsProducer {
         seekPending = false;
 
         state.ord = indexEnum.ord()-1;
-        assert state.ord >= -1: "ord=" + state.ord;
+        Debug.Assert( state.ord >= -1: "ord=" + state.ord;
         term.copyBytes(indexEnum.term());
 
         // Now, scan:
         int left = (int) (ord - state.ord);
         while(left > 0) {
           final BytesRef term = _next();
-          assert term != null;
+          Debug.Assert( term != null;
           left--;
-          assert indexIsCurrent;
+          Debug.Assert( indexIsCurrent;
         }
       }
 
@@ -758,7 +758,7 @@ public class BlockTermsReader : FieldsProducer {
          intensive consumes (eg certain MTQs, respelling) to
          not pay the price of decoding metadata they won't
          use. */
-      private boolean nextBlock() throws IOException {
+      private bool nextBlock()  {
 
         // TODO: we still lazy-decode the byte[] for each
         // term (the suffix), but, if we decoded
@@ -813,7 +813,7 @@ public class BlockTermsReader : FieldsProducer {
         return true;
       }
      
-      private void decodeMetaData() throws IOException {
+      private void decodeMetaData()  {
         //System.out.println("BTR.decodeMetadata mdUpto=" + metaDataUpto + " vs termCount=" + state.termBlockOrd + " state=" + state);
         if (!seekPending) {
           // TODO: cutover to random-access API
@@ -823,7 +823,7 @@ public class BlockTermsReader : FieldsProducer {
 
           // lazily catch up on metadata decode:
           final int limit = state.termBlockOrd;
-          boolean absolute = metaDataUpto == 0;
+          bool absolute = metaDataUpto == 0;
           // TODO: better API would be "jump straight to term=N"???
           while (metaDataUpto < limit) {
             //System.out.println("  decode mdUpto=" + metaDataUpto);
@@ -866,7 +866,7 @@ public class BlockTermsReader : FieldsProducer {
   }
 
   @Override
-  public void checkIntegrity() throws IOException {   
+  public void checkIntegrity()  {   
     // verify terms
     if (version >= BlockTermsWriter.VERSION_CHECKSUM) {
       CodecUtil.checksumEntireFile(in);

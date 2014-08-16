@@ -36,12 +36,12 @@ import org.apache.lucene.store.IOContext;
 public class SimpleTextTermVectorsFormat extends TermVectorsFormat {
 
   @Override
-  public TermVectorsReader vectorsReader(Directory directory, SegmentInfo segmentInfo, FieldInfos fieldInfos, IOContext context) throws IOException {
+  public TermVectorsReader vectorsReader(Directory directory, SegmentInfo segmentInfo, FieldInfos fieldInfos, IOContext context)  {
     return new SimpleTextTermVectorsReader(directory, segmentInfo, context);
   }
 
   @Override
-  public TermVectorsWriter vectorsWriter(Directory directory, SegmentInfo segmentInfo, IOContext context) throws IOException {
+  public TermVectorsWriter vectorsWriter(Directory directory, SegmentInfo segmentInfo, IOContext context)  {
     return new SimpleTextTermVectorsWriter(directory, segmentInfo.name, context);
   }
 }

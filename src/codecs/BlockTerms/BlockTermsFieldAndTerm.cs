@@ -10,33 +10,37 @@ namespace Lucene.Net.Codecs.BlockTerms
     /// <summary>
     /// Used as key for the terms cache
     /// </summary>
-    internal static class BlockTermsFieldAndTerm : DoubleBarrelLRUCache.CloneableKey
+    internal class BlockTermsFieldAndTerm : DoubleBarrelLRUCache.CloneableKey
     {
 
-    String field;
-    BytesRef term;
+        public String Field { get; set; }
+        public BytesRef Term { get; set; }
 
-    public FieldAndTerm() {
-    }
+        public FieldAndTerm()
+        {
+        }
 
-    public FieldAndTerm(FieldAndTerm other) {
-      field = other.field;
-      term = BytesRef.deepCopyOf(other.term);
-    }
+        public FieldAndTerm(FieldAndTerm other)
+        {
+            Field = other.Field;
+            Term = BytesRef.DeepCopyOf(other.Term);
+        }
 
-    public override boolean equals(Object _other) {
-      FieldAndTerm other = (FieldAndTerm) _other;
-      return other.field.equals(field) && term.bytesEquals(other.term);
-    }
+        public override bool Equals(Object _other)
+        {
+            FieldAndTerm other = (FieldAndTerm) _other;
+            return other.Field.equals(field) && Term.BytesEquals(other.Term);
+        }
 
-    public override FieldAndTerm clone() {
-      return new FieldAndTerm(this);
-    }
+        public override FieldAndTerm Clone()
+        {
+            return new FieldAndTerm(this);
+        }
 
-    public override int hashCode() {
-      return field.hashCode() * 31 + term.hashCode();
-    }
-  }
-
+        public override int GetHashCode()
+        {
+            return Field.GetHashCode()*31 + Term.GetHashCode();
+        }
     }
 }
+

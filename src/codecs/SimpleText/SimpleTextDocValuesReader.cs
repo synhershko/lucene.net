@@ -63,7 +63,7 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
     String pattern;
     String ordPattern;
     int maxLength;
-    boolean fixedLength;
+    bool fixedLength;
     long minValue;
     long numValues;
   }
@@ -73,7 +73,7 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
   final BytesRef scratch = new BytesRef();
   final Map<String,OneField> fields = new HashMap<>();
   
-  public SimpleTextDocValuesReader(SegmentReadState state, String ext) throws IOException {
+  public SimpleTextDocValuesReader(SegmentReadState state, String ext)  {
     // System.out.println("dir=" + state.directory + " seg=" + state.segmentInfo.name + " file=" + IndexFileNames.segmentFileName(state.segmentInfo.name, state.segmentSuffix, ext));
     data = state.directory.openInput(IndexFileNames.segmentFileName(state.segmentInfo.name, state.segmentSuffix, ext), state.context);
     maxDoc = state.segmentInfo.getDocCount();
@@ -83,7 +83,7 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
       if (scratch.equals(END)) {
         break;
       }
-      assert startsWith(FIELD) : scratch.utf8ToString();
+      Debug.Assert( startsWith(FIELD) : scratch.utf8ToString();
       String fieldName = stripPrefix(FIELD);
       //System.out.println("  field=" + fieldName);
 
@@ -91,61 +91,61 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
       fields.put(fieldName, field);
 
       readLine();
-      assert startsWith(TYPE) : scratch.utf8ToString();
+      Debug.Assert( startsWith(TYPE) : scratch.utf8ToString();
 
       DocValuesType dvType = DocValuesType.valueOf(stripPrefix(TYPE));
-      assert dvType != null;
+      Debug.Assert( dvType != null;
       if (dvType == DocValuesType.NUMERIC) {
         readLine();
-        assert startsWith(MINVALUE): "got " + scratch.utf8ToString() + " field=" + fieldName + " ext=" + ext;
+        Debug.Assert( startsWith(MINVALUE): "got " + scratch.utf8ToString() + " field=" + fieldName + " ext=" + ext;
         field.minValue = Long.parseLong(stripPrefix(MINVALUE));
         readLine();
-        assert startsWith(PATTERN);
+        Debug.Assert( startsWith(PATTERN);
         field.pattern = stripPrefix(PATTERN);
         field.dataStartFilePointer = data.getFilePointer();
         data.seek(data.getFilePointer() + (1+field.pattern.length()+2) * maxDoc);
       } else if (dvType == DocValuesType.BINARY) {
         readLine();
-        assert startsWith(MAXLENGTH);
+        Debug.Assert( startsWith(MAXLENGTH);
         field.maxLength = Integer.parseInt(stripPrefix(MAXLENGTH));
         readLine();
-        assert startsWith(PATTERN);
+        Debug.Assert( startsWith(PATTERN);
         field.pattern = stripPrefix(PATTERN);
         field.dataStartFilePointer = data.getFilePointer();
         data.seek(data.getFilePointer() + (9+field.pattern.length()+field.maxLength+2) * maxDoc);
       } else if (dvType == DocValuesType.SORTED || dvType == DocValuesType.SORTED_SET) {
         readLine();
-        assert startsWith(NUMVALUES);
+        Debug.Assert( startsWith(NUMVALUES);
         field.numValues = Long.parseLong(stripPrefix(NUMVALUES));
         readLine();
-        assert startsWith(MAXLENGTH);
+        Debug.Assert( startsWith(MAXLENGTH);
         field.maxLength = Integer.parseInt(stripPrefix(MAXLENGTH));
         readLine();
-        assert startsWith(PATTERN);
+        Debug.Assert( startsWith(PATTERN);
         field.pattern = stripPrefix(PATTERN);
         readLine();
-        assert startsWith(ORDPATTERN);
+        Debug.Assert( startsWith(ORDPATTERN);
         field.ordPattern = stripPrefix(ORDPATTERN);
         field.dataStartFilePointer = data.getFilePointer();
         data.seek(data.getFilePointer() + (9+field.pattern.length()+field.maxLength) * field.numValues + (1+field.ordPattern.length())*maxDoc);
       } else {
-        throw new AssertionError();
+        throw new Debug.Assert(ionError();
       }
     }
 
     // We should only be called from above if at least one
     // field has DVs:
-    assert !fields.isEmpty();
+    Debug.Assert( !fields.isEmpty();
   }
 
   @Override
-  public NumericDocValues getNumeric(FieldInfo fieldInfo) throws IOException {
+  public NumericDocValues getNumeric(FieldInfo fieldInfo)  {
     final OneField field = fields.get(fieldInfo.name);
-    assert field != null;
+    Debug.Assert( field != null;
 
     // SegmentCoreReaders already verifies this field is
     // valid:
-    assert field != null: "field=" + fieldInfo.name + " fields=" + fields;
+    Debug.Assert( field != null: "field=" + fieldInfo.name + " fields=" + fields;
 
     final IndexInput in = data.clone();
     final BytesRef scratch = new BytesRef();
@@ -181,13 +181,13 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
     };
   }
   
-  private Bits getNumericDocsWithField(FieldInfo fieldInfo) throws IOException {
+  private Bits getNumericDocsWithField(FieldInfo fieldInfo)  {
     final OneField field = fields.get(fieldInfo.name);
     final IndexInput in = data.clone();
     final BytesRef scratch = new BytesRef();
     return new Bits() {
       @Override
-      public boolean get(int index) {
+      public bool get(int index) {
         try {
           in.seek(field.dataStartFilePointer + (1+field.pattern.length()+2)*index);
           SimpleTextUtil.readLine(in, scratch); // data
@@ -206,12 +206,12 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
   }
 
   @Override
-  public BinaryDocValues getBinary(FieldInfo fieldInfo) throws IOException {
+  public BinaryDocValues getBinary(FieldInfo fieldInfo)  {
     final OneField field = fields.get(fieldInfo.name);
 
     // SegmentCoreReaders already verifies this field is
     // valid:
-    assert field != null;
+    Debug.Assert( field != null;
 
     final IndexInput in = data.clone();
     final BytesRef scratch = new BytesRef();
@@ -226,7 +226,7 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
           }
           in.seek(field.dataStartFilePointer + (9+field.pattern.length() + field.maxLength+2)*docID);
           SimpleTextUtil.readLine(in, scratch);
-          assert StringHelper.startsWith(scratch, LENGTH);
+          Debug.Assert( StringHelper.startsWith(scratch, LENGTH);
           int len;
           try {
             len = decoder.parse(new String(scratch.bytes, scratch.offset + LENGTH.length, scratch.length - LENGTH.length, StandardCharsets.UTF_8)).intValue();
@@ -246,7 +246,7 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
     };
   }
   
-  private Bits getBinaryDocsWithField(FieldInfo fieldInfo) throws IOException {
+  private Bits getBinaryDocsWithField(FieldInfo fieldInfo)  {
     final OneField field = fields.get(fieldInfo.name);
     final IndexInput in = data.clone();
     final BytesRef scratch = new BytesRef();
@@ -254,11 +254,11 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
 
     return new Bits() {
       @Override
-      public boolean get(int index) {
+      public bool get(int index) {
         try {
           in.seek(field.dataStartFilePointer + (9+field.pattern.length() + field.maxLength+2)*index);
           SimpleTextUtil.readLine(in, scratch);
-          assert StringHelper.startsWith(scratch, LENGTH);
+          Debug.Assert( StringHelper.startsWith(scratch, LENGTH);
           int len;
           try {
             len = decoder.parse(new String(scratch.bytes, scratch.offset + LENGTH.length, scratch.length - LENGTH.length, StandardCharsets.UTF_8)).intValue();
@@ -286,12 +286,12 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
   }
 
   @Override
-  public SortedDocValues getSorted(FieldInfo fieldInfo) throws IOException {
+  public SortedDocValues getSorted(FieldInfo fieldInfo)  {
     final OneField field = fields.get(fieldInfo.name);
 
     // SegmentCoreReaders already verifies this field is
     // valid:
-    assert field != null;
+    Debug.Assert( field != null;
 
     final IndexInput in = data.clone();
     final BytesRef scratch = new BytesRef();
@@ -327,7 +327,7 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
           }
           in.seek(field.dataStartFilePointer + ord * (9 + field.pattern.length() + field.maxLength));
           SimpleTextUtil.readLine(in, scratch);
-          assert StringHelper.startsWith(scratch, LENGTH): "got " + scratch.utf8ToString() + " in=" + in;
+          Debug.Assert( StringHelper.startsWith(scratch, LENGTH): "got " + scratch.utf8ToString() + " in=" + in;
           int len;
           try {
             len = decoder.parse(new String(scratch.bytes, scratch.offset + LENGTH.length, scratch.length - LENGTH.length, StandardCharsets.UTF_8)).intValue();
@@ -353,12 +353,12 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
   }
 
   @Override
-  public SortedSetDocValues getSortedSet(FieldInfo fieldInfo) throws IOException {
+  public SortedSetDocValues getSortedSet(FieldInfo fieldInfo)  {
     final OneField field = fields.get(fieldInfo.name);
 
     // SegmentCoreReaders already verifies this field is
     // valid:
-    assert field != null;
+    Debug.Assert( field != null;
 
     final IndexInput in = data.clone();
     final BytesRef scratch = new BytesRef();
@@ -405,7 +405,7 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
           }
           in.seek(field.dataStartFilePointer + ord * (9 + field.pattern.length() + field.maxLength));
           SimpleTextUtil.readLine(in, scratch);
-          assert StringHelper.startsWith(scratch, LENGTH): "got " + scratch.utf8ToString() + " in=" + in;
+          Debug.Assert( StringHelper.startsWith(scratch, LENGTH): "got " + scratch.utf8ToString() + " in=" + in;
           int len;
           try {
             len = decoder.parse(new String(scratch.bytes, scratch.offset + LENGTH.length, scratch.length - LENGTH.length, StandardCharsets.UTF_8)).intValue();
@@ -431,7 +431,7 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
   }
   
   @Override
-  public Bits getDocsWithField(FieldInfo field) throws IOException {
+  public Bits getDocsWithField(FieldInfo field)  {
     switch (field.getDocValuesType()) {
       case SORTED_SET:
         return DocValues.docsWithValue(getSortedSet(field), maxDoc);
@@ -442,28 +442,28 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
       case NUMERIC:
         return getNumericDocsWithField(field);
       default:
-        throw new AssertionError();
+        throw new Debug.Assert(ionError();
     }
   }
 
   @Override
-  public void close() throws IOException {
+  public void close()  {
     data.close();
   }
 
   /** Used only in ctor: */
-  private void readLine() throws IOException {
+  private void readLine()  {
     SimpleTextUtil.readLine(data, scratch);
     //System.out.println("line: " + scratch.utf8ToString());
   }
 
   /** Used only in ctor: */
-  private boolean startsWith(BytesRef prefix) {
+  private bool startsWith(BytesRef prefix) {
     return StringHelper.startsWith(scratch, prefix);
   }
 
   /** Used only in ctor: */
-  private String stripPrefix(BytesRef prefix) throws IOException {
+  private String stripPrefix(BytesRef prefix)  {
     return new String(scratch.bytes, scratch.offset + prefix.length, scratch.length - prefix.length, StandardCharsets.UTF_8);
   }
 
@@ -473,7 +473,7 @@ class SimpleTextDocValuesReader extends DocValuesProducer {
   }
 
   @Override
-  public void checkIntegrity() throws IOException {
+  public void checkIntegrity()  {
     BytesRef scratch = new BytesRef();
     IndexInput clone = data.clone();
     clone.seek(0);

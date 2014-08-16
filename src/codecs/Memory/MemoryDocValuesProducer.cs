@@ -98,12 +98,12 @@ class MemoryDocValuesProducer extends DocValuesProducer {
   static final int VERSION_CHECKSUM = 2;
   static final int VERSION_CURRENT = VERSION_CHECKSUM;
     
-  MemoryDocValuesProducer(SegmentReadState state, String dataCodec, String dataExtension, String metaCodec, String metaExtension) throws IOException {
+  MemoryDocValuesProducer(SegmentReadState state, String dataCodec, String dataExtension, String metaCodec, String metaExtension)  {
     maxDoc = state.segmentInfo.getDocCount();
     String metaName = IndexFileNames.segmentFileName(state.segmentInfo.name, state.segmentSuffix, metaExtension);
     // read in the entries from the metadata file.
     ChecksumIndexInput in = state.directory.openChecksumInput(metaName, state.context);
-    boolean success = false;
+    bool success = false;
     try {
       version = CodecUtil.checkHeader(in, metaCodec, 
                                       VERSION_START,
@@ -146,7 +146,7 @@ class MemoryDocValuesProducer extends DocValuesProducer {
     }
   }
   
-  private void readFields(IndexInput meta, FieldInfos infos) throws IOException {
+  private void readFields(IndexInput meta, FieldInfos infos)  {
     int fieldNumber = meta.readVInt();
     while (fieldNumber != -1) {
       int fieldType = meta.readByte();
@@ -203,7 +203,7 @@ class MemoryDocValuesProducer extends DocValuesProducer {
   }
 
   @Override
-  public synchronized NumericDocValues getNumeric(FieldInfo field) throws IOException {
+  public synchronized NumericDocValues getNumeric(FieldInfo field)  {
     NumericDocValues instance = numericInstances.get(field.number);
     if (instance == null) {
       instance = loadNumeric(field);
@@ -218,13 +218,13 @@ class MemoryDocValuesProducer extends DocValuesProducer {
   }
   
   @Override
-  public void checkIntegrity() throws IOException {
+  public void checkIntegrity()  {
     if (version >= VERSION_CHECKSUM) {
       CodecUtil.checksumEntireFile(data);
     }
   }
   
-  private NumericDocValues loadNumeric(FieldInfo field) throws IOException {
+  private NumericDocValues loadNumeric(FieldInfo field)  {
     NumericEntry entry = numerics.get(field.number);
     data.seek(entry.offset + entry.missingBytes);
     switch (entry.format) {
@@ -275,12 +275,12 @@ class MemoryDocValuesProducer extends DocValuesProducer {
           }
         };
       default:
-        throw new AssertionError();
+        throw new Debug.Assert(ionError();
     }
   }
 
   @Override
-  public synchronized BinaryDocValues getBinary(FieldInfo field) throws IOException {
+  public synchronized BinaryDocValues getBinary(FieldInfo field)  {
     BinaryDocValues instance = binaryInstances.get(field.number);
     if (instance == null) {
       instance = loadBinary(field);
@@ -289,7 +289,7 @@ class MemoryDocValuesProducer extends DocValuesProducer {
     return instance;
   }
   
-  private BinaryDocValues loadBinary(FieldInfo field) throws IOException {
+  private BinaryDocValues loadBinary(FieldInfo field)  {
     BinaryEntry entry = binaries.get(field.number);
     data.seek(entry.offset);
     PagedBytes bytes = new PagedBytes(16);
@@ -320,7 +320,7 @@ class MemoryDocValuesProducer extends DocValuesProducer {
   }
   
   @Override
-  public SortedDocValues getSorted(FieldInfo field) throws IOException {
+  public SortedDocValues getSorted(FieldInfo field)  {
     final FSTEntry entry = fsts.get(field.number);
     if (entry.numOrds == 0) {
       return DocValues.EMPTY_SORTED;
@@ -395,7 +395,7 @@ class MemoryDocValuesProducer extends DocValuesProducer {
   }
   
   @Override
-  public SortedSetDocValues getSortedSet(FieldInfo field) throws IOException {
+  public SortedSetDocValues getSortedSet(FieldInfo field)  {
     final FSTEntry entry = fsts.get(field.number);
     if (entry.numOrds == 0) {
       return DocValues.EMPTY_SORTED_SET; // empty FST!
@@ -484,7 +484,7 @@ class MemoryDocValuesProducer extends DocValuesProducer {
     };
   }
   
-  private Bits getMissingBits(int fieldNumber, final long offset, final long length) throws IOException {
+  private Bits getMissingBits(int fieldNumber, final long offset, final long length)  {
     if (offset == -1) {
       return new Bits.MatchAllBits(maxDoc);
     } else {
@@ -494,7 +494,7 @@ class MemoryDocValuesProducer extends DocValuesProducer {
         if (instance == null) {
           IndexInput data = this.data.clone();
           data.seek(offset);
-          assert length % 8 == 0;
+          Debug.Assert( length % 8 == 0;
           long bits[] = new long[(int) length >> 3];
           for (int i = 0; i < bits.length; i++) {
             bits[i] = data.readLong();
@@ -508,7 +508,7 @@ class MemoryDocValuesProducer extends DocValuesProducer {
   }
   
   @Override
-  public Bits getDocsWithField(FieldInfo field) throws IOException {
+  public Bits getDocsWithField(FieldInfo field)  {
     switch(field.getDocValuesType()) {
       case SORTED_SET:
         return DocValues.docsWithValue(getSortedSet(field), maxDoc);
@@ -521,12 +521,12 @@ class MemoryDocValuesProducer extends DocValuesProducer {
         NumericEntry ne = numerics.get(field.number);
         return getMissingBits(field.number, ne.missingOffset, ne.missingBytes);
       default: 
-        throw new AssertionError();
+        throw new Debug.Assert(ionError();
     }
   }
 
   @Override
-  public void close() throws IOException {
+  public void close()  {
     data.close();
   }
   
@@ -574,7 +574,7 @@ class MemoryDocValuesProducer extends DocValuesProducer {
     }
 
     @Override
-    public BytesRef next() throws IOException {
+    public BytesRef next()  {
       InputOutput<Long> io = in.next();
       if (io == null) {
         return null;
@@ -589,7 +589,7 @@ class MemoryDocValuesProducer extends DocValuesProducer {
     }
 
     @Override
-    public SeekStatus seekCeil(BytesRef text) throws IOException {
+    public SeekStatus seekCeil(BytesRef text)  {
       if (in.seekCeil(text) == null) {
         return SeekStatus.END;
       } else if (term().equals(text)) {
@@ -602,7 +602,7 @@ class MemoryDocValuesProducer extends DocValuesProducer {
     }
 
     @Override
-    public boolean seekExact(BytesRef text) throws IOException {
+    public bool seekExact(BytesRef text)  {
       if (in.seekExact(text) == null) {
         return false;
       } else {
@@ -611,7 +611,7 @@ class MemoryDocValuesProducer extends DocValuesProducer {
     }
 
     @Override
-    public void seekExact(long ord) throws IOException {
+    public void seekExact(long ord)  {
       // TODO: would be better to make this simpler and faster.
       // but we dont want to introduce a bug that corrupts our enum state!
       bytesReader.setPosition(0);
@@ -626,32 +626,32 @@ class MemoryDocValuesProducer extends DocValuesProducer {
     }
 
     @Override
-    public BytesRef term() throws IOException {
+    public BytesRef term()  {
       return in.current().input;
     }
 
     @Override
-    public long ord() throws IOException {
+    public long ord()  {
       return in.current().output;
     }
 
     @Override
-    public int docFreq() throws IOException {
+    public int docFreq()  {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public long totalTermFreq() throws IOException {
+    public long totalTermFreq()  {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public DocsEnum docs(Bits liveDocs, DocsEnum reuse, int flags) throws IOException {
+    public DocsEnum docs(Bits liveDocs, DocsEnum reuse, int flags)  {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public DocsAndPositionsEnum docsAndPositions(Bits liveDocs, DocsAndPositionsEnum reuse, int flags) throws IOException {
+    public DocsAndPositionsEnum docsAndPositions(Bits liveDocs, DocsAndPositionsEnum reuse, int flags)  {
       throw new UnsupportedOperationException();
     }
   }

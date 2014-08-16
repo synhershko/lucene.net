@@ -36,20 +36,20 @@ public abstract class IntIndexOutput implements Closeable {
 
   /** Write an int to the primary file.  The value must be
    * >= 0.  */
-  public abstract void write(int v) throws IOException;
+  public abstract void write(int v) ;
 
   /** Records a single skip-point in the IndexOutput. */
   public abstract static class Index {
 
     /** Internally records the current location */
-    public abstract void mark() throws IOException;
+    public abstract void mark() ;
 
     /** Copies index from other */
-    public abstract void copyFrom(Index other, boolean copyLast) throws IOException;
+    public abstract void copyFrom(Index other, bool copyLast) ;
 
     /** Writes "location" of current output pointer of primary
      *  output to different output (out) */
-    public abstract void write(DataOutput indexOut, boolean absolute) throws IOException;
+    public abstract void write(DataOutput indexOut, bool absolute) ;
   }
 
   /** If you are indexing the primary output file, call
@@ -57,5 +57,5 @@ public abstract class IntIndexOutput implements Closeable {
   public abstract Index index();
 
   @Override
-  public abstract void close() throws IOException;
+  public abstract void close() ;
 }

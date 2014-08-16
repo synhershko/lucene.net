@@ -70,11 +70,11 @@ class SimpleTextFieldsReader extends FieldsProducer {
   private final FieldInfos fieldInfos;
   private final int maxDoc;
 
-  public SimpleTextFieldsReader(SegmentReadState state) throws IOException {
+  public SimpleTextFieldsReader(SegmentReadState state)  {
     this.maxDoc = state.segmentInfo.getDocCount();
     fieldInfos = state.fieldInfos;
     in = state.directory.openInput(SimpleTextPostingsFormat.getPostingsFileName(state.segmentInfo.name, state.segmentSuffix), state.context);
-    boolean success = false;
+    bool success = false;
     try {
       fields = readFields(in.clone());
       success = true;
@@ -85,7 +85,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
     }
   }
   
-  private TreeMap<String,Long> readFields(IndexInput in) throws IOException {
+  private TreeMap<String,Long> readFields(IndexInput in)  {
     ChecksumIndexInput input = new BufferedChecksumIndexInput(in);
     BytesRef scratch = new BytesRef(10);
     TreeMap<String,Long> fields = new TreeMap<>();
@@ -107,7 +107,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
     private int docFreq;
     private long totalTermFreq;
     private long docsStart;
-    private boolean ended;
+    private bool ended;
     private final BytesRefFSTEnum<PairOutputs.Pair<Long,PairOutputs.Pair<Long,Long>>> fstEnum;
 
     public SimpleTextTermsEnum(FST<PairOutputs.Pair<Long,PairOutputs.Pair<Long,Long>>> fst, IndexOptions indexOptions) {
@@ -116,7 +116,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
     }
 
     @Override
-    public boolean seekExact(BytesRef text) throws IOException {
+    public bool seekExact(BytesRef text)  {
 
       final BytesRefFSTEnum.InputOutput<PairOutputs.Pair<Long,PairOutputs.Pair<Long,Long>>> result = fstEnum.seekExact(text);
       if (result != null) {
@@ -132,7 +132,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
     }
 
     @Override
-    public SeekStatus seekCeil(BytesRef text) throws IOException {
+    public SeekStatus seekCeil(BytesRef text)  {
 
       //System.out.println("seek to text=" + text.utf8ToString());
       final BytesRefFSTEnum.InputOutput<PairOutputs.Pair<Long,PairOutputs.Pair<Long,Long>>> result = fstEnum.seekCeil(text);
@@ -158,8 +158,8 @@ class SimpleTextFieldsReader extends FieldsProducer {
     }
 
     @Override
-    public BytesRef next() throws IOException {
-      assert !ended;
+    public BytesRef next()  {
+      Debug.Assert( !ended;
       final BytesRefFSTEnum.InputOutput<PairOutputs.Pair<Long,PairOutputs.Pair<Long,Long>>> result = fstEnum.next();
       if (result != null) {
         PairOutputs.Pair<Long,PairOutputs.Pair<Long,Long>> pair1 = result.output;
@@ -179,7 +179,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
     }
 
     @Override
-    public long ord() throws IOException {
+    public long ord()  {
       throw new UnsupportedOperationException();
     }
 
@@ -199,7 +199,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
     }
  
     @Override
-    public DocsEnum docs(Bits liveDocs, DocsEnum reuse, int flags) throws IOException {
+    public DocsEnum docs(Bits liveDocs, DocsEnum reuse, int flags)  {
       SimpleTextDocsEnum docsEnum;
       if (reuse != null && reuse instanceof SimpleTextDocsEnum && ((SimpleTextDocsEnum) reuse).canReuse(SimpleTextFieldsReader.this.in)) {
         docsEnum = (SimpleTextDocsEnum) reuse;
@@ -210,7 +210,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
     }
 
     @Override
-    public DocsAndPositionsEnum docsAndPositions(Bits liveDocs, DocsAndPositionsEnum reuse, int flags) throws IOException {
+    public DocsAndPositionsEnum docsAndPositions(Bits liveDocs, DocsAndPositionsEnum reuse, int flags)  {
 
       if (indexOptions.compareTo(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS) < 0) {
         // Positions were not indexed
@@ -235,7 +235,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
   private class SimpleTextDocsEnum extends DocsEnum {
     private final IndexInput inStart;
     private final IndexInput in;
-    private boolean omitTF;
+    private bool omitTF;
     private int docID = -1;
     private int tf;
     private Bits liveDocs;
@@ -248,11 +248,11 @@ class SimpleTextFieldsReader extends FieldsProducer {
       this.in = this.inStart.clone();
     }
 
-    public boolean canReuse(IndexInput in) {
+    public bool canReuse(IndexInput in) {
       return in == inStart;
     }
 
-    public SimpleTextDocsEnum reset(long fp, Bits liveDocs, boolean omitTF, int docFreq) throws IOException {
+    public SimpleTextDocsEnum reset(long fp, Bits liveDocs, bool omitTF, int docFreq)  {
       this.liveDocs = liveDocs;
       in.seek(fp);
       this.omitTF = omitTF;
@@ -268,16 +268,16 @@ class SimpleTextFieldsReader extends FieldsProducer {
     }
 
     @Override
-    public int freq() throws IOException {
+    public int freq()  {
       return tf;
     }
 
     @Override
-    public int nextDoc() throws IOException {
+    public int nextDoc()  {
       if (docID == NO_MORE_DOCS) {
         return docID;
       }
-      boolean first = true;
+      bool first = true;
       int termFreq = 0;
       while(true) {
         final long lineStart = in.getFilePointer();
@@ -306,7 +306,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
         } else if (StringHelper.startsWith(scratch, PAYLOAD)) {
           // skip
         } else {
-          assert StringHelper.startsWith(scratch, TERM) || StringHelper.startsWith(scratch, FIELD) || StringHelper.startsWith(scratch, END): "scratch=" + scratch.utf8ToString();
+          Debug.Assert( StringHelper.startsWith(scratch, TERM) || StringHelper.startsWith(scratch, FIELD) || StringHelper.startsWith(scratch, END): "scratch=" + scratch.utf8ToString();
           if (!first && (liveDocs == null || liveDocs.get(docID))) {
             in.seek(lineStart);
             if (!omitTF) {
@@ -320,7 +320,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
     }
 
     @Override
-    public int advance(int target) throws IOException {
+    public int advance(int target)  {
       // Naive -- better to index skip data
       return slowAdvance(target);
     }
@@ -343,8 +343,8 @@ class SimpleTextFieldsReader extends FieldsProducer {
     private final CharsRef scratchUTF16_2 = new CharsRef(10);
     private BytesRef payload;
     private long nextDocStart;
-    private boolean readOffsets;
-    private boolean readPositions;
+    private bool readOffsets;
+    private bool readPositions;
     private int startOffset;
     private int endOffset;
     private int cost;
@@ -354,7 +354,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
       this.in = inStart.clone();
     }
 
-    public boolean canReuse(IndexInput in) {
+    public bool canReuse(IndexInput in) {
       return in == inStart;
     }
 
@@ -378,13 +378,13 @@ class SimpleTextFieldsReader extends FieldsProducer {
     }
 
     @Override
-    public int freq() throws IOException {
+    public int freq()  {
       return tf;
     }
 
     @Override
-    public int nextDoc() throws IOException {
-      boolean first = true;
+    public int nextDoc()  {
+      bool first = true;
       in.seek(nextDocStart);
       long posStart = 0;
       while(true) {
@@ -414,7 +414,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
         } else if (StringHelper.startsWith(scratch, PAYLOAD)) {
           // skip
         } else {
-          assert StringHelper.startsWith(scratch, TERM) || StringHelper.startsWith(scratch, FIELD) || StringHelper.startsWith(scratch, END);
+          Debug.Assert( StringHelper.startsWith(scratch, TERM) || StringHelper.startsWith(scratch, FIELD) || StringHelper.startsWith(scratch, END);
           if (!first && (liveDocs == null || liveDocs.get(docID))) {
             nextDocStart = lineStart;
             in.seek(posStart);
@@ -426,17 +426,17 @@ class SimpleTextFieldsReader extends FieldsProducer {
     }
 
     @Override
-    public int advance(int target) throws IOException {
+    public int advance(int target)  {
       // Naive -- better to index skip data
       return slowAdvance(target);
     }
 
     @Override
-    public int nextPosition() throws IOException {
+    public int nextPosition()  {
       final int pos;
       if (readPositions) {
         SimpleTextUtil.readLine(in, scratch);
-        assert StringHelper.startsWith(scratch, POS): "got line=" + scratch.utf8ToString();
+        Debug.Assert( StringHelper.startsWith(scratch, POS): "got line=" + scratch.utf8ToString();
         UnicodeUtil.UTF8toUTF16(scratch.bytes, scratch.offset+POS.length, scratch.length-POS.length, scratchUTF16_2);
         pos = ArrayUtil.parseInt(scratchUTF16_2.chars, 0, scratchUTF16_2.length);
       } else {
@@ -445,11 +445,11 @@ class SimpleTextFieldsReader extends FieldsProducer {
 
       if (readOffsets) {
         SimpleTextUtil.readLine(in, scratch);
-        assert StringHelper.startsWith(scratch, START_OFFSET): "got line=" + scratch.utf8ToString();
+        Debug.Assert( StringHelper.startsWith(scratch, START_OFFSET): "got line=" + scratch.utf8ToString();
         UnicodeUtil.UTF8toUTF16(scratch.bytes, scratch.offset+START_OFFSET.length, scratch.length-START_OFFSET.length, scratchUTF16_2);
         startOffset = ArrayUtil.parseInt(scratchUTF16_2.chars, 0, scratchUTF16_2.length);
         SimpleTextUtil.readLine(in, scratch);
-        assert StringHelper.startsWith(scratch, END_OFFSET): "got line=" + scratch.utf8ToString();
+        Debug.Assert( StringHelper.startsWith(scratch, END_OFFSET): "got line=" + scratch.utf8ToString();
         UnicodeUtil.UTF8toUTF16(scratch.bytes, scratch.offset+END_OFFSET.length, scratch.length-END_OFFSET.length, scratchUTF16_2);
         endOffset = ArrayUtil.parseInt(scratchUTF16_2.chars, 0, scratchUTF16_2.length);
       }
@@ -472,12 +472,12 @@ class SimpleTextFieldsReader extends FieldsProducer {
     }
 
     @Override
-    public int startOffset() throws IOException {
+    public int startOffset()  {
       return startOffset;
     }
 
     @Override
-    public int endOffset() throws IOException {
+    public int endOffset()  {
       return endOffset;
     }
 
@@ -514,14 +514,14 @@ class SimpleTextFieldsReader extends FieldsProducer {
     private final BytesRef scratch = new BytesRef(10);
     private final CharsRef scratchUTF16 = new CharsRef(10);
 
-    public SimpleTextTerms(String field, long termsStart, int maxDoc) throws IOException {
+    public SimpleTextTerms(String field, long termsStart, int maxDoc)  {
       this.maxDoc = maxDoc;
       this.termsStart = termsStart;
       fieldInfo = fieldInfos.fieldInfo(field);
       loadTerms();
     }
 
-    private void loadTerms() throws IOException {
+    private void loadTerms()  {
       PositiveIntOutputs posIntOutputs = PositiveIntOutputs.getSingleton();
       final Builder<PairOutputs.Pair<Long,PairOutputs.Pair<Long,Long>>> b;
       final PairOutputs<Long,Long> outputsInner = new PairOutputs<>(posIntOutputs, posIntOutputs);
@@ -590,7 +590,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
     }
 
     @Override
-    public TermsEnum iterator(TermsEnum reuse) throws IOException {
+    public TermsEnum iterator(TermsEnum reuse)  {
       if (fst != null) {
         return new SimpleTextTermsEnum(fst, fieldInfo.getIndexOptions());
       } else {
@@ -614,32 +614,32 @@ class SimpleTextFieldsReader extends FieldsProducer {
     }
 
     @Override
-    public long getSumDocFreq() throws IOException {
+    public long getSumDocFreq()  {
       return sumDocFreq;
     }
 
     @Override
-    public int getDocCount() throws IOException {
+    public int getDocCount()  {
       return docCount;
     }
 
     @Override
-    public boolean hasFreqs() {
+    public bool hasFreqs() {
       return fieldInfo.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS) >= 0;
     }
 
     @Override
-    public boolean hasOffsets() {
+    public bool hasOffsets() {
       return fieldInfo.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS) >= 0;
     }
 
     @Override
-    public boolean hasPositions() {
+    public bool hasPositions() {
       return fieldInfo.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS) >= 0;
     }
     
     @Override
-    public boolean hasPayloads() {
+    public bool hasPayloads() {
       return fieldInfo.hasPayloads();
     }
   }
@@ -652,7 +652,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
   private final Map<String,SimpleTextTerms> termsCache = new HashMap<>();
 
   @Override
-  synchronized public Terms terms(String field) throws IOException {
+  synchronized public Terms terms(String field)  {
     Terms terms = termsCache.get(field);
     if (terms == null) {
       Long fp = fields.get(field);
@@ -672,7 +672,7 @@ class SimpleTextFieldsReader extends FieldsProducer {
   }
 
   @Override
-  public void close() throws IOException {
+  public void close()  {
     in.close();
   }
 
@@ -686,5 +686,5 @@ class SimpleTextFieldsReader extends FieldsProducer {
   }
 
   @Override
-  public void checkIntegrity() throws IOException {}
+  public void checkIntegrity()  {}
 }

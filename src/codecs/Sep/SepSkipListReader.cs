@@ -33,7 +33,7 @@ import org.apache.lucene.index.FieldInfo.IndexOptions;
 
 // TODO: rewrite this as recursive classes?
 class SepSkipListReader extends MultiLevelSkipListReader {
-  private boolean currentFieldStoresPayloads;
+  private bool currentFieldStoresPayloads;
   private IntIndexInput.Index freqIndex[];
   private IntIndexInput.Index docIndex[];
   private IntIndexInput.Index posIndex[];
@@ -54,7 +54,7 @@ class SepSkipListReader extends MultiLevelSkipListReader {
                     IntIndexInput posIn,
                     int maxSkipLevels,
                     int skipInterval)
-    throws IOException {
+     {
     super(skipStream, maxSkipLevels, skipInterval);
     if (freqIn != null) {
       freqIndex = new IntIndexInput.Index[maxSkipLevels];
@@ -100,7 +100,7 @@ class SepSkipListReader extends MultiLevelSkipListReader {
             IntIndexInput.Index posBaseIndex,
             long payloadBasePointer,
             int df,
-            boolean storesPayloads) {
+            bool storesPayloads) {
 
     super.init(skipPointer, df);
     this.currentFieldStoresPayloads = storesPayloads;
@@ -132,7 +132,7 @@ class SepSkipListReader extends MultiLevelSkipListReader {
   }
   
   @Override
-  protected void seekChild(int level) throws IOException {
+  protected void seekChild(int level)  {
     super.seekChild(level);
     payloadPointer[level] = lastPayloadPointer;
     payloadLength[level] = lastPayloadLength;
@@ -176,9 +176,9 @@ class SepSkipListReader extends MultiLevelSkipListReader {
   }
 
   @Override
-  protected int readSkipData(int level, IndexInput skipStream) throws IOException {
+  protected int readSkipData(int level, IndexInput skipStream)  {
     int delta;
-    assert indexOptions == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS || !currentFieldStoresPayloads;
+    Debug.Assert( indexOptions == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS || !currentFieldStoresPayloads;
     if (currentFieldStoresPayloads) {
       // the current field stores payloads.
       // if the doc delta is odd then we have

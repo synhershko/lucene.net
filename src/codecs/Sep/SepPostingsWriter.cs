@@ -85,7 +85,7 @@ public final class SepPostingsWriter extends PostingsWriterBase {
 
   final int totalNumDocs;
 
-  boolean storePayloads;
+  bool storePayloads;
   IndexOptions indexOptions;
 
   FieldInfo fieldInfo;
@@ -100,17 +100,17 @@ public final class SepPostingsWriter extends PostingsWriterBase {
   long lastPayloadFP;
   long lastSkipFP;
 
-  public SepPostingsWriter(SegmentWriteState state, IntStreamFactory factory) throws IOException {
+  public SepPostingsWriter(SegmentWriteState state, IntStreamFactory factory)  {
     this(state, factory, DEFAULT_SKIP_INTERVAL);
   }
 
-  public SepPostingsWriter(SegmentWriteState state, IntStreamFactory factory, int skipInterval) throws IOException {
+  public SepPostingsWriter(SegmentWriteState state, IntStreamFactory factory, int skipInterval)  {
     freqOut = null;
     freqIndex = null;
     posOut = null;
     posIndex = null;
     payloadOut = null;
-    boolean success = false;
+    bool success = false;
     try {
       this.skipInterval = skipInterval;
       this.skipMinimum = skipInterval; /* set to the same for now */
@@ -155,7 +155,7 @@ public final class SepPostingsWriter extends PostingsWriterBase {
   }
 
   @Override
-  public void init(IndexOutput termsOut) throws IOException {
+  public void init(IndexOutput termsOut)  {
     CodecUtil.writeHeader(termsOut, CODEC, VERSION_CURRENT);
     // TODO: -- just ask skipper to "start" here
     termsOut.writeInt(skipInterval);                // write skipInterval
@@ -169,7 +169,7 @@ public final class SepPostingsWriter extends PostingsWriterBase {
   }
 
   @Override
-  public void startTerm() throws IOException {
+  public void startTerm()  {
     docIndex.mark();
     //System.out.println("SEPW: startTerm docIndex=" + docIndex);
 
@@ -220,7 +220,7 @@ public final class SepPostingsWriter extends PostingsWriterBase {
   /** Adds a new doc in this term.  If this returns null
    *  then we just skip consuming positions/payloads. */
   @Override
-  public void startDoc(int docID, int termDocFreq) throws IOException {
+  public void startDoc(int docID, int termDocFreq)  {
 
     final int delta = docID - lastDocID;
     //System.out.println("SEPW: startDoc: write doc=" + docID + " delta=" + delta + " out.fp=" + docOut);
@@ -247,11 +247,11 @@ public final class SepPostingsWriter extends PostingsWriterBase {
 
   /** Add a new position & payload */
   @Override
-  public void addPosition(int position, BytesRef payload, int startOffset, int endOffset) throws IOException {
-    assert indexOptions == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
+  public void addPosition(int position, BytesRef payload, int startOffset, int endOffset)  {
+    Debug.Assert( indexOptions == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
 
     final int delta = position - lastPosition;
-    assert delta >= 0: "position=" + position + " lastPosition=" + lastPosition;            // not quite right (if pos=0 is repeated twice we don't catch it)
+    Debug.Assert( delta >= 0: "position=" + position + " lastPosition=" + lastPosition;            // not quite right (if pos=0 is repeated twice we don't catch it)
     lastPosition = position;
 
     if (storePayloads) {
@@ -292,11 +292,11 @@ public final class SepPostingsWriter extends PostingsWriterBase {
 
   /** Called when we are done adding docs to this term */
   @Override
-  public void finishTerm(BlockTermState _state) throws IOException {
+  public void finishTerm(BlockTermState _state)  {
     SepTermState state = (SepTermState)_state;
     // TODO: -- wasteful we are counting this in two places?
-    assert state.docFreq > 0;
-    assert state.docFreq == df;
+    Debug.Assert( state.docFreq > 0;
+    Debug.Assert( state.docFreq == df;
 
     state.docIndex = docOut.index();
     state.docIndex.copyFrom(docIndex, false);
@@ -329,7 +329,7 @@ public final class SepPostingsWriter extends PostingsWriterBase {
   }
 
   @Override
-  public void encodeTerm(long[] longs, DataOutput out, FieldInfo fieldInfo, BlockTermState _state, boolean absolute) throws IOException {
+  public void encodeTerm(long[] longs, DataOutput out, FieldInfo fieldInfo, BlockTermState _state, bool absolute)  {
     SepTermState state = (SepTermState)_state;
     if (absolute) {
       lastSkipFP = 0;
@@ -365,7 +365,7 @@ public final class SepPostingsWriter extends PostingsWriterBase {
   }
 
   @Override
-  public void close() throws IOException {
+  public void close()  {
     IOUtils.close(docOut, skipOut, freqOut, posOut, payloadOut);
   }
 }

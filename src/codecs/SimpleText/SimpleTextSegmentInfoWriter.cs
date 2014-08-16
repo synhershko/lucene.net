@@ -49,12 +49,12 @@ public class SimpleTextSegmentInfoWriter extends SegmentInfoWriter {
   final static BytesRef SI_FILE             = new BytesRef("      file ");
   
   @Override
-  public void write(Directory dir, SegmentInfo si, FieldInfos fis, IOContext ioContext) throws IOException {
+  public void write(Directory dir, SegmentInfo si, FieldInfos fis, IOContext ioContext)  {
 
     String segFileName = IndexFileNames.segmentFileName(si.name, "", SimpleTextSegmentInfoFormat.SI_EXTENSION);
     si.addFile(segFileName);
 
-    boolean success = false;
+    bool success = false;
     IndexOutput output = dir.createOutput(segFileName, ioContext);
 
     try {
@@ -69,7 +69,7 @@ public class SimpleTextSegmentInfoWriter extends SegmentInfoWriter {
       SimpleTextUtil.writeNewline(output);
     
       SimpleTextUtil.write(output, SI_USECOMPOUND);
-      SimpleTextUtil.write(output, Boolean.toString(si.getUseCompoundFile()), scratch);
+      SimpleTextUtil.write(output, bool.toString(si.getUseCompoundFile()), scratch);
       SimpleTextUtil.writeNewline(output);
     
       Map<String,String> diagnostics = si.getDiagnostics();

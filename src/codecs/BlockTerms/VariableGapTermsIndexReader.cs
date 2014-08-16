@@ -17,163 +17,206 @@
 
 namespace Lucene.Net.Codecs.BlockTerms
 {
-    
-}
+
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using Lucene.Net.Index;
+    using Lucene.Net.Store;
+    using Lucene.Net.Util;
+    using Lucene.Net.Util.Fst;
 
 /** See {@link VariableGapTermsIndexWriter}
  * 
  * @lucene.experimental */
-public class VariableGapTermsIndexReader extends TermsIndexReaderBase {
 
-  private final PositiveIntOutputs fstOutputs = PositiveIntOutputs.getSingleton();
-  private int indexDivisor;
+    public class VariableGapTermsIndexReader : TermsIndexReaderBase
+    {
 
-  // Closed if indexLoaded is true:
-  private IndexInput in;
-  private volatile boolean indexLoaded;
+        private readonly PositiveIntOutputs fstOutputs = PositiveIntOutputs.Singleton;
+        private readonly int indexDivisor;
+        private readonly IndexInput input;       // Closed if indexLoaded is true:
+        private volatile bool indexLoaded;
 
-  final HashMap<FieldInfo,FieldIndexData> fields = new HashMap<>();
-  
-  // start of the field info data
-  private long dirOffset;
-  
-  private final int version;
+        private readonly Dictionary<FieldInfo, FieldIndexData> fields = new Dictionary<FieldInfo, FieldIndexData>();
 
-  final String segment;
-  public VariableGapTermsIndexReader(Directory dir, FieldInfos fieldInfos, String segment, int indexDivisor, String segmentSuffix, IOContext context)
-    throws IOException {
-    in = dir.openInput(IndexFileNames.segmentFileName(segment, segmentSuffix, VariableGapTermsIndexWriter.TERMS_INDEX_EXTENSION), new IOContext(context, true));
-    this.segment = segment;
-    boolean success = false;
-    assert indexDivisor == -1 || indexDivisor > 0;
+        private long dirOffset;                 // start of the field info data
+        private readonly int version;
+        private readonly String segment;
 
-    try {
-      
-      version = readHeader(in);
-      this.indexDivisor = indexDivisor;
-      
-      if (version >= VariableGapTermsIndexWriter.VERSION_CHECKSUM) {
-        CodecUtil.checksumEntireFile(in);
-      }
+        public VariableGapTermsIndexReader(Directory dir, FieldInfos fieldInfos, String segment, int indexDivisor,
+            String segmentSuffix, IOContext context)
+        {
+            input =
+                dir.OpenInput(
+                    IndexFileNames.SegmentFileName(segment, segmentSuffix,
+                        VariableGapTermsIndexWriter.TERMS_INDEX_EXTENSION), new IOContext(context, true));
+            this.segment = segment;
+            bool success = false;
 
-      seekDir(in, dirOffset);
+            Debug.Debug.Assert((indexDivisor == -1 || indexDivisor > 0);
 
-      // Read directory
-      final int numFields = in.readVInt();
-      if (numFields < 0) {
-        throw new CorruptIndexException("invalid numFields: " + numFields + " (resource=" + in + ")");
-      }
+            try
+            {
 
-      for(int i=0;i<numFields;i++) {
-        final int field = in.readVInt();
-        final long indexStart = in.readVLong();
-        final FieldInfo fieldInfo = fieldInfos.fieldInfo(field);
-        FieldIndexData previous = fields.put(fieldInfo, new FieldIndexData(fieldInfo, indexStart));
-        if (previous != null) {
-          throw new CorruptIndexException("duplicate field: " + fieldInfo.name + " (resource=" + in + ")");
+                version = readHeader(input);
+                this.indexDivisor = indexDivisor;
+
+                if (version >= VariableGapTermsIndexWriter.VERSION_CHECKSUM)
+                {
+                    CodecUtil.ChecksumEntireFile(input);
+                }
+
+                SeekDir(in,
+                dirOffset)
+                ;
+
+                // Read directory
+                int numFields = input.ReadVInt();
+                if (numFields < 0)
+                {
+                    throw new CorruptIndexException("invalid numFields: " + numFields + " (resource=" + input + ")");
+                }
+
+                for (int i = 0; i < numFields; i++)
+                {
+                    final
+                    int field = in.
+                    readVInt();
+                    final
+                    long indexStart = in.
+                    readVLong();
+                    final
+                    FieldInfo fieldInfo = fieldInfos.fieldInfo(field);
+                    FieldIndexData previous = fields.put(fieldInfo, new FieldIndexData(fieldInfo, indexStart));
+                    if (previous != null)
+                    {
+                        throw new CorruptIndexException("duplicate field: " + fieldInfo.name + " (resource=" +in + ")" )
+                        ;
+                    }
+                }
+                success = true;
+            }
+            finally
+            {
+                if (indexDivisor > 0)
+                {
+                in.
+                    close();
+                    in =
+                    null;
+                    if (success)
+                    {
+                        indexLoaded = true;
+                    }
+                }
+            }
         }
-      }
-      success = true;
-    } finally {
-      if (indexDivisor > 0) {
-        in.close();
-        in = null;
-        if (success) {
-          indexLoaded = true;
+
+
+        private int ReadHeader(IndexInput input)
+        {
+            int version = CodecUtil.CheckHeader(input, VariableGapTermsIndexWriter.CODEC_NAME,
+                VariableGapTermsIndexWriter.VERSION_START, VariableGapTermsIndexWriter.VERSION_CURRENT);
+            if (version < VariableGapTermsIndexWriter.VERSION_APPEND_ONLY)
+            {
+                dirOffset = input.ReadLong();
+            }
+            return version;
         }
-      }
-    }
-  }
 
-  @Override
-  public int getDivisor() {
-    return indexDivisor;
-  }
-  
-  private int readHeader(IndexInput input) throws IOException {
-    int version = CodecUtil.checkHeader(input, VariableGapTermsIndexWriter.CODEC_NAME,
-      VariableGapTermsIndexWriter.VERSION_START, VariableGapTermsIndexWriter.VERSION_CURRENT);
-    if (version < VariableGapTermsIndexWriter.VERSION_APPEND_ONLY) {
-      dirOffset = input.readLong();
-    }
-    return version;
-  }
+        public override void Dispose()
+        {
+            throw new NotImplementedException();
+        }
 
-  private static class IndexEnum extends FieldIndexEnum {
-    private final BytesRefFSTEnum<Long> fstEnum;
-    private BytesRefFSTEnum.InputOutput<Long> current;
+        public override bool SupportsOrd()
+        {
+            return false;
+        }
 
-    public IndexEnum(FST<Long> fst) {
-      fstEnum = new BytesRefFSTEnum<>(fst);
-    }
+        public override int GetDivisor()
+        {
+            return indexDivisor;
+        }
 
-    @Override
-    public BytesRef term() {
-      if (current == null) {
-        return null;
-      } else {
-        return current.input;
-      }
-    }
+        public override FieldIndexEnum GetFieldEnum(FieldInfo fieldInfo)
+        {
+            FieldIndexData fieldData = fields[fieldInfo];
+            if (fieldData.Fst == null)
+            {
+                return null;
+            }
+            else
+            {
+                return new IndexEnum(fieldData.Fst);
+            }
+        }
 
-    @Override
-    public long seek(BytesRef target) throws IOException {
-      //System.out.println("VGR: seek field=" + fieldInfo.name + " target=" + target);
-      current = fstEnum.seekFloor(target);
-      //System.out.println("  got input=" + current.input + " output=" + current.output);
-      return current.output;
-    }
+        public override void Close()
+        {
+            if (input !=
+                null && !indexLoaded)
+            {
+                input.Close();
+            }
+        }
 
-    @Override
-    public long next() throws IOException {
-      //System.out.println("VGR: next field=" + fieldInfo.name);
-      current = fstEnum.next();
-      if (current == null) {
-        //System.out.println("  eof");
-        return -1;
-      } else {
-        return current.output;
-      }
-    }
+        private void SeekDir(IndexInput input, long dirOffset)
+        {
+            if (version >= VariableGapTermsIndexWriter.VERSION_CHECKSUM)
+            {
+                input.Seek(input.Length() - CodecUtil.FooterLength() - 8);
+                dirOffset = input.ReadLong();
+            }
+            else if (version >= VariableGapTermsIndexWriter.VERSION_APPEND_ONLY)
+            {
+                input.Seek(input.Length() - 8);
+                dirOffset = input.ReadLong();
+            }
+            input.Seek(dirOffset);
+        }
 
-    @Override
-    public long ord() {
-      throw new UnsupportedOperationException();
-    }
+        public override long RamBytesUsed()
+        {
+            long sizeInBytes = 0;
 
-    @Override
-    public long seek(long ord) {
-      throw new UnsupportedOperationException();
-    }
-  }
+            foreach (var entry in fields.Values)
+            {
+                sizeInBytes += entry.RamBytesUsed();
+            }
 
-  @Override
-  public boolean supportsOrd() {
-    return false;
-  }
+            return sizeInBytes;
+        }
 
-  private final class FieldIndexData {
 
-    private final long indexStart;
-    // Set only if terms index is loaded:
-    private volatile FST<Long> fst;
+        internal class FieldIndexData
+        {
 
-    public FieldIndexData(FieldInfo fieldInfo, long indexStart) throws IOException {
-      this.indexStart = indexStart;
+            private readonly long indexStart;
+            // Set only if terms index is loaded:
+            public volatile FST<long> Fst;
 
-      if (indexDivisor > 0) {
-        loadTermsIndex();
-      }
-    }
+            public FieldIndexData(FieldInfo fieldInfo, long indexStart)
+            {
+                this.indexStart = indexStart;
 
-    private void loadTermsIndex() throws IOException {
-      if (fst == null) {
-        IndexInput clone = in.clone();
-        clone.seek(indexStart);
-        fst = new FST<>(clone, fstOutputs);
-        clone.close();
+                if (indexDivisor > 0)
+                {
+                    loadTermsIndex();
+                }
+            }
 
-        /*
+            private void loadTermsIndex()
+            {
+                if (Fst == null)
+                {
+                    IndexInput clone = input.Clone();
+                    clone.Seek(indexStart);
+                    Fst = new FST<>(clone, fstOutputs);
+                    clone.Close();
+
+                    /*
         final String dotFileName = segment + "_" + fieldInfo.name + ".dot";
         Writer w = new OutputStreamWriter(new FileOutputStream(dotFileName));
         Util.toDot(fst, w, false, false);
@@ -181,66 +224,92 @@ public class VariableGapTermsIndexReader extends TermsIndexReaderBase {
         w.close();
         */
 
-        if (indexDivisor > 1) {
-          // subsample
-          final IntsRef scratchIntsRef = new IntsRef();
-          final PositiveIntOutputs outputs = PositiveIntOutputs.getSingleton();
-          final Builder<Long> builder = new Builder<>(FST.INPUT_TYPE.BYTE1, outputs);
-          final BytesRefFSTEnum<Long> fstEnum = new BytesRefFSTEnum<>(fst);
-          BytesRefFSTEnum.InputOutput<Long> result;
-          int count = indexDivisor;
-          while((result = fstEnum.next()) != null) {
-            if (count == indexDivisor) {
-              builder.add(Util.toIntsRef(result.input, scratchIntsRef), result.output);
-              count = 0;
+                    if (indexDivisor > 1)
+                    {
+                        // subsample
+                        IntsRef scratchIntsRef = new IntsRef();
+                        PositiveIntOutputs outputs = PositiveIntOutputs.GetSingleton();
+                        Builder<long> builder = new Builder<long>(FST.INPUT_TYPE.BYTE1, outputs);
+                        BytesRefFSTEnum<long> fstEnum = new BytesRefFSTEnum<long>(fst);
+                        BytesRefFSTEnum.InputOutput<long> result;
+                        int count = indexDivisor;
+                        while ((result = fstEnum.Next()) != null)
+                        {
+                            if (count == indexDivisor)
+                            {
+                                builder.Add(Util.ToIntsRef(result.Input, scratchIntsRef), result.Output);
+                                count = 0;
+                            }
+                            count++;
+                        }
+                        Fst = builder.Finish();
+                    }
+                }
             }
-            count++;
-          }
-          fst = builder.finish();
+
+            /** Returns approximate RAM bytes used */
+
+            public long RamBytesUsed()
+            {
+                return Fst == null ? 0 : Fst.SizeInBytes();
+            }
         }
-      }
-    }
-    
-    /** Returns approximate RAM bytes used */
-    public long ramBytesUsed() {
-      return fst == null ? 0 : fst.sizeInBytes();
-    }
-  }
 
-  @Override
-  public FieldIndexEnum getFieldEnum(FieldInfo fieldInfo) {
-    final FieldIndexData fieldData = fields.get(fieldInfo);
-    if (fieldData.fst == null) {
-      return null;
-    } else {
-      return new IndexEnum(fieldData.fst);
-    }
-  }
+        internal class IndexEnum : FieldIndexEnum
+        {
+            private readonly BytesRefFSTEnum<long> fstEnum;
+            private BytesRefFSTEnum<long>.InputOutput<long> current;
 
-  @Override
-  public void close() throws IOException {
-    if (in != null && !indexLoaded) {
-      in.close();
-    }
-  }
+            public IndexEnum(FST<long> fst)
+            {
+                fstEnum = new BytesRefFSTEnum<long>(fst);
+            }
 
-  private void seekDir(IndexInput input, long dirOffset) throws IOException {
-    if (version >= VariableGapTermsIndexWriter.VERSION_CHECKSUM) {
-      input.seek(input.length() - CodecUtil.footerLength() - 8);
-      dirOffset = input.readLong();
-    } else if (version >= VariableGapTermsIndexWriter.VERSION_APPEND_ONLY) {
-      input.seek(input.length() - 8);
-      dirOffset = input.readLong();
+            public override BytesRef Term()
+            {
+                if (current == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return current.Input;
+                }
+            }
+
+            public override long Seek(BytesRef target)
+            {
+                //System.out.println("VGR: seek field=" + fieldInfo.name + " target=" + target);
+                current = fstEnum.SeekFloor(target);
+                //System.out.println("  got input=" + current.input + " output=" + current.output);
+                return current.Output;
+            }
+
+            public override long Next()
+            {
+                //System.out.println("VGR: next field=" + fieldInfo.name);
+                current = fstEnum.Next();
+                if (current == null)
+                {
+                    //System.out.println("  eof");
+                    return -1;
+                }
+                else
+                {
+                    return current.Output;
+                }
+            }
+
+            public override long Ord()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override long Seek(long ord)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
     }
-    input.seek(dirOffset);
-  }
-  
-  @Override
-  public long ramBytesUsed() {
-    long sizeInBytes = 0;
-    for(FieldIndexData entry : fields.values()) {
-      sizeInBytes += entry.ramBytesUsed();
-    }
-    return sizeInBytes;
-  }
 }

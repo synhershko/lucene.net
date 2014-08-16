@@ -26,7 +26,7 @@ namespace Lucene.Net.Codecs.Intblock
     private final int[] pending;
 
     private int upto;
-    private boolean seekPending;
+    private bool seekPending;
     private long pendingFP;
     private long lastBlockFP = -1;
 
@@ -39,7 +39,7 @@ namespace Lucene.Net.Codecs.Intblock
     }
 
     void Seek(final long fp, final int upto) {
-      assert upto < blockSize;
+      Debug.Assert( upto < blockSize;
       if (seekPending || fp != lastBlockFP) {
         pendingFP = fp;
         seekPending = true;

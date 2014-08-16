@@ -133,14 +133,14 @@ public class FSTTermsWriter extends FieldsConsumer {
   IndexOutput out;
   final List<FieldMetaData> fields = new ArrayList<>();
 
-  public FSTTermsWriter(SegmentWriteState state, PostingsWriterBase postingsWriter) throws IOException {
+  public FSTTermsWriter(SegmentWriteState state, PostingsWriterBase postingsWriter)  {
     final String termsFileName = IndexFileNames.segmentFileName(state.segmentInfo.name, state.segmentSuffix, TERMS_EXTENSION);
 
     this.postingsWriter = postingsWriter;
     this.fieldInfos = state.fieldInfos;
     this.out = state.directory.createOutput(termsFileName, state.context);
 
-    boolean success = false;
+    bool success = false;
     try {
       writeHeader(out);
       this.postingsWriter.init(out); 
@@ -151,20 +151,20 @@ public class FSTTermsWriter extends FieldsConsumer {
       }
     }
   }
-  private void writeHeader(IndexOutput out) throws IOException {
+  private void writeHeader(IndexOutput out)  {
     CodecUtil.writeHeader(out, TERMS_CODEC_NAME, TERMS_VERSION_CURRENT);   
   }
-  private void writeTrailer(IndexOutput out, long dirStart) throws IOException {
+  private void writeTrailer(IndexOutput out, long dirStart)  {
     out.writeLong(dirStart);
   }
 
   @Override
-  public TermsConsumer addField(FieldInfo field) throws IOException {
+  public TermsConsumer addField(FieldInfo field)  {
     return new TermsWriter(field);
   }
 
   @Override
-  public void close() throws IOException {
+  public void close()  {
     if (out != null) {
       IOException ioe = null;
       try {
@@ -239,13 +239,13 @@ public class FSTTermsWriter extends FieldsConsumer {
     }
 
     @Override
-    public PostingsConsumer startTerm(BytesRef text) throws IOException {
+    public PostingsConsumer startTerm(BytesRef text)  {
       postingsWriter.startTerm();
       return postingsWriter;
     }
 
     @Override
-    public void finishTerm(BytesRef text, TermStats stats) throws IOException {
+    public void finishTerm(BytesRef text, TermStats stats)  {
       // write term meta data into fst
       final BlockTermState state = postingsWriter.newTermState();
       final FSTTermOutputs.TermData meta = new FSTTermOutputs.TermData();
@@ -266,7 +266,7 @@ public class FSTTermsWriter extends FieldsConsumer {
     }
 
     @Override
-    public void finish(long sumTotalTermFreq, long sumDocFreq, int docCount) throws IOException {
+    public void finish(long sumTotalTermFreq, long sumDocFreq, int docCount)  {
       // save FST dict
       if (numTerms > 0) {
         final FST<FSTTermOutputs.TermData> fst = builder.finish();

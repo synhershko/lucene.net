@@ -25,7 +25,7 @@ namespace Lucene.Net.Codecs.Intblock
     private long fp;
     private int upto;
 
-        public override void Read(final DataInput indexIn, final boolean absolute)
+        public override void Read(final DataInput indexIn, final bool absolute)
     {
         if (absolute)
         {
@@ -48,7 +48,7 @@ namespace Lucene.Net.Codecs.Intblock
                 fp += indexIn.readVLong();
             }
         }
-        assert
+        Debug.Assert(
         upto < blockSize;
     }
 

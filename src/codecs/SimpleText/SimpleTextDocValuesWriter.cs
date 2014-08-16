@@ -52,25 +52,25 @@ class SimpleTextDocValuesWriter extends DocValuesConsumer {
   IndexOutput data;
   final BytesRef scratch = new BytesRef();
   final int numDocs;
-  private final Set<String> fieldsSeen = new HashSet<>(); // for asserting
+  private final Set<String> fieldsSeen = new HashSet<>(); // for Debug.Assert(ing
   
-  public SimpleTextDocValuesWriter(SegmentWriteState state, String ext) throws IOException {
+  public SimpleTextDocValuesWriter(SegmentWriteState state, String ext)  {
     // System.out.println("WRITE: " + IndexFileNames.segmentFileName(state.segmentInfo.name, state.segmentSuffix, ext) + " " + state.segmentInfo.getDocCount() + " docs");
     data = state.directory.createOutput(IndexFileNames.segmentFileName(state.segmentInfo.name, state.segmentSuffix, ext), state.context);
     numDocs = state.segmentInfo.getDocCount();
   }
 
-  // for asserting
-  private boolean fieldSeen(String field) {
-    assert !fieldsSeen.contains(field): "field \"" + field + "\" was added more than once during flush";
+  // for Debug.Assert(ing
+  private bool fieldSeen(String field) {
+    Debug.Assert( !fieldsSeen.contains(field): "field \"" + field + "\" was added more than once during flush";
     fieldsSeen.add(field);
     return true;
   }
 
   @Override
-  public void addNumericField(FieldInfo field, Iterable<Number> values) throws IOException {
-    assert fieldSeen(field.name);
-    assert (field.getDocValuesType() == FieldInfo.DocValuesType.NUMERIC ||
+  public void addNumericField(FieldInfo field, Iterable<Number> values)  {
+    Debug.Assert( fieldSeen(field.name);
+    Debug.Assert( (field.getDocValuesType() == FieldInfo.DocValuesType.NUMERIC ||
             field.getNormType() == FieldInfo.DocValuesType.NUMERIC);
     writeFieldEntry(field, FieldInfo.DocValuesType.NUMERIC);
 
@@ -113,10 +113,10 @@ class SimpleTextDocValuesWriter extends DocValuesConsumer {
     // second pass to write the values
     for(Number n : values) {
       long value = n == null ? 0 : n.longValue();
-      assert value >= minValue;
+      Debug.Assert( value >= minValue;
       Number delta = BigInteger.valueOf(value).subtract(BigInteger.valueOf(minValue));
       String s = encoder.format(delta);
-      assert s.length() == patternString.length();
+      Debug.Assert( s.length() == patternString.length();
       SimpleTextUtil.write(data, s, scratch);
       SimpleTextUtil.writeNewline(data);
       if (n == null) {
@@ -126,16 +126,16 @@ class SimpleTextDocValuesWriter extends DocValuesConsumer {
       }
       SimpleTextUtil.writeNewline(data);
       numDocsWritten++;
-      assert numDocsWritten <= numDocs;
+      Debug.Assert( numDocsWritten <= numDocs;
     }
 
-    assert numDocs == numDocsWritten: "numDocs=" + numDocs + " numDocsWritten=" + numDocsWritten;
+    Debug.Assert( numDocs == numDocsWritten: "numDocs=" + numDocs + " numDocsWritten=" + numDocsWritten;
   }
 
   @Override
-  public void addBinaryField(FieldInfo field, Iterable<BytesRef> values) throws IOException {
-    assert fieldSeen(field.name);
-    assert field.getDocValuesType() == DocValuesType.BINARY;
+  public void addBinaryField(FieldInfo field, Iterable<BytesRef> values)  {
+    Debug.Assert( fieldSeen(field.name);
+    Debug.Assert( field.getDocValuesType() == DocValuesType.BINARY;
     int maxLength = 0;
     for(BytesRef value : values) {
       final int length = value == null ? 0 : value.length;
@@ -187,13 +187,13 @@ class SimpleTextDocValuesWriter extends DocValuesConsumer {
       numDocsWritten++;
     }
 
-    assert numDocs == numDocsWritten;
+    Debug.Assert( numDocs == numDocsWritten;
   }
   
   @Override
-  public void addSortedField(FieldInfo field, Iterable<BytesRef> values, Iterable<Number> docToOrd) throws IOException {
-    assert fieldSeen(field.name);
-    assert field.getDocValuesType() == DocValuesType.SORTED;
+  public void addSortedField(FieldInfo field, Iterable<BytesRef> values, Iterable<Number> docToOrd)  {
+    Debug.Assert( fieldSeen(field.name);
+    Debug.Assert( field.getDocValuesType() == DocValuesType.SORTED;
     writeFieldEntry(field, FieldInfo.DocValuesType.SORTED);
 
     int valueCount = 0;
@@ -237,7 +237,7 @@ class SimpleTextDocValuesWriter extends DocValuesConsumer {
     SimpleTextUtil.writeNewline(data);
     final DecimalFormat ordEncoder = new DecimalFormat(sb.toString(), new DecimalFormatSymbols(Locale.ROOT));
 
-    // for asserts:
+    // for Debug.Assert(s:
     int valuesSeen = 0;
 
     for(BytesRef value : values) {
@@ -256,10 +256,10 @@ class SimpleTextDocValuesWriter extends DocValuesConsumer {
       }
       SimpleTextUtil.writeNewline(data);
       valuesSeen++;
-      assert valuesSeen <= valueCount;
+      Debug.Assert( valuesSeen <= valueCount;
     }
 
-    assert valuesSeen == valueCount;
+    Debug.Assert( valuesSeen == valueCount;
 
     for(Number ord : docToOrd) {
       SimpleTextUtil.write(data, ordEncoder.format(ord.longValue()+1), scratch);
@@ -268,9 +268,9 @@ class SimpleTextDocValuesWriter extends DocValuesConsumer {
   }
 
   @Override
-  public void addSortedSetField(FieldInfo field, Iterable<BytesRef> values, Iterable<Number> docToOrdCount, Iterable<Number> ords) throws IOException {
-    assert fieldSeen(field.name);
-    assert field.getDocValuesType() == DocValuesType.SORTED_SET;
+  public void addSortedSetField(FieldInfo field, Iterable<BytesRef> values, Iterable<Number> docToOrdCount, Iterable<Number> ords)  {
+    Debug.Assert( fieldSeen(field.name);
+    Debug.Assert( field.getDocValuesType() == DocValuesType.SORTED_SET;
     writeFieldEntry(field, FieldInfo.DocValuesType.SORTED_SET);
 
     long valueCount = 0;
@@ -329,7 +329,7 @@ class SimpleTextDocValuesWriter extends DocValuesConsumer {
     SimpleTextUtil.write(data, sb2.toString(), scratch);
     SimpleTextUtil.writeNewline(data);
     
-    // for asserts:
+    // for Debug.Assert(s:
     long valuesSeen = 0;
 
     for(BytesRef value : values) {
@@ -348,10 +348,10 @@ class SimpleTextDocValuesWriter extends DocValuesConsumer {
       }
       SimpleTextUtil.writeNewline(data);
       valuesSeen++;
-      assert valuesSeen <= valueCount;
+      Debug.Assert( valuesSeen <= valueCount;
     }
 
-    assert valuesSeen == valueCount;
+    Debug.Assert( valuesSeen == valueCount;
 
     ordStream = ords.iterator();
     
@@ -377,7 +377,7 @@ class SimpleTextDocValuesWriter extends DocValuesConsumer {
   }
 
   /** write the header for this field */
-  private void writeFieldEntry(FieldInfo field, FieldInfo.DocValuesType type) throws IOException {
+  private void writeFieldEntry(FieldInfo field, FieldInfo.DocValuesType type)  {
     SimpleTextUtil.write(data, FIELD);
     SimpleTextUtil.write(data, field.name, scratch);
     SimpleTextUtil.writeNewline(data);
@@ -388,11 +388,11 @@ class SimpleTextDocValuesWriter extends DocValuesConsumer {
   }
   
   @Override
-  public void close() throws IOException {
+  public void close()  {
     if (data != null) {
-      boolean success = false;
+      bool success = false;
       try {
-        assert !fieldsSeen.isEmpty();
+        Debug.Assert( !fieldsSeen.isEmpty();
         // TODO: sheisty to do this here?
         SimpleTextUtil.write(data, END);
         SimpleTextUtil.writeNewline(data);

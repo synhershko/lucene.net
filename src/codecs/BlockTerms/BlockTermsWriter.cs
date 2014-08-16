@@ -62,7 +62,7 @@ public class BlockTermsWriter extends FieldsConsumer {
     public final int longsSize;
 
     public FieldMetaData(FieldInfo fieldInfo, long numTerms, long termsStartPointer, long sumTotalTermFreq, long sumDocFreq, int docCount, int longsSize) {
-      assert numTerms > 0;
+      Debug.Assert( numTerms > 0;
       this.fieldInfo = fieldInfo;
       this.termsStartPointer = termsStartPointer;
       this.numTerms = numTerms;
@@ -79,11 +79,11 @@ public class BlockTermsWriter extends FieldsConsumer {
 
   public BlockTermsWriter(TermsIndexWriterBase termsIndexWriter,
       SegmentWriteState state, PostingsWriterBase postingsWriter)
-      throws IOException {
+       {
     final String termsFileName = IndexFileNames.segmentFileName(state.segmentInfo.name, state.segmentSuffix, TERMS_EXTENSION);
     this.termsIndexWriter = termsIndexWriter;
     out = state.directory.createOutput(termsFileName, state.context);
-    boolean success = false;
+    bool success = false;
     try {
       fieldInfos = state.fieldInfos;
       writeHeader(out);
@@ -102,21 +102,21 @@ public class BlockTermsWriter extends FieldsConsumer {
     }
   }
   
-  private void writeHeader(IndexOutput out) throws IOException {
+  private void writeHeader(IndexOutput out)  {
     CodecUtil.writeHeader(out, CODEC_NAME, VERSION_CURRENT);     
   }
 
   @Override
-  public TermsConsumer addField(FieldInfo field) throws IOException {
+  public TermsConsumer addField(FieldInfo field)  {
     //System.out.println("\nBTW.addField seg=" + segment + " field=" + field.name);
-    assert currentField == null || currentField.name.compareTo(field.name) < 0;
+    Debug.Assert( currentField == null || currentField.name.compareTo(field.name) < 0;
     currentField = field;
     TermsIndexWriterBase.FieldWriter fieldIndexWriter = termsIndexWriter.addField(field, out.getFilePointer());
     return new TermsWriter(fieldIndexWriter, field, postingsWriter);
   }
 
   @Override
-  public void close() throws IOException {
+  public void close()  {
     if (out != null) {
       try {
         final long dirStart = out.getFilePointer();
@@ -144,7 +144,7 @@ public class BlockTermsWriter extends FieldsConsumer {
     }
   }
 
-  private void writeTrailer(long dirStart) throws IOException {
+  private void writeTrailer(long dirStart)  {
     out.writeLong(dirStart);    
   }
   
@@ -190,7 +190,7 @@ public class BlockTermsWriter extends FieldsConsumer {
     }
 
     @Override
-    public PostingsConsumer startTerm(BytesRef text) throws IOException {
+    public PostingsConsumer startTerm(BytesRef text)  {
       //System.out.println("BTW: startTerm term=" + fieldInfo.name + ":" + text.utf8ToString() + " " + text + " seg=" + segment);
       postingsWriter.startTerm();
       return postingsWriter;
@@ -199,12 +199,12 @@ public class BlockTermsWriter extends FieldsConsumer {
     private final BytesRef lastPrevTerm = new BytesRef();
 
     @Override
-    public void finishTerm(BytesRef text, TermStats stats) throws IOException {
+    public void finishTerm(BytesRef text, TermStats stats)  {
 
-      assert stats.docFreq > 0;
+      Debug.Assert( stats.docFreq > 0;
       //System.out.println("BTW: finishTerm term=" + fieldInfo.name + ":" + text.utf8ToString() + " " + text + " seg=" + segment + " df=" + stats.docFreq);
 
-      final boolean isIndexTerm = fieldIndexWriter.checkIndexTerm(text, stats);
+      final bool isIndexTerm = fieldIndexWriter.checkIndexTerm(text, stats);
 
       if (isIndexTerm) {
         if (pendingCount > 0) {
@@ -238,7 +238,7 @@ public class BlockTermsWriter extends FieldsConsumer {
 
     // Finishes all terms in this field
     @Override
-    public void finish(long sumTotalTermFreq, long sumDocFreq, int docCount) throws IOException {
+    public void finish(long sumTotalTermFreq, long sumDocFreq, int docCount)  {
       if (pendingCount > 0) {
         flushBlock();
       }
@@ -261,8 +261,8 @@ public class BlockTermsWriter extends FieldsConsumer {
     }
 
     private int sharedPrefix(BytesRef term1, BytesRef term2) {
-      assert term1.offset == 0;
-      assert term2.offset == 0;
+      Debug.Assert( term1.offset == 0;
+      Debug.Assert( term2.offset == 0;
       int pos1 = 0;
       int pos1End = pos1 + Math.min(term1.length, term2.length);
       int pos2 = 0;
@@ -279,7 +279,7 @@ public class BlockTermsWriter extends FieldsConsumer {
     private final RAMOutputStream bytesWriter = new RAMOutputStream();
     private final RAMOutputStream bufferWriter = new RAMOutputStream();
 
-    private void flushBlock() throws IOException {
+    private void flushBlock()  {
       //System.out.println("BTW.flushBlock seg=" + segment + " pendingCount=" + pendingCount + " fp=" + out.getFilePointer());
 
       // First pass: compute common prefix for all terms
@@ -312,7 +312,7 @@ public class BlockTermsWriter extends FieldsConsumer {
       // write prefix, suffix first:
       for(int termCount=0;termCount<pendingCount;termCount++) {
         final BlockTermState state = pendingTerms[termCount].state;
-        assert state != null;
+        Debug.Assert( state != null;
         bytesWriter.writeVInt(state.docFreq);
         if (fieldInfo.getIndexOptions() != IndexOptions.DOCS_ONLY) {
           bytesWriter.writeVLong(state.totalTermFreq-state.docFreq);
@@ -324,7 +324,7 @@ public class BlockTermsWriter extends FieldsConsumer {
 
       // 4th pass: write the metadata 
       long[] longs = new long[longsSize];
-      boolean absolute = true;
+      bool absolute = true;
       for(int termCount=0;termCount<pendingCount;termCount++) {
         final BlockTermState state = pendingTerms[termCount].state;
         postingsWriter.encodeTerm(longs, bufferWriter, fieldInfo, state, absolute);

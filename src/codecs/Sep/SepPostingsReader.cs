@@ -62,8 +62,8 @@ public class SepPostingsReader extends PostingsReaderBase {
   int maxSkipLevels;
   int skipMinimum;
 
-  public SepPostingsReader(Directory dir, FieldInfos fieldInfos, SegmentInfo segmentInfo, IOContext context, IntStreamFactory intFactory, String segmentSuffix) throws IOException {
-    boolean success = false;
+  public SepPostingsReader(Directory dir, FieldInfos fieldInfos, SegmentInfo segmentInfo, IOContext context, IntStreamFactory intFactory, String segmentSuffix)  {
+    bool success = false;
     try {
 
       final String docFileName = IndexFileNames.segmentFileName(segmentInfo.name, segmentSuffix, SepPostingsWriter.DOC_EXTENSION);
@@ -92,7 +92,7 @@ public class SepPostingsReader extends PostingsReaderBase {
   }
 
   @Override
-  public void init(IndexInput termsIn) throws IOException {
+  public void init(IndexInput termsIn)  {
     // Make sure we are talking to the matching past writer
     CodecUtil.checkHeader(termsIn, SepPostingsWriter.CODEC,
       SepPostingsWriter.VERSION_START, SepPostingsWriter.VERSION_START);
@@ -102,7 +102,7 @@ public class SepPostingsReader extends PostingsReaderBase {
   }
 
   @Override
-  public void close() throws IOException {
+  public void close()  {
     IOUtils.close(freqIn, docIn, skipIn, posIn, payloadIn);
   }
 
@@ -161,7 +161,7 @@ public class SepPostingsReader extends PostingsReaderBase {
   }
 
   @Override
-  public BlockTermState newTermState() throws IOException {
+  public BlockTermState newTermState()  {
     final SepTermState state = new SepTermState();
     state.docIndex = docIn.index();
     if (freqIn != null) {
@@ -174,8 +174,8 @@ public class SepPostingsReader extends PostingsReaderBase {
   }
 
   @Override
-  public void decodeTerm(long[] empty, DataInput in, FieldInfo fieldInfo, BlockTermState _termState, boolean absolute) 
-    throws IOException {
+  public void decodeTerm(long[] empty, DataInput in, FieldInfo fieldInfo, BlockTermState _termState, bool absolute) 
+     {
     final SepTermState termState = (SepTermState) _termState;
     termState.docIndex.read(in, absolute);
     if (fieldInfo.getIndexOptions() != IndexOptions.DOCS_ONLY) {
@@ -209,7 +209,7 @@ public class SepPostingsReader extends PostingsReaderBase {
   }
 
   @Override
-  public DocsEnum docs(FieldInfo fieldInfo, BlockTermState _termState, Bits liveDocs, DocsEnum reuse, int flags) throws IOException {
+  public DocsEnum docs(FieldInfo fieldInfo, BlockTermState _termState, Bits liveDocs, DocsEnum reuse, int flags)  {
     final SepTermState termState = (SepTermState) _termState;
     SepDocsEnum docsEnum;
     if (reuse == null || !(reuse instanceof SepDocsEnum)) {
@@ -230,9 +230,9 @@ public class SepPostingsReader extends PostingsReaderBase {
   @Override
   public DocsAndPositionsEnum docsAndPositions(FieldInfo fieldInfo, BlockTermState _termState, Bits liveDocs,
                                                DocsAndPositionsEnum reuse, int flags)
-    throws IOException {
+     {
 
-    assert fieldInfo.getIndexOptions() == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
+    Debug.Assert( fieldInfo.getIndexOptions() == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS;
     final SepTermState termState = (SepTermState) _termState;
     SepDocsAndPositionsEnum postingsEnum;
     if (reuse == null || !(reuse instanceof SepDocsAndPositionsEnum)) {
@@ -259,9 +259,9 @@ public class SepPostingsReader extends PostingsReaderBase {
     long freqStart;
 
     // TODO: -- should we do omitTF with 2 different enum classes?
-    private boolean omitTF;
+    private bool omitTF;
     private IndexOptions indexOptions;
-    private boolean storePayloads;
+    private bool storePayloads;
     private Bits liveDocs;
     private final IntIndexInput.Reader docReader;
     private final IntIndexInput.Reader freqReader;
@@ -274,10 +274,10 @@ public class SepPostingsReader extends PostingsReaderBase {
 
     // TODO: -- should we do hasProx with 2 different enum classes?
 
-    boolean skipped;
+    bool skipped;
     SepSkipListReader skipper;
 
-    SepDocsEnum() throws IOException {
+    SepDocsEnum()  {
       startDocIn = docIn;
       docReader = docIn.reader();
       docIndex = docIn.index();
@@ -295,7 +295,7 @@ public class SepPostingsReader extends PostingsReaderBase {
       }
     }
 
-    SepDocsEnum init(FieldInfo fieldInfo, SepTermState termState, Bits liveDocs) throws IOException {
+    SepDocsEnum init(FieldInfo fieldInfo, SepTermState termState, Bits liveDocs)  {
       this.liveDocs = liveDocs;
       this.indexOptions = fieldInfo.getIndexOptions();
       omitTF = indexOptions == IndexOptions.DOCS_ONLY;
@@ -324,7 +324,7 @@ public class SepPostingsReader extends PostingsReaderBase {
     }
 
     @Override
-    public int nextDoc() throws IOException {
+    public int nextDoc()  {
 
       while(true) {
         if (count == docFreq) {
@@ -350,7 +350,7 @@ public class SepPostingsReader extends PostingsReaderBase {
     }
 
     @Override
-    public int freq() throws IOException {
+    public int freq()  {
       return freq;
     }
 
@@ -360,7 +360,7 @@ public class SepPostingsReader extends PostingsReaderBase {
     }
 
     @Override
-    public int advance(int target) throws IOException {
+    public int advance(int target)  {
 
       if ((target - skipInterval) >= doc && docFreq >= skipMinimum) {
 
@@ -429,7 +429,7 @@ public class SepPostingsReader extends PostingsReaderBase {
     int freq;
     long freqStart;
 
-    private boolean storePayloads;
+    private bool storePayloads;
     private Bits liveDocs;
     private final IntIndexInput.Reader docReader;
     private final IntIndexInput.Reader freqReader;
@@ -449,12 +449,12 @@ public class SepPostingsReader extends PostingsReaderBase {
     private int payloadLength;
     private long pendingPayloadBytes;
 
-    private boolean skipped;
+    private bool skipped;
     private SepSkipListReader skipper;
-    private boolean payloadPending;
-    private boolean posSeekPending;
+    private bool payloadPending;
+    private bool posSeekPending;
 
-    SepDocsAndPositionsEnum() throws IOException {
+    SepDocsAndPositionsEnum()  {
       startDocIn = docIn;
       docReader = docIn.reader();
       docIndex = docIn.index();
@@ -465,7 +465,7 @@ public class SepPostingsReader extends PostingsReaderBase {
       payloadIn = SepPostingsReader.this.payloadIn.clone();
     }
 
-    SepDocsAndPositionsEnum init(FieldInfo fieldInfo, SepTermState termState, Bits liveDocs) throws IOException {
+    SepDocsAndPositionsEnum init(FieldInfo fieldInfo, SepTermState termState, Bits liveDocs)  {
       this.liveDocs = liveDocs;
       storePayloads = fieldInfo.hasPayloads();
       //System.out.println("Sep D&P init");
@@ -501,7 +501,7 @@ public class SepPostingsReader extends PostingsReaderBase {
     }
 
     @Override
-    public int nextDoc() throws IOException {
+    public int nextDoc()  {
 
       while(true) {
         if (count == docFreq) {
@@ -532,7 +532,7 @@ public class SepPostingsReader extends PostingsReaderBase {
     }
 
     @Override
-    public int freq() throws IOException {
+    public int freq()  {
       return freq;
     }
 
@@ -542,7 +542,7 @@ public class SepPostingsReader extends PostingsReaderBase {
     }
 
     @Override
-    public int advance(int target) throws IOException {
+    public int advance(int target)  {
       //System.out.println("SepD&P advance target=" + target + " vs current=" + doc + " this=" + this);
 
       if ((target - skipInterval) >= doc && docFreq >= skipMinimum) {
@@ -614,7 +614,7 @@ public class SepPostingsReader extends PostingsReaderBase {
     }
 
     @Override
-    public int nextPosition() throws IOException {
+    public int nextPosition()  {
       if (posSeekPending) {
         posIndex.seek(posReader);
         payloadIn.seek(payloadFP);
@@ -628,7 +628,7 @@ public class SepPostingsReader extends PostingsReaderBase {
         if (storePayloads && (code & 1) != 0) {
           // Payload length has changed
           payloadLength = posReader.next();
-          assert payloadLength >= 0;
+          Debug.Assert( payloadLength >= 0;
         }
         pendingPosCount--;
         position = 0;
@@ -641,7 +641,7 @@ public class SepPostingsReader extends PostingsReaderBase {
         if ((code & 1) != 0) {
           // Payload length has changed
           payloadLength = posReader.next();
-          assert payloadLength >= 0;
+          Debug.Assert( payloadLength >= 0;
         }
         position += code >>> 1;
         pendingPayloadBytes += payloadLength;
@@ -651,7 +651,7 @@ public class SepPostingsReader extends PostingsReaderBase {
       }
     
       pendingPosCount--;
-      assert pendingPosCount >= 0;
+      Debug.Assert( pendingPosCount >= 0;
       return position;
     }
 
@@ -668,7 +668,7 @@ public class SepPostingsReader extends PostingsReaderBase {
     private BytesRef payload;
 
     @Override
-    public BytesRef getPayload() throws IOException {
+    public BytesRef getPayload()  {
       if (!payloadPending) {
         return null;
       }
@@ -677,7 +677,7 @@ public class SepPostingsReader extends PostingsReaderBase {
         return payload;
       }
 
-      assert pendingPayloadBytes >= payloadLength;
+      Debug.Assert( pendingPayloadBytes >= payloadLength;
 
       if (pendingPayloadBytes > payloadLength) {
         payloadIn.seek(payloadIn.getFilePointer() + (pendingPayloadBytes - payloadLength));
@@ -708,7 +708,7 @@ public class SepPostingsReader extends PostingsReaderBase {
   }
 
   @Override
-  public void checkIntegrity() throws IOException {
+  public void checkIntegrity()  {
     // TODO: remove sep layout, its fallen behind on features...
   }
 }

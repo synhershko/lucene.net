@@ -15,28 +15,37 @@
  * limitations under the License.
  */
 
+using System;
+using Lucene.Net.Index;
+using Lucene.Net.Util;
+
 namespace Lucene.Net.Codecs.BlockTerms
 {
-    
-}
 
-/** 
- * Base class for terms index implementations to plug
- * into {@link BlockTermsWriter}.
- * 
- * @see TermsIndexReaderBase
- * @lucene.experimental 
- */
-public abstract class TermsIndexWriterBase implements Closeable {
+    /// <summary>
+    ///  Base class for terms index implementations to plug
+    /// into {@link BlockTermsWriter}.
+    /// 
+    /// @see TermsIndexReaderBase
+    /// @lucene.experimental 
+    /// </summary>
+    public abstract class TermsIndexWriterBase : IDisposable
+    {
 
-  /**
-   * Terms index API for a single field.
-   */
-  public abstract class FieldWriter {
-    public abstract boolean checkIndexTerm(BytesRef text, TermStats stats) throws IOException;
-    public abstract void add(BytesRef text, TermStats stats, long termsFilePointer) throws IOException;
-    public abstract void finish(long termsFilePointer) throws IOException;
-  }
+        public abstract FieldWriter AddField(FieldInfo fieldInfo, long termsFilePointer);
 
-  public abstract FieldWriter addField(FieldInfo fieldInfo, long termsFilePointer) throws IOException;
+        public void Dispose()
+        {
+            //
+        }
+
+
+        /// <summary>Terms index API for a single field</summary>
+        public abstract class FieldWriter
+        {
+            public abstract bool CheckIndexTerm(BytesRef text, TermStats stats);
+            public abstract void Add(BytesRef text, TermStats stats, long termsFilePointer);
+            public abstract void Finish(long termsFilePointer);
+        }
+    }
 }

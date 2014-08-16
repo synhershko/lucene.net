@@ -61,14 +61,14 @@ public class SimpleTextTermVectorsWriter extends TermVectorsWriter {
   private IndexOutput out;
   private int numDocsWritten = 0;
   private final BytesRef scratch = new BytesRef();
-  private boolean offsets;
-  private boolean positions;
-  private boolean payloads;
+  private bool offsets;
+  private bool positions;
+  private bool payloads;
 
-  public SimpleTextTermVectorsWriter(Directory directory, String segment, IOContext context) throws IOException {
+  public SimpleTextTermVectorsWriter(Directory directory, String segment, IOContext context)  {
     this.directory = directory;
     this.segment = segment;
-    boolean success = false;
+    bool success = false;
     try {
       out = directory.createOutput(IndexFileNames.segmentFileName(segment, "", VECTORS_EXTENSION), context);
       success = true;
@@ -80,7 +80,7 @@ public class SimpleTextTermVectorsWriter extends TermVectorsWriter {
   }
   
   @Override
-  public void startDocument(int numVectorFields) throws IOException {
+  public void startDocument(int numVectorFields)  {
     write(DOC);
     write(Integer.toString(numDocsWritten));
     newLine();
@@ -92,7 +92,7 @@ public class SimpleTextTermVectorsWriter extends TermVectorsWriter {
   }
 
   @Override
-  public void startField(FieldInfo info, int numTerms, boolean positions, boolean offsets, boolean payloads) throws IOException {  
+  public void startField(FieldInfo info, int numTerms, bool positions, bool offsets, bool payloads)  {  
     write(FIELD);
     write(Integer.toString(info.number));
     newLine();
@@ -102,15 +102,15 @@ public class SimpleTextTermVectorsWriter extends TermVectorsWriter {
     newLine();
     
     write(FIELDPOSITIONS);
-    write(Boolean.toString(positions));
+    write(bool.toString(positions));
     newLine();
     
     write(FIELDOFFSETS);
-    write(Boolean.toString(offsets));
+    write(bool.toString(offsets));
     newLine();
     
     write(FIELDPAYLOADS);
-    write(Boolean.toString(payloads));
+    write(bool.toString(payloads));
     newLine();
     
     write(FIELDTERMCOUNT);
@@ -123,7 +123,7 @@ public class SimpleTextTermVectorsWriter extends TermVectorsWriter {
   }
 
   @Override
-  public void startTerm(BytesRef term, int freq) throws IOException {
+  public void startTerm(BytesRef term, int freq)  {
     write(TERMTEXT);
     write(term);
     newLine();
@@ -134,8 +134,8 @@ public class SimpleTextTermVectorsWriter extends TermVectorsWriter {
   }
 
   @Override
-  public void addPosition(int position, int startOffset, int endOffset, BytesRef payload) throws IOException {
-    assert positions || offsets;
+  public void addPosition(int position, int startOffset, int endOffset, BytesRef payload)  {
+    Debug.Assert( positions || offsets;
     
     if (positions) {
       write(POSITION);
@@ -145,7 +145,7 @@ public class SimpleTextTermVectorsWriter extends TermVectorsWriter {
       if (payloads) {
         write(PAYLOAD);
         if (payload != null) {
-          assert payload.length > 0;
+          Debug.Assert( payload.length > 0;
           write(payload);
         }
         newLine();
@@ -172,7 +172,7 @@ public class SimpleTextTermVectorsWriter extends TermVectorsWriter {
   }
 
   @Override
-  public void finish(FieldInfos fis, int numDocs) throws IOException {
+  public void finish(FieldInfos fis, int numDocs)  {
     if (numDocsWritten != numDocs) {
       throw new RuntimeException("mergeVectors produced an invalid result: mergedDocs is " + numDocs + " but vec numDocs is " + numDocsWritten + " file=" + out.toString() + "; now aborting this merge to prevent index corruption");
     }
@@ -182,7 +182,7 @@ public class SimpleTextTermVectorsWriter extends TermVectorsWriter {
   }
   
   @Override
-  public void close() throws IOException {
+  public void close()  {
     try {
       IOUtils.close(out);
     } finally {
@@ -191,19 +191,19 @@ public class SimpleTextTermVectorsWriter extends TermVectorsWriter {
   }
   
   @Override
-  public Comparator<BytesRef> getComparator() throws IOException {
+  public Comparator<BytesRef> getComparator()  {
     return BytesRef.getUTF8SortedAsUnicodeComparator();
   }
   
-  private void write(String s) throws IOException {
+  private void write(String s)  {
     SimpleTextUtil.write(out, s, scratch);
   }
   
-  private void write(BytesRef bytes) throws IOException {
+  private void write(BytesRef bytes)  {
     SimpleTextUtil.write(out, bytes);
   }
   
-  private void newLine() throws IOException {
+  private void newLine()  {
     SimpleTextUtil.writeNewline(out);
   }
 }

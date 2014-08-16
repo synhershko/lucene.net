@@ -49,7 +49,7 @@ class SepSkipListWriter extends MultiLevelSkipListWriter {
   IndexOutput payloadOutput;
 
   private int curDoc;
-  private boolean curStorePayloads;
+  private bool curStorePayloads;
   private int curPayloadLength;
   private long curPayloadPointer;
   
@@ -58,7 +58,7 @@ class SepSkipListWriter extends MultiLevelSkipListWriter {
                     IntIndexOutput docOutput,
                     IntIndexOutput posOutput,
                     IndexOutput payloadOutput)
-    throws IOException {
+     {
     super(skipInterval, numberOfSkipLevels, docCount);
 
     this.freqOutput = freqOutput;
@@ -91,7 +91,7 @@ class SepSkipListWriter extends MultiLevelSkipListWriter {
     indexOptions = v;
   }
 
-  void setPosOutput(IntIndexOutput posOutput) throws IOException {
+  void setPosOutput(IntIndexOutput posOutput)  {
     this.posOutput = posOutput;
     for(int i=0;i<numberOfSkipLevels;i++) {
       posIndex[i] = posOutput.index();
@@ -107,7 +107,7 @@ class SepSkipListWriter extends MultiLevelSkipListWriter {
    */
   // Called @ every index interval (every 128th (by default)
   // doc)
-  void setSkipData(int doc, boolean storePayloads, int payloadLength) {
+  void setSkipData(int doc, bool storePayloads, int payloadLength) {
     this.curDoc = doc;
     this.curStorePayloads = storePayloads;
     this.curPayloadLength = payloadLength;
@@ -118,7 +118,7 @@ class SepSkipListWriter extends MultiLevelSkipListWriter {
 
   // Called @ start of new term
   protected void resetSkip(IntIndexOutput.Index topDocIndex, IntIndexOutput.Index topFreqIndex, IntIndexOutput.Index topPosIndex)
-    throws IOException {
+     {
     super.resetSkip();
 
     Arrays.fill(lastSkipDoc, 0);
@@ -138,7 +138,7 @@ class SepSkipListWriter extends MultiLevelSkipListWriter {
   }
   
   @Override
-  protected void writeSkipData(int level, IndexOutput skipBuffer) throws IOException {
+  protected void writeSkipData(int level, IndexOutput skipBuffer)  {
     // To efficiently store payloads in the posting lists we do not store the length of
     // every payload. Instead we omit the length for a payload if the previous payload had
     // the same length.
@@ -160,7 +160,7 @@ class SepSkipListWriter extends MultiLevelSkipListWriter {
     //         current payload length equals the length at the previous
     //         skip point
 
-    assert indexOptions == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS || !curStorePayloads;
+    Debug.Assert( indexOptions == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS || !curStorePayloads;
 
     if (curStorePayloads) {
       int delta = curDoc - lastSkipDoc[level];

@@ -15,61 +15,74 @@
  * limitations under the License.
  */
 
+using System;
+using Lucene.Net.Index;
+using Lucene.Net.Util;
+
 namespace Lucene.Net.Codecs.BlockTerms
 {
-    
-}
 
 
-// TODO
-//   - allow for non-regular index intervals?  eg with a
-//     long string of rare terms, you don't need such
-//     frequent indexing
+    /// <summary>
+    /// TODO
+    ///   - allow for non-regular index intervals?  eg with a
+    ///     long string of rare terms, you don't need such
+    ///     frequent indexing
+    /// 
+    /// {@link BlockTermsReader} interacts with an instance of this class
+    /// to manage its terms index.  The writer must accept
+    /// indexed terms (many pairs of BytesRef text + long
+    /// fileOffset), and then this reader must be able to
+    /// retrieve the nearest index term to a provided term
+    /// text. 
+    ///
+    ///  @lucene.experimental */
+    /// </summary>
+    public abstract class TermsIndexReaderBase : IDisposable
+    {
 
-/**
- * {@link BlockTermsReader} interacts with an instance of this class
- * to manage its terms index.  The writer must accept
- * indexed terms (many pairs of BytesRef text + long
- * fileOffset), and then this reader must be able to
- * retrieve the nearest index term to a provided term
- * text. 
- * @lucene.experimental */
+        public abstract FieldIndexEnum GetFieldEnum(FieldInfo fieldInfo);
 
-public abstract class TermsIndexReaderBase implements Closeable {
+        public abstract void Dispose();
 
-  public abstract FieldIndexEnum getFieldEnum(FieldInfo fieldInfo);
+        public abstract bool SupportsOrd();
 
-  @Override
-  public abstract void close() throws IOException;
+        public abstract int GetDivisor();
 
-  public abstract boolean supportsOrd();
+        /// <summary>
+        /// Similar to TermsEnum, except, the only "metadata" it
+        /// reports for a given indexed term is the long fileOffset
+        /// into the main terms dictionary file.
+        /// </summary>
+        public abstract class FieldIndexEnum
+        {
 
-  public abstract int getDivisor();
+            /// <summary> 
+            /// Seeks to "largest" indexed term that's <=
+            ///  term; returns file pointer index (into the main
+            /// terms index file) for that term 
+            /// </summary>
+            public abstract long Seek(BytesRef term);
 
-  /** 
-   * Similar to TermsEnum, except, the only "metadata" it
-   * reports for a given indexed term is the long fileOffset
-   * into the main terms dictionary file.
-   */
-  public static abstract class FieldIndexEnum {
+            /** Returns -1 at end */
+            public abstract long Next();
 
-    /** Seeks to "largest" indexed term that's <=
-     *  term; returns file pointer index (into the main
-     *  terms index file) for that term */
-    public abstract long seek(BytesRef term) throws IOException;
+            public abstract BytesRef Term();
 
-    /** Returns -1 at end */
-    public abstract long next() throws IOException;
+            /// <summary></summary>
+            /// <remarks>Only implemented if {@link TermsIndexReaderBase.supportsOrd()} 
+            /// returns true</remarks>
+            /// <returns></returns>
+            public abstract long Seek(long ord);
 
-    public abstract BytesRef term();
+            /// <summary></summary>
+            /// <remarks>Only implemented if {@link TermsIndexReaderBase.supportsOrd()} 
+            /// returns true</remarks>
+            /// <returns></returns>
+            public abstract long Ord();
+        }
 
-    /** Only implemented if {@link TermsIndexReaderBase#supportsOrd()} returns true. */
-    public abstract long seek(long ord) throws IOException;
-    
-    /** Only implemented if {@link TermsIndexReaderBase#supportsOrd()} returns true. */
-    public abstract long ord();
-  }
-
-  /** Returns approximate RAM bytes used */
-  public abstract long ramBytesUsed();
+        /// <summary>Returns approximate RAM bytes used</summary>
+        public abstract long RamBytesUsed();
+    }
 }

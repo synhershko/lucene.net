@@ -72,7 +72,7 @@ import org.apache.lucene.util.packed.PackedInts;
  *
  * <p>Note that this codec implements advance as a linear
  * scan!  This means if you store large fields in here,
- * queries that rely on advance will (AND BooleanQuery,
+ * queries that rely on advance will (AND boolQuery,
  * PhraseQuery) will be relatively slow!
  *
  * @lucene.experimental */
@@ -82,7 +82,7 @@ import org.apache.lucene.util.packed.PackedInts;
 // loads itself in ram?
 public final class MemoryPostingsFormat extends PostingsFormat {
 
-  private final boolean doPackFST;
+  private final bool doPackFST;
   private final float acceptableOverheadRatio;
 
   public MemoryPostingsFormat() {
@@ -96,7 +96,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
    * @param acceptableOverheadRatio allowable overhead for packed ints
    *        during FST construction.
    */
-  public MemoryPostingsFormat(boolean doPackFST, float acceptableOverheadRatio) {
+  public MemoryPostingsFormat(bool doPackFST, float acceptableOverheadRatio) {
     super("Memory");
     this.doPackFST = doPackFST;
     this.acceptableOverheadRatio = acceptableOverheadRatio;
@@ -112,11 +112,11 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     private final FieldInfo field;
     private final Builder<BytesRef> builder;
     private final ByteSequenceOutputs outputs = ByteSequenceOutputs.getSingleton();
-    private final boolean doPackFST;
+    private final bool doPackFST;
     private final float acceptableOverheadRatio;
     private int termCount;
 
-    public TermsWriter(IndexOutput out, FieldInfo field, boolean doPackFST, float acceptableOverheadRatio) {
+    public TermsWriter(IndexOutput out, FieldInfo field, bool doPackFST, float acceptableOverheadRatio) {
       this.out = out;
       this.field = field;
       this.doPackFST = doPackFST;
@@ -137,10 +137,10 @@ public final class MemoryPostingsFormat extends PostingsFormat {
       int lastOffset;
 
       @Override
-      public void startDoc(int docID, int termDocFreq) throws IOException {
+      public void startDoc(int docID, int termDocFreq)  {
         //System.out.println("    startDoc docID=" + docID + " freq=" + termDocFreq);
         final int delta = docID - lastDocID;
-        assert docID == 0 || delta > 0;
+        Debug.Assert( docID == 0 || delta > 0;
         lastDocID = docID;
         docCount++;
 
@@ -150,7 +150,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
           buffer.writeVInt((delta<<1) | 1);
         } else {
           buffer.writeVInt(delta<<1);
-          assert termDocFreq > 0;
+          Debug.Assert( termDocFreq > 0;
           buffer.writeVInt(termDocFreq);
         }
 
@@ -159,13 +159,13 @@ public final class MemoryPostingsFormat extends PostingsFormat {
       }
 
       @Override
-      public void addPosition(int pos, BytesRef payload, int startOffset, int endOffset) throws IOException {
-        assert payload == null || field.hasPayloads();
+      public void addPosition(int pos, BytesRef payload, int startOffset, int endOffset)  {
+        Debug.Assert( payload == null || field.hasPayloads();
 
         //System.out.println("      addPos pos=" + pos + " payload=" + payload);
 
         final int delta = pos - lastPos;
-        assert delta >= 0;
+        Debug.Assert( delta >= 0;
         lastPos = pos;
         
         int payloadLen = 0;
@@ -208,7 +208,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
       }
 
       public PostingsWriter reset() {
-        assert buffer.getFilePointer() == 0;
+        Debug.Assert( buffer.getFilePointer() == 0;
         lastDocID = 0;
         docCount = 0;
         lastPayloadLen = 0;
@@ -233,11 +233,11 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     private final IntsRef scratchIntsRef = new IntsRef();
 
     @Override
-    public void finishTerm(BytesRef text, TermStats stats) throws IOException {
+    public void finishTerm(BytesRef text, TermStats stats)  {
 
-      assert postingsWriter.docCount == stats.docFreq;
+      Debug.Assert( postingsWriter.docCount == stats.docFreq;
 
-      assert buffer2.getFilePointer() == 0;
+      Debug.Assert( buffer2.getFilePointer() == 0;
 
       buffer2.writeVInt(stats.docFreq);
       if (field.getIndexOptions() != IndexOptions.DOCS_ONLY) {
@@ -267,7 +267,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     }
 
     @Override
-    public void finish(long sumTotalTermFreq, long sumDocFreq, int docCount) throws IOException {
+    public void finish(long sumTotalTermFreq, long sumDocFreq, int docCount)  {
       if (termCount > 0) {
         out.writeVInt(termCount);
         out.writeVInt(field.number);
@@ -294,11 +294,11 @@ public final class MemoryPostingsFormat extends PostingsFormat {
   private static final int VERSION_CURRENT = VERSION_START;
 
   @Override
-  public FieldsConsumer fieldsConsumer(SegmentWriteState state) throws IOException {
+  public FieldsConsumer fieldsConsumer(SegmentWriteState state)  {
 
     final String fileName = IndexFileNames.segmentFileName(state.segmentInfo.name, state.segmentSuffix, EXTENSION);
     final IndexOutput out = state.directory.createOutput(fileName, state.context);
-    boolean success = false;
+    bool success = false;
     try {
       CodecUtil.writeHeader(out, CODEC_NAME, VERSION_CURRENT);
       success = true;
@@ -316,7 +316,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
       }
 
       @Override
-      public void close() throws IOException {
+      public void close()  {
         // EOF marker:
         try {
           out.writeVInt(0);
@@ -330,7 +330,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
 
   private final static class FSTDocsEnum extends DocsEnum {
     private final IndexOptions indexOptions;
-    private final boolean storePayloads;
+    private final bool storePayloads;
     private byte[] buffer = new byte[16];
     private final ByteArrayDataInput in = new ByteArrayDataInput(buffer);
 
@@ -342,17 +342,17 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     private int payloadLen;
     private int numDocs;
 
-    public FSTDocsEnum(IndexOptions indexOptions, boolean storePayloads) {
+    public FSTDocsEnum(IndexOptions indexOptions, bool storePayloads) {
       this.indexOptions = indexOptions;
       this.storePayloads = storePayloads;
     }
 
-    public boolean canReuse(IndexOptions indexOptions, boolean storePayloads) {
+    public bool canReuse(IndexOptions indexOptions, bool storePayloads) {
       return indexOptions == this.indexOptions && storePayloads == this.storePayloads;
     }
     
     public FSTDocsEnum reset(BytesRef bufferIn, Bits liveDocs, int numDocs) {
-      assert numDocs > 0;
+      Debug.Assert( numDocs > 0;
       if (buffer.length < bufferIn.length) {
         buffer = ArrayUtil.grow(buffer, bufferIn.length);
       }
@@ -387,7 +387,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
             freq = 1;
           } else {
             freq = in.readVInt();
-            assert freq > 0;
+            Debug.Assert( freq > 0;
           }
 
           if (indexOptions == IndexOptions.DOCS_AND_FREQS_AND_POSITIONS) {
@@ -434,7 +434,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     }
 
     @Override
-    public int advance(int target) throws IOException {
+    public int advance(int target)  {
       // TODO: we could make more efficient version, but, it
       // should be rare that this will matter in practice
       // since usually apps will not store "big" fields in
@@ -454,7 +454,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
   }
 
   private final static class FSTDocsAndPositionsEnum extends DocsAndPositionsEnum {
-    private final boolean storePayloads;
+    private final bool storePayloads;
     private byte[] buffer = new byte[16];
     private final ByteArrayDataInput in = new ByteArrayDataInput(buffer);
 
@@ -466,24 +466,24 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     private int numDocs;
     private int posPending;
     private int payloadLength;
-    final boolean storeOffsets;
+    final bool storeOffsets;
     int offsetLength;
     int startOffset;
 
     private int pos;
     private final BytesRef payload = new BytesRef();
 
-    public FSTDocsAndPositionsEnum(boolean storePayloads, boolean storeOffsets) {
+    public FSTDocsAndPositionsEnum(bool storePayloads, bool storeOffsets) {
       this.storePayloads = storePayloads;
       this.storeOffsets = storeOffsets;
     }
 
-    public boolean canReuse(boolean storePayloads, boolean storeOffsets) {
+    public bool canReuse(bool storePayloads, bool storeOffsets) {
       return storePayloads == this.storePayloads && storeOffsets == this.storeOffsets;
     }
     
     public FSTDocsAndPositionsEnum reset(BytesRef bufferIn, Bits liveDocs, int numDocs) {
-      assert numDocs > 0;
+      Debug.Assert( numDocs > 0;
 
       // System.out.println("D&P reset bytes this=" + this);
       // for(int i=bufferIn.offset;i<bufferIn.length;i++) {
@@ -527,7 +527,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
           freq = 1;
         } else {
           freq = in.readVInt();
-          assert freq > 0;
+          Debug.Assert( freq > 0;
         }
 
         if (liveDocs == null || liveDocs.get(accum)) {
@@ -567,7 +567,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     @Override
     public int nextPosition() {
       //System.out.println("    nextPos storePayloads=" + storePayloads + " this=" + this);
-      assert posPending > 0;
+      Debug.Assert( posPending > 0;
       posPending--;
       if (!storePayloads) {
         pos += in.readVInt();
@@ -622,7 +622,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     }
 
     @Override
-    public int advance(int target) throws IOException {
+    public int advance(int target)  {
       // TODO: we could make more efficient version, but, it
       // should be rare that this will matter in practice
       // since usually apps will not store "big" fields in
@@ -645,7 +645,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     private final FieldInfo field;
     private final BytesRefFSTEnum<BytesRef> fstEnum;
     private final ByteArrayDataInput buffer = new ByteArrayDataInput();
-    private boolean didDecode;
+    private bool didDecode;
 
     private int docFreq;
     private long totalTermFreq;
@@ -675,7 +675,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     }
 
     @Override
-    public boolean seekExact(BytesRef text) throws IOException {
+    public bool seekExact(BytesRef text)  {
       //System.out.println("te.seekExact text=" + field.name + ":" + text.utf8ToString() + " this=" + this);
       current = fstEnum.seekExact(text);
       didDecode = false;
@@ -683,7 +683,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     }
 
     @Override
-    public SeekStatus seekCeil(BytesRef text) throws IOException {
+    public SeekStatus seekCeil(BytesRef text)  {
       //System.out.println("te.seek text=" + field.name + ":" + text.utf8ToString() + " this=" + this);
       current = fstEnum.seekCeil(text);
       if (current == null) {
@@ -726,7 +726,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     @Override
     public DocsAndPositionsEnum docsAndPositions(Bits liveDocs, DocsAndPositionsEnum reuse, int flags) {
 
-      boolean hasOffsets = field.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS) >= 0;
+      bool hasOffsets = field.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS) >= 0;
       if (field.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS) < 0) {
         return null;
       }
@@ -750,7 +750,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     }
 
     @Override
-    public BytesRef next() throws IOException {
+    public BytesRef next()  {
       //System.out.println("te.next");
       current = fstEnum.next();
       if (current == null) {
@@ -802,7 +802,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     private final ByteSequenceOutputs outputs = ByteSequenceOutputs.getSingleton();
     private final FieldInfo field;
 
-    public TermsReader(FieldInfos fieldInfos, IndexInput in, int termCount) throws IOException {
+    public TermsReader(FieldInfos fieldInfos, IndexInput in, int termCount)  {
       this.termCount = termCount;
       final int fieldNumber = in.readVInt();
       field = fieldInfos.fieldInfo(fieldNumber);
@@ -848,22 +848,22 @@ public final class MemoryPostingsFormat extends PostingsFormat {
     }
 
     @Override
-    public boolean hasFreqs() {
+    public bool hasFreqs() {
       return field.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS) >= 0;
     }
 
     @Override
-    public boolean hasOffsets() {
+    public bool hasOffsets() {
       return field.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS) >= 0;
     }
 
     @Override
-    public boolean hasPositions() {
+    public bool hasPositions() {
       return field.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS) >= 0;
     }
     
     @Override
-    public boolean hasPayloads() {
+    public bool hasPayloads() {
       return field.hasPayloads();
     }
 
@@ -873,7 +873,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
   }
 
   @Override
-  public FieldsProducer fieldsProducer(SegmentReadState state) throws IOException {
+  public FieldsProducer fieldsProducer(SegmentReadState state)  {
     final String fileName = IndexFileNames.segmentFileName(state.segmentInfo.name, state.segmentSuffix, EXTENSION);
     final ChecksumIndexInput in = state.directory.openChecksumInput(fileName, IOContext.READONCE);
 
@@ -930,7 +930,7 @@ public final class MemoryPostingsFormat extends PostingsFormat {
       }
       
       @Override
-      public void checkIntegrity() throws IOException {}
+      public void checkIntegrity()  {}
     };
   }
 }

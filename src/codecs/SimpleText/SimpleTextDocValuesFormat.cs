@@ -126,12 +126,12 @@ public class SimpleTextDocValuesFormat extends DocValuesFormat {
   }
 
   @Override
-  public DocValuesConsumer fieldsConsumer(SegmentWriteState state) throws IOException {
+  public DocValuesConsumer fieldsConsumer(SegmentWriteState state)  {
     return new SimpleTextDocValuesWriter(state, "dat");
   }
 
   @Override
-  public DocValuesProducer fieldsProducer(SegmentReadState state) throws IOException {
+  public DocValuesProducer fieldsProducer(SegmentReadState state)  {
     return new SimpleTextDocValuesReader(state, "dat");
   }
 }

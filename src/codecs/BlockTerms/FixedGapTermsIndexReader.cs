@@ -42,7 +42,7 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
 
   // Closed if indexLoaded is true:
   private IndexInput in;
-  private volatile boolean indexLoaded;
+  private volatile bool indexLoaded;
 
   private final Comparator<BytesRef> termComp;
 
@@ -60,15 +60,15 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
   private final int version;
 
   public FixedGapTermsIndexReader(Directory dir, FieldInfos fieldInfos, String segment, int indexDivisor, Comparator<BytesRef> termComp, String segmentSuffix, IOContext context)
-    throws IOException {
+     {
 
     this.termComp = termComp;
 
-    assert indexDivisor == -1 || indexDivisor > 0;
+    Debug.Assert( indexDivisor == -1 || indexDivisor > 0;
 
     in = dir.openInput(IndexFileNames.segmentFileName(segment, segmentSuffix, FixedGapTermsIndexWriter.TERMS_INDEX_EXTENSION), context);
     
-    boolean success = false;
+    bool success = false;
 
     try {
       
@@ -90,7 +90,7 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
         // In case terms index gets loaded, later, on demand
         totalIndexInterval = indexInterval * indexDivisor;
       }
-      assert totalIndexInterval > 0;
+      Debug.Assert( totalIndexInterval > 0;
       
       seekDir(in, dirOffset);
 
@@ -140,7 +140,7 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
     return indexDivisor;
   }
 
-  private int readHeader(IndexInput input) throws IOException {
+  private int readHeader(IndexInput input)  {
     int version = CodecUtil.checkHeader(input, FixedGapTermsIndexWriter.CODEC_NAME,
       FixedGapTermsIndexWriter.VERSION_START, FixedGapTermsIndexWriter.VERSION_CURRENT);
     if (version < FixedGapTermsIndexWriter.VERSION_APPEND_ONLY) {
@@ -167,7 +167,7 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
     public long seek(BytesRef target) {
       int lo = 0;          // binary search
       int hi = fieldIndex.numIndexTerms - 1;
-      assert totalIndexInterval > 0 : "totalIndexInterval=" + totalIndexInterval;
+      Debug.Assert( totalIndexInterval > 0 : "totalIndexInterval=" + totalIndexInterval;
 
       while (hi >= lo) {
         int mid = (lo + hi) >>> 1;
@@ -182,14 +182,14 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
         } else if (delta > 0) {
           lo = mid + 1;
         } else {
-          assert mid >= 0;
+          Debug.Assert( mid >= 0;
           ord = mid*totalIndexInterval;
           return fieldIndex.termsStart + fieldIndex.termsDictOffsets.get(mid);
         }
       }
 
       if (hi < 0) {
-        assert hi == -1;
+        Debug.Assert( hi == -1;
         hi = 0;
       }
 
@@ -224,7 +224,7 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
     public long seek(long ord) {
       int idx = (int) (ord / totalIndexInterval);
       // caller must ensure ord is in bounds
-      assert idx < fieldIndex.numIndexTerms;
+      Debug.Assert( idx < fieldIndex.numIndexTerms;
       final long offset = fieldIndex.termOffsets.get(idx);
       final int length = (int) (fieldIndex.termOffsets.get(1+idx) - offset);
       termBytesReader.fillSlice(term, fieldIndex.termBytesStart + offset, length);
@@ -234,7 +234,7 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
   }
 
   @Override
-  public boolean supportsOrd() {
+  public bool supportsOrd() {
     return true;
   }
 
@@ -250,7 +250,7 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
     private final int numIndexTerms;
 
     public FieldIndexData(FieldInfo fieldInfo, int numIndexTerms, long indexStart, long termsStart, long packedIndexStart,
-                          long packedOffsetsStart) throws IOException {
+                          long packedOffsetsStart)  {
 
       this.termsStart = termsStart;
       this.indexStart = indexStart;
@@ -263,7 +263,7 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
       }
     }
 
-    private void loadTermsIndex() throws IOException {
+    private void loadTermsIndex()  {
       if (coreIndex == null) {
         coreIndex = new CoreFieldIndex(indexStart, termsStart, packedIndexStart, packedOffsetsStart, numIndexTerms);
       }
@@ -284,7 +284,7 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
       final int numIndexTerms;
       final long termsStart;
 
-      public CoreFieldIndex(long indexStart, long termsStart, long packedIndexStart, long packedOffsetsStart, int numIndexTerms) throws IOException {
+      public CoreFieldIndex(long indexStart, long termsStart, long packedIndexStart, long packedOffsetsStart, int numIndexTerms)  {
 
         this.termsStart = termsStart;
         termBytesStart = termBytes.getPointer();
@@ -295,11 +295,11 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
         // -1 is passed to mean "don't load term index", but
         // if we are then later loaded it's overwritten with
         // a real value
-        assert indexDivisor > 0;
+        Debug.Assert( indexDivisor > 0;
 
         this.numIndexTerms = 1+(numIndexTerms-1) / indexDivisor;
 
-        assert this.numIndexTerms  > 0: "numIndexTerms=" + numIndexTerms + " indexDivisor=" + indexDivisor;
+        Debug.Assert( this.numIndexTerms  > 0: "numIndexTerms=" + numIndexTerms + " indexDivisor=" + indexDivisor;
 
         if (indexDivisor == 1) {
           // Default (load all index terms) is fast -- slurp in the images from disk:
@@ -310,11 +310,11 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
 
             // records offsets into main terms dict file
             termsDictOffsets = PackedInts.getReader(clone);
-            assert termsDictOffsets.size() == numIndexTerms;
+            Debug.Assert( termsDictOffsets.size() == numIndexTerms;
 
             // records offsets into byte[] term data
             termOffsets = PackedInts.getReader(clone);
-            assert termOffsets.size() == 1+numIndexTerms;
+            Debug.Assert( termOffsets.size() == 1+numIndexTerms;
           } finally {
             clone.close();
           }
@@ -357,8 +357,8 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
               final int numTermBytes = (int) (nextTermOffset - termOffset);
 
               clone.seek(indexStart + termOffset);
-              assert indexStart + termOffset < clone.length() : "indexStart=" + indexStart + " termOffset=" + termOffset + " len=" + clone.length();
-              assert indexStart + termOffset + numTermBytes < clone.length();
+              Debug.Assert( indexStart + termOffset < clone.length() : "indexStart=" + indexStart + " termOffset=" + termOffset + " len=" + clone.length();
+              Debug.Assert( indexStart + termOffset + numTermBytes < clone.length();
 
               termBytes.copy(clone, numTermBytes);
               termOffsetUpto += numTermBytes;
@@ -404,13 +404,13 @@ public class FixedGapTermsIndexReader extends TermsIndexReaderBase {
   }
 
   @Override
-  public void close() throws IOException {
+  public void close()  {
     if (in != null && !indexLoaded) {
       in.close();
     }
   }
 
-  private void seekDir(IndexInput input, long dirOffset) throws IOException {
+  private void seekDir(IndexInput input, long dirOffset)  {
     if (version >= FixedGapTermsIndexWriter.VERSION_CHECKSUM) {
       input.seek(input.length() - CodecUtil.footerLength() - 8);
       dirOffset = input.readLong();

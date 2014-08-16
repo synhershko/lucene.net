@@ -42,14 +42,14 @@ public abstract class FixedIntBlockIndexOutput extends IntIndexOutput {
   protected final int[] buffer;
   private int upto;
 
-  protected FixedIntBlockIndexOutput(IndexOutput out, int fixedBlockSize) throws IOException {
+  protected FixedIntBlockIndexOutput(IndexOutput out, int fixedBlockSize)  {
     blockSize = fixedBlockSize;
     this.out = out;
     out.writeVInt(blockSize);
     buffer = new int[blockSize];
   }
 
-  protected abstract void flushBlock() throws IOException;
+  protected abstract void flushBlock() ;
 
   @Override
   public IntIndexOutput.Index index() {
@@ -63,13 +63,13 @@ public abstract class FixedIntBlockIndexOutput extends IntIndexOutput {
     int lastUpto;
 
     @Override
-    public void mark() throws IOException {
+    public void mark()  {
       fp = out.getFilePointer();
       upto = FixedIntBlockIndexOutput.this.upto;
     }
 
     @Override
-    public void copyFrom(IntIndexOutput.Index other, boolean copyLast) throws IOException {
+    public void copyFrom(IntIndexOutput.Index other, bool copyLast)  {
       Index idx = (Index) other;
       fp = idx.fp;
       upto = idx.upto;
@@ -80,13 +80,13 @@ public abstract class FixedIntBlockIndexOutput extends IntIndexOutput {
     }
 
     @Override
-    public void write(DataOutput indexOut, boolean absolute) throws IOException {
+    public void write(DataOutput indexOut, bool absolute)  {
       if (absolute) {
         indexOut.writeVInt(upto);
         indexOut.writeVLong(fp);
       } else if (fp == lastFP) {
         // same block
-        assert upto >= lastUpto;
+        Debug.Assert( upto >= lastUpto;
         int uptoDelta = upto - lastUpto;
         indexOut.writeVInt(uptoDelta << 1 | 1);
       } else {      
@@ -105,7 +105,7 @@ public abstract class FixedIntBlockIndexOutput extends IntIndexOutput {
   }
 
   @Override
-  public void write(int v) throws IOException {
+  public void write(int v)  {
     buffer[upto++] = v;
     if (upto == blockSize) {
       flushBlock();
@@ -114,7 +114,7 @@ public abstract class FixedIntBlockIndexOutput extends IntIndexOutput {
   }
 
   @Override
-  public void close() throws IOException {
+  public void close()  {
     try {
       if (upto > 0) {
         // NOTE: entries in the block after current upto are

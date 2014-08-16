@@ -54,11 +54,11 @@ public class FSTPulsing41PostingsFormat extends PostingsFormat {
   }
 
   @Override
-  public FieldsConsumer fieldsConsumer(SegmentWriteState state) throws IOException {
+  public FieldsConsumer fieldsConsumer(SegmentWriteState state)  {
     PostingsWriterBase docsWriter = null;
     PostingsWriterBase pulsingWriter = null;
 
-    boolean success = false;
+    bool success = false;
     try {
       docsWriter = wrappedPostingsBaseFormat.postingsWriterBase(state);
       pulsingWriter = new PulsingPostingsWriter(state, freqCutoff, docsWriter);
@@ -73,10 +73,10 @@ public class FSTPulsing41PostingsFormat extends PostingsFormat {
   }
 
   @Override
-  public FieldsProducer fieldsProducer(SegmentReadState state) throws IOException {
+  public FieldsProducer fieldsProducer(SegmentReadState state)  {
     PostingsReaderBase docsReader = null;
     PostingsReaderBase pulsingReader = null;
-    boolean success = false;
+    bool success = false;
     try {
       docsReader = wrappedPostingsBaseFormat.postingsReaderBase(state);
       pulsingReader = new PulsingPostingsReader(state, docsReader);

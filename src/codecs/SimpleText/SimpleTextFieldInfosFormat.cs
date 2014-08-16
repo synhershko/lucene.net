@@ -34,12 +34,12 @@ public class SimpleTextFieldInfosFormat extends FieldInfosFormat {
   private final FieldInfosWriter writer = new SimpleTextFieldInfosWriter();
 
   @Override
-  public FieldInfosReader getFieldInfosReader() throws IOException {
+  public FieldInfosReader getFieldInfosReader()  {
     return reader;
   }
 
   @Override
-  public FieldInfosWriter getFieldInfosWriter() throws IOException {
+  public FieldInfosWriter getFieldInfosWriter()  {
     return writer;
   }
 }

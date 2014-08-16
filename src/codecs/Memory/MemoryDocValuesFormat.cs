@@ -56,12 +56,12 @@ public class MemoryDocValuesFormat extends DocValuesFormat {
   }
 
   @Override
-  public DocValuesConsumer fieldsConsumer(SegmentWriteState state) throws IOException {
+  public DocValuesConsumer fieldsConsumer(SegmentWriteState state)  {
     return new MemoryDocValuesConsumer(state, DATA_CODEC, DATA_EXTENSION, METADATA_CODEC, METADATA_EXTENSION, acceptableOverheadRatio);
   }
   
   @Override
-  public DocValuesProducer fieldsProducer(SegmentReadState state) throws IOException {
+  public DocValuesProducer fieldsProducer(SegmentReadState state)  {
     return new MemoryDocValuesProducer(state, DATA_CODEC, DATA_EXTENSION, METADATA_CODEC, METADATA_EXTENSION);
   }
   

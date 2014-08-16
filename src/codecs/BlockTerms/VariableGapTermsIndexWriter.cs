@@ -15,6 +15,16 @@
  * limitations under the License.
  */
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using Lucene.Net.Codecs;
+using Lucene.Net.Codecs.BlockTerms;
+using Lucene.Net.Index;
+using Lucene.Net.Store;
+using Lucene.Net.Util;
+using Lucene.Net.Util.Fst;
+
 namespace Lucene.Net.Codecs.BlockTerms
 {
     
@@ -27,19 +37,19 @@ namespace Lucene.Net.Codecs.BlockTerms
  * (unicode codepoint order when the bytes are UTF8).
  *
  * @lucene.experimental */
-public class VariableGapTermsIndexWriter extends TermsIndexWriterBase {
-  protected IndexOutput out;
+public class VariableGapTermsIndexWriter : TermsIndexWriterBase {
+  protected IndexOutput output;
 
   /** Extension of terms index file */
-  static final String TERMS_INDEX_EXTENSION = "tiv";
+  public const String TERMS_INDEX_EXTENSION = "tiv";
 
-  final static String CODEC_NAME = "VARIABLE_GAP_TERMS_INDEX";
-  final static int VERSION_START = 0;
-  final static int VERSION_APPEND_ONLY = 1;
-  final static int VERSION_CHECKSUM = 2;
-  final static int VERSION_CURRENT = VERSION_CHECKSUM;
+ public const String CODEC_NAME = "VARIABLE_GAP_TERMS_INDEX";
+ public const int VERSION_START = 0;
+public const int VERSION_APPEND_ONLY = 1;
+  public const int VERSION_CHECKSUM = 2;
+  public const int VERSION_CURRENT = VERSION_CHECKSUM;
 
-  private final List<FSTFieldWriter> fields = new ArrayList<>();
+  private readonly List<FSTFieldWriter> fields = new ArrayList<>();
   
   @SuppressWarnings("unused") private final FieldInfos fieldInfos; // unread
   private final IndexTermSelector policy;
@@ -52,80 +62,95 @@ public class VariableGapTermsIndexWriter extends TermsIndexWriterBase {
    * 
    * @lucene.experimental 
    */
-  public static abstract class IndexTermSelector {
-    /** 
-     * Called sequentially on every term being written,
-     * returning true if this term should be indexed
-     */
-    public abstract boolean isIndexTerm(BytesRef term, TermStats stats);
-    /**
-     * Called when a new field is started.
-     */
-    public abstract void newField(FieldInfo fieldInfo);
-  }
 
-  /** Same policy as {@link FixedGapTermsIndexWriter} */
-  public static final class EveryNTermSelector extends IndexTermSelector {
-    private int count;
-    private final int interval;
-
-    public EveryNTermSelector(int interval) {
-      this.interval = interval;
-      // First term is first indexed term:
-      count = interval;
+    public abstract class IndexTermSelector
+    {
+        /// <summary>
+        /// Called sequentially on every term being written
+        /// returning true if this term should be indexed
+        /// </summary>
+        public abstract bool IsIndexTerm(BytesRef term, TermStats stats);
+        
+        /// <summary>Called when a new field is started</summary>
+        public abstract void NewField(FieldInfo fieldInfo);
     }
 
-    @Override
-    public boolean isIndexTerm(BytesRef term, TermStats stats) {
-      if (count >= interval) {
-        count = 1;
-        return true;
-      } else {
-        count++;
-        return false;
-      }
+    /// <remarks>
+    /// Same policy as {@link FixedGapTermsIndexWriter}
+    /// </remarks>
+    public sealed class EveryNTermSelector : IndexTermSelector
+    {
+        private int count;
+        private readonly int interval;
+
+        public EveryNTermSelector(int interval)
+        {
+            this.interval = interval;
+            // First term is first indexed term:
+            count = interval;
+        }
+
+        public override bool IsIndexTerm(BytesRef term, TermStats stats)
+        {
+            if (count >= interval)
+            {
+                count = 1;
+                return true;
+            }
+            else
+            {
+                count++;
+                return false;
+            }
+        }
+
+        public override void NewField(FieldInfo fieldInfo)
+        {
+            count = interval;
+        }
     }
 
-    @Override
-    public void newField(FieldInfo fieldInfo) {
-      count = interval;
+    /// <summary>
+    /// Sets an index term when docFreq >= docFreqThresh, or
+    /// every interval terms.  This should reduce seek time
+    /// to high docFreq terms. 
+    /// </summary>
+    public class EveryNOrDocFreqTermSelector : IndexTermSelector
+    {
+        private int count;
+        private readonly int docFreqThresh;
+        private readonly int interval;
+
+        public EveryNOrDocFreqTermSelector(int docFreqThresh, int interval)
+        {
+            this.interval = interval;
+            this.docFreqThresh = docFreqThresh;
+
+            // First term is first indexed term:
+            count = interval;
+        }
+
+        public override bool IsIndexTerm(BytesRef term, TermStats stats)
+        {
+            if (stats.DocFreq >= docFreqThresh || count >= interval)
+            {
+                count = 1;
+                return true;
+            }
+            else
+            {
+                count++;
+                return false;
+            }
+        }
+
+        public override void NewField(FieldInfo fieldInfo)
+        {
+            count = interval;
+        }
     }
-  }
 
-  /** Sets an index term when docFreq >= docFreqThresh, or
-   *  every interval terms.  This should reduce seek time
-   *  to high docFreq terms.  */
-  public static final class EveryNOrDocFreqTermSelector extends IndexTermSelector {
-    private int count;
-    private final int docFreqThresh;
-    private final int interval;
-
-    public EveryNOrDocFreqTermSelector(int docFreqThresh, int interval) {
-      this.interval = interval;
-      this.docFreqThresh = docFreqThresh;
-
-      // First term is first indexed term:
-      count = interval;
-    }
-
-    @Override
-    public boolean isIndexTerm(BytesRef term, TermStats stats) {
-      if (stats.docFreq >= docFreqThresh || count >= interval) {
-        count = 1;
-        return true;
-      } else {
-        count++;
-        return false;
-      }
-    }
-
-    @Override
-    public void newField(FieldInfo fieldInfo) {
-      count = interval;
-    }
-  }
-
-  // TODO: it'd be nice to let the FST builder prune based
+    // TODO: it'd be nice to let the FST builder prune based
   // on term count of each node (the prune1/prune2 that it
   // accepts), and build the index based on that.  This
   // should result in a more compact terms index, more like
@@ -158,153 +183,184 @@ public class VariableGapTermsIndexWriter extends TermsIndexWriterBase {
   // terms or as rare as every <maxArcCount> * 10 (eg 2560),
   // in the extremes.
 
-  public VariableGapTermsIndexWriter(SegmentWriteState state, IndexTermSelector policy) throws IOException {
-    final String indexFileName = IndexFileNames.segmentFileName(state.segmentInfo.name, state.segmentSuffix, TERMS_INDEX_EXTENSION);
-    out = state.directory.createOutput(indexFileName, state.context);
-    boolean success = false;
-    try {
-      fieldInfos = state.fieldInfos;
-      this.policy = policy;
-      writeHeader(out);
-      success = true;
-    } finally {
-      if (!success) {
-        IOUtils.closeWhileHandlingException(out);
-      }
+    public VariableGapTermsIndexWriter(SegmentWriteState state, IndexTermSelector policy)
+    {
+        string indexFileName = IndexFileNames.SegmentFileName(state.SegmentInfo.Name, state.SegmentSuffix,
+            TERMS_INDEX_EXTENSION);
+        output = state.Directory.CreateOutput(indexFileName, state.Context);
+        bool success = false;
+        try
+        {
+            FieldInfos = state.FieldInfos;
+            this.Policy = policy;
+            writeHeader(output);
+            success = true;
+        }
+        finally
+        {
+            if (!success)
+            {
+                IOUtils.CloseWhileHandlingException(output);
+            }
+        }
     }
-  }
-  
-  private void writeHeader(IndexOutput out) throws IOException {
-    CodecUtil.writeHeader(out, CODEC_NAME, VERSION_CURRENT);
-  }
 
-  @Override
-  public FieldWriter addField(FieldInfo field, long termsFilePointer) throws IOException {
-    ////System.out.println("VGW: field=" + field.name);
-    policy.newField(field);
-    FSTFieldWriter writer = new FSTFieldWriter(field, termsFilePointer);
-    fields.add(writer);
-    return writer;
-  }
+    private void WriteHeader(IndexOutput output)
+    {
+        CodecUtil.WriteHeader(output, CODEC_NAME, VERSION_CURRENT);
+    }
 
-  /** NOTE: if your codec does not sort in unicode code
+    public override FieldWriter AddField(FieldInfo field, long termsFilePointer)
+    {
+        ////System.out.println("VGW: field=" + field.name);
+        Policy.newField(field);
+        FSTFieldWriter writer = new FSTFieldWriter(field, termsFilePointer);
+        fields.Add(writer);
+        return writer;
+    }
+
+    /** NOTE: if your codec does not sort in unicode code
    *  point order, you must override this method, to simply
    *  return indexedTerm.length. */
-  protected int indexedTermPrefixLength(final BytesRef priorTerm, final BytesRef indexedTerm) {
-    // As long as codec sorts terms in unicode codepoint
-    // order, we can safely strip off the non-distinguishing
-    // suffix to save RAM in the loaded terms index.
-    final int idxTermOffset = indexedTerm.offset;
-    final int priorTermOffset = priorTerm.offset;
-    final int limit = Math.min(priorTerm.length, indexedTerm.length);
-    for(int byteIdx=0;byteIdx<limit;byteIdx++) {
-      if (priorTerm.bytes[priorTermOffset+byteIdx] != indexedTerm.bytes[idxTermOffset+byteIdx]) {
-        return byteIdx+1;
-      }
-    }
-    return Math.min(1+priorTerm.length, indexedTerm.length);
-  }
 
-  private class FSTFieldWriter extends FieldWriter {
-    private final Builder<Long> fstBuilder;
-    private final PositiveIntOutputs fstOutputs;
-    private final long startTermsFilePointer;
-
-    final FieldInfo fieldInfo;
-    FST<Long> fst;
-    final long indexStart;
-
-    private final BytesRef lastTerm = new BytesRef();
-    private boolean first = true;
-
-    public FSTFieldWriter(FieldInfo fieldInfo, long termsFilePointer) throws IOException {
-      this.fieldInfo = fieldInfo;
-      fstOutputs = PositiveIntOutputs.getSingleton();
-      fstBuilder = new Builder<>(FST.INPUT_TYPE.BYTE1, fstOutputs);
-      indexStart = out.getFilePointer();
-      ////System.out.println("VGW: field=" + fieldInfo.name);
-
-      // Always put empty string in
-      fstBuilder.add(new IntsRef(), termsFilePointer);
-      startTermsFilePointer = termsFilePointer;
-    }
-
-    @Override
-    public boolean checkIndexTerm(BytesRef text, TermStats stats) throws IOException {
-      //System.out.println("VGW: index term=" + text.utf8ToString());
-      // NOTE: we must force the first term per field to be
-      // indexed, in case policy doesn't:
-      if (policy.isIndexTerm(text, stats) || first) {
-        first = false;
-        //System.out.println("  YES");
-        return true;
-      } else {
-        lastTerm.copyBytes(text);
-        return false;
-      }
-    }
-
-    private final IntsRef scratchIntsRef = new IntsRef();
-
-    @Override
-    public void add(BytesRef text, TermStats stats, long termsFilePointer) throws IOException {
-      if (text.length == 0) {
-        // We already added empty string in ctor
-        assert termsFilePointer == startTermsFilePointer;
-        return;
-      }
-      final int lengthSave = text.length;
-      text.length = indexedTermPrefixLength(lastTerm, text);
-      try {
-        fstBuilder.add(Util.toIntsRef(text, scratchIntsRef), termsFilePointer);
-      } finally {
-        text.length = lengthSave;
-      }
-      lastTerm.copyBytes(text);
-    }
-
-    @Override
-    public void finish(long termsFilePointer) throws IOException {
-      fst = fstBuilder.finish();
-      if (fst != null) {
-        fst.save(out);
-      }
-    }
-  }
-
-  @Override
-  public void close() throws IOException {
-    if (out != null) {
-      try {
-        final long dirStart = out.getFilePointer();
-        final int fieldCount = fields.size();
-        
-        int nonNullFieldCount = 0;
-        for(int i=0;i<fieldCount;i++) {
-          FSTFieldWriter field = fields.get(i);
-          if (field.fst != null) {
-            nonNullFieldCount++;
-          }
+    protected int IndexedTermPrefixLength(BytesRef priorTerm, BytesRef indexedTerm)
+    {
+        // As long as codec sorts terms in unicode codepoint
+        // order, we can safely strip off the non-distinguishing
+        // suffix to save RAM in the loaded terms index.
+        int idxTermOffset = indexedTerm.Offset;
+        int priorTermOffset = priorTerm.Offset;
+        int limit = Math.Min(priorTerm.Length, indexedTerm.Length);
+        for (int byteIdx = 0; byteIdx < limit; byteIdx++)
+        {
+            if (priorTerm.Bytes[priorTermOffset + byteIdx] != indexedTerm.Bytes[idxTermOffset + byteIdx])
+            {
+                return byteIdx + 1;
+            }
         }
-        
-        out.writeVInt(nonNullFieldCount);
-        for(int i=0;i<fieldCount;i++) {
-          FSTFieldWriter field = fields.get(i);
-          if (field.fst != null) {
-            out.writeVInt(field.fieldInfo.number);
-            out.writeVLong(field.indexStart);
-          }
-        }
-        writeTrailer(dirStart);
-        CodecUtil.writeFooter(out);
-      } finally {
-        out.close();
-        out = null;
-      }
-    }
-  }
 
-  private void writeTrailer(long dirStart) throws IOException {
-    out.writeLong(dirStart);
-  }
+        return Math.Min(1 + priorTerm.Length, indexedTerm.Length);
+    }
+
+    private class FSTFieldWriter : FieldWriter
+    {
+        private readonly Builder<long> fstBuilder;
+        private readonly PositiveIntOutputs fstOutputs;
+        private readonly long startTermsFilePointer;
+
+        public FieldInfo fieldInfo;
+        private FST<long> fst;
+        private long indexStart;
+
+        private readonly BytesRef lastTerm = new BytesRef();
+        private bool first = true;
+
+        public FSTFieldWriter(FieldInfo fieldInfo, long termsFilePointer)
+        {
+            this.fieldInfo = fieldInfo;
+            fstOutputs = PositiveIntOutputs.Singleton;
+            fstBuilder = new Builder<>(FST.INPUT_TYPE.BYTE1, fstOutputs);
+            indexStart = output.FilePointer;
+            ////System.out.println("VGW: field=" + fieldInfo.name);
+
+            // Always put empty string in
+            fstBuilder.Add(new IntsRef(), termsFilePointer);
+            startTermsFilePointer = termsFilePointer;
+        }
+
+        public override bool CheckIndexTerm(BytesRef text, TermStats stats)
+        {
+            //System.out.println("VGW: index term=" + text.utf8ToString());
+            // NOTE: we must force the first term per field to be
+            // indexed, in case policy doesn't:
+            if (policy.isIndexTerm(text, stats) || first)
+            {
+                first = false;
+                //System.out.println("  YES");
+                return true;
+            }
+            else
+            {
+                lastTerm.CopyBytes(text);
+                return false;
+            }
+        }
+
+        private readonly IntsRef scratchIntsRef = new IntsRef();
+
+        public override void Add(BytesRef text, TermStats stats, long termsFilePointer)
+        {
+            if (text.Length == 0)
+            {
+                // We already added empty string in ctor
+                Debug.Assert(termsFilePointer == startTermsFilePointer);
+                return;
+            }
+            int lengthSave = text.Length;
+            text.Length = IndexedTermPrefixLength(lastTerm, text);
+            try
+            {
+                fstBuilder.Add(Util.ToIntsRef(text, scratchIntsRef), termsFilePointer);
+            }
+            finally
+            {
+                text.Length = lengthSave;
+            }
+            lastTerm.CopyBytes(text);
+        }
+
+        public override void Finish(long termsFilePointer)
+        {
+            fst = fstBuilder.Finish();
+            if (fst != null)
+            {
+                fst.Save(output);
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        if (output != null)
+        {
+            try
+            {
+                long dirStart = output.FilePointer;
+                int fieldCount = fields.Size;
+
+                int nonNullFieldCount = 0;
+                for (int i = 0; i < fieldCount; i++)
+                {
+                    FSTFieldWriter field = fields[i];
+                    if (field.fst != null)
+                    {
+                        nonNullFieldCount++;
+                    }
+                }
+
+                output.WriteVInt(nonNullFieldCount);
+                for (int i = 0; i < fieldCount; i++)
+                {
+                    FSTFieldWriter field = fields[i];
+                    if (field.Fst != null)
+                    {
+                        output.WriteVInt(field.fieldInfo.Number);
+                        output.WriteVLong(field.indexStart);
+                    }
+                }
+                writeTrailer(dirStart);
+                CodecUtil.WriteFooter(output);
+            }
+            finally
+            {
+                output.Dispose();
+                output = null;
+            }
+        }
+    }
+
+    private void WriteTrailer(long dirStart)
+    {
+        output.WriteLong(dirStart);
+    }
 }

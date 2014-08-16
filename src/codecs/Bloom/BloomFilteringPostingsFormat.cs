@@ -432,7 +432,7 @@ namespace Lucene.Net.Codecs.Bloom
                 FuzzySet bloomFilter = bloomFilterFactory.GetSetForField(state, field);
                 if (bloomFilter != null)
                 {
-                    Debug.Assert(bloomFilters.ContainsKey(field) == false);
+                    Debug.Debug.Assert((bloomFilters.ContainsKey(field) == false);
                     bloomFilters.Add(field, bloomFilter);
                     return new WrappedTermsConsumer(delegateFieldsConsumer.AddField(field), bloomFilter);
                 }

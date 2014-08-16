@@ -52,48 +52,48 @@ import org.apache.lucene.util.StringHelper;
 public class SimpleTextSegmentInfoReader extends SegmentInfoReader {
 
   @Override
-  public SegmentInfo read(Directory directory, String segmentName, IOContext context) throws IOException {
+  public SegmentInfo read(Directory directory, String segmentName, IOContext context)  {
     BytesRef scratch = new BytesRef();
     String segFileName = IndexFileNames.segmentFileName(segmentName, "", SimpleTextSegmentInfoFormat.SI_EXTENSION);
     ChecksumIndexInput input = directory.openChecksumInput(segFileName, context);
-    boolean success = false;
+    bool success = false;
     try {
       SimpleTextUtil.readLine(input, scratch);
-      assert StringHelper.startsWith(scratch, SI_VERSION);
+      Debug.Assert( StringHelper.startsWith(scratch, SI_VERSION);
       final String version = readString(SI_VERSION.length, scratch);
     
       SimpleTextUtil.readLine(input, scratch);
-      assert StringHelper.startsWith(scratch, SI_DOCCOUNT);
+      Debug.Assert( StringHelper.startsWith(scratch, SI_DOCCOUNT);
       final int docCount = Integer.parseInt(readString(SI_DOCCOUNT.length, scratch));
     
       SimpleTextUtil.readLine(input, scratch);
-      assert StringHelper.startsWith(scratch, SI_USECOMPOUND);
-      final boolean isCompoundFile = Boolean.parseBoolean(readString(SI_USECOMPOUND.length, scratch));
+      Debug.Assert( StringHelper.startsWith(scratch, SI_USECOMPOUND);
+      final bool isCompoundFile = bool.parsebool(readString(SI_USECOMPOUND.length, scratch));
     
       SimpleTextUtil.readLine(input, scratch);
-      assert StringHelper.startsWith(scratch, SI_NUM_DIAG);
+      Debug.Assert( StringHelper.startsWith(scratch, SI_NUM_DIAG);
       int numDiag = Integer.parseInt(readString(SI_NUM_DIAG.length, scratch));
       Map<String,String> diagnostics = new HashMap<>();
 
       for (int i = 0; i < numDiag; i++) {
         SimpleTextUtil.readLine(input, scratch);
-        assert StringHelper.startsWith(scratch, SI_DIAG_KEY);
+        Debug.Assert( StringHelper.startsWith(scratch, SI_DIAG_KEY);
         String key = readString(SI_DIAG_KEY.length, scratch);
       
         SimpleTextUtil.readLine(input, scratch);
-        assert StringHelper.startsWith(scratch, SI_DIAG_VALUE);
+        Debug.Assert( StringHelper.startsWith(scratch, SI_DIAG_VALUE);
         String value = readString(SI_DIAG_VALUE.length, scratch);
         diagnostics.put(key, value);
       }
       
       SimpleTextUtil.readLine(input, scratch);
-      assert StringHelper.startsWith(scratch, SI_NUM_FILES);
+      Debug.Assert( StringHelper.startsWith(scratch, SI_NUM_FILES);
       int numFiles = Integer.parseInt(readString(SI_NUM_FILES.length, scratch));
       Set<String> files = new HashSet<>();
 
       for (int i = 0; i < numFiles; i++) {
         SimpleTextUtil.readLine(input, scratch);
-        assert StringHelper.startsWith(scratch, SI_FILE);
+        Debug.Assert( StringHelper.startsWith(scratch, SI_FILE);
         String fileName = readString(SI_FILE.length, scratch);
         files.add(fileName);
       }

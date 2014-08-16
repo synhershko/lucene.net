@@ -43,9 +43,9 @@ class DirectDocValuesConsumer extends DocValuesConsumer {
   IndexOutput data, meta;
   final int maxDoc;
 
-  DirectDocValuesConsumer(SegmentWriteState state, String dataCodec, String dataExtension, String metaCodec, String metaExtension) throws IOException {
+  DirectDocValuesConsumer(SegmentWriteState state, String dataCodec, String dataExtension, String metaCodec, String metaExtension)  {
     maxDoc = state.segmentInfo.getDocCount();
-    boolean success = false;
+    bool success = false;
     try {
       String dataName = IndexFileNames.segmentFileName(state.segmentInfo.name, state.segmentSuffix, dataExtension);
       data = state.directory.createOutput(dataName, state.context);
@@ -62,17 +62,17 @@ class DirectDocValuesConsumer extends DocValuesConsumer {
   }
 
   @Override
-  public void addNumericField(FieldInfo field, Iterable<Number> values) throws IOException {
+  public void addNumericField(FieldInfo field, Iterable<Number> values)  {
     meta.writeVInt(field.number);
     meta.writeByte(NUMBER);
     addNumericFieldValues(field, values);
   }
 
-  private void addNumericFieldValues(FieldInfo field, Iterable<Number> values) throws IOException {
+  private void addNumericFieldValues(FieldInfo field, Iterable<Number> values)  {
     meta.writeLong(data.getFilePointer());
     long minValue = Long.MAX_VALUE;
     long maxValue = Long.MIN_VALUE;
-    boolean missing = false;
+    bool missing = false;
 
     long count = 0;
     for (Number nv : values) {
@@ -137,8 +137,8 @@ class DirectDocValuesConsumer extends DocValuesConsumer {
   }
   
   @Override
-  public void close() throws IOException {
-    boolean success = false;
+  public void close()  {
+    bool success = false;
     try {
       if (meta != null) {
         meta.writeVInt(-1); // write EOF marker
@@ -159,16 +159,16 @@ class DirectDocValuesConsumer extends DocValuesConsumer {
   }
 
   @Override
-  public void addBinaryField(FieldInfo field, final Iterable<BytesRef> values) throws IOException {
+  public void addBinaryField(FieldInfo field, final Iterable<BytesRef> values)  {
     meta.writeVInt(field.number);
     meta.writeByte(BYTES);
     addBinaryFieldValues(field, values);
   }
 
-  private void addBinaryFieldValues(FieldInfo field, final Iterable<BytesRef> values) throws IOException {
+  private void addBinaryFieldValues(FieldInfo field, final Iterable<BytesRef> values)  {
     // write the byte[] data
     final long startFP = data.getFilePointer();
-    boolean missing = false;
+    bool missing = false;
     long totalBytes = 0;
     int count = 0;
     for(BytesRef v : values) {
@@ -208,7 +208,7 @@ class DirectDocValuesConsumer extends DocValuesConsumer {
   
   // TODO: in some cases representing missing with minValue-1 wouldn't take up additional space and so on,
   // but this is very simple, and algorithms only check this for values of 0 anyway (doesnt slow down normal decode)
-  void writeMissingBitset(Iterable<?> values) throws IOException {
+  void writeMissingBitset(Iterable<?> values)  {
     long bits = 0;
     int count = 0;
     for (Object v : values) {
@@ -228,7 +228,7 @@ class DirectDocValuesConsumer extends DocValuesConsumer {
   }
 
   @Override
-  public void addSortedField(FieldInfo field, Iterable<BytesRef> values, Iterable<Number> docToOrd) throws IOException {
+  public void addSortedField(FieldInfo field, Iterable<BytesRef> values, Iterable<Number> docToOrd)  {
     meta.writeVInt(field.number);
     meta.writeByte(SORTED);
 
@@ -241,7 +241,7 @@ class DirectDocValuesConsumer extends DocValuesConsumer {
 
   // note: this might not be the most efficient... but its fairly simple
   @Override
-  public void addSortedSetField(FieldInfo field, Iterable<BytesRef> values, final Iterable<Number> docToOrdCount, final Iterable<Number> ords) throws IOException {
+  public void addSortedSetField(FieldInfo field, Iterable<BytesRef> values, final Iterable<Number> docToOrdCount, final Iterable<Number> ords)  {
     meta.writeVInt(field.number);
     meta.writeByte(SORTED_SET);
 
@@ -261,10 +261,10 @@ class DirectDocValuesConsumer extends DocValuesConsumer {
           return new Iterator<Number>() {
 
             long sum;
-            boolean ended;
+            bool ended;
 
             @Override
-            public boolean hasNext() {
+            public bool hasNext() {
               return iter.hasNext() || !ended;
             }
 
@@ -280,7 +280,7 @@ class DirectDocValuesConsumer extends DocValuesConsumer {
               } else if (!ended) {
                 ended = true;
               } else {
-                assert false;
+                Debug.Assert( false;
               }
 
               return toReturn;

@@ -80,7 +80,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
   private final static int DEFAULT_MIN_SKIP_COUNT = 8;
   private final static int DEFAULT_LOW_FREQ_CUTOFF = 32;
 
-  //private static final boolean DEBUG = true;
+  //private static final bool DEBUG = true;
 
   // TODO: allow passing/wrapping arbitrary postings format?
 
@@ -100,12 +100,12 @@ public final class DirectPostingsFormat extends PostingsFormat {
   }
   
   @Override
-  public FieldsConsumer fieldsConsumer(SegmentWriteState state) throws IOException {
+  public FieldsConsumer fieldsConsumer(SegmentWriteState state)  {
     return PostingsFormat.forName("Lucene41").fieldsConsumer(state);
   }
 
   @Override
-  public FieldsProducer fieldsProducer(SegmentReadState state) throws IOException {
+  public FieldsProducer fieldsProducer(SegmentReadState state)  {
     FieldsProducer postings = PostingsFormat.forName("Lucene41").fieldsProducer(state);
     if (state.context.context != IOContext.Context.MERGE) {
       FieldsProducer loadedPostings;
@@ -125,7 +125,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
   private static final class DirectFields extends FieldsProducer {
     private final Map<String,DirectField> fields = new TreeMap<>();
 
-    public DirectFields(SegmentReadState state, Fields fields, int minSkipCount, int lowFreqCutoff) throws IOException {
+    public DirectFields(SegmentReadState state, Fields fields, int minSkipCount, int lowFreqCutoff)  {
       for (String field : fields) {
         this.fields.put(field, new DirectField(state, field, fields.terms(field), minSkipCount, lowFreqCutoff));
       }
@@ -170,7 +170,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
     }
 
     @Override
-    public void checkIntegrity() throws IOException {
+    public void checkIntegrity()  {
       // if we read entirely into ram, we already validated.
       // otherwise returned the raw postings reader
     }
@@ -254,10 +254,10 @@ public final class DirectPostingsFormat extends PostingsFormat {
     private final int[] skipOffsets;
 
     private final TermAndSkip[] terms;
-    private final boolean hasFreq;
-    private final boolean hasPos;
-    private final boolean hasOffsets;
-    private final boolean hasPayloads;
+    private final bool hasFreq;
+    private final bool hasPos;
+    private final bool hasOffsets;
+    private final bool hasPayloads;
     private final long sumTotalTermFreq;
     private final int docCount;
     private final long sumDocFreq;
@@ -288,7 +288,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
       }
     }
 
-    public DirectField(SegmentReadState state, String field, Terms termsIn, int minSkipCount, int lowFreqCutoff) throws IOException {
+    public DirectField(SegmentReadState state, String field, Terms termsIn, int minSkipCount, int lowFreqCutoff)  {
       final FieldInfo fieldInfo = state.fieldInfos.fieldInfo(field);
 
       sumTotalTermFreq = termsIn.getSumTotalTermFreq();
@@ -468,7 +468,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
 
             upto++;
           }
-          assert upto == docFreq;
+          Debug.Assert( upto == docFreq;
           ent = new HighFreqTerm(docs, freqs, positions, payloads, totalTermFreq);
         }
 
@@ -502,7 +502,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
         }
       }
       this.skipOffsets[numTerms] = skipOffset;
-      assert skipOffset == skipCount;
+      Debug.Assert( skipOffset == skipCount;
     }
 
     /** Returns approximate RAM bytes used */
@@ -593,7 +593,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
     }
 
     private void finishSkips() {
-      assert count == terms.length;
+      Debug.Assert( count == terms.length;
       int lastTermOffset = termOffsets[count-1];
       int lastTermLength = termOffsets[count] - lastTermOffset;
 
@@ -682,22 +682,22 @@ public final class DirectPostingsFormat extends PostingsFormat {
     }
 
     @Override
-    public boolean hasFreqs() {
+    public bool hasFreqs() {
       return hasFreq;
     }
 
     @Override
-    public boolean hasOffsets() {
+    public bool hasOffsets() {
       return hasOffsets;
     }
 
     @Override
-    public boolean hasPositions() {
+    public bool hasPositions() {
       return hasPos;
     }
     
     @Override
-    public boolean hasPayloads() {
+    public bool hasPayloads() {
       return hasPayloads;
     }
 
@@ -706,7 +706,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
       private final BytesRef scratch = new BytesRef();
       private int termOrd;
 
-      boolean canReuse(TermAndSkip[] other) {
+      bool canReuse(TermAndSkip[] other) {
         return DirectField.this.terms == other;
       }
 
@@ -791,7 +791,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
       }
 
       @Override
-      public boolean seekExact(BytesRef term) {
+      public bool seekExact(BytesRef term) {
         // TODO: we should use the skip pointers; should be
         // faster than bin search; we should also hold
         // & reuse current state so seeking forwards is
@@ -813,10 +813,10 @@ public final class DirectPostingsFormat extends PostingsFormat {
       }
 
       @Override
-      public void seekExact(BytesRef term, TermState state) throws IOException {
+      public void seekExact(BytesRef term, TermState state)  {
         termOrd = (int) ((OrdTermState) state).ord;
         setTerm();
-        assert term.equals(scratch);
+        Debug.Assert( term.equals(scratch);
       }
 
       @Override
@@ -988,13 +988,13 @@ public final class DirectPostingsFormat extends PostingsFormat {
 
               while (label > states[i].transitionMax) {
                 states[i].transitionUpto++;
-                assert states[i].transitionUpto < states[i].transitions.length;
+                Debug.Assert( states[i].transitionUpto < states[i].transitions.length;
                 states[i].transitionMin = states[i].transitions[states[i].transitionUpto].getMin();
                 states[i].transitionMax = states[i].transitions[states[i].transitionUpto].getMax();
-                assert states[i].transitionMin >= 0;
-                assert states[i].transitionMin <= 255;
-                assert states[i].transitionMax >= 0;
-                assert states[i].transitionMax <= 255;
+                Debug.Assert( states[i].transitionMin >= 0;
+                Debug.Assert( states[i].transitionMin <= 255;
+                Debug.Assert( states[i].transitionMax >= 0;
+                Debug.Assert( states[i].transitionMax <= 255;
               }
 
               // Skip forwards until we find a term matching
@@ -1030,7 +1030,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
                   //   System.out.println("  no match; already beyond; return termOrd=" + termOrd);
                   // }
                   stateUpto -= skipUpto;
-                  assert stateUpto >= 0;
+                  Debug.Assert( stateUpto >= 0;
                   return;
                 } else if (label == (termBytes[termOffset+i] & 0xFF)) {
                   // if (DEBUG) {
@@ -1042,7 +1042,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
                     final int nextState = runAutomaton.step(states[stateUpto].state, label);
 
                     // Automaton is required to accept startTerm:
-                    assert nextState != -1;
+                    Debug.Assert( nextState != -1;
 
                     stateUpto++;
                     states[stateUpto].changeOrd = skips[skipOffset + skipUpto++];
@@ -1067,10 +1067,10 @@ public final class DirectPostingsFormat extends PostingsFormat {
                     // than the minSkipCount):
                     final int startTermOrd = termOrd;
                     while (termOrd < terms.length && compare(termOrd, startTerm) <= 0) {
-                      assert termOrd == startTermOrd || skipOffsets[termOrd] == skipOffsets[termOrd+1];
+                      Debug.Assert( termOrd == startTermOrd || skipOffsets[termOrd] == skipOffsets[termOrd+1];
                       termOrd++;
                     }
-                    assert termOrd - startTermOrd < minSkipCount;
+                    Debug.Assert( termOrd - startTermOrd < minSkipCount;
                     termOrd--;
                     stateUpto -= skipUpto;
                     // if (DEBUG) {
@@ -1142,7 +1142,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
 
         if (termOrd == 0 && termOffsets[1] == 0) {
           // Special-case empty string:
-          assert stateUpto == 0;
+          Debug.Assert( stateUpto == 0;
           // if (DEBUG) {
           //   System.out.println("  visit empty string");
           // }
@@ -1198,9 +1198,9 @@ public final class DirectPostingsFormat extends PostingsFormat {
           //   System.out.println("  term=" + new BytesRef(termBytes, termOffset, termLength).utf8ToString() + " skips=" + Arrays.toString(skips));
           // }
         
-          assert termOrd < state.changeOrd;
+          Debug.Assert( termOrd < state.changeOrd;
 
-          assert stateUpto <= termLength: "term.length=" + termLength + "; stateUpto=" + stateUpto;
+          Debug.Assert( stateUpto <= termLength: "term.length=" + termLength + "; stateUpto=" + stateUpto;
           final int label = termBytes[termOffset+stateUpto] & 0xFF;
 
           while (label > state.transitionMax) {
@@ -1214,7 +1214,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
                 termOrd = terms.length;
                 return null;
               } else {
-                assert state.changeOrd > termOrd;
+                Debug.Assert( state.changeOrd > termOrd;
                 // if (DEBUG) {
                 //   System.out.println("  jumpend " + (state.changeOrd - termOrd));
                 // }
@@ -1225,13 +1225,13 @@ public final class DirectPostingsFormat extends PostingsFormat {
               }
               continue nextTerm;
             }
-            assert state.transitionUpto < state.transitions.length: " state.transitionUpto=" + state.transitionUpto + " vs " + state.transitions.length;
+            Debug.Assert( state.transitionUpto < state.transitions.length: " state.transitionUpto=" + state.transitionUpto + " vs " + state.transitions.length;
             state.transitionMin = state.transitions[state.transitionUpto].getMin();
             state.transitionMax = state.transitions[state.transitionUpto].getMax();
-            assert state.transitionMin >= 0;
-            assert state.transitionMin <= 255;
-            assert state.transitionMax >= 0;
-            assert state.transitionMax <= 255;
+            Debug.Assert( state.transitionMin >= 0;
+            Debug.Assert( state.transitionMin <= 255;
+            Debug.Assert( state.transitionMax >= 0;
+            Debug.Assert( state.transitionMax <= 255;
           }
 
           /*
@@ -1355,11 +1355,11 @@ public final class DirectPostingsFormat extends PostingsFormat {
           } else {
             // Run the non-indexed tail of this term:
 
-            // TODO: add assert that we don't inc too many times
+            // TODO: add Debug.Assert( that we don't inc too many times
 
             if (compiledAutomaton.commonSuffixRef != null) {
               //System.out.println("suffix " + compiledAutomaton.commonSuffixRef.utf8ToString());
-              assert compiledAutomaton.commonSuffixRef.offset == 0;
+              Debug.Assert( compiledAutomaton.commonSuffixRef.offset == 0;
               if (termLength < compiledAutomaton.commonSuffixRef.length) {
                 termOrd++;
                 skipUpto = 0;
@@ -1518,7 +1518,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
       this.liveDocs = liveDocs;
     }
 
-    public boolean canReuse(Bits liveDocs) {
+    public bool canReuse(Bits liveDocs) {
       return liveDocs == this.liveDocs;
     }
 
@@ -1565,7 +1565,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
     }
 
     @Override
-    public int advance(int target) throws IOException {
+    public int advance(int target)  {
       // Linear scan, but this is low-freq term so it won't
       // be costly:
       return slowAdvance(target);
@@ -1587,7 +1587,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
       this.liveDocs = liveDocs;
     }
 
-    public boolean canReuse(Bits liveDocs) {
+    public bool canReuse(Bits liveDocs) {
       return liveDocs == this.liveDocs;
     }
 
@@ -1633,7 +1633,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
     }
 
     @Override
-    public int advance(int target) throws IOException {
+    public int advance(int target)  {
       // Linear scan, but this is low-freq term so it won't
       // be costly:
       return slowAdvance(target);
@@ -1661,7 +1661,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
       // }
     }
 
-    public boolean canReuse(Bits liveDocs, int posMult) {
+    public bool canReuse(Bits liveDocs, int posMult) {
       return liveDocs == this.liveDocs && posMult == this.posMult;
     }
 
@@ -1682,13 +1682,13 @@ public final class DirectPostingsFormat extends PostingsFormat {
       if (liveDocs == null) {
         if (upto < postings.length) {   
           freq = postings[upto+1];
-          assert freq > 0;
+          Debug.Assert( freq > 0;
           return postings[upto];
         }
       } else {
         while (upto < postings.length) {
           freq = postings[upto+1];
-          assert freq > 0;
+          Debug.Assert( freq > 0;
           if (liveDocs.get(postings[upto])) {
             return postings[upto];
           }
@@ -1717,7 +1717,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
     }
 
     @Override
-    public int advance(int target) throws IOException {
+    public int advance(int target)  {
       // Linear scan, but this is low-freq term so it won't
       // be costly:
       return slowAdvance(target);
@@ -1734,8 +1734,8 @@ public final class DirectPostingsFormat extends PostingsFormat {
     private int[] postings;
     private final Bits liveDocs;
     private final int posMult;
-    private final boolean hasOffsets;
-    private final boolean hasPayloads;
+    private final bool hasOffsets;
+    private final bool hasPayloads;
     private final BytesRef payload = new BytesRef();
     private int upto;
     private int docID;
@@ -1748,7 +1748,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
     private int payloadLength;
     private byte[] payloadBytes;
 
-    public LowFreqDocsAndPositionsEnum(Bits liveDocs, boolean hasOffsets, boolean hasPayloads) {
+    public LowFreqDocsAndPositionsEnum(Bits liveDocs, bool hasOffsets, bool hasPayloads) {
       this.liveDocs = liveDocs;
       this.hasOffsets = hasOffsets;
       this.hasPayloads = hasPayloads;
@@ -1835,7 +1835,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
 
     @Override
     public int nextPosition() {
-      assert skipPositions > 0;
+      Debug.Assert( skipPositions > 0;
       skipPositions--;
       final int pos = postings[upto++];
       if (hasOffsets) {
@@ -1861,7 +1861,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
     }
 
     @Override
-    public int advance(int target) throws IOException {
+    public int advance(int target)  {
       return slowAdvance(target);
     }
 
@@ -1896,7 +1896,7 @@ public final class DirectPostingsFormat extends PostingsFormat {
       this.liveDocs = liveDocs;
     }
 
-    public boolean canReuse(Bits liveDocs) {
+    public bool canReuse(Bits liveDocs) {
       return liveDocs == this.liveDocs;
     }
 
@@ -2069,14 +2069,14 @@ public final class DirectPostingsFormat extends PostingsFormat {
     private int[][] positions;
     private byte[][][] payloads;
     private final Bits liveDocs;
-    private final boolean hasOffsets;
+    private final bool hasOffsets;
     private final int posJump;
     private int upto;
     private int docID = -1;
     private int posUpto;
     private int[] curPositions;
 
-    public HighFreqDocsAndPositionsEnum(Bits liveDocs, boolean hasOffsets) {
+    public HighFreqDocsAndPositionsEnum(Bits liveDocs, bool hasOffsets) {
       this.liveDocs = liveDocs;
       this.hasOffsets = hasOffsets;
       posJump = hasOffsets ? 3 : 1;

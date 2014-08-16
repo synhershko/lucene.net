@@ -36,12 +36,12 @@ public class SimpleTextNormsFormat extends NormsFormat {
   private static final String NORMS_SEG_EXTENSION = "len";
   
   @Override
-  public DocValuesConsumer normsConsumer(SegmentWriteState state) throws IOException {
+  public DocValuesConsumer normsConsumer(SegmentWriteState state)  {
     return new SimpleTextNormsConsumer(state);
   }
   
   @Override
-  public DocValuesProducer normsProducer(SegmentReadState state) throws IOException {
+  public DocValuesProducer normsProducer(SegmentReadState state)  {
     return new SimpleTextNormsProducer(state);
   }
   
@@ -53,7 +53,7 @@ public class SimpleTextNormsFormat extends NormsFormat {
    * @lucene.experimental
    */
   public static class SimpleTextNormsProducer extends SimpleTextDocValuesReader {
-    public SimpleTextNormsProducer(SegmentReadState state) throws IOException {
+    public SimpleTextNormsProducer(SegmentReadState state)  {
       // All we do is change the extension from .dat -> .len;
       // otherwise this is a normal simple doc values file:
       super(state, NORMS_SEG_EXTENSION);
@@ -68,7 +68,7 @@ public class SimpleTextNormsFormat extends NormsFormat {
    * @lucene.experimental
    */
   public static class SimpleTextNormsConsumer extends SimpleTextDocValuesWriter {
-    public SimpleTextNormsConsumer(SegmentWriteState state) throws IOException {
+    public SimpleTextNormsConsumer(SegmentWriteState state)  {
       // All we do is change the extension from .dat -> .len;
       // otherwise this is a normal simple doc values file:
       super(state, NORMS_SEG_EXTENSION);

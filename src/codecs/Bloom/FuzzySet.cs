@@ -195,7 +195,7 @@ namespace Lucene.Net.Codecs.Bloom
    * returned by {@link FixedBitSet#getBits}</li>
    * </ul>
    * @param out Data output stream
-   * @throws IOException If there is a low-level I/O error
+   * @ If there is a low-level I/O error
    */
 
         public void Serialize(DataOutput output)
@@ -233,7 +233,7 @@ namespace Lucene.Net.Codecs.Bloom
 
         private ContainsResult MayContainValue(int positiveHash)
         {
-            Debug.Assert(positiveHash >= 0);
+            Debug.Debug.Assert((positiveHash >= 0);
 
             // Bloom sizes are always base 2 and so can be ANDed for a fast modulo
             int pos = positiveHash & bloomSize;
@@ -250,7 +250,7 @@ namespace Lucene.Net.Codecs.Bloom
    * Records a value in the set. The referenced bytes are hashed and then modulo n'd where n is the
    * chosen size of the internal bitset.
    * @param value the key value to be hashed
-   * @throws IOException If there is a low-level I/O error
+   * @ If there is a low-level I/O error
    */
 
         public void AddValue(BytesRef value)

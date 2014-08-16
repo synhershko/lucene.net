@@ -45,25 +45,25 @@ class SimpleTextFieldsWriter extends FieldsConsumer {
   final static BytesRef END_OFFSET   = new BytesRef("      endOffset ");
   final static BytesRef PAYLOAD      = new BytesRef("        payload ");
 
-  public SimpleTextFieldsWriter(SegmentWriteState state) throws IOException {
+  public SimpleTextFieldsWriter(SegmentWriteState state)  {
     final String fileName = SimpleTextPostingsFormat.getPostingsFileName(state.segmentInfo.name, state.segmentSuffix);
     out = state.directory.createOutput(fileName, state.context);
   }
 
-  private void write(String s) throws IOException {
+  private void write(String s)  {
     SimpleTextUtil.write(out, s, scratch);
   }
 
-  private void write(BytesRef b) throws IOException {
+  private void write(BytesRef b)  {
     SimpleTextUtil.write(out, b);
   }
 
-  private void newline() throws IOException {
+  private void newline()  {
     SimpleTextUtil.writeNewline(out);
   }
 
   @Override
-  public TermsConsumer addField(FieldInfo field) throws IOException {
+  public TermsConsumer addField(FieldInfo field)  {
     write(FIELD);
     write(field.name);
     newline();
@@ -78,16 +78,16 @@ class SimpleTextFieldsWriter extends FieldsConsumer {
     }
 
     @Override
-    public PostingsConsumer startTerm(BytesRef term) throws IOException {
+    public PostingsConsumer startTerm(BytesRef term)  {
       return postingsWriter.reset(term);
     }
 
     @Override
-    public void finishTerm(BytesRef term, TermStats stats) throws IOException {
+    public void finishTerm(BytesRef term, TermStats stats)  {
     }
 
     @Override
-    public void finish(long sumTotalTermFreq, long sumDocFreq, int docCount) throws IOException {
+    public void finish(long sumTotalTermFreq, long sumDocFreq, int docCount)  {
     }
 
     @Override
@@ -98,12 +98,12 @@ class SimpleTextFieldsWriter extends FieldsConsumer {
 
   private class SimpleTextPostingsWriter extends PostingsConsumer {
     private BytesRef term;
-    private boolean wroteTerm;
+    private bool wroteTerm;
     private final IndexOptions indexOptions;
-    private final boolean writePositions;
-    private final boolean writeOffsets;
+    private final bool writePositions;
+    private final bool writeOffsets;
 
-    // for assert:
+    // for Debug.Assert(:
     private int lastStartOffset = 0;
 
     public SimpleTextPostingsWriter(FieldInfo field) {
@@ -115,7 +115,7 @@ class SimpleTextFieldsWriter extends FieldsConsumer {
     }
 
     @Override
-    public void startDoc(int docID, int termDocFreq) throws IOException {
+    public void startDoc(int docID, int termDocFreq)  {
       if (!wroteTerm) {
         // we lazily do this, in case the term had zero docs
         write(TERM);
@@ -143,7 +143,7 @@ class SimpleTextFieldsWriter extends FieldsConsumer {
     }
 
     @Override
-    public void addPosition(int position, BytesRef payload, int startOffset, int endOffset) throws IOException {
+    public void addPosition(int position, BytesRef payload, int startOffset, int endOffset)  {
       if (writePositions) {
         write(POS);
         write(Integer.toString(position));
@@ -151,8 +151,8 @@ class SimpleTextFieldsWriter extends FieldsConsumer {
       }
 
       if (writeOffsets) {
-        assert endOffset >= startOffset;
-        assert startOffset >= lastStartOffset: "startOffset=" + startOffset + " lastStartOffset=" + lastStartOffset;
+        Debug.Assert( endOffset >= startOffset;
+        Debug.Assert( startOffset >= lastStartOffset: "startOffset=" + startOffset + " lastStartOffset=" + lastStartOffset;
         lastStartOffset = startOffset;
         write(START_OFFSET);
         write(Integer.toString(startOffset));
@@ -163,7 +163,7 @@ class SimpleTextFieldsWriter extends FieldsConsumer {
       }
 
       if (payload != null && payload.length > 0) {
-        assert payload.length != 0;
+        Debug.Assert( payload.length != 0;
         write(PAYLOAD);
         write(payload);
         newline();
@@ -176,7 +176,7 @@ class SimpleTextFieldsWriter extends FieldsConsumer {
   }
 
   @Override
-  public void close() throws IOException {
+  public void close()  {
     if (out != null) {
       try {
         write(END);

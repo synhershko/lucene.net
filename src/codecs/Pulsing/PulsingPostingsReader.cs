@@ -105,7 +105,7 @@ namespace Lucene.Net.Codecs.Pulsing
         {
             PulsingTermState termState = (PulsingTermState) _termState;
 
-            Debug.Assert(empty.Length == 0);
+            Debug.Debug.Assert((empty.Length == 0);
             termState.Absolute = termState.Absolute || absolute;
             // if we have positions, its total TF, otherwise its computed based on docFreq.
             // TODO Double check this is right..
@@ -337,7 +337,7 @@ namespace Lucene.Net.Codecs.Pulsing
                 }
                 else
                 {
-                    Debug.Assert(WrappedTermState != null);
+                    Debug.Debug.Assert((WrappedTermState != null);
                     clone.WrappedTermState = (BlockTermState) WrappedTermState.Clone();
                     clone.Absolute = Absolute;
                     if (Longs != null)
@@ -405,7 +405,7 @@ namespace Lucene.Net.Codecs.Pulsing
 
             public PulsingDocsEnum Reset(Bits liveDocs, PulsingTermState termState)
             {
-                Debug.Assert(termState.PostingsSize != -1);
+                Debug.Debug.Assert((termState.PostingsSize != -1);
 
                 // Must make a copy of termState's byte[] so that if
                 // app does TermsEnum.next(), this DocsEnum is not affected
@@ -563,7 +563,7 @@ namespace Lucene.Net.Codecs.Pulsing
 
             public PulsingDocsAndPositionsEnum reset(Bits liveDocs, PulsingTermState termState)
             {
-                Debug.Assert(termState.PostingsSize != -1);
+                Debug.Debug.Assert((termState.PostingsSize != -1);
 
                 if (postingsBytes == null)
                 {
@@ -645,7 +645,7 @@ namespace Lucene.Net.Codecs.Pulsing
 
             public override int NextPosition()
             {
-                Debug.Assert(posPending > 0);
+                Debug.Debug.Assert((posPending > 0);
 
                 posPending--;
 

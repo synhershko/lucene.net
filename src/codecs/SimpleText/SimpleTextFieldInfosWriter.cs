@@ -60,11 +60,11 @@ public class SimpleTextFieldInfosWriter extends FieldInfosWriter {
   final static BytesRef ATT_VALUE       =  new BytesRef("    value ");
   
   @Override
-  public void write(Directory directory, String segmentName, String segmentSuffix, FieldInfos infos, IOContext context) throws IOException {
+  public void write(Directory directory, String segmentName, String segmentSuffix, FieldInfos infos, IOContext context)  {
     final String fileName = IndexFileNames.segmentFileName(segmentName, segmentSuffix, FIELD_INFOS_EXTENSION);
     IndexOutput out = directory.createOutput(fileName, context);
     BytesRef scratch = new BytesRef();
-    boolean success = false;
+    bool success = false;
     try {
       SimpleTextUtil.write(out, NUMFIELDS);
       SimpleTextUtil.write(out, Integer.toString(infos.size()), scratch);
@@ -80,26 +80,26 @@ public class SimpleTextFieldInfosWriter extends FieldInfosWriter {
         SimpleTextUtil.writeNewline(out);
         
         SimpleTextUtil.write(out, ISINDEXED);
-        SimpleTextUtil.write(out, Boolean.toString(fi.isIndexed()), scratch);
+        SimpleTextUtil.write(out, bool.toString(fi.isIndexed()), scratch);
         SimpleTextUtil.writeNewline(out);
         
         if (fi.isIndexed()) {
-          assert fi.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS) >= 0 || !fi.hasPayloads();
+          Debug.Assert( fi.getIndexOptions().compareTo(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS) >= 0 || !fi.hasPayloads();
           SimpleTextUtil.write(out, INDEXOPTIONS);
           SimpleTextUtil.write(out, fi.getIndexOptions().toString(), scratch);
           SimpleTextUtil.writeNewline(out);
         }
         
         SimpleTextUtil.write(out, STORETV);
-        SimpleTextUtil.write(out, Boolean.toString(fi.hasVectors()), scratch);
+        SimpleTextUtil.write(out, bool.toString(fi.hasVectors()), scratch);
         SimpleTextUtil.writeNewline(out);
         
         SimpleTextUtil.write(out, PAYLOADS);
-        SimpleTextUtil.write(out, Boolean.toString(fi.hasPayloads()), scratch);
+        SimpleTextUtil.write(out, bool.toString(fi.hasPayloads()), scratch);
         SimpleTextUtil.writeNewline(out);
                
         SimpleTextUtil.write(out, NORMS);
-        SimpleTextUtil.write(out, Boolean.toString(!fi.omitsNorms()), scratch);
+        SimpleTextUtil.write(out, bool.toString(!fi.omitsNorms()), scratch);
         SimpleTextUtil.writeNewline(out);
         
         SimpleTextUtil.write(out, NORMS_TYPE);

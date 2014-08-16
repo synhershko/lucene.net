@@ -78,13 +78,13 @@ class DirectDocValuesProducer extends DocValuesProducer {
   static final int VERSION_CHECKSUM = 1;
   static final int VERSION_CURRENT = VERSION_CHECKSUM;
     
-  DirectDocValuesProducer(SegmentReadState state, String dataCodec, String dataExtension, String metaCodec, String metaExtension) throws IOException {
+  DirectDocValuesProducer(SegmentReadState state, String dataCodec, String dataExtension, String metaCodec, String metaExtension)  {
     maxDoc = state.segmentInfo.getDocCount();
     String metaName = IndexFileNames.segmentFileName(state.segmentInfo.name, state.segmentSuffix, metaExtension);
     // read in the entries from the metadata file.
     ChecksumIndexInput in = state.directory.openChecksumInput(metaName, state.context);
     ramBytesUsed = new AtomicLong(RamUsageEstimator.shallowSizeOfInstance(getClass()));
-    boolean success = false;
+    bool success = false;
     try {
       version = CodecUtil.checkHeader(in, metaCodec, 
                                       VERSION_START,
@@ -124,7 +124,7 @@ class DirectDocValuesProducer extends DocValuesProducer {
     }
   }
 
-  private NumericEntry readNumericEntry(IndexInput meta) throws IOException {
+  private NumericEntry readNumericEntry(IndexInput meta)  {
     NumericEntry entry = new NumericEntry();
     entry.offset = meta.readLong();
     entry.count = meta.readInt();
@@ -139,7 +139,7 @@ class DirectDocValuesProducer extends DocValuesProducer {
     return entry;
   }
 
-  private BinaryEntry readBinaryEntry(IndexInput meta) throws IOException {
+  private BinaryEntry readBinaryEntry(IndexInput meta)  {
     BinaryEntry entry = new BinaryEntry();
     entry.offset = meta.readLong();
     entry.numBytes = meta.readInt();
@@ -154,14 +154,14 @@ class DirectDocValuesProducer extends DocValuesProducer {
     return entry;
   }
 
-  private SortedEntry readSortedEntry(IndexInput meta) throws IOException {
+  private SortedEntry readSortedEntry(IndexInput meta)  {
     SortedEntry entry = new SortedEntry();
     entry.docToOrd = readNumericEntry(meta);
     entry.values = readBinaryEntry(meta);
     return entry;
   }
 
-  private SortedSetEntry readSortedSetEntry(IndexInput meta) throws IOException {
+  private SortedSetEntry readSortedSetEntry(IndexInput meta)  {
     SortedSetEntry entry = new SortedSetEntry();
     entry.docToOrdAddress = readNumericEntry(meta);
     entry.ords = readNumericEntry(meta);
@@ -169,7 +169,7 @@ class DirectDocValuesProducer extends DocValuesProducer {
     return entry;
   }
 
-  private void readFields(IndexInput meta) throws IOException {
+  private void readFields(IndexInput meta)  {
     int fieldNumber = meta.readVInt();
     while (fieldNumber != -1) {
       int fieldType = meta.readByte();
@@ -194,14 +194,14 @@ class DirectDocValuesProducer extends DocValuesProducer {
   }
   
   @Override
-  public void checkIntegrity() throws IOException {
+  public void checkIntegrity()  {
     if (version >= VERSION_CHECKSUM) {
       CodecUtil.checksumEntireFile(data);
     }
   }
 
   @Override
-  public synchronized NumericDocValues getNumeric(FieldInfo field) throws IOException {
+  public synchronized NumericDocValues getNumeric(FieldInfo field)  {
     NumericDocValues instance = numericInstances.get(field.number);
     if (instance == null) {
       // Lazy load
@@ -211,7 +211,7 @@ class DirectDocValuesProducer extends DocValuesProducer {
     return instance;
   }
   
-  private NumericDocValues loadNumeric(NumericEntry entry) throws IOException {
+  private NumericDocValues loadNumeric(NumericEntry entry)  {
     data.seek(entry.offset + entry.missingBytes);
     switch (entry.byteWidth) {
     case 1:
@@ -273,12 +273,12 @@ class DirectDocValuesProducer extends DocValuesProducer {
       }
     
     default:
-      throw new AssertionError();
+      throw new Debug.Assert(ionError();
     }
   }
 
   @Override
-  public synchronized BinaryDocValues getBinary(FieldInfo field) throws IOException {
+  public synchronized BinaryDocValues getBinary(FieldInfo field)  {
     BinaryDocValues instance = binaryInstances.get(field.number);
     if (instance == null) {
       // Lazy load
@@ -288,7 +288,7 @@ class DirectDocValuesProducer extends DocValuesProducer {
     return instance;
   }
   
-  private BinaryDocValues loadBinary(BinaryEntry entry) throws IOException {
+  private BinaryDocValues loadBinary(BinaryEntry entry)  {
     data.seek(entry.offset);
     final byte[] bytes = new byte[entry.numBytes];
     data.readBytes(bytes, 0, entry.numBytes);
@@ -313,7 +313,7 @@ class DirectDocValuesProducer extends DocValuesProducer {
   }
   
   @Override
-  public synchronized SortedDocValues getSorted(FieldInfo field) throws IOException {
+  public synchronized SortedDocValues getSorted(FieldInfo field)  {
     SortedDocValues instance = sortedInstances.get(field.number);
     if (instance == null) {
       // Lazy load
@@ -323,7 +323,7 @@ class DirectDocValuesProducer extends DocValuesProducer {
     return instance;
   }
 
-  private SortedDocValues loadSorted(FieldInfo field) throws IOException {
+  private SortedDocValues loadSorted(FieldInfo field)  {
     final SortedEntry entry = sorteds.get(field.number);
     final NumericDocValues docToOrd = loadNumeric(entry.docToOrd);
     final BinaryDocValues values = loadBinary(entry.values);
@@ -352,7 +352,7 @@ class DirectDocValuesProducer extends DocValuesProducer {
   }
 
   @Override
-  public synchronized SortedSetDocValues getSortedSet(FieldInfo field) throws IOException {
+  public synchronized SortedSetDocValues getSortedSet(FieldInfo field)  {
     SortedSetRawValues instance = sortedSetInstances.get(field.number);
     final SortedSetEntry entry = sortedSets.get(field.number);
     if (instance == null) {
@@ -412,7 +412,7 @@ class DirectDocValuesProducer extends DocValuesProducer {
     };
   }
   
-  private SortedSetRawValues loadSortedSet(SortedSetEntry entry) throws IOException {
+  private SortedSetRawValues loadSortedSet(SortedSetEntry entry)  {
     SortedSetRawValues instance = new SortedSetRawValues();
     instance.docToOrdAddress = loadNumeric(entry.docToOrdAddress);
     instance.ords = loadNumeric(entry.ords);
@@ -420,7 +420,7 @@ class DirectDocValuesProducer extends DocValuesProducer {
     return instance;
   }
 
-  private Bits getMissingBits(int fieldNumber, final long offset, final long length) throws IOException {
+  private Bits getMissingBits(int fieldNumber, final long offset, final long length)  {
     if (offset == -1) {
       return new Bits.MatchAllBits(maxDoc);
     } else {
@@ -430,7 +430,7 @@ class DirectDocValuesProducer extends DocValuesProducer {
         if (instance == null) {
           IndexInput data = this.data.clone();
           data.seek(offset);
-          assert length % 8 == 0;
+          Debug.Assert( length % 8 == 0;
           long bits[] = new long[(int) length >> 3];
           for (int i = 0; i < bits.length; i++) {
             bits[i] = data.readLong();
@@ -444,7 +444,7 @@ class DirectDocValuesProducer extends DocValuesProducer {
   }
   
   @Override
-  public Bits getDocsWithField(FieldInfo field) throws IOException {
+  public Bits getDocsWithField(FieldInfo field)  {
     switch(field.getDocValuesType()) {
       case SORTED_SET:
         return DocValues.docsWithValue(getSortedSet(field), maxDoc);
@@ -457,12 +457,12 @@ class DirectDocValuesProducer extends DocValuesProducer {
         NumericEntry ne = numerics.get(field.number);
         return getMissingBits(field.number, ne.missingOffset, ne.missingBytes);
       default: 
-        throw new AssertionError();
+        throw new Debug.Assert(ionError();
     }
   }
 
   @Override
-  public void close() throws IOException {
+  public void close()  {
     data.close();
   }
   
