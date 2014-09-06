@@ -1,4 +1,7 @@
-﻿=================== 3.0.3 trunk (not yet released) =====================
+﻿September 6th 2014 - Started work on revamping the project code and structure towards a v4.8 release
+
+
+=================== 3.0.3 trunk (not yet released) =====================
 
 Bug
 •[LUCENENET-54] - ArgumentOurOfRangeException caused by SF.Snowball.Ext.DanishStemmer
