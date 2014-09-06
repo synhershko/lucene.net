@@ -469,7 +469,7 @@
     <Compile Include="JavaCompatibility\SystemTypesHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\core\Lucene.Net.csproj">
+    <ProjectReference Include="..\Lucene.Net.Core\Lucene.Net.csproj">
       <Project>{5d4ad9be-1ffb-41ab-9943-25737971bf57}</Project>
       <Name>Lucene.Net</Name>
     </ProjectReference>
